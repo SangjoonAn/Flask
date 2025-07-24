@@ -3527,8 +3527,8 @@
             updateText("mvbx_beamset", data.packet.Mvbx_BeamSet);
             updateText("mvbx_pci", data.packet.MVBX_pci);
             updateText("mvbx_ssb", data.packet.MVBX_ssb);
-            updateText("mvbx_rsrp", data.packet.MVBX_rsrp + " [dBm]");
-            updateText("mvbx_snr", data.packet.MVBX_snr + " [dB]");
+            updateText("mvbx_rsrp", data.packet.MVBX_rsrp.toFixed(2) + " [dBm]");
+            updateText("mvbx_snr", data.packet.MVBX_snr.toFixed(2) + " [dB]");
 
 
             if (data.packet.StaMuAlarm && Array.isArray(data.packet.StaMuAlarm)) {
