@@ -1829,11 +1829,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id = "mvbx_tx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id = "mvbx_rx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -1893,11 +1893,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id = "mvbx_tx_gain_set_miso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id = "mvbx_rx_gain_set_miso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -2366,16 +2366,16 @@
                                                 <i class="fas fa-plus-circle me-1"></i> DL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_input_siso">DL Input</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL Input</strong></span>
+                                                <span id="dl_input_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_att_siso">DL ATT</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL ATT</strong></span>
+                                                <span id="dl_att_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_alc_level_siso">DL ALC Level</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL ALC Level</strong></span>
+                                                <span id="dl_alc_level_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
@@ -2387,16 +2387,16 @@
                                                 <i class="fas fa-plus-circle me-1"></i> UL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_input_siso">UL Output(EIRP)</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL Output(EIRP)</strong></span>
+                                                <span id="ul_input_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_att_siso">UL ATT</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL ATT</strong></span>
+                                                <span id="ul_att_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_iso_level_siso">UL ISO Level</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL ISO Level</strong></span>
+                                                <span id="ul_iso_level_siso">N/A</span>
                                             </div>
                                         </div>
                                     </div>
@@ -3538,6 +3538,8 @@
             updateText("ul_input_siso", data.packet.UL_InputOffset_SISO + " [dBm]");
             updateText("ul_att_siso", data.packet.ALC_Atten_UL0_SISO + " [dB]");
             updateText("ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level + " [dBm]");
+            updateText("mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso + " [dB]");
+            updateText("mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso + " [dB]");
             updateText("ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
 
             // MIMO RF
@@ -3547,7 +3549,11 @@
             updateText("ul_input_mimo", data.packet.UL_InputOffset_MIMO + " [dBm]");
             updateText("ul_att_mimo", data.packet.ALC_Atten_UL1_MIMO + " [dB]");
             updateText("ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level + " [dBm]");
+            updateText("mvbx_tx_gain_set_miso", data.packet.Mvbx_TxGainSetMiso + " [dB]");
+            updateText("mvbx_rx_gain_set_miso", data.packet.Mvbx_RxGainSetMiso + " [dB]");
             updateText("ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
+
+            
 
             //siso optic
             updateText("ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
