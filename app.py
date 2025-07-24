@@ -77,8 +77,8 @@ def handle_hex_packet(data):
         print("ModIMSINum:", list(binary_data[436:452]))
         print("ModIMEINum:", list(binary_data[452:476]))
         print("ModIpAddress (raw):", list(binary_data[476:480]))
-        print("ModPhonNumber (raw):", list(binary_data[480:492]))
-        print("ModEmsFwVer (raw):", list(binary_data[492:494]))
+        print("ModPhonNumber (raw):", list(binary_data[484:496]))
+        print("ModEmsFwVer (raw):", list(binary_data[496:498]))
 
         print(list(binary_data[248:252]))  # [205, 204, 74, 194]가 나와야 정상
         print(struct.unpack('<f', bytes(binary_data[248:252]))[0])  # -81.6이 나와야 정상
