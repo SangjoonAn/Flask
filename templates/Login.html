@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .left {
+            flex: 1;
+            background-image: url('/static/images/Login_bg.png');
+            background-size: cover;
+            background-position: center;
+        }
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+        .logo img {
+            width: 180px;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #24343D;
+            color: white;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .save {
+            margin-top: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .save input {
+            margin-right: 5px;
+        }
+        .message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left"></div>
+        <div class="right">
+            <div class="logo">
+                <img src="/static/images/Login_logo.png" alt="FR Tek Logo">
+                <div style="text-align: center; font-size: 16px; margin-top: 8px;">Fiber Radio Technologies<br><strong>Sign into your account</strong></div>
+            </div>
+            <form method="POST">
+                <input type="text" name="username" placeholder="username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <div class="save">
+                    <input type="checkbox" name="save">
+                    <label for="save">Save</label>
+                </div>
+            </form>
+            {% if message %}
+                <div class="message">{{ message }}</div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
