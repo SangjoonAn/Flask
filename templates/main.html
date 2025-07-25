@@ -579,7 +579,8 @@
             display: none; /* 이미지에 푸터가 없으므로 숨김 */
         }
 
-
+        .siso-rf-box { margin-right: 40px; }
+        .mimo-rf-box { margin-left: 40px; }
 
     </style>
 
@@ -1028,7 +1029,7 @@
 
                 <!-- DU Hidden Modal -->
                 <div class="modal fade" id="duHiddenModal" tabindex="-1" aria-labelledby="duHiddenModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                    <div class="modal-dialog modal-dialog-scrollable" style="max-width: 85%; width: 85%;">
                         <div class="modal-content rounded-lg shadow-xl">
                             <div class="modal-header bg-gray-700 text-white rounded-t-lg">
                                 <h5 class="modal-title text-xl font-bold" id="duHiddenModalLabel">DU HIDDEN</h5>
@@ -1038,99 +1039,118 @@
                             <div class="modal-body p-6 bg-gray-50">
                                 <!-- RF sections in 2 columns -->
                                 <div class="row gx-5 mb-4">
-                                    <!-- SISO RF -->
-                                    <div class="col-12 col-lg-6 rf-optic-section px-lg-3">
+                                    <div class="col-12 col-lg-5 rf-optic-section px-lg-3"> <!-- SISO RF -->
+                                        <!-- SISO RF -->
                                         <h6><i class="fas fa-dot-circle"></i> SISO RF</h6>
                                         <hr>
                                         <div class="row mt-3">
+                                            <!-- DL Column -->
                                             <div class="col-6">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
+                                                <!-- DL Top Section -->
                                                 <div class="input-item">
                                                     <label>DL SUB ATT</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="4.5" class="form-control form-control-sm" />
+                                                        <input type="text" value="4.5" class="form-control form-control-sm" id="DlSubAtten_SISO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>DL Input Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="-0.5" class="form-control form-control-sm" />
+                                                        <input type="text" value="-0.5" class="form-control form-control-sm" id="DL_InputOffset_SISO" />
+                                                        <span class="unit">[dB]</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- DL Middle Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
+                                                <div class="input-item">
+                                                    <label>DL ATT Test</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0.0" class="form-control form-control-sm" id="Dl_Att_Test_Siso" />
+                                                        <span class="unit">[dB]</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- DL Bottom Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
+                                                <div class="input-item">
+                                                    <label>Ant Gain</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="46" class="form-control form-control-sm" id="Ant_Gain_Siso" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
-                                                    <label>DL ATT Test</label>
+                                                    <label>Ant ATT Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="-3" class="form-control form-control-sm" id="Ant_Offset_DL_Siso" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <!-- UL Column -->
                                             <div class="col-6">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
+                                                <!-- UL Top Section -->
                                                 <div class="input-item">
                                                     <label>UL SUB ATT</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="3.5" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="UlSubAtten_SISO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>UL Output Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="UL_OutputOffset_SISO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
+                                                <div class="input-item">
+                                                    <label>SD Status</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0" class="form-control form-control-sm" readonly />
+                                                        <span class="unit"></span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- UL Middle Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
                                                 <div class="input-item">
                                                     <label>UL ATT Test</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ul_Att_Test_Siso" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
-                                        <div class="row mt-2">
-                                            <div class="col-12 text-muted-small text-end">SD Status: 0</div>
-                                            <div class="col-12 col-md-6">
+                                                
+                                                <!-- UL Bottom Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
                                                 <div class="input-item">
-                                                    <label>Ant Gain</label>
+                                                    <label>Ant Out Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="46" class="form-control form-control-sm" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="input-item">
-                                                    <label>Ant Out Output</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ant_Out_Offset_Siso" />
                                                         <span class="unit">[dBm]</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="input-item">
-                                                    <label>Ant ATT Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="-3" class="form-control form-control-sm" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
                                                 <div class="input-item">
                                                     <label>Ant Output</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="-1" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" readonly id="Ant_Output_SISO" />
+                                                        <span class="unit">[dBm]</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-item">
+                                                    <label>Ant ATT Offset</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ant_Offset_UL_Siso" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
@@ -1138,111 +1158,133 @@
                                         </div>
                                     </div>
 
-                                    <!-- MIMO RF -->
-                                    <div class="col-12 col-lg-6 rf-optic-section px-lg-3">
+                                    <div class="col-12 col-lg-2"></div>
+
+                                    <div class="col-12 col-lg-5 rf-optic-section px-lg-3"> <!-- MIMO RF -->
+                                        <!-- MIMO RF -->
                                         <h6><i class="fas fa-dot-circle"></i> MIMO RF</h6>
                                         <hr>
                                         <div class="row mt-3">
+                                            <!-- DL Column -->
                                             <div class="col-6">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
+                                                <!-- DL Top Section -->
                                                 <div class="input-item">
                                                     <label>DL SUB ATT</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="3.5" class="form-control form-control-sm" />
+                                                        <input type="text" value="3.5" class="form-control form-control-sm" id="DlSubAtten_MIMO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>DL Input Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="-0.5" class="form-control form-control-sm" />
+                                                        <input type="text" value="-0.5" class="form-control form-control-sm" id="DL_InputOffset_MIMO" />
+                                                        <span class="unit">[dB]</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- DL Middle Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
+                                                <div class="input-item">
+                                                    <label>DL ATT Test</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0.0" class="form-control form-control-sm" id="Dl_Att_Test_Mimo" />
+                                                        <span class="unit">[dB]</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- DL Bottom Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
+                                                <div class="input-item">
+                                                    <label>Ant Gain</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="48" class="form-control form-control-sm" id="Ant_Gain_Mimo" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
-                                                    <label>DL ATT Test</label>
+                                                    <label>Ant ATT Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="-3" class="form-control form-control-sm" id="Ant_Offset_DL_Mimo" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <!-- UL Column -->
                                             <div class="col-6">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
+                                                <!-- UL Top Section -->
                                                 <div class="input-item">
                                                     <label>UL SUB ATT</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="4.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="4.0" class="form-control form-control-sm" id="UlSubAtten_MIMO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>UL Output Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0.0" class="form-control form-control-sm" id="UL_OutputOffset_MIMO" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
+                                                <div class="input-item">
+                                                    <label>SD Status</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0" class="form-control form-control-sm" readonly />
+                                                        <span class="unit"></span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- UL Middle Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
                                                 <div class="input-item">
                                                     <label>UL ATT Test</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="U_Att_Testl_Mimo" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
-                                        <div class="row mt-2">
-                                            <div class="col-12 text-muted-small text-end">SD Status: 0</div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="input-item">
-                                                    <label>Ant Gain</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="48" class="form-control form-control-sm" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
+                                                
+                                                <!-- UL Bottom Section -->
+                                                <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
                                                 <div class="input-item">
                                                     <label>Ant Out Output</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ant_Out_Offset_Mimo" />
                                                         <span class="unit">[dBm]</span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
-                                                <div class="input-item">
-                                                    <label>Ant ATT Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="-3" class="form-control form-control-sm" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-6">
                                                 <div class="input-item">
                                                     <label>Ant Output</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="-1" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ant_Output_MIMO" />
+                                                        <span class="unit">[dB]</span>
+                                                    </div>
+                                                </div>
+                                                <div class="input-item">
+                                                    <label>Ant ATT Offset</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="Ant_Offset_UL_Mimo" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                
                                 </div>
                                 
                                 <!-- Optic sections in 2 columns -->
                                 <div class="row g-4 mb-4">
                                     <!-- SISO Optic -->
-                                    <div class="col-12 col-lg-6 rf-optic-section">
+                                    <div class="col-12 col-lg-5 rf-optic-section">
                                         <h6><i class="fas fa-dot-circle"></i> SISO OPTIC</h6>
                                         <hr>
                                         <div class="row mt-3">
@@ -1250,35 +1292,35 @@
                                                 <div class="input-item">
                                                     <label>LD PWR Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="LD1_DET_DL0_SISO_Offset" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>PD PWR Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="PD1_DET_UL0_SISO_Offset" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>RSRQ Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="9" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="RsrpOffset" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>RSRQ Low Level</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="-120" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpLevel" />
                                                         <span class="unit">[dBm]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>RSRQ Still Time</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="60" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpStillTime" />
                                                         <span class="unit">[sec]</span>
                                                     </div>
                                                 </div>
@@ -1286,8 +1328,10 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-12 col-lg-2"></div>
+
                                     <!-- MIMO Optic -->
-                                    <div class="col-12 col-lg-6 rf-optic-section">
+                                    <div class="col-12 col-lg-5 rf-optic-section">
                                         <h6><i class="fas fa-dot-circle"></i> MIMO OPTIC</h6>
                                         <hr>
                                         <div class="row mt-3">
@@ -1295,14 +1339,14 @@
                                                 <div class="input-item">
                                                     <label>LD PWR Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="LD2_DET_DL1_MIMO_Offset" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
                                                 <div class="input-item">
                                                     <label>PD PWR Offset</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" value="0.0" class="form-control form-control-sm" />
+                                                        <input type="text" value="0" class="form-control form-control-sm" id="PD2_DET_UL1_MIMO_Offset" />
                                                         <span class="unit">[dB]</span>
                                                     </div>
                                                 </div>
@@ -1568,7 +1612,7 @@
                                     <span><strong>ISO Status</strong></span>
                                 </div>
                                 <div class="col-6 mb-2 text-end">
-                                    <span>Ready</span>
+                                    <span id="du_iso_status">N/A</span>
                                 </div>
 
                                 <div class="col-6 mb-2">
@@ -1712,19 +1756,19 @@
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_threshold">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span>-97 [dBm]</span>
+                                        <span id="mvbx_rsagc_mode">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
-                                        <span>-92.6 [dBm]</span>
+                                        <span id="agc_input_power">N/A</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
@@ -1804,7 +1848,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode">On</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -1868,7 +1912,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode">On</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -2144,7 +2188,7 @@
                                     <span><strong>ISO Status</strong></span>
                                 </div>
                                 <div class="col-6 mb-2 text-end">
-                                    <span>Ready</span>
+                                    <span id="du_iso_status">N/A</span>
                                 </div>
 
                                 <div class="col-6 mb-2">
@@ -2288,19 +2332,19 @@
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_threshold">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span>-97 [dBm]</span>
+                                        <span id="mvbx_rsagc_mode">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
-                                        <span>-92.6 [dBm]</span>
+                                        <span id="agc_input_power">N/A</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
@@ -2404,11 +2448,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id="mvbx_tx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id="mvbx_rx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong id="ul_iso_att_siso">UL ISO ATT</strong></span>
@@ -2468,11 +2512,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id="mvbx_tx_gain_set_miso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span>NA</span>
+                                            <span id="mvbx_rx_gain_set_miso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong id="ul_iso_att_mimo">UL ISO ATT</strong></span>
@@ -3553,6 +3597,48 @@
             updateText("mvbx_rx_gain_set_miso", data.packet.Mvbx_RxGainSetMiso + " [dB]");
             updateText("ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
 
+            // RF Configuration Fields Update
+            console.log("RF Configuration Data:", data.packet);
+            
+            // SISO RF Fields
+            console.log("DU_DlSubAtten_SISO:", data.packet.DU_DlSubAtten_SISO);
+            updateValue("DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
+            updateValue("UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
+            updateValue("DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
+            updateValue("UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
+            updateValue("Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
+            updateValue("Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
+            updateValue("Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
+            updateValue("Ant_Output_SISO", data.packet.DsOutputPower_SISO);
+            updateValue("Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
+            updateValue("Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
+            updateValue("Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
+
+            // MIMO RF Fields
+            updateValue("DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
+            updateValue("UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
+            updateValue("DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
+            updateValue("UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
+            updateValue("Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
+            updateValue("U_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
+            updateValue("Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
+            updateValue("Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
+            updateValue("Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
+            updateValue("Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
+            updateValue("Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
+
+            // Optic Configuration Fields Update
+            // SISO Optic Fields
+            updateValue("LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
+            updateValue("PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
+            updateValue("RsrpOffset", data.packet.RsrpOffset);
+            updateValue("LowRsrpLevel", data.packet.LowRsrpLevel);
+            updateValue("LowRsrpStillTime", data.packet.LowRsrpStillTime);
+
+            // MIMO Optic Fields
+            updateValue("LD2_DET_DL1_MIMO_Offset", data.packet.LD2_DET_DL1_MIMO_Offset);
+            updateValue("PD2_DET_UL1_MIMO_Offset", data.packet.PD2_DET_UL1_MIMO_Offset);
+
             
 
             //siso optic
@@ -3641,8 +3727,39 @@
             //     document.getElementById('su2_nav_dot').style.backgroundColor = 'white';
             // }
 
+            const duIsoStatusText = {
+                0: "Ready",
+                1: "Measuring",
+                2: "Fail",
+                3: "Success"
+            };
+            updateText("du_iso_status", duIsoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
         
 
+            // 1. Ant. Array On/Off (GumStick_OnOff)
+            updateText("gumstick_onoff", data.packet.GumStick_OnOff === 1 ? "On" : "Off");
+
+            // 2. AGC On/Off (Mvbx_RsAgcThreshold)
+            updateText("mvbx_rsagc_threshold", data.packet.Mvbx_RsAgcThreshold === 1 ? "On" : "Off");
+
+            // 3. AGC Level (Mvbx_RsAgcMode)
+            let agcLevel = data.packet.Mvbx_RsAgcMode;
+            if (agcLevel === -999) {
+                updateText("mvbx_rsagc_mode", "- - -");
+            } else {
+                updateText("mvbx_rsagc_mode", agcLevel + " dBm");
+            }
+
+            // 4. AGC Input (AGC_Input_Power, 0.1dBm 단위)
+            let agcInput = data.packet.AGC_Input_Power;
+            if (typeof agcInput === "number" && !isNaN(agcInput)) {
+                updateText("agc_input_power", (agcInput / 10).toFixed(1) + " dBm");
+            } else {
+                updateText("agc_input_power", "N/A");
+            }
+
+            updateText("alc_dl0_siso_mode", data.packet.ALC_DL0_SISO_Mode === 1 ? "On" : "Off");
+            updateText("alc_dl1_mimo_mode", data.packet.ALC_DL1_MIMO_Mode === 1 ? "On" : "Off");
         });
 
         // Bootstrap Modal을 사용하여 정보 메시지 표시 (alert() 대체)
@@ -3704,8 +3821,6 @@
 
 
     </script>
-
-
 
 
 </body>
