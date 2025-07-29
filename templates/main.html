@@ -74,7 +74,16 @@
 
         .status-normal { background-color: green; }
         .status-alarm { background-color: red; }
-        .status-linkfail { background-color: orange; }
+.status-alarm-yellow { background-color: yellow; }
+.status-unknown { background-color: gray; }
+.status-linkfail { background-color: orange; }
+.status-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
 
 
 
@@ -671,6 +680,16 @@
                     <div class="du-item-circle status-circle" id="su2_nav_dot"></div> <!-- status-circle 클래스 추가 -->
                     <span>SU #2</span>
                 </div>
+
+                <div class="su-item" id="nav_su3" onclick="showInfoModal('SU #3 화면 전환 기능은 아직 구현되지 않았습니다.');">
+                    <div class="du-item-circle status-circle" id="su3_nav_dot"></div> <!-- status-circle 클래스 추가 -->
+                    <span>SU #3</span>
+                </div>
+
+                <div class="su-item" id="nav_su4" onclick="showInfoModal('SU #4 화면 전환 기능은 아직 구현되지 않았습니다.');">
+                    <div class="du-item-circle status-circle" id="su4_nav_dot"></div> <!-- status-circle 클래스 추가 -->
+                    <span>SU #4</span>
+                </div>
             </div>
 
             <hr>
@@ -693,10 +712,11 @@
                             <small class="text-muted">Site Name :</small> Korea FRTek RF - EMIS
                         </div>
                         <div class="col-md-3 text-center">
-                            <small class="text-muted">S/N :</small> FRC24-224-0550
+                            <small class="text-muted">S/N :</small> <span id="conserialnum_header">N/A</span>
                         </div>
                         <div class="col-md-3 text-end">
-                            <small class="text-muted">EMS ver :</small> 40.00
+                            <small class="text-muted">EMS ver :</small>
+                            <span id="emsversion2">N/A</span>
                         </div>
                     </div>
                     
@@ -1362,23 +1382,23 @@
                                         <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
                                             <div class="form-group-item">
                                                 <label class="font-semibold">S/N</label>
-                                                <input type="text" value="FRC24-224-0550" class="form-control form-control-sm w-40" />
+                                                <input type="text" id="conserialnum" value="N/A" class="form-control form-control-sm w-40" />
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">ISO Detect</label>
-                                                <input type="text" value="SGD" class="form-control form-control-sm w-40" />
+                                                <input type="text" id="isodetect" value="N/A" class="form-control form-control-sm w-40" />
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Polling Time</label>
                                                 <div class="d-flex align-items-center"> <!-- Changed structure for alignment -->
-                                                    <input type="text" value="500" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
+                                                    <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
                                                     <span class="unit">[ms]</span>
                                                 </div>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Baudrate</label>
                                                 <div class="d-flex align-items-center"> <!-- Changed structure for alignment -->
-                                                    <input type="text" value="115200" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
+                                                    <input type="text" id="baudrate" value="N/A" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
                                                     <span class="unit">[bps]</span>
                                                 </div>
                                             </div>
@@ -1388,19 +1408,19 @@
                                         <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
                                             <div class="form-group-item">
                                                 <label class="font-semibold">AOM Temp</label>
-                                                <button class="btn-toggle on">On</button>
+                                                <button id="aomtemp-toggle" class="btn-toggle on">N/A</button>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Att Test</label>
-                                                <button class="btn-toggle off">Off</button>
+                                                <button id="att-test-toggle" class="btn-toggle off">N/A</button>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Api Init.</label>
-                                                <button class="btn-toggle on">On</button>
+                                                <button id="api-init-toggle" class="btn-toggle on">N/A</button>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Api Init. Retry</label>
-                                                <button class="btn-toggle on">On</button>
+                                                <button id="api-init-retry-toggle" class="btn-toggle on">N/A</button>
                                             </div>
                                         </div>
 
@@ -1408,15 +1428,15 @@
                                         <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Debug</label>
-                                                <button class="btn-toggle on">On</button>
+                                                <button id="debug-toggle" class="btn-toggle on">N/A</button>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Modem</label>
-                                                <button class="btn-toggle off">Off</button>
+                                                <button id="modem-toggle" class="btn-toggle off">N/A</button>
                                             </div>
                                             <div class="form-group-item">
                                                 <label class="font-semibold">Ant Band</label>
-                                                <button class="btn-toggle on">On</button>
+                                                <button class="btn-toggle on">N/A</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1493,13 +1513,13 @@
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>80 ℃</span>
+                                    <span id="tempupper">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>-30 ℃</span>
+                                    <span id="templower">N/A</span>
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -1524,10 +1544,10 @@
                                     <span id="ScanStatus">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
-                                    <span></span>
+                                    <span><strong>Api Ver</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span></span>
+                                    <span id="apiver">N/A</span>
                                 </div>
                             </div>
 
@@ -1541,16 +1561,16 @@
                                         <span><strong>CASCADE</strong></span>
                                     </div>
                                     <div class="col-2 mb-2 text-center">
-                                        <span class="badge bg-success">#1 Enable</span>
+                                        <span id="su1-enable-badge" class="badge bg-secondary">N/A</span>
                                     </div>
                                     <div class="col-2 mb-2 text-center">
-                                        <span class="badge bg-secondary">#2 Disable</span>
+                                        <span id="su2-enable-badge" class="badge bg-secondary">N/A</span>
                                     </div>
                                     <div class="col-2 mb-2 text-center">
-                                        <span class="badge bg-secondary">#3 Disable</span>
+                                        <span id="su3-enable-badge" class="badge bg-secondary">N/A</span>
                                     </div>
                                     <div class="col-2 mb-2 text-center">
-                                        <span class="badge bg-secondary">#4 Disable</span>
+                                        <span id="su4-enable-badge" class="badge bg-secondary">N/A</span>
                                     </div>
                                 </div>
                             </div>
@@ -1589,11 +1609,37 @@
                                 </h5>
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                 <div class="row text-secondary small">
-                                    <div class="col-12 mb-2">
-                                        <span>#1</span>
+                                    <div class="col-3 text-center" id="su1-link-container">
+                                        <div class="mb-2">
+                                            <span>#1</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span id="su1-link-dot" class="status-dot status-unknown"></span>
+                                        </div>
                                     </div>
-                                    <div class="col-12 mb-2">
-                                        <span class="status-circle" style="background-color: orange;"></span>
+                                    <div class="col-3 text-center" id="su2-link-container">
+                                        <div class="mb-2">
+                                            <span>#2</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span id="su2-link-dot" class="status-dot status-unknown"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-center" id="su3-link-container">
+                                        <div class="mb-2">
+                                            <span>#3</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span id="su3-link-dot" class="status-dot status-unknown"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-3 text-center" id="su4-link-container">
+                                        <div class="mb-2">
+                                            <span>#4</span>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span id="su4-link-dot" class="status-dot status-unknown"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1848,7 +1894,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -1912,7 +1958,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -2019,7 +2065,7 @@
 
 
             <!-- SU Content (첫 번째 이미지에 해당하는 내용) -->
-            <div id="su1_content_display" class="active">
+            <div id="su1_content_display">
                 <div class="bg-light p-3 rounded shadow-sm mb-2"> 
                     <div class="row align-items-center mb-2"> 
                         <div class="col-md-3">
@@ -2032,7 +2078,8 @@
                             <small class="text-muted">S/N :</small> FRC24-224-0550
                         </div>
                         <div class="col-md-3 text-end">
-                            <small class="text-muted">EMS ver :</small> 40.00
+                            <small class="text-muted" >EMS ver :</small> 
+                            <span id="ems_version2">N/A</span>
                         </div>
                     </div>
                     
@@ -2344,7 +2391,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
-                                        <span id="agc_input_power">N/A</span>
+                                        <span>N/A</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
@@ -2910,8 +2957,7 @@
 
         // 전역 변수로 현재 알람 상태 저장 (초기값 설정)
         let currentDuAlarmStatus = 1; // 0: 정상 (초록색), 1: 알람 (빨간색) - DU 기본값을 1 (빨간색)로 설정
-        let currentSu1AlarmStatus = 0; // 0: 정상 (노란색/Link Fail), 1: 알람 (빨간색) - SU#1 기본색상 변경
-        let currentSu2AlarmStatus = 0; // 0: 정상 (노란색/Link Fail), 1: 알람 (빨간색) - SU#2 기본값을 0 (노란색/Link Fail)로 설정
+        
 
         // Send_Packet 데이터 정의 (전역 변수로 선언)
         const sendPacketData = {
@@ -3386,12 +3432,14 @@
             const duNavDot = document.getElementById('du_nav_dot');
             const su1NavDot = document.getElementById('su1_nav_dot');
             const su2NavDot = document.getElementById('su2_nav_dot');
+            const su3NavDot = document.getElementById('su3_nav_dot');
+            const su4NavDot = document.getElementById('su4_nav_dot');
 
             // 모든 점에 대해 기존 색상 클래스 초기화
-            [duNavDot, su1NavDot, su2NavDot].forEach(dot => {
+            [duNavDot, su1NavDot, su2NavDot, su3NavDot, su4NavDot].forEach(dot => {
                 if (dot) {
                     // 기존 배경색 클래스 제거
-                    dot.classList.remove('status-normal', 'status-alarm', 'status-linkfail');
+                    dot.classList.remove('status-normal', 'status-alarm', 'status-linkfail', 'status-alarm-yellow', 'status-unknown');
                     // showScreen 함수에서 설정하는 인라인 스타일 초기화
                     dot.style.backgroundColor = ''; 
                 }
@@ -3406,21 +3454,74 @@
                 }
             }
 
-            // SU #1 점 색상 업데이트
-            if (su1NavDot) {
-                if (currentSu1AlarmStatus === 1) {
-                    su1NavDot.classList.add('status-alarm'); // 알람 시 빨간색
-                } else {
-                    su1NavDot.classList.add('status-linkfail'); // 정상 시 노란색 (status-linkfail)
+            // SU #1, #2, #3, #4 점 색상 업데이트 - SuLinkFailBits 데이터가 있으면 사용, 없으면 기본값
+            if (window.currentSuLinkFailBits) {
+                const bits = window.currentSuLinkFailBits;
+                
+                // SU1 링크 알람 (1비트: 0=정상, 1=링크페일알람)
+                if (su1NavDot) {
+                    su1NavDot.classList.remove('status-normal', 'status-linkfail');
+                    if (bits.SU1_LINK_FAIL === 0) {
+                        su1NavDot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU1_LINK_FAIL === 1) {
+                        su1NavDot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su1NavDot.classList.add('status-normal'); // 기본값: 초록색
+                    }
                 }
-            }
-
-            // SU #2 점 색상 업데이트
-            if (su2NavDot) {
-                if (currentSu2AlarmStatus === 1) {
-                    su2NavDot.classList.add('status-alarm'); // 알람 시 빨간색
-                } else {
-                    su2NavDot.classList.add('status-linkfail'); // 정상 시 노란색 (status-linkfail)
+                
+                // SU2 링크 알람
+                if (su2NavDot) {
+                    su2NavDot.classList.remove('status-normal', 'status-linkfail');
+                    if (bits.SU2_LINK_FAIL === 0) {
+                        su2NavDot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU2_LINK_FAIL === 1) {
+                        su2NavDot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su2NavDot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // SU3 링크 알람
+                if (su3NavDot) {
+                    su3NavDot.classList.remove('status-normal', 'status-linkfail');
+                    if (bits.SU3_LINK_FAIL === 0) {
+                        su3NavDot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU3_LINK_FAIL === 1) {
+                        su3NavDot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su3NavDot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // SU4 링크 알람
+                if (su4NavDot) {
+                    su4NavDot.classList.remove('status-normal', 'status-linkfail');
+                    if (bits.SU4_LINK_FAIL === 0) {
+                        su4NavDot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU4_LINK_FAIL === 1) {
+                        su4NavDot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su4NavDot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+            } else {
+                // SuLinkFailBits 데이터가 없으면 기본값은 초록색으로 설정 (정상 상태)
+                if (su1NavDot) {
+                    su1NavDot.classList.remove('status-normal', 'status-linkfail');
+                    su1NavDot.classList.add('status-normal');
+                }
+                if (su2NavDot) {
+                    su2NavDot.classList.remove('status-normal', 'status-linkfail');
+                    su2NavDot.classList.add('status-normal');
+                }
+                if (su3NavDot) {
+                    su3NavDot.classList.remove('status-normal', 'status-linkfail');
+                    su3NavDot.classList.add('status-normal');
+                }
+                if (su4NavDot) {
+                    su4NavDot.classList.remove('status-normal', 'status-linkfail');
+                    su4NavDot.classList.add('status-normal');
                 }
             }
         }
@@ -3431,7 +3532,9 @@
             const su1Content = document.getElementById('su1_content_display');
             const duNavDot = document.getElementById('du_nav_dot');
             const su1NavDot = document.getElementById('su1_nav_dot');
-            const su2NavDot = document.getElementById('su2_nav_dot'); // SU#2 점도 가져오기
+            const su2NavDot = document.getElementById('su2_nav_dot');
+            const su3NavDot = document.getElementById('su3_nav_dot');
+            const su4NavDot = document.getElementById('su4_nav_dot');
 
             // 모든 네비게이션 점을 현재 알람 상태 색상으로 먼저 초기화 (비활성화 상태의 색상)
             updateNavDotColors();
@@ -3458,19 +3561,115 @@
         socket.on('connect', () => console.log('🟢 Connected to Flask Server'));
         socket.on('disconnect', () => console.log('🔴 Disconnected from Flask Server'));
 
+        // RX 박스 상태 관리
+        let rxBoxState = {
+            originalBg: null,
+            originalColor: null
+        };
+
+        // RX 박스 초기 상태 저장 및 네비게이션 점 기본값 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const rxBox = document.querySelector('.rx-box');
+            if (rxBox) {
+                rxBoxState.originalBg = window.getComputedStyle(rxBox).backgroundColor;
+                rxBoxState.originalColor = window.getComputedStyle(rxBox).color;
+            }
+            
+            // SU 네비게이션 점 기본값 설정 (회색)
+            const su1NavDot = document.getElementById('su1_nav_dot');
+            const su2NavDot = document.getElementById('su2_nav_dot');
+            const su3NavDot = document.getElementById('su3_nav_dot');
+            const su4NavDot = document.getElementById('su4_nav_dot');
+            
+            if (su1NavDot) su1NavDot.classList.add('status-unknown');
+            if (su2NavDot) su2NavDot.classList.add('status-unknown');
+            if (su3NavDot) su3NavDot.classList.add('status-unknown');
+            if (su4NavDot) su4NavDot.classList.add('status-unknown');
+        });
+
+        // RX 박스 켜기
+        socket.on("rx_on", function () {
+            document.querySelectorAll('.rx-box').forEach(rxbox => {
+                rxbox.style.backgroundColor = 'yellow';
+                rxbox.style.color = 'black';
+            });
+            console.log("🟡 RX Box: ON");
+        });
+
+        // RX 박스 끄기
+        socket.on("rx_off", function () {
+            document.querySelectorAll('.rx-box').forEach(rxbox => {
+                rxbox.style.backgroundColor = rxBoxState.originalBg;
+                rxbox.style.color = rxBoxState.originalColor;
+            });
+            console.log("⚫ RX Box: OFF");
+        });
+
         socket.on("update_status", function (data) {
             //console.log("📥 Received update_status:", data.packet);
 
-            document.querySelectorAll('.rx-box').forEach(rxbox => {
-                const originalBg = window.getComputedStyle(rxbox).backgroundColor;
-                const originalColor = window.getComputedStyle(rxbox).color;
-                rxbox.style.backgroundColor = 'yellow';
-                rxbox.style.color = 'black';
-                setTimeout(() => {
-                rxbox.style.backgroundColor = originalBg;
-                rxbox.style.color = originalColor;
-                }, 500);
-            });
+            // SuLinkFailBits 처리 (1비트씩)
+            if (data.packet.SuLinkFailBits) {
+                const bits = data.packet.SuLinkFailBits;
+                
+                // 전역 변수에 저장하여 updateNavDotColors에서 사용할 수 있도록 함
+                window.currentSuLinkFailBits = bits;
+                
+                // SU1 링크 알람 (1비트: 0=정상, 1=링크페일알람)
+                const su1Dot = document.querySelector('#su1-link-dot');
+                if (su1Dot) {
+                    su1Dot.className = 'status-dot';
+                    if (bits.SU1_LINK_FAIL === 0) {
+                        su1Dot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU1_LINK_FAIL === 1) {
+                        su1Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su1Dot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // SU2 링크 알람
+                const su2Dot = document.querySelector('#su2-link-dot');
+                if (su2Dot) {
+                    su2Dot.className = 'status-dot';
+                    if (bits.SU2_LINK_FAIL === 0) {
+                        su2Dot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU2_LINK_FAIL === 1) {
+                        su2Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su2Dot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // SU3 링크 알람
+                const su3Dot = document.querySelector('#su3-link-dot');
+                if (su3Dot) {
+                    su3Dot.className = 'status-dot';
+                    if (bits.SU3_LINK_FAIL === 0) {
+                        su3Dot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU3_LINK_FAIL === 1) {
+                        su3Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su3Dot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // SU4 링크 알람
+                const su4Dot = document.querySelector('#su4-link-dot');
+                if (su4Dot) {
+                    su4Dot.className = 'status-dot';
+                    if (bits.SU4_LINK_FAIL === 0) {
+                        su4Dot.classList.add('status-normal'); // 초록색 (정상)
+                    } else if (bits.SU4_LINK_FAIL === 1) {
+                        su4Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
+                    } else {
+                        su4Dot.classList.add('status-normal'); // 기본값: 초록색
+                    }
+                }
+                
+                // 네비게이션 점 색상 업데이트
+                updateNavDotColors();
+            }
 
             const updateText = (id, value) => {
                 const el = document.getElementById(id);
@@ -3513,7 +3712,7 @@
 
             updateText("McuSwVer2", data.packet.McuSwVer);
 
-            updateText("FPGA_Ver", data.packet.FPGA_Ver || "N/A");
+            updateText("FPGA_Ver", data.packet.FPGA_Ver);
 
             const rtpTypeText = {
             0: "DU_28G",
@@ -3532,14 +3731,22 @@
             if (data.packet.SysTemper !== undefined) {
             updateText("curtemper", `${data.packet.SysTemper} ℃`);
             }
+            
+            if (data.packet.SysTemperHighLvl !== undefined) {
+            updateText("tempupper", `${data.packet.SysTemperHighLvl} ℃`);
+            }
+            
+            if (data.packet.SysTemperLowLvl !== undefined) {
+            updateText("templower", `${data.packet.SysTemperLowLvl} ℃`);
+            }
 
 
             //Modem Status 화면
 
             updateText("modstatus", statusText[data.packet.ModStatus] || "Unknown");
-            updateText("modimsi", new Uint8Array(data.packet.ModIMSINum));
-            updateText("modimei", new Uint8Array(data.packet.ModIMEINum));
-            updateText("modnum", new Uint8Array(data.packet.ModPhonNumber));
+            updateText("modimsi", data.packet.ModIMSINum);
+            updateText("modimei", data.packet.ModIMEINum);
+            updateText("modnum", data.packet.ModPhonNumber);
             updateText("rsrp", data.packet.ModRsrp + " [dBm]");
             updateText("rsrq", data.packet.ModRsrq + " [dBm]");
             updateText("rssi", data.packet.ModRssi + " [dBm]");
@@ -3547,9 +3754,100 @@
             updateText("sinr", data.packet.ModSinr + " [dB]");
             updateText("txpwr", data.packet.ModTxPwr + " [dBm]");
             updateText("modver", data.packet.ModVersion);
-            updateText("emsversion", new Uint8Array(data.packet.ModEmsFwVer));
+            updateText("emsversion", data.packet.ModEmsFwVer);
+            updateText("emsversion2", data.packet.ModEmsFwVer);
             updateText("modip", data.packet.ModIpAddress);
             updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
+            
+            // ISO Detect Mode: 1이면 MIMO, 0이면 SISO
+            updateValue("isodetect", data.packet.IsoDetectMode === 1 ? "MIMO" : "SISO");
+            
+            // Polling Time: 값 출력 (범위 100~5,000ms)
+            updateValue("pollingtime", data.packet.PollingTime);
+            
+            // Baudrate: 0=19200bps, 1=38400bps, 2=57600bps, 3=115200bps
+            let baudrateText = "N/A";
+            if (data.packet.Mu_Su_Buadrate === 0) baudrateText = "19200";
+            else if (data.packet.Mu_Su_Buadrate === 1) baudrateText = "38400";
+            else if (data.packet.Mu_Su_Buadrate === 2) baudrateText = "57600";
+            else if (data.packet.Mu_Su_Buadrate === 3) baudrateText = "115200";
+            updateValue("baudrate", baudrateText);
+            
+            // Api Ver: 0이면 Single, 1이면 Tri
+            updateText("apiver", data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
+            
+            // 토글 버튼 업데이트 (1=ON, 0=OFF)
+            // AOM Temp
+            const aomTempToggle = document.getElementById('aomtemp-toggle');
+            if (aomTempToggle) {
+                if (data.packet.AomTemperConperMode === 1) {
+                    updateText('aomtemp-toggle', 'On');
+                    aomTempToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('aomtemp-toggle', 'Off');
+                    aomTempToggle.className = 'btn-toggle off';
+                }
+            }
+            
+            // Att Test
+            const attTestToggle = document.getElementById('att-test-toggle');
+            if (attTestToggle) {
+                if (data.packet.AttTestMode === 1) {
+                    updateText('att-test-toggle', 'On');
+                    attTestToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('att-test-toggle', 'Off');
+                    attTestToggle.className = 'btn-toggle off';
+                }
+            }
+            
+            // Api Init
+            const apiInitToggle = document.getElementById('api-init-toggle');
+            if (apiInitToggle) {
+                if (data.packet.ApiInitMode === 1) {
+                    updateText('api-init-toggle', 'On');
+                    apiInitToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('api-init-toggle', 'Off');
+                    apiInitToggle.className = 'btn-toggle off';
+                }
+            }
+            
+            // Api Init Retry
+            const apiInitRetryToggle = document.getElementById('api-init-retry-toggle');
+            if (apiInitRetryToggle) {
+                if (data.packet.ApiInitRetryMode === 1) {
+                    updateText('api-init-retry-toggle', 'On');
+                    apiInitRetryToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('api-init-retry-toggle', 'Off');
+                    apiInitRetryToggle.className = 'btn-toggle off';
+                }
+            }
+            
+            // Debug
+            const debugToggle = document.getElementById('debug-toggle');
+            if (debugToggle) {
+                if (data.packet.DebugMode === 1) {
+                    updateText('debug-toggle', 'On');
+                    debugToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('debug-toggle', 'Off');
+                    debugToggle.className = 'btn-toggle off';
+                }
+            }
+            
+            // Modem
+            const modemToggle = document.getElementById('modem-toggle');
+            if (modemToggle) {
+                if (data.packet.ModemOnOff === 1) {
+                    updateText('modem-toggle', 'On');
+                    modemToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('modem-toggle', 'Off');
+                    modemToggle.className = 'btn-toggle off';
+                }
+            }
 
             /*
             const parseFloat32 = (bytes) => {
@@ -3572,8 +3870,8 @@
             updateText("mvbx_beamset", data.packet.Mvbx_BeamSet);
             updateText("mvbx_pci", data.packet.MVBX_pci);
             updateText("mvbx_ssb", data.packet.MVBX_ssb);
-            updateText("mvbx_rsrp", data.packet.MVBX_rsrp.toFixed(2) + " [dBm]");
-            updateText("mvbx_snr", data.packet.MVBX_snr.toFixed(2) + " [dB]");
+            updateText("mvbx_rsrp", data.packet.MVBX_rsrp);
+            updateText("mvbx_snr", data.packet.MVBX_snr);
 
             // SISO RF
             updateText("dl_input_siso", data.packet.DL_OutputOffset_SISO + " [dBm]");
@@ -3682,50 +3980,9 @@
 
 
 
-            const agcMode = data.packet.Mvbx_RsAgcMode;
-            const agcModeEl = document.getElementById("Mvbx_RsAgcMode");
-
-            if (agcModeEl && agcMode !== undefined && !userClicked) {
-                agcModeEl.innerText = agcMode === 1 ? "On" : "Off";
-                agcModeEl.classList.toggle("btn-success", agcMode === 1);
-                agcModeEl.classList.toggle("btn-secondary", agcMode !== 1);
-            }
-
             updateValue("Mvbx_RsAgcThreshold", data.packet.Mvbx_RsAgcThreshold);
-
-            if (gNB_VenderElement && data.packet.gNB_Vender !== undefined && !userModified) {
-                const val = Number(data.packet.gNB_Vender);
-                gNB_VenderElement.value = [0, 1, 2, 3].includes(val) ? val : "na";
-            }
-
-
-            // data.packet에서 StaMuAlarm[0] 값 확인
-            if (data && data.packet && data.packet.StaMuAlarm !== undefined && data.packet.StaMuAlarm.length > 0) {
-                currentDuAlarmStatus = data.packet.StaMuAlarm[0];
-            }
-            // SU#1에 대한 알람 상태 업데이트 (예시: data.packet.Su1AlarmStatus가 있다고 가정)
-            if (data && data.packet && data.packet.Su1AlarmStatus !== undefined) {
-                currentSu1AlarmStatus = data.packet.Su1AlarmStatus;
-            }
-            // SU#2에 대한 알람 상태 업데이트 (예시: data.packet.Su2AlarmStatus가 있다고 가정)
-            if (data && data.packet && data.packet.Su2AlarmStatus !== undefined) {
-                currentSu2AlarmStatus = data.packet.Su2AlarmStatus;
-            }
-
-            // 네비게이션 점 색상 업데이트
-            updateNavDotColors();
-
-            // 현재 활성화된 화면의 점은 다시 흰색으로 설정하여 활성화 상태 유지
-            const activeScreenId = document.querySelector('.content-area > div.active')?.id;
-            if (activeScreenId === 'du_content_display') {
-                document.getElementById('du_nav_dot').style.backgroundColor = 'white';
-            } else if (activeScreenId === 'su1_content_display') {
-                document.getElementById('su1_nav_dot').style.backgroundColor = 'white';
-            }
-            // SU #2 화면이 활성화될 경우
-            // else if (activeScreenId === 'su2_content_display') {
-            //     document.getElementById('su2_nav_dot').style.backgroundColor = 'white';
-            // }
+            updateValue("conserialnum", data.packet.ConSerialNum);
+            updateText("conserialnum_header", data.packet.ConSerialNum);
 
             const duIsoStatusText = {
                 0: "Ready",
@@ -3733,6 +3990,10 @@
                 2: "Fail",
                 3: "Success"
             };
+            
+
+
+            
             updateText("du_iso_status", duIsoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
         
 
@@ -3750,16 +4011,163 @@
                 updateText("mvbx_rsagc_mode", agcLevel + " dBm");
             }
 
-            // 4. AGC Input (AGC_Input_Power, 0.1dBm 단위)
-            let agcInput = data.packet.AGC_Input_Power;
-            if (typeof agcInput === "number" && !isNaN(agcInput)) {
-                updateText("agc_input_power", (agcInput / 10).toFixed(1) + " dBm");
-            } else {
-                updateText("agc_input_power", "N/A");
-            }
+            // 4. AGC Input (AGC_Input_Power)
+            updateText("agc_input_power", data.packet.AGC_Input_Power + " dBm");
 
             updateText("alc_dl0_siso_mode", data.packet.ALC_DL0_SISO_Mode === 1 ? "On" : "Off");
             updateText("alc_dl1_mimo_mode", data.packet.ALC_DL1_MIMO_Mode === 1 ? "On" : "Off");
+
+            if (gNB_VenderElement && data.packet.gNB_Vender !== undefined && !userModified) {
+                const val = Number(data.packet.gNB_Vender);
+                gNB_VenderElement.value = [0, 1, 2, 3].includes(val) ? val : "N/A";
+            }
+
+
+            // DU 알람 상태 확인 - 10개 알람 항목 중 하나라도 활성화되어 있으면 알람
+            if (data && data.packet && data.packet.StaMuAlarm !== undefined && data.packet.StaMuAlarm.length > 0) {
+                const alarmBytes = data.packet.StaMuAlarm;
+                
+                // 알람 비트맵 정의
+                const alarmBitMap = [
+                    { bit: 1,  id: 'alarm_dc' },
+                    { bit: 2,  id: 'alarm_ac' },
+                    { bit: 3,  id: 'alarm_temp' },
+                    { bit: 4,  id: 'alarm_bat' },
+                    { bit: 49, id: 'alarm_fpga_link' },
+                    { bit: 53, id: 'alarm_if_pll' },
+                    { bit: 54, id: 'alarm_sync_pll' },
+                    { bit: 51, id: 'alarm_tsync_link' },
+                    { bit: 66, id: 'alarm_decoding' },
+                    { bit: 70, id: 'alarm_aa_link' }
+                ];
+                
+                // 10개 알람 중 하나라도 활성화되어 있으면 DU 알람 상태로 설정
+                const hasAnyAlarm = alarmBitMap.some(({ bit }) => {
+                    const byteIndex = Math.floor((bit - 1) / 8);
+                    const bitPosition = (bit - 1) % 8;
+                    return byteIndex < alarmBytes.length && (alarmBytes[byteIndex] & (1 << bitPosition)) !== 0;
+                });
+                
+                currentDuAlarmStatus = hasAnyAlarm ? 1 : 0;
+            }
+
+
+            // 네비게이션 점 색상 업데이트
+            updateNavDotColors();
+
+            // 현재 활성화된 화면의 점은 다시 흰색으로 설정하여 활성화 상태 유지
+            const activeScreenId = document.querySelector('.content-area > div.active')?.id;
+            if (activeScreenId === 'du_content_display') {
+                document.getElementById('du_nav_dot').style.backgroundColor = 'white';
+            } else if (activeScreenId === 'su1_content_display') {
+                document.getElementById('su1_nav_dot').style.backgroundColor = 'white';
+            }
+            // SU #2 화면이 활성화될 경우
+            // else if (activeScreenId === 'su2_content_display') {
+            //     document.getElementById('su2_nav_dot').style.backgroundColor = 'white';
+            // }
+            
+            // SU Enable 상태 처리
+            if (data.packet.SuEnableBits) {
+                const enableBits = data.packet.SuEnableBits;
+                
+                // SU1 Enable 상태 (항상 Enable로 설정)
+                const su1EnableBadge = document.getElementById('su1-enable-badge');
+                if (su1EnableBadge) {
+                    su1EnableBadge.textContent = "#1 Enable";
+                    su1EnableBadge.className = "badge bg-success";
+                }
+                
+                // SU2 Enable 상태
+                const su2EnableBadge = document.getElementById('su2-enable-badge');
+                if (su2EnableBadge) {
+                    if (enableBits.SU2_ENABLE === 1) {
+                        su2EnableBadge.textContent = "#2 Enable";
+                        su2EnableBadge.className = "badge bg-success";
+                    } else {
+                        su2EnableBadge.textContent = "#2 Disable";
+                        su2EnableBadge.className = "badge bg-secondary";
+                    }
+                }
+                
+                // SU3 Enable 상태
+                const su3EnableBadge = document.getElementById('su3-enable-badge');
+                if (su3EnableBadge) {
+                    if (enableBits.SU3_ENABLE === 1) {
+                        su3EnableBadge.textContent = "#3 Enable";
+                        su3EnableBadge.className = "badge bg-success";
+                    } else {
+                        su3EnableBadge.textContent = "#3 Disable";
+                        su3EnableBadge.className = "badge bg-secondary";
+                    }
+                }
+                
+                // SU4 Enable 상태
+                const su4EnableBadge = document.getElementById('su4-enable-badge');
+                if (su4EnableBadge) {
+                    if (enableBits.SU4_ENABLE === 1) {
+                        su4EnableBadge.textContent = "#4 Enable";
+                        su4EnableBadge.className = "badge bg-success";
+                    } else {
+                        su4EnableBadge.textContent = "#4 Disable";
+                        su4EnableBadge.className = "badge bg-secondary";
+                    }
+                }
+                
+                // SU Link 컨테이너 표시/숨김 처리
+                const su1LinkContainer = document.getElementById('su1-link-container');
+                const su2LinkContainer = document.getElementById('su2-link-container');
+                const su3LinkContainer = document.getElementById('su3-link-container');
+                const su4LinkContainer = document.getElementById('su4-link-container');
+                
+                // SU1은 항상 표시 (Enable)
+                if (su1LinkContainer) {
+                    su1LinkContainer.style.display = 'block';
+                }
+                
+                // SU2 Enable 상태에 따라 표시/숨김
+                if (su2LinkContainer) {
+                    su2LinkContainer.style.display = enableBits.SU2_ENABLE === 1 ? 'block' : 'none';
+                }
+                
+                // SU3 Enable 상태에 따라 표시/숨김
+                if (su3LinkContainer) {
+                    su3LinkContainer.style.display = enableBits.SU3_ENABLE === 1 ? 'block' : 'none';
+                }
+                
+                // SU4 Enable 상태에 따라 표시/숨김
+                if (su4LinkContainer) {
+                    su4LinkContainer.style.display = enableBits.SU4_ENABLE === 1 ? 'block' : 'none';
+                }
+                
+                // SU Navigation 항목 표시/숨김 처리
+                const su1NavItem = document.getElementById('nav_su1');
+                const su2NavItem = document.getElementById('nav_su2');
+                const su3NavItem = document.getElementById('nav_su3');
+                const su4NavItem = document.getElementById('nav_su4');
+                
+                // SU1은 항상 표시 (Enable)
+                if (su1NavItem) {
+                    su1NavItem.style.display = 'block';
+                }
+                
+                // SU2 Enable 상태에 따라 표시/숨김
+                if (su2NavItem) {
+                    su2NavItem.style.display = enableBits.SU2_ENABLE === 1 ? 'block' : 'none';
+                }
+                
+                // SU3 Enable 상태에 따라 표시/숨김
+                if (su3NavItem) {
+                    su3NavItem.style.display = enableBits.SU3_ENABLE === 1 ? 'block' : 'none';
+                }
+                
+                // SU4 Enable 상태에 따라 표시/숨김
+                if (su4NavItem) {
+                    su4NavItem.style.display = enableBits.SU4_ENABLE === 1 ? 'block' : 'none';
+                }
+            }
+
+            
         });
 
         // Bootstrap Modal을 사용하여 정보 메시지 표시 (alert() 대체)

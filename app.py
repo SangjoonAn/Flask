@@ -60,6 +60,8 @@ def handle_connect():
 def handle_disconnect():
     print('❌ Client disconnected')
 
+
+
 @socketio.on('hex_packet')
 def handle_hex_packet(data):
     """ HEX 데이터 수신 및 변환 """
@@ -92,11 +94,15 @@ def handle_hex_packet(data):
         return {"status": "error", "message": str(e)}
 
 
+
+
 # ---------------------------- 샘플 파서 함수 ----------------------------
 def parse_AllStatusPacket(packet):
     parsed_data = {}
     #Du 상태
     parsed_data['Rcv_Main_Sys'] = packet[0]
+    # Rcv_Main_Sys 감지 시 RX 박스 켜기
+    socketio.emit("rx_on")
     parsed_data['Rcv_Sub_Sys'] = packet[1]
     parsed_data['Rcv_Object'] = packet[2]
     parsed_data['Trans_Main_Sys'] = packet[3]
@@ -114,7 +120,24 @@ def parse_AllStatusPacket(packet):
     parsed_data['RtpKind'] = packet[18]
     parsed_data['Reserved0'] = packet[19]
     parsed_data['StaMuAlarm'] = list(packet[20:32])
+    # ALA2 링크 알람 비트 추출 (packet[21]의 비트 0~3)
+    ala2_link_alarms = {
+        'ALA2_SU1_LINK_ALARM': (packet[21] >> 0) & 1,  # 비트 0
+        'ALA2_SU2_LINK_ALARM': (packet[21] >> 1) & 1,  # 비트 1
+        'ALA2_SU3_LINK_ALARM': (packet[21] >> 2) & 1,  # 비트 2
+        'ALA2_SU4_LINK_ALARM': (packet[21] >> 3) & 1   # 비트 3
+    }
+    parsed_data['ALA2_Link_Alarms'] = ala2_link_alarms
     parsed_data['SuLinkFail'] = packet[32:44]
+    # SuLinkFail에서 1비트씩 추출 - SU1~SU4만
+    su_link_fail_bits = {
+        'SU1_LINK_FAIL': (packet[32] >> 0) & 1,  # 비트 0
+        'SU2_LINK_FAIL': (packet[32] >> 1) & 1,  # 비트 1
+        'SU3_LINK_FAIL': (packet[32] >> 2) & 1,  # 비트 2
+        'SU4_LINK_FAIL': (packet[32] >> 3) & 1   # 비트 3
+        #추후 SU5, SU6 추가 해야할수도 있음
+    }
+    parsed_data['SuLinkFailBits'] = su_link_fail_bits
     parsed_data['SuSumAlarm'] = packet[44:56]
     parsed_data['SuRptAlarm'] = packet[56:68] 
     parsed_data['StsApiVenderFreq'] = struct.unpack('<I', bytes([packet[68], packet[69], packet[70], packet[71]]))[0]
@@ -157,8 +180,8 @@ def parse_AllStatusPacket(packet):
     parsed_data['Reserved4'] = packet[238:244]
     parsed_data['MVBX_pci'] = struct.unpack('<h', bytes([packet[244], packet[245]]))[0]
     parsed_data['MVBX_ssb'] = struct.unpack('<h', bytes([packet[246], packet[247]]))[0]
-    parsed_data['MVBX_rsrp'] = struct.unpack('<f', bytes(packet[248:252]))[0]
-    parsed_data['MVBX_snr'] = struct.unpack('<f', bytes(packet[252:256]))[0]
+    parsed_data['MVBX_rsrp'] = f"{struct.unpack('<f', bytes(packet[248:252]))[0]:.2f} [dBm]"
+    parsed_data['MVBX_snr'] = f"{struct.unpack('<f', bytes(packet[252:256]))[0]:.2f} [dB]"
     parsed_data['MVBX_BeamInfo_beamId1'] = struct.unpack('<h', bytes([packet[256], packet[257]]))[0]
     parsed_data['MVBX_BeamInfo_beamId2'] = struct.unpack('<h', bytes([packet[258], packet[259]]))[0]
     parsed_data['MVBX_BeamInfo_beamId3'] = struct.unpack('<h', bytes([packet[260], packet[261]]))[0]
@@ -200,7 +223,7 @@ def parse_AllStatusPacket(packet):
     parsed_data['ModRsrp'] = struct.unpack('<h', bytes([packet[412], packet[413]]))[0]
     parsed_data['ModRsrq'] = struct.unpack('<h', bytes([packet[414], packet[415]]))[0]
     parsed_data['InitTemper'] = packet[416]
-    parsed_data['ModVersion'] = packet[417]
+    parsed_data['ModVersion'] = f"{packet[417] / 100:.2f}"
     parsed_data['ModLanUseMode'] = packet[418]
     parsed_data['ModPci'] = packet[419]
     parsed_data['SU_DlIsoAtten_SISO'] = packet[420]
@@ -208,18 +231,42 @@ def parse_AllStatusPacket(packet):
     parsed_data['SU_UlIsoAtten_SISO'] = packet[422]
     parsed_data['SU_UlIsoAtten_MIMO'] = packet[423]
     parsed_data['SU_ISO_SATUS'] = packet[424:428]
+    
     parsed_data['DU_ISO_STATUS'] = packet[428]
+    
     parsed_data['ModStatus'] = packet[429]
     parsed_data['ModSinr'] = packet[430]
     parsed_data['Reserved6'] = packet[431]
     parsed_data['ModRssi'] = struct.unpack('<h', bytes([packet[432], packet[433]]))[0]
     parsed_data['ModTxPwr'] = struct.unpack('<h', bytes([packet[434], packet[435]]))[0]
-    parsed_data['ModIMSINum'] = packet[436:452]
-    parsed_data['ModIMEINum'] = packet[452:476]
+    
+    """
+    # 16진수 바이트 배열을 10진수 문자열로 변환 (15자리만)
+    def hex_bytes_to_decimal_string(byte_array):
+        try:
+            # 16진수 값을 10진수 문자열로 변환
+            result = ''.join([f"{b:02d}" for b in byte_array if b != 0])
+            # 15자리만 사용
+            return result[:15] if result else "N/A"
+        except:
+            return "N/A"
+    """
+    
+    # 널문자를 만날 때까지 문자열 변환
+    def bytes_to_string_until_null(byte_array):
+        result = ''
+        for b in byte_array:
+            if b == 0:  # 널문자 만나면 중단
+                break
+            result += chr(b)
+        return result
+    
+    parsed_data['ModIMSINum'] = bytes_to_string_until_null(packet[436:452])
+    parsed_data['ModIMEINum'] = bytes_to_string_until_null(packet[452:476])
     parsed_data['ModIpAddress'] =f"{packet[476]}.{packet[477]}.{packet[478]}.{packet[479]}"
     parsed_data['ModServerIpAddress'] = packet[480:484]
-    parsed_data['ModPhonNumber'] = packet[484:496]
-    parsed_data['ModEmsFwVer'] = packet[496:498]
+    parsed_data['ModPhonNumber'] = bytes_to_string_until_null(packet[484:495])
+    parsed_data['ModEmsFwVer'] = f"{struct.unpack('<h', bytes([packet[496], packet[497]]))[0] / 100:.2f}"
     parsed_data['Gumstick_CurTemper'] = struct.unpack('<h', bytes([packet[498], packet[499]]))[0]
     parsed_data['Gumstick_StartTemper'] = struct.unpack('<h', bytes([packet[500], packet[501]]))[0]
     parsed_data['DlTemperCompensation'] = packet[502]
@@ -230,7 +277,8 @@ def parse_AllStatusPacket(packet):
     parsed_data['DsOutputPower_SISO'] = struct.unpack('<h', bytes([packet[508], packet[509]]))[0]
     parsed_data['EmsModemReset'] = packet[510]
     parsed_data['Reserved6p2'] = packet[511]
-    parsed_data['AGC_Input_Power'] = struct.unpack('<h', bytes([packet[512], packet[513]]))[0]
+    agc_input_raw = struct.unpack('<h', bytes([packet[512], packet[513]]))[0]
+    parsed_data['AGC_Input_Power'] = f"{agc_input_raw / 10:.1f}"
     parsed_data['DsOutputPower_MIMO'] = struct.unpack('<h', bytes([packet[514], packet[515]]))[0]
     parsed_data['Actual_Orientation'] = struct.unpack('<h', bytes([packet[516], packet[517]]))[0]
     parsed_data['Actual_Tilt'] = struct.unpack('<h', bytes([packet[518], packet[519]]))[0]
@@ -246,6 +294,16 @@ def parse_AllStatusPacket(packet):
     parsed_data['SubInitCheckNum'] = packet[614]
     parsed_data['DebugMode'] = packet[615]
     parsed_data['SuEnableInfo'] = packet[616:628]
+    # SU Enable Info 비트 추출 (packet[616]의 비트 0~3)
+    su_enable_bits = {
+        'SU1_ENABLE': (packet[616] >> 0) & 1,  # 비트 0
+        'SU2_ENABLE': (packet[616] >> 1) & 1,  # 비트 1
+        'SU3_ENABLE': (packet[616] >> 2) & 1,  # 비트 2
+        'SU4_ENABLE': (packet[616] >> 3) & 1   # 비트 3
+    }
+    parsed_data['SuEnableBits'] = su_enable_bits
+    
+
     parsed_data['MaskMuAlarm'] = packet[628:640]
     parsed_data['MaskSuLinkFail'] = packet[640:652]
     parsed_data['MaskSuSumAlarm'] = packet[652:664]
@@ -398,7 +456,7 @@ def parse_AllStatusPacket(packet):
     parsed_data['GS_AttenOffset_DL_Mimo'] = packet[1025]
     parsed_data['GS_AttenOffset_UL_Siso'] = packet[1026]
     parsed_data['GS_AttenOffset_UL_Mimo'] = packet[1027]
-    parsed_data['ConSerialNum'] = packet[1028:1044]
+    parsed_data['ConSerialNum'] = ''.join([chr(b) for b in packet[1028:1044] if b != 0])
     parsed_data['AomTemperConperMode'] = packet[1044]
     parsed_data['GS_AttenOffset_30by15_DL_Siso'] = packet[1045]
     parsed_data['GS_AttenOffset_30by30_DL_Siso'] = packet[1046]
@@ -434,6 +492,8 @@ def parse_AllStatusPacket(packet):
     parsed_data['PciNo'] = struct.unpack('<h', bytes([packet[1102], packet[1103]]))[0]
     parsed_data['PciTime'] = packet[1104]
     parsed_data['Reserved42'] = packet[1105:1112]
+    # Reserved42 감지 시 RX 박스 끄기
+    socketio.emit("rx_off")
 
     return parsed_data
 
