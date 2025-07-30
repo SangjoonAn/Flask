@@ -74,16 +74,16 @@
 
         .status-normal { background-color: green; }
         .status-alarm { background-color: red; }
-.status-alarm-yellow { background-color: yellow; }
-.status-unknown { background-color: gray; }
-.status-linkfail { background-color: orange; }
-.status-dot {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    margin-left: 5px;
-}
+        .status-alarm-yellow { background-color: yellow; }
+        .status-unknown { background-color: gray; }
+        .status-linkfail { background-color: orange; }
+        .status-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 5px;
+        }
 
 
 
@@ -445,6 +445,71 @@
             border-radius: 12px;
             overflow: hidden; /* Ensures rounded corners apply to children */
         }
+
+        /* Beam Info Modal 관련 CSS */
+        .beam-scan-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .beam-scan-field label {
+            font-size: 0.875rem;
+            color: #495057;
+            margin: 0;
+        }
+
+        .toggle-switch {
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 10px;
+            border: none;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-switch:checked {
+            background-color: #28a745;
+        }
+
+        .toggle-switch:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        /* 초기 설정 모달 특정 스타일 */
+        .modal-header.initial-setup-header {
+            background-color: #A0A0A0; /* 회색 배경 */
+            color: black; 
+            border-bottom: none; 
+            padding: 8px 15px; 
+            position: relative; 
+        }
+        .modal-header.initial-setup-header .modal-title {
+            font-weight: bold;
+            font-size: 1rem; 
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+        .modal-header.initial-setup-header .modal-title i {
+            font-size: 0.8rem; 
+        }
+        .modal-header.initial-setup-header .btn-close {
+            color: black; 
+            opacity: 1; 
+            font-size: 0.9rem; 
+            background: none; 
+            padding: 0; 
+            margin: 0; 
+        }
+        .modal-header.initial-setup-header .btn-close:focus {
+            box-shadow: none;
+        }
         .modal-header {
             background-color: #f8f9fa; /* Light header background */
             border-bottom: 1px solid #e9ecef;
@@ -741,7 +806,7 @@
                             HIDDEN
                         </button>
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;"
-                                data-bs-toggle="modal" data-bs-target="#duBeamControlModal">Beam Info</button>       
+                                data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>       
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">Alarm Mask</button>
                         <button class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
                     </div>
@@ -1456,6 +1521,294 @@
                     </div>
                 </div>
 
+                <!-- Beam Info Modal -->
+                <div class="modal fade" id="beamInfoModal" tabindex="-1" aria-labelledby="beamInfoModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl"> <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
+
+                            <div class="modal-header initial-setup-header" style="background-color: #6c757d; color: white; border-bottom: none; padding: 0.5rem 1rem; border-radius: 0.25rem 0.25rem 0 0; cursor: grab;">
+                                <h5 class="modal-title" id="beamInfoModalLabel" style="font-weight: bold;">
+                                    <i class="fas fa-info-circle"></i> DU Beam Control
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body" style="background-color:#d1d1d1; padding: 20px; text-align: left;">
+                                <div class="card mb-3">
+                                    <div class="card-header">Evn</div>
+                                    <div class="card-body">
+                                        <div class="row align-items-center g-2">
+                                            <div class="col-auto">
+                                                <small class="text-muted">Ant. Array Ver</small><br>
+                                                <strong>0.3.16</strong>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">Temper Comp</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check form-switch">
+                                                    <input class="form-check-input toggle-switch" type="checkbox" id="startTemperSwitch" checked>
+                                                    <label class="form-check-label visually-hidden" for="startTemperSwitch">Start Temper Toggle</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">Start Temper</small><br>
+                                                <strong>52.0℃</strong>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">Cur Temper</small><br>
+                                                <strong>59.0℃</strong>
+                                            </div>
+                                            <div class="col-auto ms-auto text-end">
+                                                <small class="text-muted">Compensation DL</small><br>
+                                                <strong>1dB</strong>
+                                            </div>
+                                            <div class="col-auto text-end">
+                                                <small class="text-muted">Compensation UL</small><br>
+                                                <strong>1dB</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header">SISO Tx/Rx Gain Setting</div>
+                                            <div class="card-body">
+                                                <div class="row g-2">
+                                                    <div class="col-12 d-flex align-items-center">
+                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Front End
+                                                        <div class="ms-auto d-flex align-items-center">
+                                                            <span class="me-2 text-muted">Tx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="9">
+                                                            <span class="me-2 text-muted">Rx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="14">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex align-items-center">
+                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Mixer
+                                                        <div class="ms-auto d-flex align-items-center">
+                                                            <span class="me-2 text-muted">Tx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="5">
+                                                            <span class="me-2 text-muted">Rx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="5">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header">MIMO Tx/Rx Gain Setting</div>
+                                            <div class="card-body">
+                                                <div class="row g-2">
+                                                    <div class="col-12 d-flex align-items-center">
+                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Front End
+                                                        <div class="ms-auto d-flex align-items-center">
+                                                            <span class="me-2 text-muted">Tx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="9">
+                                                            <span class="me-2 text-muted">Rx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="14">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 d-flex align-items-center">
+                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Mixer
+                                                        <div class="ms-auto d-flex align-items-center">
+                                                            <span class="me-2 text-muted">Tx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="5">
+                                                            <span class="me-2 text-muted">Rx Gain Idx</span>
+                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="5">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header">Beam Book</div>
+                                            <div class="card-body text-center">
+
+                                                <svg id="beamBook" width="360" height="360" viewBox="0 0 400 400"></svg>
+
+
+                                                <div class="text-start mt-3">
+                                                    <small class="text-muted">Orientation</small> <span class="ms-2">0.000</span><br>
+                                                    <small class="text-muted">Tilt</small> <span class="ms-4">0.000</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card mb-3">
+                                            <div class="card-header">Beam Info</div>
+                                            <div class="card-body p-0">
+                                                <div class="table-responsive">
+                                                    <table class="table table-striped table-sm mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Rank</th>
+                                                                <th scope="col">Beam ID</th>
+                                                                <th scope="col">PCI</th>
+                                                                <th scope="col">SSB</th>
+                                                                <th scope="col">Energy</th>
+                                                                <th scope="col">PSS</th>
+                                                                <th scope="col">SNR(dB)</th>
+                                                                <th scope="col">RSRP(dBm)</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>1st</td>
+                                                                <td>1</td>
+                                                                <td>313</td>
+                                                                <td>0</td>
+                                                                <td>1</td>
+                                                                <td>0</td>
+                                                                <td>-0.00</td>
+                                                                <td>-990.00</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>2nd</td>
+                                                                <td>12</td>
+                                                                <td>313</td>
+                                                                <td>32</td>
+                                                                <td>0</td>
+                                                                <td>1</td>
+                                                                <td>15.91</td>
+                                                                <td>-96.13</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>3rd</td>
+                                                                <td>13</td>
+                                                                <td>313</td>
+                                                                <td>64</td>
+                                                                <td>0</td>
+                                                                <td>1</td>
+                                                                <td>12.64</td>
+                                                                <td>-99.63</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>4th</td>
+                                                                <td>47</td>
+                                                                <td>313</td>
+                                                                <td>16</td>
+                                                                <td>0</td>
+                                                                <td>1</td>
+                                                                <td>12.14</td>
+                                                                <td>-100.57</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card mb-3">
+                                            <div class="card-header">Beam Scan</div>
+                                            <div class="card-body">
+                                                <div class="row g-2">
+                                                    <div class="col-md-6">
+                                                        <div class="beam-scan-field">
+                                                            <label for="beamRetry">Beam Retry</label>
+                                                            <div class="form-check form-switch ms-auto">
+                                                                <input class="form-check-input toggle-switch" type="checkbox" id="beamRetrySwitch" checked>
+                                                                <label class="form-check-label visually-hidden" for="beamRetrySwitch">Beam Retry Toggle</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="decodeAGC">Decode AGC</label>
+                                                            <div class="form-check form-switch ms-auto">
+                                                                <input class="form-check-input toggle-switch" type="checkbox" id="decodeAGCSwitch" checked>
+                                                                <label class="form-check-label visually-hidden" for="decodeAGCSwitch">Decode AGC Toggle</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="retryCount">Retry Count (1/min)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="retryCount" value="9230">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="pllRelockCount">PLL Relock Count</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="pllRelockCount" value="0">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="centerFrequency">Center Frequency</label>
+                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
+                                                                <input type="text" class="form-control" id="centerFrequency" value="2792500">
+                                                                <span class="input-group-text">KHz</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="beamFix">Beam Fix</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="beamFix" value="AUTO">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="beam-scan-field">
+                                                            <label for="apiLogLevel">API Log Level (2~4)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="apiLogLevel" value="5">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="apiAdcSel">API Adc Sel (0~3dB)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="apiAdcSel" value="0">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="syncPathGain">Sync Path Gain (0~15.2dB)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="syncPathGain" value="15">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="duTimeAdvance">DU Time Advance (10.5us)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="duTimeAdvance" value="0">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="suTimeAdvance">SU Time Advance (10.5us)</label>
+                                                            <input type="text" class="form-control form-control-sm ms-auto" id="suTimeAdvance" value="0">
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="orientationActual">Orientation</label>
+                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
+                                                                <span class="input-group-text">Actual</span>
+                                                                <input type="text" class="form-control" id="orientationActual" value="0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="orientationAdjust"></label>
+                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
+                                                                <span class="input-group-text">Adjust</span>
+                                                                <input type="text" class="form-control" id="orientationAdjust" value="0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="tiltActual">Tilt</label>
+                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
+                                                                <span class="input-group-text">Actual</span>
+                                                                <input type="text" class="form-control" id="tiltActual" value="0">
+                                                            </div>
+                                                        </div>
+                                                        <div class="beam-scan-field">
+                                                            <label for="tiltAdjust"></label>
+                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
+                                                                <span class="input-group-text">Adjust</span>
+                                                                <input type="text" class="form-control" id="tiltAdjust" value="0">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding-top: 0;">
+                                <button class="btn btn-secondary me-2">Cancel</button>
+                                <button class="btn btn-primary">Set Mode</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
 
                 <!-- DU System -->
                 <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white;" class="mb-2">DU System</div>
@@ -1586,20 +1939,20 @@
 
                             <div class="row text-secondary small mb-4">
                                     <div class="col-4">
-                                        <p id="alarm_dc"><span class="status-circle" style="background-color: gray;"></span> DC</p>
-                                        <p id="alarm_temp" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Temp</p>
-                                        <p id="alarm_if_pll" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> IF PLL</p>
+                                        <p id="alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_ac" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> AC</p>
-                                        <p id="alarm_bat" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> BAT</p>
-                                        <p id="alarm_sync_pll" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Sync PLL</p>
+                                        <p id="alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> FPGA Link</p>
-                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Ant. Array Link</p>
-                                        <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> TSync Link</p>
-                                        <p id="alarm_decoding" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Decoding</p>
+                                        <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
                             </div>
 
@@ -2202,20 +2555,20 @@
 
                             <div class="row text-secondary small mb-4">
                                     <div class="col-4">
-                                        <p id="alarm_dc"><span class="status-circle" style="background-color: gray;"></span> DC</p>
-                                        <p id="alarm_temp" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Temp</p>
-                                        <p id="alarm_if_pll" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> IF PLL</p>
+                                        <p id="alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_ac" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> AC</p>
-                                        <p id="alarm_bat" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> BAT</p>
-                                        <p id="alarm_sync_pll" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Sync PLL</p>
+                                        <p id="alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> FPGA Link</p>
-                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Ant. Array Link</p>
-                                        <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> TSync Link</p>
-                                        <p id="alarm_decoding" style="color: gray;"><span class="status-circle" style="background-color: gray;"></span> Decoding</p>
+                                        <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
                                     
                             </div>
@@ -2956,7 +3309,7 @@
         let userClicked = false;
 
         // 전역 변수로 현재 알람 상태 저장 (초기값 설정)
-        let currentDuAlarmStatus = 1; // 0: 정상 (초록색), 1: 알람 (빨간색) - DU 기본값을 1 (빨간색)로 설정
+        let currentDuAlarmStatus = 0; // 0: 정상 (초록색), 1: 알람 (빨간색) - DU 기본값을 0 (초록색)로 설정
         
 
         // Send_Packet 데이터 정의 (전역 변수로 선언)
@@ -3244,8 +3597,137 @@
             if (!el) return;
 
             const bit = getBitFromByteArray(byteArray, bitIndex);
-            el.style.backgroundColor = bit === 1 ? 'green' : 'red';
+            if (bit === 0) {
+                el.style.backgroundColor = 'green'; // 정상
+            } else if (bit === 1) {
+                el.style.backgroundColor = 'red'; // 알람
+            } else {
+                el.style.backgroundColor = 'gray'; // 기본값
+            }
         }
+
+        // 서버에서 계산된 알람 상태로 .status-circle 색상 변경
+        function updateAlarmDot(elementId, isActive) {
+            const el = document.querySelector(`#${elementId} .status-circle`);
+            if (!el) return;
+
+            if (isActive) {
+                el.style.backgroundColor = 'red'; // 알람
+            } else {
+                el.style.backgroundColor = 'green'; // 정상
+            }
+        }
+
+        const beamData = []; // 저장할 beam path/text info
+
+        // 링별 빔 개수: 0~57 총 58개
+        const ringSegments = [1, 6, 12, 17, 20]; // 총합 58
+        const centerX = 200;
+        const centerY = 200;
+        const ringWidth = 30;
+
+        // BeamBook 그리기
+        function drawBeamBook() {
+            const svg = document.getElementById("beamBook");
+            svg.innerHTML = ""; // 초기화
+            beamData.length = 0;
+
+            let currentNumber = 0;
+
+            for (let ring = 0; ring < ringSegments.length; ring++) {
+                const segments = ringSegments[ring];
+                const innerRadius = ring * ringWidth;
+                const outerRadius = innerRadius + ringWidth;
+
+                for (let i = 0; i < segments; i++) {
+                    const startAngle = (360 - (i * (360 / segments))) * Math.PI / 180;  // 시계방향
+                    const endAngle = (360 - ((i + 1) * (360 / segments))) * Math.PI / 180;
+
+                    // path 만들기
+                    const path = describeArc(centerX, centerY, innerRadius, outerRadius, startAngle, endAngle);
+                    const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    pathEl.setAttribute("d", path);
+                    pathEl.setAttribute("fill", "dimgray");
+                    pathEl.setAttribute("stroke", "#aaa");
+                    pathEl.setAttribute("stroke-width", 1);
+                    svg.appendChild(pathEl);
+
+                    // 번호 텍스트
+                    const midAngle = (startAngle + endAngle) / 2;
+                    const textRadius = (innerRadius + outerRadius) / 2;
+                    const textX = centerX + textRadius * Math.cos(midAngle);
+                    const textY = centerY + textRadius * Math.sin(midAngle);
+                    const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    textEl.setAttribute("x", textX);
+                    textEl.setAttribute("y", textY);
+                    textEl.setAttribute("text-anchor", "middle");
+                    textEl.setAttribute("alignment-baseline", "middle");
+                    textEl.setAttribute("font-size", "10");
+                    textEl.setAttribute("fill", "white");
+                    textEl.textContent = currentNumber;
+                    svg.appendChild(textEl);
+
+                    beamData.push({
+                        number: currentNumber,
+                        pathEl: pathEl,
+                        textEl: textEl
+                    });
+
+                    currentNumber++;
+                    if (currentNumber >= 58) break;
+                }
+            }
+        }
+
+        // path 계산
+        function describeArc(cx, cy, r1, r2, startAngle, endAngle) {
+            const x1i = cx + r1 * Math.cos(startAngle);
+            const y1i = cy + r1 * Math.sin(startAngle);
+            const x2i = cx + r2 * Math.cos(startAngle);
+            const y2i = cy + r2 * Math.sin(startAngle);
+            const x2o = cx + r2 * Math.cos(endAngle);
+            const y2o = cy + r2 * Math.sin(endAngle);
+            const x1o = cx + r1 * Math.cos(endAngle);
+            const y1o = cy + r1 * Math.sin(endAngle);
+            const largeArc = ((endAngle - startAngle) % (2 * Math.PI)) > Math.PI ? 1: 0;
+
+            return `
+                M ${x1i},${y1i}
+                L ${x2i},${y2i}
+                A ${r2},${r2} 0 ${largeArc} 0 ${x2o},${y2o}
+                L ${x1o},${y1o}
+                A ${r1},${r1} 0 ${largeArc} 1 ${x1i},${y1i}
+                Z
+            `;
+        }
+
+        // 외부에서 색상 업데이트
+        function updateBeamColors({ yellow = [], blue = [] }) {
+            for (const beam of beamData) {
+                const { number, pathEl } = beam;
+                if (yellow.includes(number)) {
+                    pathEl.setAttribute("fill", "gold");
+                } else if (blue.includes(number)) {
+                    pathEl.setAttribute("fill", "deepskyblue");
+                } else {
+                    pathEl.setAttribute("fill", "dimgray");
+                }
+            }
+        }
+
+        // Beam Info 모달이 열릴 때 다이어그램 그리기
+        document.addEventListener('DOMContentLoaded', function() {
+            const beamInfoModal = document.getElementById('beamInfoModal');
+            if (beamInfoModal) {
+                beamInfoModal.addEventListener('shown.bs.modal', function() {
+                    drawBeamBook();
+                    updateBeamColors({
+                        yellow: [2],
+                        blue: [11, 3, 47]
+                    });
+                });
+            }
+        });
 
 
         function updateTime() {
@@ -3440,17 +3922,18 @@
                 if (dot) {
                     // 기존 배경색 클래스 제거
                     dot.classList.remove('status-normal', 'status-alarm', 'status-linkfail', 'status-alarm-yellow', 'status-unknown');
-                    // showScreen 함수에서 설정하는 인라인 스타일 초기화
+                    // 인라인 스타일 초기화 (테두리는 유지)
                     dot.style.backgroundColor = ''; 
                 }
             });
 
-            // DU 점 색상 업데이트
+            // DU 점 색상 업데이트 - 기본값은 초록색, 알람 시 빨간색
             if (duNavDot) {
+                duNavDot.classList.remove('status-normal', 'status-alarm');
                 if (currentDuAlarmStatus === 1) {
-                    duNavDot.classList.add('status-alarm'); // 알람 시 빨간색 (요청에 따라 기본 DU 색상)
+                    duNavDot.classList.add('status-alarm'); // 알람 시 빨간색
                 } else {
-                    duNavDot.classList.add('status-normal'); // 정상 시 초록색 (이 경우는 Socket.IO 데이터에 따라 변경될 때)
+                    duNavDot.classList.add('status-normal'); // 정상 시 초록색 (기본값)
                 }
             }
 
@@ -3567,7 +4050,7 @@
             originalColor: null
         };
 
-        // RX 박스 초기 상태 저장 및 네비게이션 점 기본값 설정
+        // RX 박스 초기 상태 저장
         document.addEventListener('DOMContentLoaded', function() {
             const rxBox = document.querySelector('.rx-box');
             if (rxBox) {
@@ -3575,16 +4058,8 @@
                 rxBoxState.originalColor = window.getComputedStyle(rxBox).color;
             }
             
-            // SU 네비게이션 점 기본값 설정 (회색)
-            const su1NavDot = document.getElementById('su1_nav_dot');
-            const su2NavDot = document.getElementById('su2_nav_dot');
-            const su3NavDot = document.getElementById('su3_nav_dot');
-            const su4NavDot = document.getElementById('su4_nav_dot');
-            
-            if (su1NavDot) su1NavDot.classList.add('status-unknown');
-            if (su2NavDot) su2NavDot.classList.add('status-unknown');
-            if (su3NavDot) su3NavDot.classList.add('status-unknown');
-            if (su4NavDot) su4NavDot.classList.add('status-unknown');
+            // 네비게이션 점 기본값 설정 (초록색)
+            updateNavDotColors();
         });
 
         // RX 박스 켜기
@@ -3874,22 +4349,22 @@
             updateText("mvbx_snr", data.packet.MVBX_snr);
 
             // SISO RF
-            updateText("dl_input_siso", data.packet.DL_OutputOffset_SISO + " [dBm]");
-            updateText("dl_att_siso", data.packet.ALC_Atten_DL0_SISO + " [dB]");
+            updateText("dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
+            updateText("dl_att_siso", data.packet.DU_DlManualAtten_SISO + " [dB]");
             updateText("dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level + " [dBm]");
-            updateText("ul_input_siso", data.packet.UL_InputOffset_SISO + " [dBm]");
-            updateText("ul_att_siso", data.packet.ALC_Atten_UL0_SISO + " [dB]");
+            updateText("ul_input_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
+            updateText("ul_att_siso", data.packet.DU_UlManualAtten_SISO + " [dB]");
             updateText("ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level + " [dBm]");
             updateText("mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso + " [dB]");
             updateText("mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso + " [dB]");
             updateText("ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
 
             // MIMO RF
-            updateText("dl_input_mimo", data.packet.DL_OutputOffset_MIMO + " [dBm]");
-            updateText("dl_att_mimo", data.packet.ALC_Atten_DL1_MIMO + " [dB]");
+            updateText("dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
+            updateText("dl_att_mimo", data.packet.DU_DlManualAtten_MIMO + " [dB]");
             updateText("dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level + " [dBm]");
-            updateText("ul_input_mimo", data.packet.UL_InputOffset_MIMO + " [dBm]");
-            updateText("ul_att_mimo", data.packet.ALC_Atten_UL1_MIMO + " [dB]");
+            updateText("ul_input_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
+            updateText("ul_att_mimo", data.packet.DU_UlManualAtten_MIMO + " [dB]");
             updateText("ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level + " [dBm]");
             updateText("mvbx_tx_gain_set_miso", data.packet.Mvbx_TxGainSetMiso + " [dB]");
             updateText("mvbx_rx_gain_set_miso", data.packet.Mvbx_RxGainSetMiso + " [dB]");
@@ -3952,25 +4427,19 @@
             updateText("pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low + " [dBm]");
 
 
-            if (data.packet.StaMuAlarm && Array.isArray(data.packet.StaMuAlarm)) {
-                const alarmBytes = data.packet.StaMuAlarm;
-
-                const alarmBitMap = [
-                    { bit: 1,  id: 'alarm_dc' },
-                    { bit: 2,  id: 'alarm_ac' },
-                    { bit: 3,  id: 'alarm_temp' },
-                    { bit: 4,  id: 'alarm_bat' },
-                    { bit: 49, id: 'alarm_fpga_link' },
-                    { bit: 53, id: 'alarm_if_pll' },
-                    { bit: 54, id: 'alarm_sync_pll' },
-                    { bit: 51, id: 'alarm_tsync_link' },
-                    { bit: 66, id: 'alarm_decoding' },
-                    { bit: 70, id: 'alarm_aa_link' }
-                ];
-
-                alarmBitMap.forEach(({ bit, id }) => {
-                    updateAlarmDotByBit(alarmBytes, bit, id);
+            if (data.packet.AlarmStatus) {
+                // 서버에서 계산된 알람 상태 사용
+                const alarmStatus = data.packet.AlarmStatus;
+                
+                // 각 알람 상태에 따라 UI 업데이트
+                Object.keys(alarmStatus).forEach(alarmId => {
+                    const isActive = alarmStatus[alarmId] === 1;
+                    updateAlarmDot(alarmId, isActive);
                 });
+                
+                // DU 알람 상태 계산 (클라이언트에서 계산)
+                const hasAnyAlarm = Object.values(alarmStatus).some(status => status === 1);
+                currentDuAlarmStatus = hasAnyAlarm ? 1 : 0;
             }
 
             updateStatusBadge1("FpgaStatus", data.packet.FPGA_Boot_Status);
@@ -4023,49 +4492,15 @@
             }
 
 
-            // DU 알람 상태 확인 - 10개 알람 항목 중 하나라도 활성화되어 있으면 알람
-            if (data && data.packet && data.packet.StaMuAlarm !== undefined && data.packet.StaMuAlarm.length > 0) {
-                const alarmBytes = data.packet.StaMuAlarm;
-                
-                // 알람 비트맵 정의
-                const alarmBitMap = [
-                    { bit: 1,  id: 'alarm_dc' },
-                    { bit: 2,  id: 'alarm_ac' },
-                    { bit: 3,  id: 'alarm_temp' },
-                    { bit: 4,  id: 'alarm_bat' },
-                    { bit: 49, id: 'alarm_fpga_link' },
-                    { bit: 53, id: 'alarm_if_pll' },
-                    { bit: 54, id: 'alarm_sync_pll' },
-                    { bit: 51, id: 'alarm_tsync_link' },
-                    { bit: 66, id: 'alarm_decoding' },
-                    { bit: 70, id: 'alarm_aa_link' }
-                ];
-                
-                // 10개 알람 중 하나라도 활성화되어 있으면 DU 알람 상태로 설정
-                const hasAnyAlarm = alarmBitMap.some(({ bit }) => {
-                    const byteIndex = Math.floor((bit - 1) / 8);
-                    const bitPosition = (bit - 1) % 8;
-                    return byteIndex < alarmBytes.length && (alarmBytes[byteIndex] & (1 << bitPosition)) !== 0;
-                });
-                
-                currentDuAlarmStatus = hasAnyAlarm ? 1 : 0;
-            }
+
 
 
             // 네비게이션 점 색상 업데이트
             updateNavDotColors();
 
-            // 현재 활성화된 화면의 점은 다시 흰색으로 설정하여 활성화 상태 유지
+            // 현재 활성화된 화면의 점은 알람 상태를 유지 (추가 표시 없음)
             const activeScreenId = document.querySelector('.content-area > div.active')?.id;
-            if (activeScreenId === 'du_content_display') {
-                document.getElementById('du_nav_dot').style.backgroundColor = 'white';
-            } else if (activeScreenId === 'su1_content_display') {
-                document.getElementById('su1_nav_dot').style.backgroundColor = 'white';
-            }
-            // SU #2 화면이 활성화될 경우
-            // else if (activeScreenId === 'su2_content_display') {
-            //     document.getElementById('su2_nav_dot').style.backgroundColor = 'white';
-            // }
+            // 활성화된 화면의 점에 대한 추가 표시 제거
             
             // SU Enable 상태 처리
             if (data.packet.SuEnableBits) {

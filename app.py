@@ -99,6 +99,24 @@ def handle_hex_packet(data):
 # ---------------------------- 샘플 파서 함수 ----------------------------
 def parse_AllStatusPacket(packet):
     parsed_data = {}
+    
+    # 단위 변환 함수들
+    def convert_to_01dbm(raw_value):
+        """0.1dBm 단위로 변환 (예: -517 → -51.7 dBm)"""
+        return raw_value / 10.0
+    
+    def convert_att_4_to_2(raw_value):
+        """ATT 변환 (4→2dB, Step: 0.5dB)"""
+        return raw_value * 0.5
+    
+    def convert_to_1dbm(raw_value):
+        """1dBm 단위로 변환"""
+        return raw_value
+    
+    def convert_iso_att(raw_value):
+        """ISO ATT 변환 (4→2dB, Step: 0.5dB, Range: 0~20dB)"""
+        return raw_value * 0.5
+    
     #Du 상태
     parsed_data['Rcv_Main_Sys'] = packet[0]
     # Rcv_Main_Sys 감지 시 RX 박스 켜기
@@ -120,6 +138,36 @@ def parse_AllStatusPacket(packet):
     parsed_data['RtpKind'] = packet[18]
     parsed_data['Reserved0'] = packet[19]
     parsed_data['StaMuAlarm'] = list(packet[20:32])
+    
+    # 알람 비트 매핑 정의
+    alarm_bit_map = [
+        {'bit': 1,  'id': 'alarm_dc'},
+        {'bit': 2,  'id': 'alarm_ac'},
+        {'bit': 3,  'id': 'alarm_temp'},
+        {'bit': 4,  'id': 'alarm_bat'},
+        {'bit': 49, 'id': 'alarm_fpga_link'},
+        {'bit': 53, 'id': 'alarm_if_pll'},
+        {'bit': 54, 'id': 'alarm_sync_pll'},
+        {'bit': 52, 'id': 'alarm_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 66, 'id': 'alarm_decoding'},
+        {'bit': 70, 'id': 'alarm_aa_link'}
+    ]
+    
+    # 알람 비트 추출 함수
+    def get_alarm_bit(alarm_bytes, bit_position):
+        byte_index = (bit_position - 1) // 8
+        bit_in_byte = (bit_position - 1) % 8
+        if byte_index < len(alarm_bytes):
+            return (alarm_bytes[byte_index] >> bit_in_byte) & 1
+        return 0
+    
+    # 각 알람 비트 상태 추출
+    alarm_status = {}
+    for alarm in alarm_bit_map:
+        alarm_status[alarm['id']] = get_alarm_bit(packet[20:32], alarm['bit'])
+    
+    parsed_data['AlarmStatus'] = alarm_status
+    
     # ALA2 링크 알람 비트 추출 (packet[21]의 비트 0~3)
     ala2_link_alarms = {
         'ALA2_SU1_LINK_ALARM': (packet[21] >> 0) & 1,  # 비트 0
@@ -154,14 +202,16 @@ def parse_AllStatusPacket(packet):
     parsed_data['ALC_Atten_DL1_MIMO'] = struct.unpack('<h', bytes([packet[166], packet[167]]))[0]
     parsed_data['ALC_Atten_UL0_SISO'] = struct.unpack('<h', bytes([packet[168], packet[169]]))[0]
     parsed_data['ALC_Atten_UL1_MIMO'] = struct.unpack('<h', bytes([packet[170], packet[171]]))[0]
-    parsed_data['LD1_DET_DL0_SISO'] = struct.unpack('<h', bytes([packet[172], packet[173]]))[0]
-    parsed_data['LD2_DET_DL1_MIMO'] = struct.unpack('<h', bytes([packet[174], packet[175]]))[0]
-    parsed_data['PD1_DET_UL0_SISO'] = struct.unpack('<h', bytes([packet[176], packet[177]]))[0]
-    parsed_data['PD2_DET_UL1_MIMO'] = struct.unpack('<h', bytes([packet[178], packet[179]]))[0]
-    parsed_data['SISO_RF_DET_DL0_OUT'] = struct.unpack('<h', bytes([packet[180], packet[181]]))[0]
-    parsed_data['SISO_RF_DET_UL0_OUT'] = struct.unpack('<h', bytes([packet[182], packet[183]]))[0]
-    parsed_data['MIMO_RF_DET_DL1_OUT'] = struct.unpack('<h', bytes([packet[184], packet[185]]))[0]
-    parsed_data['MIMO_RF_DET_UL1_OUT'] = struct.unpack('<h', bytes([packet[186], packet[187]]))[0]
+    # SISO/MIMO OPTIC DET (0.1dBm 단위로 변환)
+    parsed_data['LD1_DET_DL0_SISO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[172], packet[173]]))[0])
+    parsed_data['LD2_DET_DL1_MIMO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[174], packet[175]]))[0])
+    parsed_data['PD1_DET_UL0_SISO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[176], packet[177]]))[0])
+    parsed_data['PD2_DET_UL1_MIMO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[178], packet[179]]))[0])
+    # SISO/MIMO RF DET (0.1dBm 단위로 변환)
+    parsed_data['SISO_RF_DET_DL0_OUT'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[180], packet[181]]))[0])
+    parsed_data['SISO_RF_DET_UL0_OUT'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[182], packet[183]]))[0])
+    parsed_data['MIMO_RF_DET_DL1_OUT'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[184], packet[185]]))[0])
+    parsed_data['MIMO_RF_DET_UL1_OUT'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[186], packet[187]]))[0])
     parsed_data['LD3_DET_DL0_SISO'] = struct.unpack('<h', bytes([packet[188], packet[189]]))[0]
     parsed_data['LD4_DET_DL1_MIMO'] = struct.unpack('<h', bytes([packet[190], packet[191]]))[0]
     parsed_data['PD3_DET_UL0_SISO'] = struct.unpack('<h', bytes([packet[192], packet[193]]))[0]
@@ -331,18 +381,20 @@ def parse_AllStatusPacket(packet):
     parsed_data['ALC_DL1_MIMO_Mode'] = packet[761]
     parsed_data['ALC_UL0_SISO_Mode'] = packet[762]
     parsed_data['ALC_UL1_MIMO_Mode'] = packet[763]
-    parsed_data['ALC_DL0_SISO_Level'] = struct.unpack('<h', bytes([packet[764], packet[765]]))[0]
-    parsed_data['ALC_DL1_MIMO_Level'] = struct.unpack('<h', bytes([packet[766], packet[767]]))[0]
-    parsed_data['ALC_UL0_SISO_Level'] = struct.unpack('<h', bytes([packet[768], packet[769]]))[0]
-    parsed_data['ALC_UL1_MIMO_Level'] = struct.unpack('<h', bytes([packet[770], packet[771]]))[0]
+    # ALC Level (1dBm 단위)
+    parsed_data['ALC_DL0_SISO_Level'] = convert_to_1dbm(struct.unpack('<h', bytes([packet[764], packet[765]]))[0])
+    parsed_data['ALC_DL1_MIMO_Level'] = convert_to_1dbm(struct.unpack('<h', bytes([packet[766], packet[767]]))[0])
+    parsed_data['ALC_UL0_SISO_Level'] = convert_to_1dbm(struct.unpack('<h', bytes([packet[768], packet[769]]))[0])
+    parsed_data['ALC_UL1_MIMO_Level'] = convert_to_1dbm(struct.unpack('<h', bytes([packet[770], packet[771]]))[0])
     parsed_data['SISO_RF_DET_DL0_OUT_High'] = struct.unpack('<h', bytes([packet[772], packet[773]]))[0]
     parsed_data['SISO_RF_DET_UL0_OUT_High'] = struct.unpack('<h', bytes([packet[774], packet[775]]))[0]
     parsed_data['MIMO_RF_DET_DL1_OUT_High'] = struct.unpack('<h', bytes([packet[776], packet[777]]))[0]
     parsed_data['MIMO_RF_DET_UL1_OUT_High'] = struct.unpack('<h', bytes([packet[778], packet[779]]))[0]
-    parsed_data['LD1_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[780], packet[781]]))[0]
-    parsed_data['LD2_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[782], packet[783]]))[0]
-    parsed_data['PD1_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[784], packet[785]]))[0]
-    parsed_data['PD2_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[786], packet[787]]))[0]
+    # SISO/MIMO OPTIC DET Low (0.1dBm 단위로 변환)
+    parsed_data['LD1_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[780], packet[781]]))[0])
+    parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
+    parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
+    parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
     parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
     parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
     parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
@@ -355,16 +407,17 @@ def parse_AllStatusPacket(packet):
     parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
     parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
     parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
-    parsed_data['DU_DlManualAtten_SISO'] = packet[812]
-    parsed_data['DU_DlSubAtten_SISO'] = packet[813]
-    parsed_data['DU_DlManualAtten_MIMO'] = packet[814]
-    parsed_data['DU_DlSubAtten_MIMO'] = packet[815]
-    parsed_data['DU_UlManualAtten_SISO'] = packet[816]
-    parsed_data['DU_UlSubAtten_SISO'] = packet[817]
-    parsed_data['DU_UlIsoAtten_SISO'] = packet[818]
-    parsed_data['DU_UlManualAtten_MIMO'] = packet[819]
-    parsed_data['DU_UlSubAtten_MIMO'] = packet[820]
-    parsed_data['DU_UlIsoAtten_MIMO'] = packet[821]
+    # DU ATT (0.5dB 단위로 변환)
+    parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
+    parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
+    parsed_data['DU_DlManualAtten_MIMO'] = convert_att_4_to_2(packet[814])
+    parsed_data['DU_DlSubAtten_MIMO'] = convert_att_4_to_2(packet[815])
+    parsed_data['DU_UlManualAtten_SISO'] = convert_att_4_to_2(packet[816])
+    parsed_data['DU_UlSubAtten_SISO'] = convert_att_4_to_2(packet[817])
+    parsed_data['DU_UlIsoAtten_SISO'] = convert_iso_att(packet[818])
+    parsed_data['DU_UlManualAtten_MIMO'] = convert_att_4_to_2(packet[819])
+    parsed_data['DU_UlSubAtten_MIMO'] = convert_att_4_to_2(packet[820])
+    parsed_data['DU_UlIsoAtten_MIMO'] = convert_iso_att(packet[821])
     parsed_data['SU_DlManualAtten_SISO'] = packet[822]
     parsed_data['SU_DlSubAtten_SISO'] = packet[823]
     parsed_data['SU_DlManualAtten_MIMO'] = packet[824]
@@ -769,7 +822,7 @@ def parse_AllStatusPacket2(packet):
     parsed_data['cSU_DlManualAtten_SISO5'] = packet[544]
     parsed_data['cSU_UlManualAtten_SISO1'] = packet[545]   
     parsed_data['cSU_UlManualAtten_SISO2'] = packet[546]   
-    parsed_data['cSU_UlManualAtten_SISO3'] = packet[547]   
+    parsed_data['cSU_UlManualAtten_SISO3'] = convert_att_4_to_2(packet[547])   
     parsed_data['cSU_DlManualAtten_SISO'] = packet[548]
     parsed_data['cSU_DlSubAtten_SISO'] = packet[549]
     parsed_data['cSU_UlManualAtten_SISO4'] = packet[550]
