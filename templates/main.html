@@ -548,6 +548,160 @@
             background-color: #6b7280; /* Gray */
             color: white;
         }
+
+        /* DU Hidden Modal Grid Layout */
+        .du-hidden-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto auto;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .rf-section, .optic-section {
+            background: #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .rf-section h6, .optic-section h6 {
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .rf-content {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .rf-column {
+            flex: 1;
+        }
+
+        .rf-column h6 {
+            color: #6c757d;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .optic-content {
+            margin-top: 10px;
+        }
+
+        .input-item {
+            margin-bottom: 8px;
+        }
+
+        .input-item label {
+            font-size: 12px;
+            color: #495057;
+            font-weight: 500;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            background: white;
+        }
+
+        .input-with-unit .unit {
+            font-size: 11px;
+            color: #6c757d;
+            white-space: nowrap;
+        }
+
+        .bottom-section {
+            grid-column: 1 / -1;
+            background: #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .bottom-content {
+            display: flex;
+            gap: 30px;
+            justify-content: space-between;
+        }
+
+        .bottom-block {
+            flex: 1;
+        }
+
+        .form-group-item {
+            margin-bottom: 10px;
+        }
+
+        .form-group-item label {
+            font-size: 12px;
+            color: #495057;
+            font-weight: 600;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .form-group-item input {
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 3px;
+            background: white;
+            width: 100%;
+        }
+
+        .btn-toggle {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-toggle.on {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-toggle.off {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .cut-time-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .btn-custom-blue-lg {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
         .btn-success-custom {
             background-color: #10b981; /* Green */
             color: white;
@@ -1122,25 +1276,28 @@
 
                 <!-- DU Hidden Modal -->
                 <div class="modal fade" id="duHiddenModal" tabindex="-1" aria-labelledby="duHiddenModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-scrollable" style="max-width: 85%; width: 85%;">
-                        <div class="modal-content rounded-lg shadow-xl">
-                            <div class="modal-header bg-gray-700 text-white rounded-t-lg">
-                                <h5 class="modal-title text-xl font-bold" id="duHiddenModalLabel">DU HIDDEN</h5>
-                                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
+                            <div class="modal-header initial-setup-header" style="background-color: #6c757d; color: white; border-bottom: none; padding: 0.5rem 1rem; border-radius: 0.25rem 0.25rem 0 0; cursor: grab;">
+                                <h5 class="modal-title" id="duHiddenModalLabel" style="font-weight: bold;">
+                                    <i class="fas fa-plus me-2"></i>DU HIDDEN
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             
-                            <div class="modal-body p-6 bg-gray-50">
-                                <!-- RF sections in 2 columns -->
-                                <div class="row gx-5 mb-4">
-                                    <div class="col-12 col-lg-5 rf-optic-section px-lg-3"> <!-- SISO RF -->
-                                        <!-- SISO RF -->
-                                        <h6><i class="fas fa-dot-circle"></i> SISO RF</h6>
-                                        <hr>
-                                        <div class="row mt-3">
+                            <div class="modal-body" style="background-color:#d1d1d1; padding: 20px; text-align: left;">
+                                <!-- Main Grid Layout -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <!-- SISO RF Section -->
+                                        <div class="card mb-3">
+                                            <div class="card-header">SISO RF</div>
+                                            <div class="card-body">
+                                        <div class="rf-content">
                                             <!-- DL Column -->
-                                            <div class="col-6">
+                                            <div class="rf-column">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
-                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                    <i class="fas fa-plus me-1"></i> DL
                                                 </h6>
                                                 <!-- DL Top Section -->
                                                 <div class="input-item">
@@ -1187,9 +1344,9 @@
                                             </div>
                                             
                                             <!-- UL Column -->
-                                            <div class="col-6">
+                                            <div class="rf-column">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
-                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                    <i class="fas fa-plus me-1"></i> UL
                                                 </h6>
                                                 <!-- UL Top Section -->
                                                 <div class="input-item">
@@ -1249,19 +1406,20 @@
                                                 </div>
                                             </div>
                                         </div>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="col-12 col-lg-2"></div>
-
-                                    <div class="col-12 col-lg-5 rf-optic-section px-lg-3"> <!-- MIMO RF -->
-                                        <!-- MIMO RF -->
-                                        <h6><i class="fas fa-dot-circle"></i> MIMO RF</h6>
-                                        <hr>
-                                        <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <!-- MIMO RF Section -->
+                                        <div class="card mb-3">
+                                            <div class="card-header">MIMO RF</div>
+                                            <div class="card-body">
+                                        <div class="rf-content">
                                             <!-- DL Column -->
-                                            <div class="col-6">
+                                            <div class="rf-column">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
-                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                    <i class="fas fa-plus me-1"></i> DL
                                                 </h6>
                                                 <!-- DL Top Section -->
                                                 <div class="input-item">
@@ -1308,9 +1466,9 @@
                                             </div>
                                             
                                             <!-- UL Column -->
-                                            <div class="col-6">
+                                            <div class="rf-column">
                                                 <h6 class="text-secondary d-flex align-items-center mb-2">
-                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                    <i class="fas fa-plus me-1"></i> UL
                                                 </h6>
                                                 <!-- UL Top Section -->
                                                 <div class="input-item">
@@ -1370,159 +1528,160 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                
-                                </div>
-                                
-                                <!-- Optic sections in 2 columns -->
-                                <div class="row g-4 mb-4">
-                                    <!-- SISO Optic -->
-                                    <div class="col-12 col-lg-5 rf-optic-section">
-                                        <h6><i class="fas fa-dot-circle"></i> SISO OPTIC</h6>
-                                        <hr>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <div class="input-item">
-                                                    <label>LD PWR Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="LD1_DET_DL0_SISO_Offset" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-item">
-                                                    <label>PD PWR Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="PD1_DET_UL0_SISO_Offset" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-item">
-                                                    <label>RSRQ Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="RsrpOffset" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-item">
-                                                    <label>RSRQ Low Level</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpLevel" />
-                                                        <span class="unit">[dBm]</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-item">
-                                                    <label>RSRQ Still Time</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpStillTime" />
-                                                        <span class="unit">[sec]</span>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-12 col-lg-2"></div>
+                                    <div class="col-md-6">
+                                        <!-- SISO OPTIC Section -->
+                                        <div class="card mb-3">
+                                            <div class="card-header">SISO OPTIC</div>
+                                            <div class="card-body">
+                                        <div class="optic-content">
+                                            <div class="input-item">
+                                                <label>LD PWR Offset</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="LD1_DET_DL0_SISO_Offset" />
+                                                    <span class="unit">[dB]</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-item">
+                                                <label>PD PWR Offset</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="PD1_DET_UL0_SISO_Offset" />
+                                                    <span class="unit">[dB]</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-item">
+                                                <label>RSRQ Offset</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="RsrpOffset" />
+                                                    <span class="unit">[dB]</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-item">
+                                                <label>RSRQ Low Level</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpLevel" />
+                                                    <span class="unit">[dBm]</span>
+                                                </div>
+                                            </div>
+                                            <div class="input-item">
+                                                <label>RSRQ Still Time</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="LowRsrpStillTime" />
+                                                    <span class="unit">[sec]</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <!-- MIMO Optic -->
-                                    <div class="col-12 col-lg-5 rf-optic-section">
-                                        <h6><i class="fas fa-dot-circle"></i> MIMO OPTIC</h6>
-                                        <hr>
-                                        <div class="row mt-3">
-                                            <div class="col-12">
-                                                <div class="input-item">
-                                                    <label>LD PWR Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="LD2_DET_DL1_MIMO_Offset" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
+                                    <div class="col-md-6">
+                                        <!-- MIMO OPTIC Section -->
+                                        <div class="card mb-3">
+                                            <div class="card-header">MIMO OPTIC</div>
+                                            <div class="card-body">
+                                        <div class="optic-content">
+                                            <div class="input-item">
+                                                <label>LD PWR Offset</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="LD2_DET_DL1_MIMO_Offset" />
+                                                    <span class="unit">[dB]</span>
                                                 </div>
-                                                <div class="input-item">
-                                                    <label>PD PWR Offset</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" value="0" class="form-control form-control-sm" id="PD2_DET_UL1_MIMO_Offset" />
-                                                        <span class="unit">[dB]</span>
-                                                    </div>
+                                            </div>
+                                            <div class="input-item">
+                                                <label>PD PWR Offset</label>
+                                                <div class="input-with-unit">
+                                                    <input type="text" value="0" class="form-control form-control-sm" id="PD2_DET_UL1_MIMO_Offset" />
+                                                    <span class="unit">[dB]</span>
                                                 </div>
+                                            </div>
+                                        </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Bottom Section (S/N, Polling Time, Baudrate, Toggles) -->
-                                <div class="bottom-section card p-4 mt-4 rf-optic-section"> <!-- Added rf-optic-section class -->
-                                    <div class="row g-4 text-secondary small">
-                                        <!-- Left Block -->
-                                        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">S/N</label>
-                                                <input type="text" id="conserialnum" value="N/A" class="form-control form-control-sm w-40" />
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">ISO Detect</label>
-                                                <input type="text" id="isodetect" value="N/A" class="form-control form-control-sm w-40" />
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Polling Time</label>
-                                                <div class="d-flex align-items-center"> <!-- Changed structure for alignment -->
-                                                    <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
-                                                    <span class="unit">[ms]</span>
+                                <div class="card mb-3">
+                                    <div class="card-header">System Settings</div>
+                                    <div class="card-body">
+                                        <div class="bottom-content">
+                                            <!-- Left Block -->
+                                            <div class="bottom-block">
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">S/N</label>
+                                                    <input type="text" id="conserialnum" value="N/A" class="form-control form-control-sm" />
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">ISO Detect</label>
+                                                    <input type="text" id="isodetect" value="N/A" class="form-control form-control-sm" />
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Polling Time</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" />
+                                                        <span class="unit">[ms]</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Baudrate</label>
+                                                    <div class="input-with-unit">
+                                                        <input type="text" id="baudrate" value="N/A" class="form-control form-control-sm" />
+                                                        <span class="unit">[bps]</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Baudrate</label>
-                                                <div class="d-flex align-items-center"> <!-- Changed structure for alignment -->
-                                                    <input type="text" id="baudrate" value="N/A" class="form-control form-control-sm" style="width: 80px; margin-right: 5px;" />
-                                                    <span class="unit">[bps]</span>
+
+                                            <!-- Middle Block (Toggles) -->
+                                            <div class="bottom-block">
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">AOM Temp</label>
+                                                    <button id="aomtemp-toggle" class="btn-toggle on">N/A</button>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Att Test</label>
+                                                    <button id="att-test-toggle" class="btn-toggle off">N/A</button>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Api Init.</label>
+                                                    <button id="api-init-toggle" class="btn-toggle on">N/A</button>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Api Init. Retry</label>
+                                                    <button id="api-init-retry-toggle" class="btn-toggle on">N/A</button>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <!-- Middle Block (Toggles) -->
-                                        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">AOM Temp</label>
-                                                <button id="aomtemp-toggle" class="btn-toggle on">N/A</button>
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Att Test</label>
-                                                <button id="att-test-toggle" class="btn-toggle off">N/A</button>
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Api Init.</label>
-                                                <button id="api-init-toggle" class="btn-toggle on">N/A</button>
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Api Init. Retry</label>
-                                                <button id="api-init-retry-toggle" class="btn-toggle on">N/A</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- Right Block (More Toggles) -->
-                                        <div class="col-12 col-md-6 col-lg-4 d-flex flex-column">
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Debug</label>
-                                                <button id="debug-toggle" class="btn-toggle on">N/A</button>
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Modem</label>
-                                                <button id="modem-toggle" class="btn-toggle off">N/A</button>
-                                            </div>
-                                            <div class="form-group-item">
-                                                <label class="font-semibold">Ant Band</label>
-                                                <button class="btn-toggle on">N/A</button>
+                                            <!-- Right Block (More Toggles) -->
+                                            <div class="bottom-block">
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Debug</label>
+                                                    <button id="debug-toggle" class="btn-toggle on">N/A</button>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Modem</label>
+                                                    <button id="modem-toggle" class="btn-toggle off">N/A</button>
+                                                </div>
+                                                <div class="form-group-item">
+                                                    <label class="font-semibold">Ant Band</label>
+                                                    <span id ="antband">N/A</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Cut Time Set Button -->
-                                <div class="d-flex justify-content-end mt-4">
+                                <div class="cut-time-button">
                                     <button class="btn btn-custom-blue-lg">
                                         Cut Time Set
                                     </button>
                                 </div>
                             </div>
-                            <div class="modal-footer">
+                            <div class="modal-footer" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px;">
                                 <button type="button" class="btn btn-secondary-custom" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -1904,12 +2063,7 @@
                                 <div class="col-3 mb-2 text-end">
                                     <span id="ScanStatus">N/A</span>
                                 </div>
-                                <div class="col-3 mb-2">
-                                    <span><strong>Api Ver</strong></span>
-                                </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <span id="apiver">N/A</span>
-                                </div>
+                                
                             </div>
 
                             <div class="p-3 mt-4 rounded shadow-sm" style="background-color: #f0ffff;">
@@ -4256,8 +4410,8 @@
             else if (data.packet.Mu_Su_Buadrate === 3) baudrateText = "115200";
             updateValue("baudrate", baudrateText);
             
-            // Api Ver: 0이면 Single, 1이면 Tri
-            updateText("apiver", data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
+            // Ant Band: 0이면 Single, 1이면 Tri
+            updateText("antband", data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
             
             // 토글 버튼 업데이트 (1=ON, 0=OFF)
             // AOM Temp
