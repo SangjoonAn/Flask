@@ -9,7 +9,7 @@
 
     <style>
         body { 
-            background-color: #E0E0E0; overflow: hidden; 
+            background-color: #E0E0E0; overflow: auto; 
             transition: background-color 0.2s ease, color 0.2s ease; /* body에도 트랜지션 추가 (선택 사항) */
         }
         .navbar { background: #547186; color: white; display: flex; align-items: center; justify-content: space-between; padding: 10px; }
@@ -17,8 +17,16 @@
         .time-container { color: white; }
         .icon-container { display: flex; gap: 15px; color: white; }
         .icon-container i { font-size: 20px; cursor: pointer; }
-        .wrapper { display: flex; height: 100vh; }
-        .sidebar { width: 300px; background: #41515D; color: white; padding: 15px; 
+        .wrapper { 
+            display: flex; 
+            min-height: 100vh; 
+        }
+        .sidebar { 
+            width: 300px; 
+            background: #41515D; 
+            color: white; 
+            padding: 15px; 
+            flex-shrink: 0;
             transition: background-color 0.2s ease, color 0.2s ease; /* 핵심 변경: 사이드바에 트랜지션 추가 */
         }
         .sidebar h5 { font-weight: bold; margin-bottom: 10px; }
@@ -119,7 +127,7 @@
 
         /* Main Content Area */
         .content-area {
-            flex: 1; /* 남은 공간을 모두 차지 */
+            flex: 1;
             padding: 20px;
             background-color: #fff;
             overflow-y: auto; /* 내용이 많을 경우 스크롤바 생성 */
