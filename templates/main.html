@@ -1982,7 +1982,7 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-2">
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 520px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> DU System
                             </h5>
@@ -2093,7 +2093,7 @@
                     </div>
                     
                     <div class="col-md-4">
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 520px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Alarm
                             </h5>
@@ -2162,7 +2162,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 520px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> ISO Measur
                             </h5>
@@ -2189,12 +2189,12 @@
                     </div>
                 </div>
 
-                <div class="row">
+                                <div class="row">
                     <!-- Modem Status -->
                     <div class="col-md-6"> <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Modem Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;"> 
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 390px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Modem Status
                             </h5>
@@ -2287,7 +2287,7 @@
                         <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Beam Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 300px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 390px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Beam Status
                             </h5>
@@ -2369,7 +2369,7 @@
                                     <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
                                 </div>
                             </div>
-                        </div>
+                                                </div>
                     </div>
                 </div>
 
@@ -2377,7 +2377,7 @@
                 <div class="col-md-12 mb-4 mt-2"> <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                         AOM & mmWave
                     </div>
-                    <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;">
+                    <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 340px;">
                         <h5 class="text-primary d-flex align-items-center mb-3">
                             <i class="fas fa-folder me-2"></i> AOM & mmWave
                         </h5>
@@ -2385,7 +2385,7 @@
 
                         <div class="row text-secondary small">
                             <div class="col-md-6 mb-4">
-                                <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;"> 
+                                <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
                                     <h6 class="text-primary d-flex align-items-center mb-3">
                                         <i class="fas fa-folder me-2"></i> SISO RF
                                     </h6>
@@ -3729,16 +3729,16 @@
             const el = document.getElementById(elementId);
 
             if (value === 0) {
-                el.innerText = "BEAM SCAN READY";
+                el.innerText = "SCAN READY";
                 el.className = "badge bg-secondary";
             } else if (value === 1) {
-                el.innerText = "BEAM SCAN OK";
+                el.innerText = "SCAN OK";
                 el.className = "badge bg-info text-dark";
             } else if (value === 2) {
-                el.innerText = "BEAM SCAN FAIL";
+                el.innerText = "SCAN FAIL";
                 el.className = "badge bg-danger";
             } else if (value === 4) {
-                el.innerText = "BEAM SCAN OFF";
+                el.innerText = "SCAN OFF";
                 el.className = "badge bg-dark";
             } else {
                 el.innerText = "N/A";
