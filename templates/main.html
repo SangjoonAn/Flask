@@ -102,6 +102,13 @@
             font-size: 0.7rem;
         }
 
+        /* Beam Info 카드 텍스트 크기 절반으로 줄이기 */
+        .beam-info-card span {
+            font-size: 0.5rem;
+        }
+
+
+
 
 
 
@@ -1698,8 +1705,8 @@
                 </div>
 
                 <!-- Beam Info Modal -->
-                <div class="modal fade" id="beamInfoModal" tabindex="-1" aria-labelledby="beamInfoModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-xl"> <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
+                <div class="modal fade" id="beamInfoModal" tabindex="-1" aria-labelledby="beamInfoModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 95%; width: 95%;"> <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
 
                             <div class="modal-header initial-setup-header" style="background-color: #6c757d; color: white; border-bottom: none; padding: 0.5rem 1rem; border-radius: 0.25rem 0.25rem 0 0; cursor: grab;">
                                 <h5 class="modal-title" id="beamInfoModalLabel" style="font-weight: bold;">
@@ -1820,7 +1827,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="card mb-3">
+                                        <div class="card mb-3 beam-info-card">
                                             <div class="card-header">Beam Info</div>
                                             <div class="card-body p-0">
                                                 <div class="table-responsive">
@@ -1977,9 +1984,9 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding-top: 0;">
-                                <button class="btn btn-secondary me-2">Cancel</button>
-                                <button class="btn btn-primary">Set Mode</button>
+                            </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                                <button class="btn btn-primary" style="visibility: visible; opacity: 1;">Set Mode</button>
                             </div>
 
                         </div>
@@ -3789,32 +3796,69 @@
             }
         }
 
-        const beamData = []; // 저장할 beam path/text info
-
-        // 링별 빔 개수: 0~57 총 58개
-        const ringSegments = [1, 6, 12, 17, 20]; // 총합 58
+        // =======================================================
+        // 1. 데이터 및 전역 변수 설정
+        // =======================================================
+        const beamData = []; // 생성된 beam path/text 정보 저장
         const centerX = 200;
         const centerY = 200;
         const ringWidth = 30;
 
-        // BeamBook 그리기
+        // ✅ 링별 빔 개수: 중앙(1개)을 제외하고 정의합니다.
+        // 중앙 원은 별도로 그려지므로 첫 번째 링부터 정의합니다.
+        const ringSegments = [6, 12, 17, 22]; // 예: [6, 12, 17, 22] -> 총 4개 링
+
+        // =======================================================
+        // 2. BeamBook 그리기 (수정된 함수)
+        // =======================================================
         function drawBeamBook() {
             const svg = document.getElementById("beamBook");
-            svg.innerHTML = ""; // 초기화
+            svg.innerHTML = "";
             beamData.length = 0;
 
-            let currentNumber = 0;
+            // --- 중앙 원(0번) 그리기 (이전과 동일) ---
+            const centerCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            centerCircle.setAttribute("cx", centerX);
+            centerCircle.setAttribute("cy", centerY);
+            centerCircle.setAttribute("r", ringWidth);
+            centerCircle.setAttribute("fill", "yellow"); // 노란색으로 변경
+            centerCircle.style.fill = "yellow"; // CSS 스타일로도 설정
+            centerCircle.setAttribute("stroke", "#aaa");
+            centerCircle.setAttribute("stroke-width", 1);
+            svg.appendChild(centerCircle);
 
-            for (let ring = 0; ring < ringSegments.length; ring++) {
-                const segments = ringSegments[ring];
-                const innerRadius = ring * ringWidth;
+            const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            centerText.setAttribute("x", centerX);
+            centerText.setAttribute("y", centerY);
+            centerText.setAttribute("text-anchor", "middle");
+            centerText.setAttribute("alignment-baseline", "middle");
+            centerText.setAttribute("font-size", "12");
+            centerText.setAttribute("fill", "white");
+            centerText.setAttribute("font-weight", "bold");
+            centerText.textContent = "0";
+            svg.appendChild(centerText);
+
+            beamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
+
+            // --- 링 그리기 ---
+            let startNum = 1;
+            for (let ringIndex = 0; ringIndex < ringSegments.length; ringIndex++) {
+                const segments = ringSegments[ringIndex];
+                const innerRadius = (ringIndex + 1) * ringWidth;
                 const outerRadius = innerRadius + ringWidth;
 
                 for (let i = 0; i < segments; i++) {
-                    const startAngle = (360 - (i * (360 / segments))) * Math.PI / 180;  // 시계방향
-                    const endAngle = (360 - ((i + 1) * (360 / segments))) * Math.PI / 180;
+                    const anglePerSegment = (2 * Math.PI) / segments;
 
-                    // path 만들기
+                    // ✅ [수정된 부분] i 앞에 -를 붙여 방향을 반대로 바꿉니다.
+                    const midAngle = -(i * anglePerSegment);
+                    
+                    const startAngle = midAngle - (anglePerSegment / 2);
+                    const endAngle = midAngle + (anglePerSegment / 2);
+                    
+                    const beamNumber = startNum + i;
+
+                    // Path, Text 생성 부분은 이전과 동일합니다.
                     const path = describeArc(centerX, centerY, innerRadius, outerRadius, startAngle, endAngle);
                     const pathEl = document.createElementNS("http://www.w3.org/2000/svg", "path");
                     pathEl.setAttribute("d", path);
@@ -3823,8 +3867,6 @@
                     pathEl.setAttribute("stroke-width", 1);
                     svg.appendChild(pathEl);
 
-                    // 번호 텍스트
-                    const midAngle = (startAngle + endAngle) / 2;
                     const textRadius = (innerRadius + outerRadius) / 2;
                     const textX = centerX + textRadius * Math.cos(midAngle);
                     const textY = centerY + textRadius * Math.sin(midAngle);
@@ -3835,41 +3877,95 @@
                     textEl.setAttribute("alignment-baseline", "middle");
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
-                    textEl.textContent = currentNumber;
+                    textEl.textContent = beamNumber;
                     svg.appendChild(textEl);
-
-                    beamData.push({
-                        number: currentNumber,
-                        pathEl: pathEl,
-                        textEl: textEl
-                    });
-
-                    currentNumber++;
-                    if (currentNumber >= 58) break;
+                    
+                    beamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
                 }
+                startNum += segments;
+            }
+
+            // =======================================================
+            // ✅ 각도 텍스트 그리기 (사용자 지정 목록 반영)
+            // =======================================================
+
+            // ✅ 사용자가 제공한 22개의 각도 레이블 목록 (중복 '164'' 하나 제외)
+            const angleLabels = [
+                "0'", "16'", "33'", "49'", "65'", "82'", "98'", "115'", "131'", 
+                "147'", "164'", "180'", "196'", "213'", "229'", "245'", "262'", 
+                "278'", "295'", "311'", "327'", "344'"
+            ];
+
+            const lastRingIndex = ringSegments.length - 1;
+            const lastRingSegments = ringSegments[lastRingIndex];
+            const angleLabelRadius = (ringSegments.length + 1) * ringWidth + 10;
+
+            // 레이블 배열의 개수와 세그먼트 개수가 일치하는지 확인
+            if (angleLabels.length !== lastRingSegments) {
+                console.error("지정된 각도 레이블의 개수와 마지막 링의 세그먼트 개수가 일치하지 않습니다.");
+                return; // 개수가 다르면 충돌 방지를 위해 그리지 않음
+            }
+
+            const anglePerSegment = (2 * Math.PI) / lastRingSegments;
+
+            for (let i = 0; i < lastRingSegments; i++) {
+                const midAngle = -(i * anglePerSegment); // 위치 계산을 위한 각도는 그대로 사용
+
+                // 텍스트 위치 계산
+                const textX = centerX + angleLabelRadius * Math.cos(midAngle);
+                const textY = centerY + angleLabelRadius * Math.sin(midAngle);
+
+                // SVG 텍스트 요소 생성
+                const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                textEl.setAttribute("x", textX);
+                textEl.setAttribute("y", textY);
+                textEl.setAttribute("text-anchor", "middle");
+                textEl.setAttribute("alignment-baseline", "middle");
+                textEl.setAttribute("font-size", "10");
+                textEl.setAttribute("font-weight", "bold");
+                textEl.setAttribute("fill", "deepskyblue");
+                
+                // ✅ [수정된 부분] 계산된 각도 대신, 배열에서 텍스트를 가져와 설정
+                textEl.textContent = angleLabels[i];
+                
+                svg.appendChild(textEl);
             }
         }
 
-        // path 계산
+        // =======================================================
+        // 3. Path 계산 (수정된 함수)
+        // =======================================================
+        /**
+         * SVG 경로 데이터(d 속성)를 생성하여 부채꼴 조각을 그립니다. (수정된 버전)
+         * @param {number} cx - 중심 X 좌표
+         * @param {number} cy - 중심 Y 좌표
+         * @param {number} r1 - 내부 반지름
+         * @param {number} r2 - 외부 반지름
+         * @param {number} startAngle - 시작 각도 (라디안)
+         * @param {number} endAngle - 끝 각도 (라디안)
+         * @returns {string} SVG path의 d 속성에 들어갈 경로 데이터
+         */
         function describeArc(cx, cy, r1, r2, startAngle, endAngle) {
-            const x1i = cx + r1 * Math.cos(startAngle);
-            const y1i = cy + r1 * Math.sin(startAngle);
-            const x2i = cx + r2 * Math.cos(startAngle);
-            const y2i = cy + r2 * Math.sin(startAngle);
-            const x2o = cx + r2 * Math.cos(endAngle);
-            const y2o = cy + r2 * Math.sin(endAngle);
-            const x1o = cx + r1 * Math.cos(endAngle);
-            const y1o = cy + r1 * Math.sin(endAngle);
-            const largeArc = ((endAngle - startAngle) % (2 * Math.PI)) > Math.PI ? 1: 0;
+            // 1. 부채꼴의 네 꼭짓점 계산
+            const outerStart = { x: cx + r2 * Math.cos(startAngle), y: cy + r2 * Math.sin(startAngle) };
+            const outerEnd   = { x: cx + r2 * Math.cos(endAngle),   y: cy + r2 * Math.sin(endAngle) };
+            const innerStart = { x: cx + r1 * Math.cos(startAngle), y: cy + r1 * Math.sin(startAngle) };
+            const innerEnd   = { x: cx + r1 * Math.cos(endAngle),   y: cy + r1 * Math.sin(endAngle) };
 
-            return `
-                M ${x1i},${y1i}
-                L ${x2i},${y2i}
-                A ${r2},${r2} 0 ${largeArc} 0 ${x2o},${y2o}
-                L ${x1o},${y1o}
-                A ${r1},${r1} 0 ${largeArc} 1 ${x1i},${y1i}
-                Z
-            `;
+            // 2. 호가 180도보다 큰지 여부 판단
+            const largeArcFlag = Math.abs(endAngle - startAngle) >= Math.PI ? '1' : '0';
+
+            // 3. 올바른 순서로 경로 데이터 생성
+            // (바깥 호 -> 직선 -> 안쪽 호 -> 닫기)
+            const d = [
+                "M", outerStart.x, outerStart.y, // 시작: 바깥쪽 호의 시작점
+                "A", r2, r2, 0, largeArcFlag, 1, outerEnd.x, outerEnd.y, // 바깥쪽 호 그리기
+                "L", innerEnd.x, innerEnd.y,     // 안쪽 호의 끝점으로 직선 연결
+                "A", r1, r1, 0, largeArcFlag, 0, innerStart.x, innerStart.y, // 안쪽 호를 반대방향으로 그리기
+                "Z" // 경로 닫기
+            ].join(" ");
+
+            return d;
         }
 
         // 외부에서 색상 업데이트
@@ -3893,8 +3989,8 @@
                 beamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawBeamBook();
                     updateBeamColors({
-                        yellow: [2],
-                        blue: [11, 3, 47]
+                        yellow: [],
+                        blue: [12, 13, 47]
                     });
                 });
             }
