@@ -103,7 +103,7 @@ def parse_AllStatusPacket(packet):
     # 단위 변환 함수들
     def convert_to_01dbm(raw_value):
         """0.1dBm 단위로 변환 (예: -517 → -51.7 dBm)"""
-        return raw_value / 10.0
+        return round(raw_value / 10.0, 1)
     
     def convert_att_4_to_2(raw_value):
         """ATT 변환 (4→2dB, Step: 0.5dB)"""
@@ -116,6 +116,14 @@ def parse_AllStatusPacket(packet):
     def convert_iso_att(raw_value):
         """ISO ATT 변환 (4→2dB, Step: 0.5dB, Range: 0~20dB)"""
         return raw_value * 0.5
+    
+    def convert_att_test(raw_value):
+        """ATT Test 변환 (50: 5dB, 0.5dB 단위, Range: 0~30dB)"""
+        return raw_value * 0.5
+    
+    def convert_polling_time(raw_value):
+        """Polling Time 변환 (2바이트 uint, 범위: 100~5,000ms)"""
+        return raw_value  # 이미 ms 단위로 저장되어 있음
     
     #Du 상태
     parsed_data['Rcv_Main_Sys'] = packet[0]
@@ -324,12 +332,12 @@ def parse_AllStatusPacket(packet):
     parsed_data['PllRelockCount'] = struct.unpack('<h', bytes([packet[504], packet[505]]))[0]
     parsed_data['DecodedRate'] = packet[506]
     parsed_data['Reserved6p1'] = packet[507]
-    parsed_data['DsOutputPower_SISO'] = struct.unpack('<h', bytes([packet[508], packet[509]]))[0]
+    parsed_data['DsOutputPower_SISO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[508], packet[509]]))[0])
     parsed_data['EmsModemReset'] = packet[510]
     parsed_data['Reserved6p2'] = packet[511]
     agc_input_raw = struct.unpack('<h', bytes([packet[512], packet[513]]))[0]
     parsed_data['AGC_Input_Power'] = f"{agc_input_raw / 10:.1f}"
-    parsed_data['DsOutputPower_MIMO'] = struct.unpack('<h', bytes([packet[514], packet[515]]))[0]
+    parsed_data['DsOutputPower_MIMO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[514], packet[515]]))[0])
     parsed_data['Actual_Orientation'] = struct.unpack('<h', bytes([packet[516], packet[517]]))[0]
     parsed_data['Actual_Tilt'] = struct.unpack('<h', bytes([packet[518], packet[519]]))[0]
     parsed_data['Reserved6p3'] = packet[520:576]
@@ -360,7 +368,7 @@ def parse_AllStatusPacket(packet):
     parsed_data['MaskSuRptAlarm'] = packet[664:676]
     parsed_data['ConEmsModemReset'] = packet[676]
     parsed_data['DownloadPath_GuiOrEms'] = packet[677]
-    parsed_data['PollingTime'] = struct.unpack('<h', bytes([packet[678], packet[679]]))[0]
+    parsed_data['PollingTime'] = struct.unpack('<H', bytes([packet[678], packet[679]]))[0]
     parsed_data['ApiInitMode'] = packet[680]
     parsed_data['AttTestMode'] = packet[681]
     parsed_data['SuId'] = packet[682]
@@ -399,10 +407,10 @@ def parse_AllStatusPacket(packet):
     parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
     parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
     parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
-    parsed_data['LD1_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[796], packet[797]]))[0]
-    parsed_data['LD2_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[798], packet[799]]))[0]
-    parsed_data['PD1_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[800], packet[801]]))[0]
-    parsed_data['PD2_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[802], packet[803]]))[0]
+    parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
+    parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
+    parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
+    parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
     parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
     parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
     parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
@@ -427,20 +435,20 @@ def parse_AllStatusPacket(packet):
     parsed_data['SU_UlManualAtten_MIMO'] = packet[828]
     parsed_data['SU_UlSubAtten_MIMO'] = packet[829]
     parsed_data['LicPassword'] = struct.unpack('<h', bytes([packet[830], packet[831]]))[0]
-    parsed_data['DL_OutputOffset_SISO'] = struct.unpack('<h', bytes([packet[832], packet[833]]))[0]
-    parsed_data['DL_OutputOffset_MIMO'] = struct.unpack('<h', bytes([packet[834], packet[835]]))[0]
-    parsed_data['UL_InputOffset_SISO'] = struct.unpack('<h', bytes([packet[836], packet[837]]))[0]
-    parsed_data['UL_InputOffset_MIMO'] = struct.unpack('<h', bytes([packet[838], packet[839]]))[0]
+    parsed_data['DL_OutputOffset_SISO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[832], packet[833]]))[0])
+    parsed_data['DL_OutputOffset_MIMO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[834], packet[835]]))[0])
+    parsed_data['UL_InputOffset_SISO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[836], packet[837]]))[0])
+    parsed_data['UL_InputOffset_MIMO'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[838], packet[839]]))[0])
     parsed_data['SU_UlCasSisoAtten_SISO'] = packet[840]
     parsed_data['SU_UlCasSisoAtten_MIMO'] = packet[841]
     parsed_data['SdOnOffSiso'] = packet[842]
     parsed_data['SdOnOffMimo'] = packet[843]
     parsed_data['DuFixBeam'] = packet[844]
     parsed_data['Reserved4_Local'] = packet[845:852]
-    parsed_data['Dl_Siso_Att_Test'] = struct.unpack('<h', bytes([packet[852], packet[853]]))[0]
-    parsed_data['Dl_Mimo_Att_Test'] = struct.unpack('<h', bytes([packet[854], packet[855]]))[0]
-    parsed_data['Ul_Siso_Att_Test'] = struct.unpack('<h', bytes([packet[856], packet[857]]))[0]
-    parsed_data['Ul_Mimo_Att_Test'] = struct.unpack('<h', bytes([packet[858], packet[859]]))[0]
+    parsed_data['Dl_Siso_Att_Test'] = convert_att_test(struct.unpack('<h', bytes([packet[852], packet[853]]))[0])
+    parsed_data['Dl_Mimo_Att_Test'] = convert_att_test(struct.unpack('<h', bytes([packet[854], packet[855]]))[0])
+    parsed_data['Ul_Siso_Att_Test'] = convert_att_test(struct.unpack('<h', bytes([packet[856], packet[857]]))[0])
+    parsed_data['Ul_Mimo_Att_Test'] = convert_att_test(struct.unpack('<h', bytes([packet[858], packet[859]]))[0])
     parsed_data['Reserved10p1'] = packet[860:892]
     # MVBX 제어
     parsed_data['Mvbx_BeamSet'] = packet[892]
@@ -493,22 +501,22 @@ def parse_AllStatusPacket(packet):
     parsed_data['ApiSuTimeAdvance'] = packet[1002]
     parsed_data['TemperCompensationMode'] = packet[1003]
     parsed_data['ApiVenderFreq'] = struct.unpack('<I', bytes([packet[1004], packet[1005], packet[1006], packet[1007]]))[0]
-    parsed_data['ApiGsOutputPowerOffsetSiso'] = struct.unpack('<h', bytes([packet[1008], packet[1009]]))[0]
+    parsed_data['ApiGsOutputPowerOffsetSiso'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1008], packet[1009]]))[0])
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
     parsed_data['Reserved33'] = packet[1013]
-    parsed_data['ApiGsOutputPowerOffsetMimo'] = struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0]
+    parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]
     parsed_data['Gs_Gain_Mimo'] = packet[1018]
     parsed_data['ApiInitRetryMode'] = packet[1019]
     parsed_data['Orientation'] = struct.unpack('<h', bytes([packet[1020], packet[1021]]))[0]
     parsed_data['Tilt'] = struct.unpack('<h', bytes([packet[1022], packet[1023]]))[0]
-    parsed_data['GS_AttenOffset_DL_Siso'] = packet[1024]
-    parsed_data['GS_AttenOffset_DL_Mimo'] = packet[1025]
-    parsed_data['GS_AttenOffset_UL_Siso'] = packet[1026]
-    parsed_data['GS_AttenOffset_UL_Mimo'] = packet[1027]
+    parsed_data['GS_AttenOffset_DL_Siso'] = struct.unpack('<b', bytes([packet[1024]]))[0]
+    parsed_data['GS_AttenOffset_DL_Mimo'] = struct.unpack('<b', bytes([packet[1025]]))[0]
+    parsed_data['GS_AttenOffset_UL_Siso'] = struct.unpack('<b', bytes([packet[1026]]))[0]
+    parsed_data['GS_AttenOffset_UL_Mimo'] = struct.unpack('<b', bytes([packet[1027]]))[0]
     parsed_data['ConSerialNum'] = ''.join([chr(b) for b in packet[1028:1044] if b != 0])
     parsed_data['AomTemperConperMode'] = packet[1044]
     parsed_data['GS_AttenOffset_30by15_DL_Siso'] = packet[1045]
@@ -533,7 +541,7 @@ def parse_AllStatusPacket(packet):
     parsed_data['GS_AttenOffset_60by60_UL_Mimo'] = packet[1064]
     parsed_data['Reserved41'] = packet[1065:1089]
     parsed_data['LowRsrpStillTime'] = packet[1089]
-    parsed_data['LowRsrpLevel'] = struct.unpack('<h', bytes([packet[1090], packet[1091]]))[0]
+    parsed_data['LowRsrpLevel'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1090], packet[1091]]))[0])
     parsed_data['SU_DlCasSisoAtten_SISO'] = packet[1092]
     parsed_data['SU_DlCasSisoAtten_MIMO'] = packet[1093]
     parsed_data['SU_DlCasSisoAttenTest_SISO'] = packet[1094]
@@ -746,7 +754,7 @@ def parse_AllStatusPacket2(packet):
     parsed_data['cDU_GS_AttenOffset_UL_Mimo'] = packet[400]
     parsed_data['cDU_AomTemperConperMode'] = packet[401]
     parsed_data['cDU_LowRsrpStillTime'] = packet[402]
-    parsed_data['cDU_LowRsrpLevel'] = struct.unpack('<h', bytes([packet[403], packet[404]]))[0]
+    parsed_data['cDU_LowRsrpLevel'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[403], packet[404]]))[0])
     parsed_data['cDU_PciResetOnOff'] = packet[405]
     parsed_data['cDU_PciNo'] = struct.unpack('<h', bytes([packet[406], packet[407]]))[0]
     parsed_data['cDU_PciTime'] = packet[408]
