@@ -98,6 +98,38 @@
             font-size: 0.75rem;
         }
 
+        /* 플러스 아이콘 스타일 */
+        .plus-icon {
+            width: 16px;
+            height: 16px;
+            background-color: #6c757d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .plus-icon span {
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            line-height: 1;
+        }
+
+
+
+        /* On 버튼 통일 스타일 */
+        .btn-on {
+            background-color: #507346 !important;
+            color: white !important;
+            width: 50px;
+        }
+
         .small-text-2 {
             font-size: 0.7rem;
         }
@@ -1158,12 +1190,11 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">gNB Type</label>
                                     <div class="col-7">
-                                        <select id="gNB_Vender" class="form-select">
-                                            <option value="na">N/A</option>
-                                            <option value=0>Manual</option>
-                                            <option value=1>Samsung</option>
-                                            <option value=2>Nokia</option>
-                                            <option value=3>Ericsson</option>
+                                        <select id="gNB_Vendor_1" class="form-select form-select-sm">
+                                            <option value="Manual">Manual</option>
+                                            <option value="Samsung">Samsung</option>
+                                            <option value="Nokia">Nokia</option>
+                                            <option value="Ericsson">Ericsson</option>
                                         </select>
                                         <button id="setVendorBtn" class="btn btn-sm btn-secondary mt-2">Set Vendor</button>
                                     </div>
@@ -1637,21 +1668,26 @@
                                                 </div>
                                                 <div class="form-group-item">
                                                     <label class="font-semibold">ISO Detect</label>
-                                                    <input type="text" id="isodetect" value="N/A" class="form-control form-control-sm" />
+                                                    <select id="isodetect" class="form-select form-select-sm" style="width: 80px; font-size: 0.65rem; padding: 0.1rem 0.2rem;">
+                                                        <option value="SISO">SISO</option>
+                                                        <option value="MIMO">MIMO</option>
+                                                    </select>
                                                 </div>
                                                 <div class="form-group-item">
                                                     <label class="font-semibold">Polling Time</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" />
+                                                        <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" onchange="handlePollingTimeChange(this.value)" />
                                                         <span class="unit">[ms]</span>
                                                     </div>
                                                 </div>
                                                 <div class="form-group-item">
                                                     <label class="font-semibold">Baudrate</label>
-                                                    <div class="input-with-unit">
-                                                        <input type="text" id="baudrate" value="N/A" class="form-control form-control-sm" />
-                                                        <span class="unit">[bps]</span>
-                                                    </div>
+                                                    <select id="baudrate" class="form-select form-select-sm" style="width: 80px; font-size: 0.65rem; padding: 0.1rem 0.2rem;">
+                                                        <option value="19200">19200</option>
+                                                        <option value="38400">38400</option>
+                                                        <option value="57600">57600</option>
+                                                        <option value="115200">115200</option>
+                                                    </select>
                                                 </div>
                                             </div>
 
@@ -1719,35 +1755,34 @@
                                 <div class="card mb-3">
                                     <div class="card-header">Evn</div>
                                     <div class="card-body">
-                                        <div class="row align-items-center g-2">
+                                        <div class="row align-items-center justify-content-between">
                                             <div class="col-auto">
-                                                <small class="text-muted">Ant. Array Ver</small><br>
-                                                <strong>0.3.16</strong>
+                                                <small class="text-muted">Ant. Array Ver</small>
+                                                <small id="antArrayVer">N/A</small>
                                             </div>
                                             <div class="col-auto">
                                                 <small class="text-muted">Temper Comp</small>
                                             </div>
                                             <div class="col-auto">
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input toggle-switch" type="checkbox" id="startTemperSwitch" checked>
-                                                    <label class="form-check-label visually-hidden" for="startTemperSwitch">Start Temper Toggle</label>
+                                                <button class="btn btn-sm btn-on" id="temperComp">N/A</button>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">Start Temper</small>
+                                                <small id="startTemper">N/A</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <small class="text-muted">Cur Temper</small>
+                                                <small id="curTemper">N/A</small>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="text-end">
+                                                    <small class="text-muted">Compensation DL</small>
+                                                    <small id="compensationDL">N/A</small>
                                                 </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <small class="text-muted">Start Temper</small><br>
-                                                <strong>52.0℃</strong>
-                                            </div>
-                                            <div class="col-auto">
-                                                <small class="text-muted">Cur Temper</small><br>
-                                                <strong>59.0℃</strong>
-                                            </div>
-                                            <div class="col-auto ms-auto text-end">
-                                                <small class="text-muted">Compensation DL</small><br>
-                                                <strong>1dB</strong>
-                                            </div>
-                                            <div class="col-auto text-end">
-                                                <small class="text-muted">Compensation UL</small><br>
-                                                <strong>1dB</strong>
+                                                <div class="text-end mt-1">
+                                                    <small class="text-muted">Compensation UL</small>
+                                                    <small id="compensationUL">N/A</small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1760,21 +1795,25 @@
                                             <div class="card-body">
                                                 <div class="row g-2">
                                                     <div class="col-12 d-flex align-items-center">
-                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Front End
+                                                        <div class="me-2 plus-icon">
+                                                            <span>+</span>
+                                                        </div> Front End
                                                         <div class="ms-auto d-flex align-items-center">
                                                             <span class="me-2 text-muted">Tx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="9">
+                                                            <span class="me-3" style="width: 50px;" id="mvbxMv2850TxGainSiso">N/A</span>
                                                             <span class="me-2 text-muted">Rx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="14">
+                                                            <span style="width: 50px;" id="mvbxMv2850RxGainSiso">N/A</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 d-flex align-items-center">
-                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Mixer
+                                                        <div class="me-2 plus-icon">
+                                                            <span>+</span>
+                                                        </div> Mixer
                                                         <div class="ms-auto d-flex align-items-center">
                                                             <span class="me-2 text-muted">Tx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="5">
+                                                            <span class="me-3" style="width: 50px;" id="mvbxMv2853TxGainSiso">N/A</span>
                                                             <span class="me-2 text-muted">Rx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="5">
+                                                            <span style="width: 50px;" id="mvbxMv2853RxGainSiso">N/A</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1787,21 +1826,25 @@
                                             <div class="card-body">
                                                 <div class="row g-2">
                                                     <div class="col-12 d-flex align-items-center">
-                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Front End
+                                                        <div class="me-2 plus-icon">
+                                                            <span>+</span>
+                                                        </div> Front End
                                                         <div class="ms-auto d-flex align-items-center">
                                                             <span class="me-2 text-muted">Tx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="9">
+                                                            <span class="me-3" style="width: 50px;" id="mvbxMv2850TxGainMimo">N/A</span>
                                                             <span class="me-2 text-muted">Rx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="14">
+                                                            <span style="width: 50px;" id="mvbxMv2850RxGainMimo">N/A</span>
                                                         </div>
                                                     </div>
                                                     <div class="col-12 d-flex align-items-center">
-                                                        <i class="fas fa-circle-dot me-2 text-primary"></i> Mixer
+                                                        <div class="me-2 plus-icon">
+                                                            <span>+</span>
+                                                        </div> Mixer
                                                         <div class="ms-auto d-flex align-items-center">
                                                             <span class="me-2 text-muted">Tx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm me-3" style="width: 50px;" value="5">
+                                                            <span class="me-3" style="width: 50px;" id="mvbxMv2853TxGainMimo">N/A</span>
                                                             <span class="me-2 text-muted">Rx Gain Idx</span>
-                                                            <input type="text" class="form-control form-control-sm" style="width: 50px;" value="5">
+                                                            <span style="width: 50px;" id="mvbxMv2853RxGainMimo">N/A</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1819,19 +1862,19 @@
                                                 <svg id="beamBook" width="360" height="360" viewBox="0 0 400 400"></svg>
 
 
-                                                <div class="text-start mt-3">
-                                                    <small class="text-muted">Orientation</small> <span class="ms-2">0.000</span><br>
-                                                    <small class="text-muted">Tilt</small> <span class="ms-4">0.000</span>
+                                                <div class="text-end mt-3">
+                                                    <small class="text-muted">Orientation</small> <span class="ms-2" id="orientation">0.000</span><br>
+                                                    <small class="text-muted">Tilt</small> <span class="ms-4" id="tilt">0.000</span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="card mb-3 beam-info-card">
+                                        <div class="card mb-3 beam-info-card" style="position: sticky; top: 0; z-index: 100;">
                                             <div class="card-header">Beam Info</div>
                                             <div class="card-body p-0">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped table-sm mb-0 small-text">
+                                                    <table class="table table-striped table-sm mb-0 small-text text-center">
                                                         <thead>
                                                             <tr>
                                                                 <th scope="col">Rank</th>
@@ -1846,44 +1889,44 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td>1st</td>
-                                                                <td>1</td>
-                                                                <td>313</td>
-                                                                <td>0</td>
-                                                                <td>1</td>
-                                                                <td>0</td>
-                                                                <td>-0.00</td>
-                                                                <td>-990.00</td>
+                                                                <td style="background-color: #F2C029; color: white; font-weight: bold;">1st</td>
+                                                                <td id="mvbxBeamInfoBeamId1">1</td>
+                                                                <td id="mvbxBeamInfoPci1">313</td>
+                                                                <td id="mvbxBeamInfoSsbldx1">0</td>
+                                                                <td id="mvbxBeamInfoEnergy1">1</td>
+                                                                <td id="mvbxBeamInfoPsstype1">0</td>
+                                                                <td id="mvbxBeamInfoSnr1">-0.00</td>
+                                                                <td id="mvbxBeamInfoRsrp1">-990.00</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>2nd</td>
-                                                                <td>12</td>
-                                                                <td>313</td>
-                                                                <td>32</td>
-                                                                <td>0</td>
-                                                                <td>1</td>
-                                                                <td>15.91</td>
-                                                                <td>-96.13</td>
+                                                                <td style="background-color: #84D9A9; color: white; font-weight: bold;">2nd</td>
+                                                                <td id="mvbxBeamInfoBeamId2">12</td>
+                                                                <td id="mvbxBeamInfoPci2">313</td>
+                                                                <td id="mvbxBeamInfoSsbldx2">32</td>
+                                                                <td id="mvbxBeamInfoEnergy2">0</td>
+                                                                <td id="mvbxBeamInfoPsstype2">1</td>
+                                                                <td id="mvbxBeamInfoSnr2">15.91</td>
+                                                                <td id="mvbxBeamInfoRsrp2">-96.13</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>3rd</td>
-                                                                <td>13</td>
-                                                                <td>313</td>
-                                                                <td>64</td>
-                                                                <td>0</td>
-                                                                <td>1</td>
-                                                                <td>12.64</td>
-                                                                <td>-99.63</td>
+                                                                <td style="background-color: #84D9A9; color: white; font-weight: bold;">3rd</td>
+                                                                <td id="mvbxBeamInfoBeamId3">13</td>
+                                                                <td id="mvbxBeamInfoPci3">313</td>
+                                                                <td id="mvbxBeamInfoSsbldx3">64</td>
+                                                                <td id="mvbxBeamInfoEnergy3">0</td>
+                                                                <td id="mvbxBeamInfoPsstype3">1</td>
+                                                                <td id="mvbxBeamInfoSnr3">12.64</td>
+                                                                <td id="mvbxBeamInfoRsrp3">-99.63</td>
                                                             </tr>
                                                             <tr>
-                                                                <td>4th</td>
-                                                                <td>47</td>
-                                                                <td>313</td>
-                                                                <td>16</td>
-                                                                <td>0</td>
-                                                                <td>1</td>
-                                                                <td>12.14</td>
-                                                                <td>-100.57</td>
+                                                                <td style="background-color: #84D9A9; color: white; font-weight: bold;">4th</td>
+                                                                <td id="mvbxBeamInfoBeamId4">47</td>
+                                                                <td id="mvbxBeamInfoPci4">313</td>
+                                                                <td id="mvbxBeamInfoSsbldx4">16</td>
+                                                                <td id="mvbxBeamInfoEnergy4">0</td>
+                                                                <td id="mvbxBeamInfoPsstype4">1</td>
+                                                                <td id="mvbxBeamInfoSnr4">12.14</td>
+                                                                <td id="mvbxBeamInfoRsrp4">-100.57</td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -1893,29 +1936,23 @@
                                         <div class="card mb-3">
                                             <div class="card-header">Beam Scan</div>
                                             <div class="card-body">
-                                                <div class="row g-2">
+                                                <div class="row g-4">
                                                     <div class="col-md-6">
                                                         <div class="beam-scan-field">
                                                             <label for="beamRetry">Beam Retry</label>
-                                                            <div class="form-check form-switch ms-auto">
-                                                                <input class="form-check-input toggle-switch" type="checkbox" id="beamRetrySwitch" checked>
-                                                                <label class="form-check-label visually-hidden" for="beamRetrySwitch">Beam Retry Toggle</label>
-                                                            </div>
+                                                            <button class="btn btn-sm ms-auto btn-on" id="beamRetrySwitch">On</button>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="decodeAGC">Decode AGC</label>
-                                                            <div class="form-check form-switch ms-auto">
-                                                                <input class="form-check-input toggle-switch" type="checkbox" id="decodeAGCSwitch" checked>
-                                                                <label class="form-check-label visually-hidden" for="decodeAGCSwitch">Decode AGC Toggle</label>
-                                                            </div>
+                                                            <button class="btn btn-sm ms-auto btn-on" id="decodeAGCSwitch">On</button>
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="retryCount">Retry Count (1/min)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="retryCount" value="9230">
+                                                            <label for="retryCount">Retry Count [1:5min]</label>
+                                                            <span class="ms-auto" id="retryCount">9230</span>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="pllRelockCount">PLL Relock Count</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="pllRelockCount" value="0">
+                                                            <span class="ms-auto" id="pllRelockCount">0</span>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="centerFrequency">Center Frequency</label>
@@ -1926,57 +1963,63 @@
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="beamFix">Beam Fix</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="beamFix" value="AUTO">
+                                                            <select class="form-select form-select-sm ms-auto" id="beamFix" style="width: 80px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                                <option value="AUTO">AUTO</option>
+                                                                <option value="FIX">FIX</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="beam-scan-field">
                                                             <label for="apiLogLevel">API Log Level (2~4)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="apiLogLevel" value="5">
+                                                            <input type="text" class="form-control form-control-sm ms-auto w-25" id="apiLogLevel" value="5">
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="apiAdcSel">API Adc Sel (0~3dB)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="apiAdcSel" value="0">
+                                                            <input type="text" class="form-control form-control-sm ms-auto w-25" id="apiAdcSel" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="syncPathGain">Sync Path Gain (0~15.2dB)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="syncPathGain" value="15">
+                                                            <input type="text" class="form-control form-control-sm ms-auto w-25" id="syncPathGain" value="15">
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="duTimeAdvance">DU Time Advance (10.5us)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="duTimeAdvance" value="0">
+                                                            <input type="text" class="form-control form-control-sm ms-auto w-25" id="duTimeAdvance" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="suTimeAdvance">SU Time Advance (10.5us)</label>
-                                                            <input type="text" class="form-control form-control-sm ms-auto" id="suTimeAdvance" value="0">
+                                                            <input type="text" class="form-control form-control-sm ms-auto w-25" id="suTimeAdvance" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="orientationActual">Orientation</label>
-                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                                <span class="input-group-text">Actual</span>
-                                                                <input type="text" class="form-control" id="orientationActual" value="0">
-                                                            </div>
-                                                        </div>
-                                                        <div class="beam-scan-field">
-                                                            <label for="orientationAdjust"></label>
-                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                                <span class="input-group-text">Adjust</span>
-                                                                <input type="text" class="form-control" id="orientationAdjust" value="0">
-                                                            </div>
-                                                        </div>
-                                                        <div class="beam-scan-field">
-                                                            <label for="tiltActual">Tilt</label>
-                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                                <span class="input-group-text">Actual</span>
-                                                                <input type="text" class="form-control" id="tiltActual" value="0">
-                                                            </div>
-                                                        </div>
-                                                        <div class="beam-scan-field">
-                                                            <label for="tiltAdjust"></label>
-                                                            <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                                <span class="input-group-text">Adjust</span>
-                                                                <input type="text" class="form-control" id="tiltAdjust" value="0">
-                                                            </div>
+                                                            <table class="table table-sm table-borderless mb-0">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col" class="text-center"></th>
+                                                                        <th scope="col" class="text-center">[Actual]</th>
+                                                                        <th scope="col" class="text-center">[Adjust]</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="text-center">
+                                                                            <small class="text-muted">Orientation</small>
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <input type="text" class="form-control form-control-sm" id="orientationActual" value="0" style="width: 60px; margin-left: 20px;">
+                                                                        </td>
+                                                                        <td class="text-center text-muted">[0]</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="text-center">
+                                                                            <small class="text-muted">Tilt</small>
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            <input type="text" class="form-control form-control-sm" id="tiltActual" value="2" style="width: 60px; margin-left: 20px;">
+                                                                        </td>
+                                                                        <td class="text-center text-muted">[0]</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2368,9 +2411,11 @@
                                     <span><strong>gNB Type</strong></span>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-select form-select-sm">
-                                        <option selected>Manual</option>
-                                        <option>Auto</option>
+                                    <select id="gNB_Vendor" class="form-select form-select-sm">
+                                        <option value="Manual">Manual</option>
+                                        <option value="Samsung">Samsung</option>
+                                        <option value="Nokia">Nokia</option>
+                                        <option value="Ericsson">Ericsson</option>
                                     </select>
                                 </div>
                             </div>
@@ -3481,7 +3526,7 @@
         let userStarted = false;
         let userModified = false;
         let savedVendor = null;
-        let gNB_VenderElement;
+        let gNB_VendorElement;
         let timer = 10;
         let timeLeft = 300; // 초기 USIM 타이머 값 (초)
         let userClicked = false;
@@ -3802,7 +3847,7 @@
         const beamData = []; // 생성된 beam path/text 정보 저장
         const centerX = 200;
         const centerY = 200;
-        const ringWidth = 30;
+        const ringWidth = 36;
 
         // ✅ 링별 빔 개수: 중앙(1개)을 제외하고 정의합니다.
         // 중앙 원은 별도로 그려지므로 첫 번째 링부터 정의합니다.
@@ -3821,8 +3866,8 @@
             centerCircle.setAttribute("cx", centerX);
             centerCircle.setAttribute("cy", centerY);
             centerCircle.setAttribute("r", ringWidth);
-            centerCircle.setAttribute("fill", "yellow"); // 노란색으로 변경
-            centerCircle.style.fill = "yellow"; // CSS 스타일로도 설정
+            centerCircle.setAttribute("fill", "#F2C029"); // 노란색으로 변경
+            centerCircle.style.fill = "#F2C029"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
             svg.appendChild(centerCircle);
@@ -3923,7 +3968,7 @@
                 textEl.setAttribute("alignment-baseline", "middle");
                 textEl.setAttribute("font-size", "10");
                 textEl.setAttribute("font-weight", "bold");
-                textEl.setAttribute("fill", "deepskyblue");
+                textEl.setAttribute("fill", "#1374F2");
                 
                 // ✅ [수정된 부분] 계산된 각도 대신, 배열에서 텍스트를 가져와 설정
                 textEl.textContent = angleLabels[i];
@@ -3975,7 +4020,7 @@
                 if (yellow.includes(number)) {
                     pathEl.setAttribute("fill", "gold");
                 } else if (blue.includes(number)) {
-                    pathEl.setAttribute("fill", "deepskyblue");
+                    pathEl.setAttribute("fill", "#84D9A9");
                 } else {
                     pathEl.setAttribute("fill", "dimgray");
                 }
@@ -3988,9 +4033,11 @@
             if (beamInfoModal) {
                 beamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawBeamBook();
+                    
+                                        // Beam ID 2, 3, 4번의 실제 값들을 사용하여 동그라미 색상 업데이트
                     updateBeamColors({
                         yellow: [],
-                        blue: [12, 13, 47]
+                        blue: [2, 3, 4]
                     });
                 });
             }
@@ -4420,7 +4467,9 @@
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
+                    console.log(`updateValue: ${id} = ${value} (before: ${el.value})`);
                     el.value = value;
+                    console.log(`updateValue: ${id} = ${value} (after: ${el.value})`);
                     // ID 값 출력 시 텍스트 크기 조정
                     el.style.fontSize = '0.85rem';
                 }
@@ -4762,14 +4811,88 @@
             updateText("alc_dl0_siso_mode", data.packet.ALC_DL0_SISO_Mode === 1 ? "On" : "Off");
             updateText("alc_dl1_mimo_mode", data.packet.ALC_DL1_MIMO_Mode === 1 ? "On" : "Off");
 
-            if (gNB_VenderElement && data.packet.gNB_Vender !== undefined && !userModified) {
-                const val = Number(data.packet.gNB_Vender);
-                gNB_VenderElement.value = [0, 1, 2, 3].includes(val) ? val : "N/A";
+            // gNB Type: 0=Manual, 1=Samsung, 2=Nokia, 3=Ericsson
+            console.log('gNB_Vendor data:', data.packet.gNB_Vendor);
+            let gNBVendorText = "Manual"; // 기본값
+            if (data.packet.gNB_Vendor === 0) gNBVendorText = "Manual";
+            else if (data.packet.gNB_Vendor === 1) gNBVendorText = "Samsung";
+            else if (data.packet.gNB_Vendor === 2) gNBVendorText = "Nokia";
+            else if (data.packet.gNB_Vendor === 3) gNBVendorText = "Ericsson";
+            console.log('gNBVendorText:', gNBVendorText);
+            
+            // 메인 화면의 gNB_Vendor 업데이트
+            updateValue("gNB_Vendor", gNBVendorText);
+            
+            // 모달의 gNB_Vendor_1 업데이트
+            updateValue("gNB_Vendor_1", gNBVendorText);
+
+            updateText('antArrayVer', data.packet.Gumstick_Ver);
+            document.getElementById('temperComp').textContent = data.packet.BeamAntSelect === 1 ? 'On' : 'Off';
+            updateText('startTemper', data.packet.Gumstick_StartTemper + '℃');
+            updateText('curTemper', data.packet.Gumstick_CurTemper + '℃');
+            updateText('compensationDL', data.packet.DlTemperCompensation + 'dB');
+            updateText('compensationUL', data.packet.UlTemperCompensation + 'dB');
+            updateText('mvbxMv2850TxGainSiso', data.packet.Mvbx_Mv2850TxGainSiso);
+            updateText('mvbxMv2850RxGainSiso', data.packet.Mvbx_Mv2850RxGainSiso);
+            updateText('mvbxMv2853TxGainSiso', data.packet.Mvbx_Mv2853TxGainSiso);
+            updateText('mvbxMv2853RxGainSiso', data.packet.Mvbx_Mv2853RxGainSiso);
+            updateText('mvbxMv2850TxGainMimo', data.packet.Mvbx_Mv2850TxGainMimo);
+            updateText('mvbxMv2850RxGainMimo', data.packet.Mvbx_Mv2850RxGainMimo);
+            updateText('mvbxMv2853TxGainMimo', data.packet.Mvbx_Mv2853TxGainMimo);
+            updateText('mvbxMv2853RxGainMimo', data.packet.Mvbx_Mv2853RxGainMimo);
+            updateText('mvbxBeamInfoBeamId1', data.packet.MVBX_BeamInfo_beamId1);
+            updateText('mvbxBeamInfoBeamId2', data.packet.MVBX_BeamInfo_beamId2);
+            updateText('mvbxBeamInfoBeamId3', data.packet.MVBX_BeamInfo_beamId3);
+            updateText('mvbxBeamInfoBeamId4', data.packet.MVBX_BeamInfo_beamId4);
+            updateText('mvbxBeamInfoPci1', data.packet.MVBX_BeamInfo_pci1);
+            updateText('mvbxBeamInfoPci2', data.packet.MVBX_BeamInfo_pci2);
+            updateText('mvbxBeamInfoPci3', data.packet.MVBX_BeamInfo_pci3);
+            updateText('mvbxBeamInfoPci4', data.packet.MVBX_BeamInfo_pci4);
+            updateText('mvbxBeamInfoSsbldx1', data.packet.MVBX_BeamInfo_ssbldx1);
+            updateText('mvbxBeamInfoSsbldx2', data.packet.MVBX_BeamInfo_ssbldx2);
+            updateText('mvbxBeamInfoSsbldx3', data.packet.MVBX_BeamInfo_ssbldx3);
+            updateText('mvbxBeamInfoSsbldx4', data.packet.MVBX_BeamInfo_ssbldx4);
+            updateText('mvbxBeamInfoEnergy1', data.packet.MVBX_BeamInfo_energy1);
+            updateText('mvbxBeamInfoEnergy2', data.packet.MVBX_BeamInfo_energy2);
+            updateText('mvbxBeamInfoEnergy3', data.packet.MVBX_BeamInfo_energy3);
+            updateText('mvbxBeamInfoEnergy4', data.packet.MVBX_BeamInfo_energy4);
+            updateText('mvbxBeamInfoPsstype1', data.packet.MVBX_BeamInfo_psstype1);
+            updateText('mvbxBeamInfoPsstype2', data.packet.MVBX_BeamInfo_psstype2);
+            updateText('mvbxBeamInfoPsstype3', data.packet.MVBX_BeamInfo_psstype3);
+            updateText('mvbxBeamInfoPsstype4', data.packet.MVBX_BeamInfo_psstype4);
+            updateText('mvbxBeamInfoSnr1', data.packet.MVBX_BeamInfo_snr1);
+            updateText('mvbxBeamInfoSnr2', data.packet.MVBX_BeamInfo_snr2);
+            updateText('mvbxBeamInfoSnr3', data.packet.MVBX_BeamInfo_snr3);
+            updateText('mvbxBeamInfoSnr4', data.packet.MVBX_BeamInfo_snr4);
+            updateText('mvbxBeamInfoRsrp1', data.packet.MVBX_BeamInfo_rsrp1);
+            updateText('mvbxBeamInfoRsrp2', data.packet.MVBX_BeamInfo_rsrp2);
+            updateText('mvbxBeamInfoRsrp3', data.packet.MVBX_BeamInfo_rsrp3);
+            updateText('mvbxBeamInfoRsrp4', data.packet.MVBX_BeamInfo_rsrp4);
+            document.getElementById('beamRetrySwitch').textContent = data.packet.BeamScan_OnOff === 1 ? 'On' : 'Off';
+            document.getElementById('decodeAGCSwitch').textContent = data.packet.DecodeRecoveryFuncOnOff === 1 ? 'On' : 'Off';
+            updateText('retryCount', data.packet.TryBeamScanCont);
+            updateText('pllRelockCount', data.packet.PllRelockCount);
+            updateValue('centerFrequency', data.packet.ApiVenderFreq);
+            updateValue('beamFix', data.packet.DuFixBeam === 0 ? 'AUTO' : 'FIX');
+            updateValue('apiLogLevel', data.packet.ApiLogLevel);
+            updateValue('apiAdcSel', data.packet.ApiAdcSel);
+            updateValue('syncPathGain', data.packet.ApiSyncPathGain);
+            updateValue('duTimeAdvance', data.packet.ApiDuTimeAdvance);
+            updateValue('suTimeAdvance', data.packet.ApiSuTimeAdvance);
+            updateValue('orientationActual', data.packet.Actual_Orientation);
+            updateValue('tiltActual', data.packet.Actual_Tilt);
+            updateText('orientation', data.packet.Orientation);
+            updateText('tilt', data.packet.Tilt);
+            
+        
+            
+            // Beam Book 동그라미 색상 업데이트 (app.py에서 파싱한 데이터 사용)
+            if (data.packet.MVBX_BeamInfo_beamId2 && data.packet.MVBX_BeamInfo_beamId3 && data.packet.MVBX_BeamInfo_beamId4) {
+                updateBeamColors({
+                    yellow: [],
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id > 0)
+                });
             }
-
-
-
-
 
             // 네비게이션 점 색상 업데이트
             updateNavDotColors();
@@ -4910,6 +5033,57 @@
             infoModal.show();
         }
 
+
+
+        // Polling Time 입력 변경 처리 함수
+        function handlePollingTimeChange(inputValue) {
+            console.log('Polling Time이 변경되었습니다:', inputValue);
+            
+            // 입력값을 숫자로 변환
+            const pollingTime = parseInt(inputValue);
+            
+            // 유효성 검사 (100~5000ms 범위)
+            if (isNaN(pollingTime) || pollingTime < 100 || pollingTime > 5000) {
+                console.error('Polling Time은 100~5000ms 범위여야 합니다.');
+                return;
+            }
+            
+            console.log('Polling Time 설정:', pollingTime, 'ms');
+            
+            // sendPacketData에 PollingTime 설정 (ConMuFlag[0]의 비트 7 사용)
+            if (sendPacketData && sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
+                // 기존 ConMuFlag[0] 값을 가져와서 비트 7만 수정
+                let currentFlag = sendPacketData.ConMuFlag[0];
+                
+                // Polling Time 활성화 시 비트 7을 1로 설정, 비활성화 시 0으로 설정
+                // (예: 300ms 이상이면 활성화, 그렇지 않으면 비활성화)
+                if (pollingTime >= 300) {
+                    currentFlag |= (1 << 7); // 비트 7을 1로 설정
+                    console.log('Polling Time 활성화 (비트 7 = 1)');
+                } else {
+                    currentFlag &= ~(1 << 7); // 비트 7을 0으로 설정
+                    console.log('Polling Time 비활성화 (비트 7 = 0)');
+                }
+                
+                sendPacketData.ConMuFlag[0] = currentFlag;
+                console.log('sendPacketData.ConMuFlag[0] updated to:', sendPacketData.ConMuFlag[0]);
+                
+                // 실제 입력한 Polling Time 값도 함께 전송
+                sendPacketData.PollingTime = pollingTime;
+                console.log('sendPacketData.PollingTime set to:', sendPacketData.PollingTime);
+                
+                // Socket.IO를 통해 패킷 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('Polling Time 패킷 전송 완료');
+                } else {
+                    console.error('Socket.IO is not connected. Cannot send Polling Time packet.');
+                }
+            } else {
+                console.error('sendPacketData.ConMuFlag is not defined or is empty.');
+            }
+        }
+
         // Reset 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
         function handleResetConfirmation(confirmed) {
             if (confirmed) {
@@ -4936,6 +5110,7 @@
                 console.log('DU Reset이 취소되었습니다.');
             }
         }
+
 
 
 

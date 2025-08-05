@@ -93,6 +93,61 @@ def handle_hex_packet(data):
         print(f"❌ Unexpected Error: {e}")
         return {"status": "error", "message": str(e)}
 
+@socketio.on('du_Ctrl_packet')
+def handle_du_control_packet(data):
+    """ DU 제어 패킷 수신 및 처리 """
+    try:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        print(f"[{current_time}] 🎛️ Received DU Control Packet")
+        print("📦 Received data:", data)
+        
+        # 패킷 데이터 처리
+        if 'ConMuFlag' in data and data['ConMuFlag']:
+            if data['ConMuFlag'][0] == 0x01:
+                print("🔄 DU Reset 명령 감지됨")
+                # TODO: 실제 DU 장비로 Reset 명령 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+        
+        if 'ConMuFlag' in data and data['ConMuFlag']:
+            current_flag = data['ConMuFlag'][0]
+            print(f"🔍 ConMuFlag[0] 값: {current_flag} (0x{current_flag:02X})")
+            print(f"🔍 ConMuFlag[0] 비트: {bin(current_flag)[2:].zfill(8)}")
+            
+            # Reset 명령 확인 (비트 0)
+            if current_flag & 0x01:
+                print("🔄 DU Reset 명령 감지됨 (비트 0 = 1)")
+                # TODO: 실제 DU 장비로 Reset 명령 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+            else:
+                print("🔄 DU Reset 명령 없음 (비트 0 = 0)")
+            
+            # Polling Time 상태 확인 (비트 7)
+            if current_flag & 0x80:  # 0x80 = 10000000 (비트 7)
+                print("⏱️ Polling Time 활성화됨 (비트 7 = 1)")
+                # TODO: 실제 DU 장비로 Polling Time 활성화 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+            else:
+                print("⏱️ Polling Time 비활성화됨 (비트 7 = 0)")
+                # TODO: 실제 DU 장비로 Polling Time 비활성화 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+        
+        # Polling Time 값 확인 (별도 필드로 전송된 경우)
+        if 'PollingTime' in data:
+            polling_time = data['PollingTime']
+            print(f"⏱️ 사용자 입력 Polling Time: {polling_time}ms")
+        elif 'pollingTime' in data:
+            polling_time = data['pollingTime']
+            print(f"⏱️ 사용자 입력 Polling Time: {polling_time}ms")
+        
+        # 성공 응답
+        socketio.emit("du_control_response", {"status": "success", "message": "DU Control packet processed"})
+        return {"status": "success", "message": "DU Control packet received"}
+        
+    except Exception as e:
+        print(f"❌ DU Control Packet Error: {e}")
+        socketio.emit("du_control_response", {"status": "error", "message": str(e)})
+        return {"status": "error", "message": str(e)}
+
 
 
 
@@ -260,14 +315,31 @@ def parse_AllStatusPacket(packet):
     parsed_data['MVBX_BeamInfo_psstype2'] = struct.unpack('<I', bytes([packet[308], packet[309], packet[310], packet[311]]))[0]
     parsed_data['MVBX_BeamInfo_psstype3'] = struct.unpack('<I', bytes([packet[312], packet[313], packet[314], packet[315]]))[0]
     parsed_data['MVBX_BeamInfo_psstype4'] = struct.unpack('<I', bytes([packet[316], packet[317], packet[318], packet[319]]))[0]
-    parsed_data['MVBX_BeamInfo_snr1'] = packet[320:324] # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_snr2'] = packet[324:328]  # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_snr3'] = packet[328:332]  # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_snr4'] = packet[332:336]  # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_rsrp1'] = packet[336:340] # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_rsrp2'] = packet[340:344]  # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_rsrp3'] = packet[344:348]  # struct.unpack('<f', ...) -> raw bytes
-    parsed_data['MVBX_BeamInfo_rsrp4'] = packet[348:352]  # struct.unpack('<f', ...) -> raw bytes
+    # SNR 값 처리 (소수점 2자리, -999이면 "- - -")
+    snr1 = struct.unpack('<f', bytes(packet[320:324]))[0]
+    parsed_data['MVBX_BeamInfo_snr1'] = "- - -" if snr1 == -999 else f"{snr1:.2f}"
+    
+    snr2 = struct.unpack('<f', bytes(packet[324:328]))[0]
+    parsed_data['MVBX_BeamInfo_snr2'] = "- - -" if snr2 == -999 else f"{snr2:.2f}"
+    
+    snr3 = struct.unpack('<f', bytes(packet[328:332]))[0]
+    parsed_data['MVBX_BeamInfo_snr3'] = "- - -" if snr3 == -999 else f"{snr3:.2f}"
+    
+    snr4 = struct.unpack('<f', bytes(packet[332:336]))[0]
+    parsed_data['MVBX_BeamInfo_snr4'] = "- - -" if snr4 == -999 else f"{snr4:.2f}"
+    
+    # RSRP 값 처리 (소수점 2자리, -999이면 "- - -")
+    rsrp1 = struct.unpack('<f', bytes(packet[336:340]))[0]
+    parsed_data['MVBX_BeamInfo_rsrp1'] = "- - -" if rsrp1 == -999 else f"{rsrp1:.2f}"
+    
+    rsrp2 = struct.unpack('<f', bytes(packet[340:344]))[0]
+    parsed_data['MVBX_BeamInfo_rsrp2'] = "- - -" if rsrp2 == -999 else f"{rsrp2:.2f}"
+    
+    rsrp3 = struct.unpack('<f', bytes(packet[344:348]))[0]
+    parsed_data['MVBX_BeamInfo_rsrp3'] = "- - -" if rsrp3 == -999 else f"{rsrp3:.2f}"
+    
+    rsrp4 = struct.unpack('<f', bytes(packet[348:352]))[0]
+    parsed_data['MVBX_BeamInfo_rsrp4'] = "- - -" if rsrp4 == -999 else f"{rsrp4:.2f}"
     parsed_data['pss_pulse_count'] = struct.unpack('<I', bytes([packet[352], packet[353], packet[354], packet[355]]))[0]
     parsed_data['decoded_ssb_count'] = struct.unpack('<I', bytes([packet[356], packet[357], packet[358], packet[359]]))[0]
     parsed_data['decoded_ssb_no_error_count'] = struct.unpack('<I', bytes([packet[360], packet[361], packet[362], packet[363]]))[0]
@@ -511,8 +583,8 @@ def parse_AllStatusPacket(packet):
     parsed_data['Gs_Gain_Siso'] = packet[1017]
     parsed_data['Gs_Gain_Mimo'] = packet[1018]
     parsed_data['ApiInitRetryMode'] = packet[1019]
-    parsed_data['Orientation'] = struct.unpack('<h', bytes([packet[1020], packet[1021]]))[0]
-    parsed_data['Tilt'] = struct.unpack('<h', bytes([packet[1022], packet[1023]]))[0]
+    parsed_data['Orientation'] = f"{struct.unpack('<h', bytes([packet[1020], packet[1021]]))[0]:.3f}"
+    parsed_data['Tilt'] = f"{struct.unpack('<h', bytes([packet[1022], packet[1023]]))[0]:.3f}"
     parsed_data['GS_AttenOffset_DL_Siso'] = struct.unpack('<b', bytes([packet[1024]]))[0]
     parsed_data['GS_AttenOffset_DL_Mimo'] = struct.unpack('<b', bytes([packet[1025]]))[0]
     parsed_data['GS_AttenOffset_UL_Siso'] = struct.unpack('<b', bytes([packet[1026]]))[0]
