@@ -1031,26 +1031,26 @@
                 <!-- Initial Setup Custom Modal -->
                 <div class="modal fade" id="duInitialSetupModal" tabindex="-1" aria-labelledby="duInitialSetupModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
-                        <div class="modal-header" style="background-color: #666;">
-                            <h5 class="modal-title text-white" id="duInitialSetupModalLabel">Initial Setup</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <div class="p-3 mb-3" style="background-color: yellow; font-size: 2rem; font-weight: bold;">
-                            INITIAL SETUP
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 10px; margin: 0;">
+                            <div class="modal-header" style="background-color: #666; border-bottom: none; padding: 1rem; border-radius: 10px 10px 0 0;">
+                                <h5 class="modal-title text-white" id="duInitialSetupModalLabel">Initial Setup</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="d-flex justify-content-center gap-3 mb-4">
-                            <button
-                                class="btn btn-lg"
-                                style="width: 120px; background-color: #d3dce6;"
-                                data-bs-toggle="modal"
-                                data-bs-target="#usimCheckModal"
-                                data-bs-dismiss="modal"
-                                onclick="startUsimTimer()">
-                                Start
-                            </button>
+
+                            <div class="modal-body" style="padding: 2rem;">
+                                <div class="p-3 mb-3" style="background-color: yellow; font-size: 2rem; font-weight: bold;">
+                                INITIAL SETUP
+                                </div>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                <button
+                                    class="btn btn-lg"
+                                    style="width: 120px; background-color: #d3dce6;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#usimCheckModal"
+                                    data-bs-dismiss="modal"
+                                    onclick="startUsimTimer()">
+                                    Start
+                                </button>
 
 
                             <button class="btn btn-lg" style="width: 120px; background-color: #d3dce6;" data-bs-dismiss="modal">Close</button>
@@ -1175,14 +1175,14 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">AGC On/Off</label>
                                     <div class="col-7">
-                                    <button id="Mvbx_RsAgcMode" class="btn btn-success btn-sm w-100" style="width: 50px;">On</button>
+                                    <button id="Mvbx_RsAgcMode2" class="btn btn-success btn-sm w-100" style="width: 50px;">On</button>
                                     </div>
                                 </div>
 
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">AGC Level</label>
                                     <div class="col-7 d-flex align-items-center">
-                                    <input type="text" id="Mvbx_RsAgcThreshold" class="form-control text-end" value="-97">
+                                    <input type="text" id="Mvbx_RsAgcThreshold2" class="form-control text-end" value="-97">
                                     <span class="ms-2">[dBm]</span>
                                     </div>
                                 </div>
@@ -1253,7 +1253,7 @@
                         <div class="modal-footer d-flex justify-content-between">
                             <button class="btn btn-secondary" onclick="goToDeviceFromAgc()">Back</button>
                             <div>&lt;Step 4/7&gt;</div>
-                            <button class="btn btn-primary">Next</button>
+                            <button class="btn btn-primary" onclick="goToStep5()">Next</button>
                             <button class="btn btn-danger" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
                         </div>
                         </div>
@@ -1294,35 +1294,342 @@
                 </div>
 
 
-                <!-- Button APN Setup Modal -->
-                <div class="modal fade" id="BtapnSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                <!-- Initial Setup Modal (Step 5/7) -->
+                <div class="modal fade" id="InitialSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
+                        
 
-                            <div class="modal-body text-center">
 
-                                <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
-                                <label class="fw-bold">Mobile Company</label>
-                                <input type="text" class="form-control text-center" style="max-width:100px;" value="uscc" readonly>
-                                <input type="text" class="form-control text-center" style="max-width:300px;" value="uscc07454.enterprise3.usc-cdp">
-                                <button class="btn btn-secondary">Set</button>
+                        <!-- Body -->
+                        <div class="modal-body text-start">
+
+                            <!-- DU Physical Section -->
+                            <div class="mb-4">
+                                <div style="font-weight:bold; font-size:1.1rem; text-align:left; border-bottom:1px dashed #999; padding-bottom:5px; margin-bottom:15px;">
+                                    <i class="bi bi-folder"></i> DU Physical
+                                </div>
+                                
+                                <div class="row gx-5">
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Orientation</label>
+                                            <div class="col-8 d-flex align-items-center">
+                                                <input type="text" id="Actual_Orientation" class="form-control text-end" value="0">
+                                                <span class="ms-2">[0]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Tilt</label>
+                                            <div class="col-8 d-flex align-items-center">
+                                                <input type="text" id="Actual_Tilt" class="form-control text-end" value="0">
+                                                <span class="ms-2">[0]</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="d-flex justify-content-center gap-3 mb-4">
-                                <button
-                                    type="button"
-                                    class="btn btn-lg"
-                                    style="width: 100px; background-color: #d3dce6;"
-                                    data-bs-dismiss="modal"
-                                    onclick="handleResetConfirmation(false)">
-                                    Close
-                                </button>
+                            <!-- DU Info Section -->
+                            <div class="mb-4">
+                                <div style="font-weight:bold; font-size:1.1rem; text-align:left; border-bottom:1px dashed #999; padding-bottom:5px; margin-bottom:15px;">
+                                    <i class="bi bi-folder"></i> DU Info
+                                </div>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Site ID</label>
+                                            <div class="col-8">
+                                                <input type="text" id="site-id" class="form-control" value="Kor-FRTek-001" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Site Name</label>
+                                            <div class="col-8">
+                                                <input type="text" id="site-name" class="form-control" value="Korea FRTek RF-EMS" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Latitude</label>
+                                            <div class="col-8">
+                                                <input type="text" id="latitude" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">Longitude</label>
+                                            <div class="col-8">
+                                                <input type="text" id="longitude" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row align-items-center">
+                                            <label class="col-4 col-form-label">DU Name</label>
+                                            <div class="col-8">
+                                                <input type="text" id="du-name" class="form-control" value="DU">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                         </div>
-                    </div>
 
+                        <!-- Timer -->
+                        <div style="font-size:1rem; margin-top:10px; margin-bottom:20px; text-align: center;">
+                            Time : <span id="InitialSetupTimer">300</span> [Sec]
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button class="btn btn-secondary" onclick="backToAgcSetup()">Back</button>
+                            <div>&lt;Step 5/7&gt;</div>
+                            <button class="btn btn-primary" onclick="goToStep6()">Next</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SU Setup Modal (Step 6/7) -->
+                <div class="modal fade" id="BtapnSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
+                        
+
+
+                        <!-- Body -->
+                        <div class="modal-body text-start">
+
+                            <!-- SU Enable Section -->
+                            <div class="mb-4">
+                                <div style="font-weight:bold; font-size:1.1rem; text-align:left; border-bottom:1px dashed #999; padding-bottom:5px; margin-bottom:15px;">
+                                    <i class="bi bi-folder"></i> SU Enable
+                                </div>
+                                
+                                <div class="row gx-5">
+                                    <div class="col-md-12">
+                                        <div class="row align-items-center">
+                                            <label class="col-3 col-form-label">CASCADE</label>
+                                            <div class="col-9">
+                                                <div class="d-flex gap-2">
+                                                    <button id="su1-enable-btn" class="btn btn-success btn-sm">#1 Enable</button>
+                                                    <button id="su2-enable-btn" class="btn btn-secondary btn-sm">#2 Disable</button>
+                                                    <button id="su3-enable-btn" class="btn btn-secondary btn-sm">#3 Disable</button>
+                                                    <button id="su4-enable-btn" class="btn btn-secondary btn-sm">#4 Disable</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SU Info Section -->
+                            <div class="mb-4">
+                                <div style="font-weight:bold; font-size:0.9rem; text-align:left; border-bottom:1px dashed #999; padding-bottom:3px; margin-bottom:10px;">
+                                    <i class="bi bi-folder"></i> SU Info
+                                </div>
+                                
+                                <div class="row g-2">
+                                    <!-- SU#1 Row -->
+                                    <div class="col-md-12">
+                                        <div class="row g-1 justify-content-center">
+                                            <div class="col-md-2">
+                                                <div class="row align-items-center">
+                                                    <label class="col-12 col-form-label" style="font-size:0.7rem;">SU#1</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-5 col-form-label" style="font-size:0.7rem;">Name</label>
+                                                    <div class="col-7">
+                                                        <input type="text" id="su1-name" class="form-control form-control-sm" value="SU #1" style="font-size:0.7rem;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Latitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su1-latitude" class="form-control form-control-sm" style="font-size:0.7rem;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Longitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su1-longitude" class="form-control form-control-sm" style="font-size:0.7rem;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SU#2 Row -->
+                                    <div class="col-md-12">
+                                        <div class="row g-1 justify-content-center">
+                                            <div class="col-md-2">
+                                                <div class="row align-items-center">
+                                                    <label class="col-12 col-form-label" style="font-size:0.7rem;">SU#2</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-5 col-form-label" style="font-size:0.7rem;">Name</label>
+                                                    <div class="col-7">
+                                                        <input type="text" id="su2-name" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Latitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su2-latitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Longitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su2-longitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SU#3 Row -->
+                                    <div class="col-md-12">
+                                        <div class="row g-1 justify-content-center">
+                                            <div class="col-md-2">
+                                                <div class="row align-items-center">
+                                                    <label class="col-12 col-form-label" style="font-size:0.7rem;">SU#3</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-5 col-form-label" style="font-size:0.7rem;">Name</label>
+                                                    <div class="col-7">
+                                                        <input type="text" id="su3-name" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Latitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su3-latitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Longitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su3-longitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- SU#4 Row -->
+                                    <div class="col-md-12">
+                                        <div class="row g-1 justify-content-center">
+                                            <div class="col-md-2">
+                                                <div class="row align-items-center">
+                                                    <label class="col-12 col-form-label" style="font-size:0.7rem;">SU#4</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-5 col-form-label" style="font-size:0.7rem;">Name</label>
+                                                    <div class="col-7">
+                                                        <input type="text" id="su4-name" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Latitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su4-latitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="row align-items-center">
+                                                    <label class="col-4 col-form-label" style="font-size:0.7rem;">Longitude</label>
+                                                    <div class="col-8">
+                                                        <input type="text" id="su4-longitude" class="form-control form-control-sm" style="font-size:0.7rem;" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Timer -->
+                        <div style="font-size:1rem; margin-top:10px; margin-bottom:20px; text-align: center;">
+                            Time : <span id="BtapnTimer">300</span> [Sec]
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button class="btn btn-secondary" onclick="backToInitialSetup()">Back</button>
+                            <div>&lt;Step 6/7&gt;</div>
+                            <button class="btn btn-primary" onclick="goToStep7()">Next</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Setup Modal (Step 7/7) -->
+                <div class="modal fade" id="FinalSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-md">
+                        <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:30px;">
+                        
+                        <!-- Question -->
+                        <div style="font-size:1.2rem; margin-bottom:25px; color:#333;">
+                            Complete set up?
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-center gap-3">
+                            <button class="btn btn-light" style="padding:10px 25px; font-weight:bold; color:#333; border:none; border-radius:5px;">YES</button>
+                            <button class="btn btn-light" style="padding:10px 25px; font-weight:bold; color:#333; border:none; border-radius:5px;">NO</button>
+                        </div>
+
+                        <!-- Timer -->
+                        <div style="font-size:1rem; margin-top:20px; text-align: center;">
+                            Time : <span id="FinalSetupTimer">300</span> [Sec]
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer d-flex justify-content-between">
+                            <button class="btn btn-secondary" onclick="backToBtapnSetup()">Back</button>
+                            <div>&lt;Step 7/7&gt;</div>
+                            <button class="btn btn-primary" onclick="goToStep7()">Next</button>
+                            <button class="btn btn-danger" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
+                        </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- DU Hidden Modal -->
@@ -4120,7 +4427,7 @@
 
         function updateTimerDisplays() {
             document.getElementById('usimTimer').textContent = timeLeft;
-            ['apnTimer', 'DeviceTimer', 'AgcTimer'].forEach(id => {
+            ['apnTimer', 'DeviceTimer', 'AgcTimer', 'InitialSetupTimer', 'BtapnTimer', 'FinalSetupTimer'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.textContent = timeLeft;
             });
@@ -4144,6 +4451,48 @@
             bootstrap.Modal.getInstance(document.getElementById('DeviceSetupModal'))?.hide();
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('AgcSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function goToStep5() {
+            bootstrap.Modal.getInstance(document.getElementById('AgcSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('InitialSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function backToAgcSetup() {
+            bootstrap.Modal.getInstance(document.getElementById('InitialSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('AgcSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function goToStep6() {
+            bootstrap.Modal.getInstance(document.getElementById('InitialSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('BtapnSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function backToInitialSetup() {
+            bootstrap.Modal.getInstance(document.getElementById('BtapnSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('InitialSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function goToStep7() {
+            bootstrap.Modal.getInstance(document.getElementById('BtapnSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('FinalSetupModal')).show();
+            updateTimerDisplays();
+        }
+
+        function backToBtapnSetup() {
+            bootstrap.Modal.getInstance(document.getElementById('FinalSetupModal'))?.hide();
+            if (timeLeft <= 0) return;
+            new bootstrap.Modal(document.getElementById('BtapnSetupModal')).show();
             updateTimerDisplays();
         }
 
@@ -4792,10 +5141,28 @@
         
 
             // 1. Ant. Array On/Off (GumStick_OnOff)
-            updateText("gumstick_onoff", data.packet.GumStick_OnOff === 1 ? "On" : "Off");
+            const gumstickOnOffEl = document.getElementById("gumstick_onoff");
+            if (gumstickOnOffEl) {
+                if (data.packet.GumStick_OnOff === 1) {
+                    gumstickOnOffEl.textContent = "On";
+                    gumstickOnOffEl.className = "btn btn-success btn-sm";
+                } else {
+                    gumstickOnOffEl.textContent = "Off";
+                    gumstickOnOffEl.className = "btn btn-secondary btn-sm";
+                }
+            }
 
             // 2. AGC On/Off (Mvbx_RsAgcThreshold)
-            updateText("mvbx_rsagc_threshold", data.packet.Mvbx_RsAgcThreshold === 1 ? "On" : "Off");
+            const mvbxRsagcThresholdEl = document.getElementById("mvbx_rsagc_threshold");
+            if (mvbxRsagcThresholdEl) {
+                if (data.packet.Mvbx_RsAgcThreshold === 1) {
+                    mvbxRsagcThresholdEl.textContent = "On";
+                    mvbxRsagcThresholdEl.className = "btn btn-success btn-sm";
+                } else {
+                    mvbxRsagcThresholdEl.textContent = "Off";
+                    mvbxRsagcThresholdEl.className = "btn btn-secondary btn-sm";
+                }
+            }
 
             // 3. AGC Level (Mvbx_RsAgcMode)
             let agcLevel = data.packet.Mvbx_RsAgcMode;
@@ -4808,8 +5175,29 @@
             // 4. AGC Input (AGC_Input_Power)
             updateText("agc_input_power", data.packet.AGC_Input_Power + " dBm");
 
-            updateText("alc_dl0_siso_mode", data.packet.ALC_DL0_SISO_Mode === 1 ? "On" : "Off");
-            updateText("alc_dl1_mimo_mode", data.packet.ALC_DL1_MIMO_Mode === 1 ? "On" : "Off");
+            // ALC DL0 SISO Mode (1=ON, 0=OFF)
+            const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
+            if (alcDl0SisoEl) {
+                if (data.packet.ALC_DL0_SISO_Mode === 1) {
+                    alcDl0SisoEl.textContent = "On";
+                    alcDl0SisoEl.className = "btn btn-success btn-sm";
+                } else {
+                    alcDl0SisoEl.textContent = "Off";
+                    alcDl0SisoEl.className = "btn btn-secondary btn-sm";
+                }
+            }
+            
+            // ALC DL1 MIMO Mode (1=ON, 0=OFF)
+            const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
+            if (alcDl1MimoEl) {
+                if (data.packet.ALC_DL1_MIMO_Mode === 1) {
+                    alcDl1MimoEl.textContent = "On";
+                    alcDl1MimoEl.className = "btn btn-success btn-sm";
+                } else {
+                    alcDl1MimoEl.textContent = "Off";
+                    alcDl1MimoEl.className = "btn btn-secondary btn-sm";
+                }
+            }
 
             // gNB Type: 0=Manual, 1=Samsung, 2=Nokia, 3=Ericsson
             console.log('gNB_Vendor data:', data.packet.gNB_Vendor);
@@ -4825,6 +5213,21 @@
             
             // 모달의 gNB_Vendor_1 업데이트
             updateValue("gNB_Vendor_1", gNBVendorText);
+            
+            // AGC On/Off 업데이트 (1=ON, 0=OFF)
+            const agcModeEl2 = document.getElementById("Mvbx_RsAgcMode2");
+            if (agcModeEl2) {
+                if (data.packet.Mvbx_RsAgcMode === 1) {
+                    agcModeEl2.textContent = "On";
+                    agcModeEl2.className = "btn btn-success btn-sm w-100";
+                } else {
+                    agcModeEl2.textContent = "Off";
+                    agcModeEl2.className = "btn btn-secondary btn-sm w-100";
+                }
+            }
+            
+            // AGC Level 업데이트 (Range:-60~-100, Step:1)
+            updateValue("Mvbx_RsAgcThreshold2", data.packet.Mvbx_RsAgcThreshold);
 
             updateText('antArrayVer', data.packet.Gumstick_Ver);
             document.getElementById('temperComp').textContent = data.packet.BeamAntSelect === 1 ? 'On' : 'Off';
@@ -4883,6 +5286,148 @@
             updateValue('tiltActual', data.packet.Actual_Tilt);
             updateText('orientation', data.packet.Orientation);
             updateText('tilt', data.packet.Tilt);
+            updateText('Actual_Orientation', data.packet.Actual_Orientation);
+            updateText('Actual_Tilt', data.packet.Actual_Tilt);
+            updateValue('du-name', data.packet.ConSerialNum);
+
+                          // SU Enable 버튼 상태 업데이트
+              const su1EnableBtn = document.getElementById('su1-enable-btn');
+              const su2EnableBtn = document.getElementById('su2-enable-btn');
+              const su3EnableBtn = document.getElementById('su3-enable-btn');
+              const su4EnableBtn = document.getElementById('su4-enable-btn');
+  
+              // SU Info 필드들
+              const su1NameField = document.getElementById('su1-name');
+              const su1LatField = document.getElementById('su1-latitude');
+              const su1LonField = document.getElementById('su1-longitude');
+              
+              const su2NameField = document.getElementById('su2-name');
+              const su2LatField = document.getElementById('su2-latitude');
+              const su2LonField = document.getElementById('su2-longitude');
+              
+              const su3NameField = document.getElementById('su3-name');
+              const su3LatField = document.getElementById('su3-latitude');
+              const su3LonField = document.getElementById('su3-longitude');
+              
+              const su4NameField = document.getElementById('su4-name');
+              const su4LatField = document.getElementById('su4-latitude');
+              const su4LonField = document.getElementById('su4-longitude');
+  
+              if (su1EnableBtn) {
+                  su1EnableBtn.textContent = "#1 Enable";
+                  su1EnableBtn.className = "btn btn-success btn-sm";
+                  if (su1NameField) {
+                      su1NameField.disabled = false;
+                      su1NameField.style.backgroundColor = "white";
+                  }
+                  if (su1LatField) {
+                      su1LatField.disabled = false;
+                      su1LatField.style.backgroundColor = "white";
+                  }
+                  if (su1LonField) {
+                      su1LonField.disabled = false;
+                      su1LonField.style.backgroundColor = "white";
+                  }
+              }
+              if (su2EnableBtn) {
+                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU2_ENABLE === 1) {
+                      su2EnableBtn.textContent = "#2 Enable";
+                      su2EnableBtn.className = "btn btn-success btn-sm";
+                      if (su2NameField) {
+                          su2NameField.disabled = false;
+                          su2NameField.style.backgroundColor = "white";
+                      }
+                      if (su2LatField) {
+                          su2LatField.disabled = false;
+                          su2LatField.style.backgroundColor = "white";
+                      }
+                      if (su2LonField) {
+                          su2LonField.disabled = false;
+                          su2LonField.style.backgroundColor = "white";
+                      }
+                  } else {
+                      su2EnableBtn.textContent = "#2 Disable";
+                      su2EnableBtn.className = "btn btn-secondary btn-sm";
+                      if (su2NameField) {
+                          su2NameField.disabled = true;
+                          su2NameField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su2LatField) {
+                          su2LatField.disabled = true;
+                          su2LatField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su2LonField) {
+                          su2LonField.disabled = true;
+                          su2LonField.style.backgroundColor = "#e9ecef";
+                      }
+                  }
+              }
+              if (su3EnableBtn) {
+                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU3_ENABLE === 1) {
+                      su3EnableBtn.textContent = "#3 Enable";
+                      su3EnableBtn.className = "btn btn-success btn-sm";
+                      if (su3NameField) {
+                          su3NameField.disabled = false;
+                          su3NameField.style.backgroundColor = "white";
+                      }
+                      if (su3LatField) {
+                          su3LatField.disabled = false;
+                          su3LatField.style.backgroundColor = "white";
+                      }
+                      if (su3LonField) {
+                          su3LonField.disabled = false;
+                          su3LonField.style.backgroundColor = "white";
+                      }
+                  } else {
+                      su3EnableBtn.textContent = "#3 Disable";
+                      su3EnableBtn.className = "btn btn-secondary btn-sm";
+                      if (su3NameField) {
+                          su3NameField.disabled = true;
+                          su3NameField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su3LatField) {
+                          su3LatField.disabled = true;
+                          su3LatField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su3LonField) {
+                          su3LonField.disabled = true;
+                          su3LonField.style.backgroundColor = "#e9ecef";
+                      }
+                  }
+              }
+              if (su4EnableBtn) {
+                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU4_ENABLE === 1) {
+                      su4EnableBtn.textContent = "#4 Enable";
+                      su4EnableBtn.className = "btn btn-success btn-sm";
+                      if (su4NameField) {
+                          su4NameField.disabled = false;
+                          su4NameField.style.backgroundColor = "white";
+                      }
+                      if (su4LatField) {
+                          su4LatField.disabled = false;
+                          su4LatField.style.backgroundColor = "white";
+                      }
+                      if (su4LonField) {
+                          su4LonField.disabled = false;
+                          su4LonField.style.backgroundColor = "white";
+                      }
+                  } else {
+                      su4EnableBtn.textContent = "#4 Disable";
+                      su4EnableBtn.className = "btn btn-secondary btn-sm";
+                      if (su4NameField) {
+                          su4NameField.disabled = true;
+                          su4NameField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su4LatField) {
+                          su4LatField.disabled = true;
+                          su4LatField.style.backgroundColor = "#e9ecef";
+                      }
+                      if (su4LonField) {
+                          su4LonField.disabled = true;
+                          su4LonField.style.backgroundColor = "#e9ecef";
+                      }
+                  }
+              }
             
         
             
