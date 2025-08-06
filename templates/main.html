@@ -972,10 +972,10 @@
             </div>
 
             <hr>
-            <button class="btn btn-secondary w-100">Packet Info</button>
+            <button class="btn btn-secondary w-100" onclick="showPacketInfo()">Packet Info</button>
             <button class="btn btn-secondary w-100 mt-2">Sync Module</button>
             <button class="btn btn-secondary w-100 mt-2">Modem AtCmd</button>
-            <button class="btn btn-primary w-100 mt-2">Download</button>
+            <button class="btn btn-secondary w-100 mt-2">Download</button>
         </div>
 
 
@@ -1021,7 +1021,7 @@
                         </button>
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;"
                                 data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>       
-                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">Alarm Mask</button>
+                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
                         <button class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
                     </div>
                 </div>
@@ -2339,6 +2339,281 @@
                                 <button class="btn btn-primary" style="visibility: visible; opacity: 1;">Set Mode</button>
                             </div>
 
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DU Alarm Mask Modal -->
+                <div class="modal fade" id="alarmMaskModal" tabindex="-1" aria-labelledby="alarmMaskModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered" style="max-width: 90%; width: 90%;">
+                        <div class="modal-content" style="background-color: #f5f5f5; border: 1px solid #ccc; border-radius: 10px;">
+                            <div class="modal-header" style="background-color: #666; border-bottom: none; padding: 1rem; border-radius: 10px 10px 0 0;">
+                                <h5 class="modal-title text-white" id="alarmMaskModalLabel">
+                                    <i class="fas fa-plus me-2"></i>DU Alarm Mask
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body" style="padding: 1.5rem;">
+                                <div class="row g-3">
+                                    <!-- Alarm Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 250px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>Alarm
+                                            </h6>
+                                            <div class="row g-2">
+                                                <div class="col-3">
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">DC</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">AC</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">FPGA Link</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">EMS Link</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">Temp</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">BAT</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;"></small>
+                                                        <div style="height: 22px;"></div>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;"></small>
+                                                        <div style="height: 22px;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">IF PLL</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">Sync PLL</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;"></small>
+                                                        <div style="height: 22px;"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">TSync Link</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">Decoding</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                    <div class="mb-2 d-flex flex-column align-items-center">
+                                                        <small style="font-size: 9px;">Ant. Array Link</small>
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SU FAIL Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 250px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>SU FAIL
+                                            </h6>
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-center gap-4">
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">CASCADE</small>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">#1</small>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">#2</small>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">#3</small>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">#4</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <div class="d-flex justify-content-center gap-4">
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <small style="font-size: 13px;">PATH#0</small>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    </div>
+                                                    <div class="text-center" style="width: 80px;">
+                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SISO RF Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 140px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>SISO RF
+                                            </h6>
+                                            <hr style="border-top: 1px dashed #999; margin-bottom: 15px;">
+                                            <div class="mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-plus text-primary me-2" style="font-size: 14px;"></i>
+                                                            <small style="font-size: 13px;">DL</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-plus text-primary me-2" style="font-size: 14px;"></i>
+                                                            <small style="font-size: 13px;">UL</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
+                                                    <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MIMO RF Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 140px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>MIMO RF
+                                            </h6>
+                                            <hr style="border-top: 1px dashed #999; margin-bottom: 15px;">
+                                            <div class="mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-plus text-primary me-2" style="font-size: 14px;"></i>
+                                                            <small style="font-size: 13px;">DL</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="d-flex align-items-center">
+                                                            <i class="fas fa-plus text-primary me-2" style="font-size: 14px;"></i>
+                                                            <small style="font-size: 13px;">UL</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2">
+                                                <div class="d-flex align-items-center">
+                                                    <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
+                                                    <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SISO OPTIC Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 140px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>SISO OPTIC
+                                            </h6>
+                                            <hr style="border-top: 1px dashed #999; margin-bottom: 15px;">
+                                            <div class="mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <small style="font-size: 11px;">DL LD Lower</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <small style="font-size: 11px;">UL PD Lower</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MIMO OPTIC Section -->
+                                    <div class="col-md-6">
+                                        <div class="alarm-section" style="background-color: #e0e0e0; padding: 15px; border-radius: 8px; height: 140px;">
+                                            <h6 style="color: #333; margin-bottom: 15px; font-weight: bold;">
+                                                <i class="fas fa-folder me-2"></i>MIMO OPTIC
+                                            </h6>
+                                            <hr style="border-top: 1px dashed #999; margin-bottom: 15px;">
+                                            <div class="mb-3">
+                                                <div class="row g-2">
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <small style="font-size: 11px;">DL LD Lower</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <small style="font-size: 11px;">UL PD Lower</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="d-flex align-items-center justify-content-center">
+                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-center" style="background-color: #f5f5f5; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
+                                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" style="background-color: #007bff; border: none;">Set</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3816,6 +4091,70 @@
 
         </div>
 
+        <!-- Packet Info Content -->
+        <div id="packet_info_display" style="display: none; background-color: #D2D7D9; min-height: 100vh; padding: 20px;">
+            <div style="background-color: #F0F1F2; padding: 1rem; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); margin-bottom: 0.5rem;"> 
+                <div class="row align-items-center mb-2"> 
+                    <div class="col-md-3">
+                        <small class="text-muted">Site ID :</small> Kor-FRTek-001
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <small class="text-muted">Site Name :</small> Korea FRTek RF-EMS
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <small class="text-muted">S/N :</small> <span id="conserialnum_header_packet">N/A</span>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_packet">N/A</span>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-3" style="border-top: 1px dotted #000000;"> 
+            
+            <!-- Main Packet Info Card -->
+            <div style="background-color: #F0F1F2; padding: 1.5rem; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);">
+                <div class="d-flex justify-content-between align-items-center mb-3"> 
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #343a40; background-color: #6c757d; color: white; padding: 8px 16px; border-radius: 4px;">
+                        Packet Info
+                    </div>
+                    <button class="btn btn-secondary btn-sm">Clear</button>
+                </div>
+
+                <!-- SU Packet Send / Success Count Section -->
+                <div class="mb-3">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-folder me-2"></i>
+                        <span style="font-weight: bold; color: #343a40;">SU Packet Send / Success Count</span>
+                    </div>
+                    
+                    <!-- Data Table -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="background-color: white;">
+                            <thead>
+                                <tr>
+                                    <th style="background-color: #f8f9fa; text-align: center;">CASCADE</th>
+                                    <th style="background-color: #f8f9fa; text-align: center;">#1</th>
+                                    <th style="background-color: #f8f9fa; text-align: center;">#2</th>
+                                    <th style="background-color: #f8f9fa; text-align: center;">#3</th>
+                                    <th style="background-color: #f8f9fa; text-align: center;">#4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">PATH#0</td>
+                                    <td style="text-align: center; font-weight: bold;">22130942 / 0</td>
+                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
+                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
+                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
 
     </div>
@@ -4676,6 +5015,7 @@
         function showScreen(screenId) {
             const duContent = document.getElementById('du_content_display');
             const su1Content = document.getElementById('su1_content_display');
+            const packetInfoContent = document.getElementById('packet_info_display');
             const duNavDot = document.getElementById('du_nav_dot');
             const su1NavDot = document.getElementById('su1_nav_dot');
             const su2NavDot = document.getElementById('su2_nav_dot');
@@ -4688,6 +5028,10 @@
             // 모든 화면 숨김
             duContent.classList.remove('active');
             su1Content.classList.remove('active');
+            if (packetInfoContent) {
+                packetInfoContent.classList.remove('active');
+                packetInfoContent.style.display = 'none';
+            }
 
             // 선택된 화면 표시 및 활성화된 화면의 네비게이션 점 색상 변경 (흰색)
             if (screenId === 'du_content') {
@@ -4695,6 +5039,11 @@
             } else if (screenId === 'su1_content') {
                 su1Content.classList.add('active');
                 console.log('SU #1 content activated.'); // 디버깅 로그
+            } else if (screenId === 'packet_info') {
+                if (packetInfoContent) {
+                    packetInfoContent.classList.add('active');
+                    packetInfoContent.style.display = 'block';
+                }
             }
              // SU #2 화면이 활성화될 경우 (현재는 구현되지 않음)
              else if (screenId === 'su2_content') {
@@ -4900,6 +5249,7 @@
             updateText("modver", data.packet.ModVersion);
             updateText("emsversion", data.packet.ModEmsFwVer);
             updateText("emsversion2", data.packet.ModEmsFwVer);
+            updateText("emsversion2_packet", data.packet.ModEmsFwVer);
             updateText("modip", data.packet.ModIpAddress);
             updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
             
@@ -5121,6 +5471,7 @@
             updateValue("Mvbx_RsAgcThreshold", data.packet.Mvbx_RsAgcThreshold);
             updateValue("conserialnum", data.packet.ConSerialNum);
             updateText("conserialnum_header", data.packet.ConSerialNum);
+            updateText("conserialnum_header_packet", data.packet.ConSerialNum);
 
             // Decoded SSB 정보 업데이트
             updateText("decoded_ssb_count", data.packet.decoded_ssb_count);
@@ -5656,6 +6007,81 @@
             }
         }
 
+        // Alarm Mask 버튼 상태 저장
+        let alarmButtonStates = {};
+        let tempButtonStates = {};
+
+        // Alarm Mask 버튼 토글 기능 (Cancel, Set 버튼 제외)
+        document.addEventListener('DOMContentLoaded', function() {
+            const alarmButtons = document.querySelectorAll('#alarmMaskModal .alarm-section .btn');
+            alarmButtons.forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    if (this.textContent === 'Off') {
+                        this.textContent = 'On';
+                        this.style.backgroundColor = '#28a745';
+                        tempButtonStates[index] = 'On';
+                    } else {
+                        this.textContent = 'Off';
+                        this.style.backgroundColor = '#666';
+                        tempButtonStates[index] = 'Off';
+                    }
+                });
+            });
+
+            // Set 버튼 클릭 시 상태 저장
+            document.addEventListener('click', function(event) {
+                if (event.target.matches('#alarmMaskModal .modal-footer .btn-primary')) {
+                    console.log('Set 버튼이 클릭되었습니다.');
+                    // 임시 상태를 실제 상태로 저장
+                    Object.assign(alarmButtonStates, tempButtonStates);
+                    console.log('Alarm Mask 설정이 저장되었습니다.');
+                    console.log('저장된 상태:', alarmButtonStates);
+                }
+            });
+
+            // Cancel 버튼 클릭 시 모달만 닫기 (임시 상태는 유지)
+            const cancelButton = document.querySelector('#alarmMaskModal .modal-footer .btn-secondary');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', function() {
+                    console.log('Cancel 버튼이 클릭되었습니다. 모달이 닫힙니다.');
+                    // Cancel 버튼은 모달만 닫고, 임시 상태는 그대로 유지
+                    // 모달이 닫히면 임시 상태도 초기화됨
+                });
+            }
+
+            // 모달이 열릴 때 버튼 상태 복원 (Cancel, Set 버튼 제외)
+            const alarmMaskModal = document.getElementById('alarmMaskModal');
+            if (alarmMaskModal) {
+                alarmMaskModal.addEventListener('shown.bs.modal', function() {
+                    const buttons = this.querySelectorAll('.alarm-section .btn');
+                    buttons.forEach((button, index) => {
+                        if (alarmButtonStates.hasOwnProperty(index)) {
+                            if (alarmButtonStates[index] === 'On') {
+                                button.textContent = 'On';
+                                button.style.backgroundColor = '#28a745';
+                            } else {
+                                button.textContent = 'Off';
+                                button.style.backgroundColor = '#666';
+                            }
+                        }
+                        // 임시 상태를 실제 저장된 상태로 초기화
+                        tempButtonStates[index] = alarmButtonStates[index] || 'Off';
+                    });
+                });
+
+                // 모달이 닫힐 때 임시 상태 초기화
+                alarmMaskModal.addEventListener('hidden.bs.modal', function() {
+                    console.log('모달이 닫혔습니다. 임시 상태를 초기화합니다.');
+                    tempButtonStates = {};
+                });
+            }
+        });
+
+        // Packet Info 화면을 표시하는 함수
+        function showPacketInfo() {
+            // showScreen 함수를 사용하여 화면 전환
+            showScreen('packet_info');
+        }
 
 
 
