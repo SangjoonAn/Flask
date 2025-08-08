@@ -67,41 +67,29 @@ def handle_hex_packet(data):
     """ HEX 데이터 수신 및 변환 """
     try:
         binary_data = binascii.unhexlify(data)  # HEX → Binary 변환
-        # 현재 시간 포함하여 출력
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3] # 밀리초까지 포함 (뒤 3자리는 잘라내어 마이크로초 대신 밀리초 단위로 표시)
-        print(f"[{current_time}] 📥 Received HEX Packet")
-        # update_status는 파싱 후 프론트로 전송할 데이터
-        update_status = parse_AllStatusPacket(binary_data)
-        #print("🔍 ModIMSINum:", update_status.get("ModIMSINum"))
-        #print("🔍 ModIMEINum:", update_status.get("ModIMEINum"))
-        #print("🔍 ModPhonNumber:", update_status.get("ModPhonNumber"))
-        print("ModStatus:", binary_data[429])
-        print("ModIMSINum:", list(binary_data[436:452]))
-        print("ModIMEINum:", list(binary_data[452:476]))
-        print("ModIpAddress (raw):", list(binary_data[476:480]))
-        print("ModPhonNumber (raw):", list(binary_data[484:496]))
-        print("ModEmsFwVer (raw):", list(binary_data[496:498]))
+        cmd = binary_data[6]
+        if cmd == 0x55 :
+            update_status = parse_AllStatusPacket(binary_data)
+            socketio.emit("update_status", {"packet": update_status})
+                    
+            # 알람 상태를 별도로 전송
+            if 'AlarmStatus' in update_status:
+                socketio.emit("alarm_status_update", {"AlarmStatus": update_status['AlarmStatus']})
+            
+            # Mask 알람 상태도 전송
+            if 'MaskAlarmStatus' in update_status:
+                socketio.emit("mask_alarm_status_update", {"MaskAlarmStatus": update_status['MaskAlarmStatus']})
+            
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # 밀리초까지 포함 (뒤 3자리는 잘라내어 마이크로초 대신 밀리초 단위로 표시)
+            print(f"[{current_time}] 📥 Received Status Packet")
+            return {"status": "success", "received_hex": data}
+        elif cmd == 0x91 :
+            tdd_status = parse_TddStatusPacket(binary_data)
+            socketio.emit("tdd_status", {"packet": tdd_status})
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # 밀리초까지 포함 (뒤 3자리는 잘라내어 마이크로초 대신 밀리초 단위로 표시)
+            print(f"[{current_time}] 📥 Received Tdd Status Packet")
+            return {"Tddstatus": "success", "received_hex": data}
 
-        print(list(binary_data[248:252]))  # [205, 204, 74, 194]가 나와야 정상
-        print(struct.unpack('<f', bytes(binary_data[248:252]))[0])  # -81.6이 나와야 정상
-
-        socketio.emit("update_status", {"packet": update_status})
-        
-        # 알람 상태를 별도로 전송
-        if 'AlarmStatus' in update_status:
-            socketio.emit("alarm_status_update", {"AlarmStatus": update_status['AlarmStatus']})
-        
-        # Mask 알람 상태도 전송
-        if 'MaskAlarmStatus' in update_status:
-            socketio.emit("mask_alarm_status_update", {"MaskAlarmStatus": update_status['MaskAlarmStatus']})
-        
-
-        
-
-        
-
-        
-        return {"status": "success", "received_hex": data}
     except binascii.Error:
         return {"status": "error", "message": "Invalid HEX format"}
     except Exception as e:
