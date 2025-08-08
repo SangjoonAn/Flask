@@ -5366,6 +5366,7 @@
             const duContent = document.getElementById('du_content_display');
             const su1Content = document.getElementById('su1_content_display');
             const packetInfoContent = document.getElementById('packet_info_display');
+            const syncModuleContent = document.getElementById('sync_module_display');
             const duNavDot = document.getElementById('du_nav_dot');
             const su1NavDot = document.getElementById('su1_nav_dot');
             const su2NavDot = document.getElementById('su2_nav_dot');
@@ -5375,15 +5376,18 @@
             // 모든 네비게이션 점을 현재 알람 상태 색상으로 먼저 초기화 (비활성화 상태의 색상)
             updateNavDotColors();
 
-            // 모든 화면 숨김
+            // 모든 화면 숨김 (기존 방식대로 active 클래스 제거)
             duContent.classList.remove('active');
             su1Content.classList.remove('active');
             if (packetInfoContent) {
                 packetInfoContent.classList.remove('active');
                 packetInfoContent.style.display = 'none';
             }
+            if (syncModuleContent) {
+                syncModuleContent.style.display = 'none';
+            }
 
-            // 선택된 화면 표시 및 활성화된 화면의 네비게이션 점 색상 변경 (흰색)
+            // 선택된 화면 표시 (기존 방식대로 active 클래스 추가)
             if (screenId === 'du_content') {
                 duContent.classList.add('active');
             } else if (screenId === 'su1_content') {
@@ -5395,14 +5399,7 @@
                     packetInfoContent.style.display = 'block';
                 }
             } else if (screenId === 'sync_module') {
-                // 모든 화면 숨김
-                duContent.style.display = 'none';
-                su1Content.style.display = 'none';
-                if (packetInfoContent) {
-                    packetInfoContent.style.display = 'none';
-                }
                 // Sync Module 화면 표시
-                const syncModuleContent = document.getElementById('sync_module_display');
                 if (syncModuleContent) {
                     syncModuleContent.style.display = 'block';
                 }

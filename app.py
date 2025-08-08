@@ -1278,6 +1278,50 @@ def parse_AllStatusPacket2(packet):
     return parsed_data
 
 
+def parse_TddStatusPacket(packet):
+    parsed_data = {}
+    #Du 상태
+    parsed_data['Rcv_Main_Sys'] = packet[0]
+    parsed_data['Rcv_Sub_Sys'] = packet[1]
+    parsed_data['Rcv_Object'] = packet[2]
+    parsed_data['Trans_Main_Sys'] = packet[3]
+    parsed_data['Trans_Sub_Sys'] = packet[4]
+    parsed_data['Trans_Object'] = packet[5]
+    parsed_data['CMD'] = packet[6]
+    parsed_data['EQUIP_TYPE'] = packet[7]
+    parsed_data['RESERVED'] = packet[8:10]
+    parsed_data['SubData_Size'] = struct.unpack('<h', bytes([packet[10], packet[11]]))[0]
+    parsed_data['ConMuFlag'] = packet[12:16]
+    parsed_data['TTG_CTRL1'] = struct.unpack('<h', bytes([packet[16], packet[17]]))[0]
+    parsed_data['RTG_CTRL1'] = struct.unpack('<h', bytes([packet[18], packet[19]]))[0]
+    parsed_data['TSYNC_DELAY1'] = struct.unpack('<h', bytes([packet[20], packet[21]]))[0]
+    parsed_data['TSYNC_OUT_SEL1'] = packet[22]
+    parsed_data['Resved1'] = packet[23]
+    parsed_data['TTG_CTRL2'] = struct.unpack('<h', bytes([packet[24], packet[25]]))[0]
+    parsed_data['RTG_CTRL2'] = struct.unpack('<h', bytes([packet[26], packet[27]]))[0]
+    parsed_data['TSYNC_DELAY2'] = struct.unpack('<h', bytes([packet[28], packet[29]]))[0]
+    parsed_data['TSYNC_OUT_SEL2'] = packet[30]
+    parsed_data['Resved2'] = packet[31]
+    parsed_data['TTG_CTRL3'] = struct.unpack('<h', bytes([packet[32], packet[33]]))[0]
+    parsed_data['RTG_CTRL3'] = struct.unpack('<h', bytes([packet[34], packet[35]]))[0]
+    parsed_data['TSYNC_DELAY3'] = struct.unpack('<h', bytes([packet[36], packet[37]]))[0]
+    parsed_data['TSYNC_OUT_SEL3'] = packet[38]
+    parsed_data['F_Mode'] = packet[39]
+    parsed_data['TDD_Slot_Format'] = packet[40:200]
+    parsed_data['TDD_3gpp_table'] = packet[200:984]
+    parsed_data['TDD_Freq'] = struct.unpack('<I', bytes([packet[984], packet[985], packet[986], packet[987]]))[0]
+    parsed_data['TDD_Arfcn'] = struct.unpack('<I', bytes([packet[988], packet[989], packet[990], packet[991]]))[0]
+    parsed_data['MvbxSsbMu'] = packet[992]
+    parsed_data['MvbxPssType'] = packet[993]
+    parsed_data['MvbxAdcSel'] = packet[994]
+    parsed_data['MvbxTddRate'] = packet[995]
+    parsed_data['TddSyncTest'] = packet[996]
+    parsed_data['Tdd_Famode'] = packet[997]
+    parsed_data['Resved3'] = packet[998:1008]
+
+    return parsed_data
+
+
 
 # ---------------------------- 서버 실행 ----------------------------
 if __name__ == '__main__':
