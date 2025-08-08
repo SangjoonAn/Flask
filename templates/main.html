@@ -973,7 +973,7 @@
 
             <hr>
             <button class="btn btn-secondary w-100" onclick="showPacketInfo()">Packet Info</button>
-            <button class="btn btn-secondary w-100 mt-2">Sync Module</button>
+                                            <button class="btn btn-secondary w-100 mt-2" onclick="showSyncModule()">Sync Module</button>
             <button class="btn btn-secondary w-100 mt-2">Modem AtCmd</button>
             <button class="btn btn-secondary w-100 mt-2">Download</button>
         </div>
@@ -1625,7 +1625,6 @@
                         <div class="modal-footer d-flex justify-content-between">
                             <button class="btn btn-secondary" onclick="backToBtapnSetup()">Back</button>
                             <div>&lt;Step 7/7&gt;</div>
-                            <button class="btn btn-primary" onclick="goToStep7()">Next</button>
                             <button class="btn btn-danger" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
                         </div>
                         </div>
@@ -2365,15 +2364,15 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">DC</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_madc" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">AC</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_ac" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">FPGA Link</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_fpga_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">EMS Link</small>
@@ -2383,11 +2382,11 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Temp</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_temp" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">BAT</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_bat" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;"></small>
@@ -2401,11 +2400,11 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">IF PLL</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_if_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Sync PLL</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_sync_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;"></small>
@@ -2415,15 +2414,15 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">TSync Link</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_tsync_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Decoding</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_decoding" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Ant. Array Link</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_aa_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2461,16 +2460,16 @@
                                                         <small style="font-size: 13px;">PATH#0</small>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU1_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU2_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU3_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU4_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2503,7 +2502,7 @@
                                             <div class="mb-2">
                                                 <div class="d-flex align-items-center">
                                                     <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
-                                                    <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    <button id="SISO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -2535,7 +2534,7 @@
                                             <div class="mb-2">
                                                 <div class="d-flex align-items-center">
                                                     <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
-                                                    <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    <button id="MIMO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3360,20 +3359,20 @@
 
                             <div class="row text-secondary small mb-4">
                                     <div class="col-4">
-                                        <p id="alarm_dc"><span class="status-circle"></span> DC</p>
-                                        <p id="alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
-                                        <p id="alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                        <p id="alarm_dc2"><span class="status-circle"></span> DC</p>
+                                        <p id="alarm_temp2" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="alarm_if_pll2" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
-                                        <p id="alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
-                                        <p id="alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                        <p id="alarm_ac2" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="alarm_bat2" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="alarm_sync_pll2" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
-                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
-                                        <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
-                                        <p id="alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                        <p id="alarm_fpga_link2" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="alarm_aa_link2" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="alarm_tsync_link2" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="alarm_decoding2" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
                                     
                             </div>
@@ -4150,6 +4149,357 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sync Module Content -->
+        <div id="sync_module_display" style="display: none; background-color: #D2D7D9; min-height: 100vh; padding: 20px;">
+            <div style="background-color: #F0F1F2; padding: 1rem; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); margin-bottom: 0.5rem;"> 
+                <div class="row align-items-center mb-2"> 
+                    <div class="col-md-3">
+                        <small class="text-muted">Site ID :</small> Kor-FRTek-001
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <small class="text-muted">Site Name :</small> Korea FRTek RF-EMS
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <small class="text-muted">S/N :</small> <span id="conserialnum_sync">N/A</span>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_sync">N/A</span>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-3" style="border-top: 1px dotted #000000;"> 
+            
+            <!-- Main Sync Module Card -->
+            <div style="background-color: #F0F1F2; padding: 1.5rem; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);">
+                <div class="d-flex justify-content-between align-items-center mb-3"> 
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #343a40; background-color: #6c757d; color: white; padding: 8px 16px; border-radius: 4px;">
+                        Sync Module
+                    </div>
+                    <button class="btn btn-secondary btn-sm">Set Mode</button>
+                </div>
+
+                <!-- Slot Format Section -->
+                <div class="mb-4">
+                    <div class="d-flex align-items-center mb-2" style="cursor: pointer;" onclick="toggleSlotFormat()">
+                        <i class="fas fa-chevron-right me-2" id="slot-format-icon"></i>
+                        <span style="font-weight: bold; color: #343a40;">Slot Format</span>
+                    </div>
+                    <div id="slot-format-content" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" style="background-color: white; font-size: 0.8rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 80px;">Slot No<br>Slot Format</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">0</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">1</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">2</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">3</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">4</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">5</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">6</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">7</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">8</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">9</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">10</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">11</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">12</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">13</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">14</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">15</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">16</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">17</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">18</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">19</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Synchronization Parameters -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6>Channel #1</h6>
+                        <div class="mb-3">
+                            <label class="form-label">TTG CTRL #1</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">RTG CTRL #1</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC Delay #1</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT SEL #1</label>
+                            <select class="form-select">
+                                <option selected>DL(L)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT MODE #1</label>
+                            <select class="form-select">
+                                <option selected>NORMAL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Channel #2</h6>
+                        <div class="mb-3">
+                            <label class="form-label">TTG CTRL #2</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">RTG CTRL #2</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC Delay #2</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT SEL #2</label>
+                            <select class="form-select">
+                                <option selected>DL(L)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT MODE #2</label>
+                            <select class="form-select">
+                                <option selected>NORMAL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h6>Channel #3</h6>
+                        <div class="mb-3">
+                            <label class="form-label">TTG CTRL #3</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">RTG CTRL #3</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC Delay #3</label>
+                            <input type="text" class="form-control" value="0.0 [us]" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT SEL #3</label>
+                            <select class="form-select">
+                                <option selected>DL(L)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">TSYNC OUT MODE #3</label>
+                            <select class="form-select">
+                                <option selected>NORMAL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SSB/TDD Rates -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">SSB MU</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="240K">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-chevron-up"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">TDD Rate</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" value="4:1">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-chevron-up"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+ </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -5044,6 +5394,18 @@
                     packetInfoContent.classList.add('active');
                     packetInfoContent.style.display = 'block';
                 }
+            } else if (screenId === 'sync_module') {
+                // 모든 화면 숨김
+                duContent.style.display = 'none';
+                su1Content.style.display = 'none';
+                if (packetInfoContent) {
+                    packetInfoContent.style.display = 'none';
+                }
+                // Sync Module 화면 표시
+                const syncModuleContent = document.getElementById('sync_module_display');
+                if (syncModuleContent) {
+                    syncModuleContent.style.display = 'block';
+                }
             }
              // SU #2 화면이 활성화될 경우 (현재는 구현되지 않음)
              else if (screenId === 'su2_content') {
@@ -5156,6 +5518,19 @@
                 
                 // 네비게이션 점 색상 업데이트
                 updateNavDotColors();
+                
+                // SU Link Fail 버튼 상태 업데이트
+                updateSuLinkFailButtons(bits);
+            }
+            
+            // Mask SU Link Fail 버튼 상태 업데이트
+            if (data.packet.MaskSuLinkFail) {
+                updateSuLinkFailButtons(data.packet.MaskSuLinkFail);
+            }
+            
+            // DL ALC 버튼 상태 업데이트
+            if (data.packet.DL_ALC_Bits) {
+                updateDLALCButtons(data.packet.DL_ALC_Bits);
             }
 
             const updateText = (id, value) => {
@@ -6007,75 +6382,7 @@
             }
         }
 
-        // Alarm Mask 버튼 상태 저장
-        let alarmButtonStates = {};
-        let tempButtonStates = {};
 
-        // Alarm Mask 버튼 토글 기능 (Cancel, Set 버튼 제외)
-        document.addEventListener('DOMContentLoaded', function() {
-            const alarmButtons = document.querySelectorAll('#alarmMaskModal .alarm-section .btn');
-            alarmButtons.forEach((button, index) => {
-                button.addEventListener('click', function() {
-                    if (this.textContent === 'Off') {
-                        this.textContent = 'On';
-                        this.style.backgroundColor = '#28a745';
-                        tempButtonStates[index] = 'On';
-                    } else {
-                        this.textContent = 'Off';
-                        this.style.backgroundColor = '#666';
-                        tempButtonStates[index] = 'Off';
-                    }
-                });
-            });
-
-            // Set 버튼 클릭 시 상태 저장
-            document.addEventListener('click', function(event) {
-                if (event.target.matches('#alarmMaskModal .modal-footer .btn-primary')) {
-                    console.log('Set 버튼이 클릭되었습니다.');
-                    // 임시 상태를 실제 상태로 저장
-                    Object.assign(alarmButtonStates, tempButtonStates);
-                    console.log('Alarm Mask 설정이 저장되었습니다.');
-                    console.log('저장된 상태:', alarmButtonStates);
-                }
-            });
-
-            // Cancel 버튼 클릭 시 모달만 닫기 (임시 상태는 유지)
-            const cancelButton = document.querySelector('#alarmMaskModal .modal-footer .btn-secondary');
-            if (cancelButton) {
-                cancelButton.addEventListener('click', function() {
-                    console.log('Cancel 버튼이 클릭되었습니다. 모달이 닫힙니다.');
-                    // Cancel 버튼은 모달만 닫고, 임시 상태는 그대로 유지
-                    // 모달이 닫히면 임시 상태도 초기화됨
-                });
-            }
-
-            // 모달이 열릴 때 버튼 상태 복원 (Cancel, Set 버튼 제외)
-            const alarmMaskModal = document.getElementById('alarmMaskModal');
-            if (alarmMaskModal) {
-                alarmMaskModal.addEventListener('shown.bs.modal', function() {
-                    const buttons = this.querySelectorAll('.alarm-section .btn');
-                    buttons.forEach((button, index) => {
-                        if (alarmButtonStates.hasOwnProperty(index)) {
-                            if (alarmButtonStates[index] === 'On') {
-                                button.textContent = 'On';
-                                button.style.backgroundColor = '#28a745';
-                            } else {
-                                button.textContent = 'Off';
-                                button.style.backgroundColor = '#666';
-                            }
-                        }
-                        // 임시 상태를 실제 저장된 상태로 초기화
-                        tempButtonStates[index] = alarmButtonStates[index] || 'Off';
-                    });
-                });
-
-                // 모달이 닫힐 때 임시 상태 초기화
-                alarmMaskModal.addEventListener('hidden.bs.modal', function() {
-                    console.log('모달이 닫혔습니다. 임시 상태를 초기화합니다.');
-                    tempButtonStates = {};
-                });
-            }
-        });
 
         // Packet Info 화면을 표시하는 함수
         function showPacketInfo() {
@@ -6083,7 +6390,141 @@
             showScreen('packet_info');
         }
 
+        // Sync Module 화면을 표시하는 함수
+        function showSyncModule() {
+            // showScreen 함수를 사용하여 화면 전환
+            showScreen('sync_module');
+        }
 
+        // Slot Format 토글 함수
+        function toggleSlotFormat() {
+            const content = document.getElementById('slot-format-content');
+            const icon = document.getElementById('slot-format-icon');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.className = 'fas fa-chevron-down me-2';
+            } else {
+                content.style.display = 'none';
+                icon.className = 'fas fa-chevron-right me-2';
+            }
+        }
+
+        // 알람 버튼 상태 업데이트 함수
+        function updateAlarmButtons(alarmStatus) {
+            if (!alarmStatus) return;
+            
+            // 각 알람 버튼의 상태를 업데이트
+            const alarmButtons = {
+                'alarm_mask_madc': document.getElementById('alarm_mask_madc'),
+                'alarm_mask_ac': document.getElementById('alarm_mask_ac'),
+                'alarm_mask_temp': document.getElementById('alarm_mask_temp'),
+                'alarm_mask_bat': document.getElementById('alarm_mask_bat'),
+                'alarm_mask_fpga_link': document.getElementById('alarm_mask_fpga_link'),
+                'alarm_mask_if_pll': document.getElementById('alarm_mask_if_pll'),
+                'alarm_mask_sync_pll': document.getElementById('alarm_mask_sync_pll'),
+                'alarm_mask_tsync_link': document.getElementById('alarm_mask_tsync_link'),
+                'alarm_mask_decoding': document.getElementById('alarm_mask_decoding'),
+                'alarm_mask_aa_link': document.getElementById('alarm_mask_aa_link')
+            };
+
+            // 각 버튼의 상태를 비트값에 따라 업데이트
+            Object.keys(alarmButtons).forEach(alarmId => {
+                const button = alarmButtons[alarmId];
+                if (button && alarmStatus.hasOwnProperty(alarmId)) {
+                    const isOn = alarmStatus[alarmId] === 1;
+                    if (isOn) {
+                        button.textContent = 'On';
+                        button.style.backgroundColor = '#28a745'; // 녹색
+                    } else {
+                        button.textContent = 'Off';
+                        button.style.backgroundColor = '#666'; // 회색
+                    }
+                }
+            });
+        }
+
+        // Socket.IO 이벤트 리스너에서 알람 상태 업데이트
+        socket.on('alarm_status_update', function(data) {
+            if (data && data.AlarmStatus) {
+                updateAlarmButtons(data.AlarmStatus);
+            }
+        });
+
+        // Socket.IO 이벤트 리스너에서 Mask 알람 상태 업데이트
+        socket.on('mask_alarm_status_update', function(data) {
+            if (data && data.MaskAlarmStatus) {
+                updateAlarmButtons(data.MaskAlarmStatus);
+            }
+        });
+
+        // DL ALC 버튼 상태 업데이트 함수
+        function updateDLALCButtons(dlAlcStatus) {
+            if (!dlAlcStatus) return;
+            
+            // 각 DL ALC 버튼의 상태를 업데이트
+            const dlAlcButtons = {
+                'SISO_MASK_DL_ALC': document.getElementById('SISO_MASK_DL_ALC'),
+                'MIMO_MASK_DL_ALC': document.getElementById('MIMO_MASK_DL_ALC')
+            };
+
+            // 각 버튼의 상태를 비트값에 따라 업데이트
+            Object.keys(dlAlcButtons).forEach(dlAlcId => {
+                const button = dlAlcButtons[dlAlcId];
+                if (button && dlAlcStatus.hasOwnProperty(dlAlcId)) {
+                    const isOn = dlAlcStatus[dlAlcId] === 1;
+                    if (isOn) {
+                        button.textContent = 'On';
+                        button.style.backgroundColor = '#28a745'; // 녹색
+                    } else {
+                        button.textContent = 'Off';
+                        button.style.backgroundColor = '#666'; // 회색
+                    }
+                }
+            });
+        }
+
+
+
+        // SU Link Fail 버튼 상태 업데이트 함수
+        function updateSuLinkFailButtons(suLinkFailStatus) {
+            if (!suLinkFailStatus) return;
+            
+            // 각 SU Link Fail 버튼의 상태를 업데이트
+            const suLinkFailButtons = {
+                'SU1_MASK_LINK_FAIL': document.getElementById('SU1_MASK_LINK_FAIL'),
+                'SU2_MASK_LINK_FAIL': document.getElementById('SU2_MASK_LINK_FAIL'),
+                'SU3_MASK_LINK_FAIL': document.getElementById('SU3_MASK_LINK_FAIL'),
+                'SU4_MASK_LINK_FAIL': document.getElementById('SU4_MASK_LINK_FAIL')
+            };
+
+            // 각 버튼의 상태를 비트값에 따라 업데이트
+            Object.keys(suLinkFailButtons).forEach(suLinkFailId => {
+                const button = suLinkFailButtons[suLinkFailId];
+                if (button && suLinkFailStatus.hasOwnProperty(suLinkFailId)) {
+                    const isOn = suLinkFailStatus[suLinkFailId] === 1;
+                    if (isOn) {
+                        button.textContent = 'On';
+                        button.style.backgroundColor = '#28a745'; // 녹색
+                    } else {
+                        button.textContent = 'Off';
+                        button.style.backgroundColor = '#666'; // 회색
+                    }
+                }
+            });
+        }
+
+        // Packet Info 데이터 업데이트 함수
+        function updatePacketInfoData() {
+            // Packet Info 화면에서 사용할 데이터 업데이트 로직
+            console.log('Packet Info 데이터 업데이트');
+        }
+
+        // Sync Module 데이터 업데이트 함수
+        function updateSyncModuleData() {
+            // Sync Module 화면에서 사용할 데이터 업데이트 로직
+            console.log('Sync Module 데이터 업데이트');
+        }
 
     </script>
 

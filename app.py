@@ -86,6 +86,21 @@ def handle_hex_packet(data):
         print(struct.unpack('<f', bytes(binary_data[248:252]))[0])  # -81.6이 나와야 정상
 
         socketio.emit("update_status", {"packet": update_status})
+        
+        # 알람 상태를 별도로 전송
+        if 'AlarmStatus' in update_status:
+            socketio.emit("alarm_status_update", {"AlarmStatus": update_status['AlarmStatus']})
+        
+        # Mask 알람 상태도 전송
+        if 'MaskAlarmStatus' in update_status:
+            socketio.emit("mask_alarm_status_update", {"MaskAlarmStatus": update_status['MaskAlarmStatus']})
+        
+
+        
+
+        
+
+        
         return {"status": "success", "received_hex": data}
     except binascii.Error:
         return {"status": "error", "message": "Invalid HEX format"}
@@ -434,8 +449,60 @@ def parse_AllStatusPacket(packet):
     parsed_data['SuEnableBits'] = su_enable_bits
     
 
-    parsed_data['MaskMuAlarm'] = packet[628:640]
+    parsed_data['MaskMuAlarm'] = list(packet[628:640])
+    
+    # packet[635]에서 0번째와 2번째 비트 추출
+    dl_alc_bits = {
+        'SISO_MASK_DL_ALC': (packet[635] >> 0) & 1,  # 비트 0
+        'MIMO_MASK_DL_ALC': (packet[635] >> 2) & 1   # 비트 2
+    }
+    parsed_data['DL_ALC_Bits'] = dl_alc_bits
+
+        # 알람 비트 매핑 정의
+    alarm_mask_bit_map = [
+        {'bit': 1,  'id': 'alarm_mask_madc'},
+        {'bit': 2,  'id': 'alarm_mask_ac'},
+        {'bit': 3,  'id': 'alarm_mask_temp'},
+        {'bit': 4,  'id': 'alarm_mask_bat'},
+        {'bit': 49, 'id': 'alarm_mask_fpga_link'},
+        {'bit': 53, 'id': 'alarm_mask_if_pll'},
+        {'bit': 54, 'id': 'alarm_mask_sync_pll'},
+        {'bit': 52, 'id': 'alarm_mask_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 66, 'id': 'alarm_mask_decoding'},
+        {'bit': 70, 'id': 'alarm_mask_aa_link'}
+    ]
+
+    # Mask 알람 비트 추출 함수
+    def get_mask_alarm_bit(mask_bytes, bit_position):
+        byte_index = (bit_position - 1) // 8
+        bit_in_byte = (bit_position - 1) % 8
+        if byte_index < len(mask_bytes):
+            return (mask_bytes[byte_index] >> bit_in_byte) & 1
+        return 0
+    
+    # 각 Mask 알람 비트 상태 추출
+    mask_alarm_status = {}
+    for alarm in alarm_mask_bit_map:
+        mask_alarm_status[alarm['id']] = get_mask_alarm_bit(packet[628:640], alarm['bit'])
+    
+    parsed_data['MaskAlarmStatus'] = mask_alarm_status
+
+    
+
+
+
     parsed_data['MaskSuLinkFail'] = packet[640:652]
+
+    # SuLinkFail에서 1비트씩 추출 - SU1~SU4만
+    su_mask_link_fail_bits = {
+        'SU1_MASK_LINK_FAIL': (packet[640] >> 0) & 1,  # 비트 0
+        'SU2_MASK_LINK_FAIL': (packet[640] >> 1) & 1,  # 비트 1
+        'SU3_MASK_LINK_FAIL': (packet[640] >> 2) & 1,  # 비트 2
+        'SU4_MASK_LINK_FAIL': (packet[640] >> 3) & 1   # 비트 3
+        #추후 SU5, SU6 추가 해야할수도 있음
+    }
+    parsed_data['MaskSuLinkFail'] = su_mask_link_fail_bits
+    
     parsed_data['MaskSuSumAlarm'] = packet[652:664]
     parsed_data['MaskSuRptAlarm'] = packet[664:676]
     parsed_data['ConEmsModemReset'] = packet[676]
