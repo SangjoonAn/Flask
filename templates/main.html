@@ -205,6 +205,40 @@
             margin-bottom: 1.5rem;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+
+        /* Sync Module 스타일 */
+        .sync-card {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .sync-label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .sync-container {
+            background-color: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .frequency-bar {
+            background-color: #dee2e6;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -1207,7 +1241,7 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">Frequency</label>
                                     <div class="col-7 d-flex align-items-center">
-                                    <input type="text" class="form-control text-end" value="28086.24">
+                                    <input type="text" id="TDD_Freq" class="form-control text-end" value="">
                                     <span class="ms-2">[MHz]</span>
                                     </div>
                                 </div>
@@ -1215,15 +1249,16 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">ARFCN</label>
                                     <div class="col-7">
-                                    <input type="text" class="form-control text-end" value="2080603">
+                                    <input type="text" id="TDD_Arfcn" class="form-control text-end" value="">
                                     </div>
                                 </div>
 
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">SSB MU</label>
                                     <div class="col-7">
-                                    <select class="form-select">
-                                        <option selected>240K</option>
+                                    <select id="MvbxSsbMu" class="form-select">
+                                        <option value="120K">120K</option>
+                                        <option value="240K">240K</option>
                                     </select>
                                     </div>
                                 </div>
@@ -1231,8 +1266,9 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">TDD Rate</label>
                                     <div class="col-7">
-                                    <select class="form-select">
-                                        <option selected>4 : 1</option>
+                                    <select id="MvbxTddRate" class="form-select">
+                                        <option value="3:1">3 : 1</option>
+                                        <option value="4:1">4 : 1</option>
                                     </select>
                                     </div>
                                 </div>
@@ -2376,7 +2412,7 @@
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">EMS Link</small>
-                                                        <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="EMS_DU_Link_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
@@ -2556,7 +2592,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="LD1_DET_DL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
                                                         </div>
                                                     </div>
                                                     <div class="col-3">
@@ -2566,7 +2602,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="PD1_DET_UL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2590,7 +2626,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="LD2_DET_DL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
                                                         </div>
                                                     </div>
                                                     <div class="col-3">
@@ -2600,7 +2636,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="PD2_DET_UL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -4142,10 +4178,10 @@
                             <tbody>
                                 <tr>
                                     <td style="text-align: center; font-weight: bold;">PATH#0</td>
-                                    <td style="text-align: center; font-weight: bold;">22130942 / 0</td>
-                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
-                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
-                                    <td style="text-align: center; font-weight: bold;">0 / 0</td>
+                                    <td style="text-align: center; font-weight: bold;" id="packet_cascade1">N/A</td>
+                                    <td style="text-align: center; font-weight: bold;" id="packet_cascade2">N/A</td>
+                                    <td style="text-align: center; font-weight: bold;" id="packet_cascade3">N/A</td>
+                                    <td style="text-align: center; font-weight: bold;" id="packet_cascade4">N/A</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -4165,10 +4201,10 @@
                         <small class="text-muted">Site Name :</small> Korea FRTek RF-EMS
                     </div>
                     <div class="col-md-3 text-center">
-                        <small class="text-muted">S/N :</small> <span id="conserialnum_sync">N/A</span>
+                        <small class="text-muted">S/N :</small> <span id="conserialnum_sync2">N/A</span>
                     </div>
                     <div class="col-md-3 text-end">
-                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_sync">N/A</span>
+                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_sync3">N/A</span>
                     </div>
                 </div>
             </div>
@@ -4192,314 +4228,182 @@
                     </div>
                     <div id="slot-format-content" style="display: none;">
                         <div class="table-responsive">
-                            <table class="table table-bordered" style="background-color: white; font-size: 0.8rem;">
+                            <table class="table table-bordered" style="font-size: 0.8rem; text-align: center;">
+                                <tbody>
+                                    {% for row in range(0, 160, 20) %}
+                                    <tr>
+                                      <!-- 설명 셀: Slot No / Slot Format -->
+                                      <td class="align-middle" style="font-weight: bold; white-space: nowrap; width: 100px; line-height: 1.8;">
+                                        Slot No<br>Slot Format
+                                      </td>
+                                  
+                                      <!-- 슬롯 번호 + 입력창 (20칸) -->
+                                      {% for col in range(row, row + 20) %}
+                                      <td>
+                                        <div style="font-weight: bold; margin-bottom: 6px;">{{ col }}</div>
+                                        <input type="text" class="form-control form-control-sm mt-1" style="height: 15px; font-size: 0.5rem; padding: 1px 3px; text-align: center;" value="">
+                                      </td>
+                                      {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                                  
+                              </table>
+                              
+                        </div>
+                    </div>
+                </div>
+
+                                <!-- Synchronization Parameters -->
+                <div class="sync-container">
+                    <div class="row gx-4">
+                        <!-- Channel 1 -->
+                        <div class="col-md-3 px-2">
+                            <div class="sync-card">
+                                <div class="sync-label">TTG CTRL #1</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">RTG CTRL #1</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC Delay #1</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC OUT SEL #1</div>
+                                <select class="form-select form-select-sm mb-2">
+                                    <option selected>DL(L)</option>
+                                </select>
+
+                                <div class="sync-label">TSYNC OUT MODE #1</div>
+                                <select class="form-select form-select-sm">
+                                    <option selected>NORMAL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Channel 2 -->
+                        <div class="col-md-3 px-2">
+                            <div class="sync-card">
+                                <div class="sync-label">TTG CTRL #2</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">RTG CTRL #2</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC Delay #2</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC OUT SEL #2</div>
+                                <select class="form-select form-select-sm mb-2">
+                                    <option selected>DL(L)</option>
+                                </select>
+
+                                <div class="sync-label">TSYNC OUT MODE #2</div>
+                                <select class="form-select form-select-sm">
+                                    <option selected>NORMAL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Channel 3 -->
+                        <div class="col-md-3 px-2">
+                            <div class="sync-card">
+                                <div class="sync-label">TTG CTRL #3</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">RTG CTRL #3</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC Delay #3</div>
+                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+
+                                <div class="sync-label">TSYNC OUT SEL #3</div>
+                                <select class="form-select form-select-sm mb-2">
+                                    <option selected>DL(L)</option>
+                                </select>
+
+                                <div class="sync-label">TSYNC OUT MODE #3</div>
+                                <select class="form-select form-select-sm">
+                                    <option selected>NORMAL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- SSB MU + TDD Rate -->
+                        <div class="col-md-3 px-2">
+                            <div class="sync-card">
+                                <div class="sync-label">SSB MU</div>
+                                <select class="form-select form-select-sm mb-2">
+                                    <option selected>240K</option>
+                                </select>
+
+                                <div class="sync-label">TDD Rate</div>
+                                <select class="form-select form-select-sm">
+                                    <option selected>4:1</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frequency Bar -->
+                <div class="frequency-bar" style="margin-top: 1rem;">
+                    <div>Frequency &nbsp;&nbsp; <input type="text" class="form-control form-control-sm" value="28086.24" style="display: inline-block; width: 120px; margin-left: 10px;"> &nbsp; [MHz]</div>
+                    <div>ARFCN &nbsp;&nbsp; <input type="text" class="form-control form-control-sm" value="2080603" style="display: inline-block; width: 100px; margin-left: 10px;"></div>
+                </div>
+
+                <!-- Slot 3gpp Format Section -->
+                <div class="mb-4" style="margin-top: 2rem;">
+                    <div class="d-flex align-items-center mb-2" style="cursor: pointer;" onclick="toggleSlot3gppFormat()">
+                        <i class="fas fa-chevron-right me-2" id="slot-3gpp-format-icon"></i>
+                        <span style="font-weight: bold; color: #343a40;">Slot 3gpp Format</span>
+                    </div>
+                    <div id="slot-3gpp-format-content" style="display: none;">
+                        <div class="table-responsive">
+                            <table border="1" style="border-collapse: collapse; font-size: 0.8rem; background-color: white; width: 100%;">
+                                <!-- Header -->
                                 <thead>
                                     <tr>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 80px;">Slot No<br>Slot Format</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">0</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">1</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">2</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">3</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">4</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">5</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">6</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">7</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">8</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">9</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">10</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">11</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">12</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">13</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">14</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">15</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">16</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">17</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">18</th>
-                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px;">19</th>
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px; border: 1px solid #dee2e6;"></th>
+                                        <!-- Column headers 0~13 -->
+                                        {% for col in range(14) %}
+                                        <th style="background-color: #f8f9fa; text-align: center; width: 40px; border: 1px solid #dee2e6;">{{ col }}</th>
+                                        {% endfor %}
                                     </tr>
                                 </thead>
+
+                                <!-- Body -->
                                 <tbody>
+                                    {% for row in range(56) %}
                                     <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
+                                        <!-- Row header -->
+                                        <td style="text-align: center; font-weight: bold; border: 1px solid #dee2e6;">{{ row }}</td>
+
+                                        <!-- Dropdowns -->
+                                        {% for col in range(14) %}
+                                        <td style="text-align: center; border: 1px solid #dee2e6;">
+                                            <select style="font-size: 0.75rem; padding: 2px 4px; width: 100%; border: none; background: transparent;">
+                                                <option>D</option>
+                                                <option>U</option>
+                                                <option>F</option>
+                                            </select>
+                                        </td>
+                                        {% endfor %}
                                     </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: center; font-weight: bold;">Slot No<br>Slot Format</td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                        <td><input type="text" class="form-control form-control-sm" value=""></td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Synchronization Parameters -->
-                <div class="row">
-                    <div class="col-md-4">
-                        <h6>Channel #1</h6>
-                        <div class="mb-3">
-                            <label class="form-label">TTG CTRL #1</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">RTG CTRL #1</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC Delay #1</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT SEL #1</label>
-                            <select class="form-select">
-                                <option selected>DL(L)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT MODE #1</label>
-                            <select class="form-select">
-                                <option selected>NORMAL</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Channel #2</h6>
-                        <div class="mb-3">
-                            <label class="form-label">TTG CTRL #2</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">RTG CTRL #2</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC Delay #2</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT SEL #2</label>
-                            <select class="form-select">
-                                <option selected>DL(L)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT MODE #2</label>
-                            <select class="form-select">
-                                <option selected>NORMAL</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <h6>Channel #3</h6>
-                        <div class="mb-3">
-                            <label class="form-label">TTG CTRL #3</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">RTG CTRL #3</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC Delay #3</label>
-                            <input type="text" class="form-control" value="0.0 [us]" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT SEL #3</label>
-                            <select class="form-select">
-                                <option selected>DL(L)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">TSYNC OUT MODE #3</label>
-                            <select class="form-select">
-                                <option selected>NORMAL</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- SSB/TDD Rates -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">SSB MU</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="240K">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-chevron-up"></i>
-                                </button>
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label class="form-label">TDD Rate</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" value="4:1">
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-chevron-up"></i>
-                                </button>
-                                <button class="btn btn-outline-secondary" type="button">
-                                    <i class="fas fa-chevron-down"></i>
-                                </button>
- </div>
-                        </div>
+                <!-- F Mode Section -->
+                <div class="mb-4" style="margin-top: 2rem;">
+                    <div class="frequency-bar">
+                        <div>F Mode &nbsp;&nbsp; <select class="form-select form-select-sm" style="display: inline-block; width: 120px; margin-left: 10px;">
+                            <option selected>UL</option>
+                            <option>DL</option>
+                        </select></div>
                     </div>
                 </div>
             </div>
@@ -5530,6 +5434,11 @@
                 updateDLALCButtons(data.packet.DL_ALC_Bits);
             }
 
+            // DET MASK 버튼 상태 업데이트
+            if (data.packet.DET_MASK_Bits) {
+                updateDETMASKButtons(data.packet.DET_MASK_Bits);
+            }
+
             const updateText = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) el.innerText = value;
@@ -5952,6 +5861,37 @@
             // AGC Level 업데이트 (Range:-60~-100, Step:1)
             updateValue("Mvbx_RsAgcThreshold2", data.packet.Mvbx_RsAgcThreshold);
 
+            // TDD Setup 업데이트
+            // Frequency 업데이트 (서버에서 이미 변환된 값)
+            if (data.packet.TDD_Freq) {
+                updateValue("TDD_Freq", data.packet.TDD_Freq);
+            }
+
+            // ARFCN 업데이트 (Range: 2054166~2104165)
+            if (data.packet.TDD_Arfcn) {
+                updateValue("TDD_Arfcn", data.packet.TDD_Arfcn);
+            }
+
+            // SSB MU 업데이트 (비트값 0이면120K, 1이면240K)
+            const ssbMuSelect = document.getElementById("MvbxSsbMu");
+            if (ssbMuSelect && data.packet.MvbxSsbMu !== undefined) {
+                if (data.packet.MvbxSsbMu === 0) {
+                    ssbMuSelect.value = "120K";
+                } else if (data.packet.MvbxSsbMu === 1) {
+                    ssbMuSelect.value = "240K";
+                }
+            }
+
+            // TDD Rate 업데이트 (비트값 0이면 3:1, 1이면 4:1)
+            const tddRateSelect = document.getElementById("MvbxTddRate");
+            if (tddRateSelect && data.packet.MvbxTddRate !== undefined) {
+                if (data.packet.MvbxTddRate === 0) {
+                    tddRateSelect.value = "3:1";
+                } else if (data.packet.MvbxTddRate === 1) {
+                    tddRateSelect.value = "4:1";
+                }
+            }
+
             updateText('antArrayVer', data.packet.Gumstick_Ver);
             document.getElementById('temperComp').textContent = data.packet.BeamAntSelect === 1 ? 'On' : 'Off';
             updateText('startTemper', data.packet.Gumstick_StartTemper + '℃');
@@ -6012,6 +5952,24 @@
             updateText('Actual_Orientation', data.packet.Actual_Orientation);
             updateText('Actual_Tilt', data.packet.Actual_Tilt);
             updateValue('du-name', data.packet.ConSerialNum);
+
+            // Sync Module S/N과 EMS ver 업데이트
+            updateText('conserialnum_sync', data.packet.ConSerialNum);
+            updateText('emsversion2_sync', data.packet.EmsVersion);
+
+            // Packet Info S/N과 EMS ver 업데이트
+            updateText('conserialnum_sync2', data.packet.ConSerialNum);
+            updateText('emsversion2_sync3', data.packet.EmsVersion);
+
+            // Packet 전송횟수와 응답횟수 업데이트
+            if (data.packet.PackSendCount && data.packet.PackErrorCount) {
+                // Cascade 1~4 업데이트 (각 cascade당 전송횟수 4바이트, 응답횟수 4바이트)
+                for (let i = 1; i <= 4; i++) {
+                    const sendCount = data.packet.PackSendCount[i-1] || 0;
+                    const errorCount = data.packet.PackErrorCount[i-1] || 0;
+                    updateText(`packet_cascade${i}`, `${sendCount} / ${errorCount}`);
+                }
+            }
 
                           // SU Enable 버튼 상태 업데이트
               const su1EnableBtn = document.getElementById('su1-enable-btn');
@@ -6407,6 +6365,20 @@
             }
         }
 
+        // Slot 3gpp Format 토글 함수
+        function toggleSlot3gppFormat() {
+            const content = document.getElementById('slot-3gpp-format-content');
+            const icon = document.getElementById('slot-3gpp-format-icon');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                icon.className = 'fas fa-chevron-down me-2';
+            } else {
+                content.style.display = 'none';
+                icon.className = 'fas fa-chevron-right me-2';
+            }
+        }
+
         // 알람 버튼 상태 업데이트 함수
         function updateAlarmButtons(alarmStatus) {
             if (!alarmStatus) return;
@@ -6462,7 +6434,8 @@
             // 각 DL ALC 버튼의 상태를 업데이트
             const dlAlcButtons = {
                 'SISO_MASK_DL_ALC': document.getElementById('SISO_MASK_DL_ALC'),
-                'MIMO_MASK_DL_ALC': document.getElementById('MIMO_MASK_DL_ALC')
+                'MIMO_MASK_DL_ALC': document.getElementById('MIMO_MASK_DL_ALC'),
+                'EMS_DU_Link_MASK': document.getElementById('EMS_DU_Link_MASK')
             };
 
             // 각 버튼의 상태를 비트값에 따라 업데이트
@@ -6470,6 +6443,34 @@
                 const button = dlAlcButtons[dlAlcId];
                 if (button && dlAlcStatus.hasOwnProperty(dlAlcId)) {
                     const isOn = dlAlcStatus[dlAlcId] === 1;
+                    if (isOn) {
+                        button.textContent = 'On';
+                        button.style.backgroundColor = '#28a745'; // 녹색
+                    } else {
+                        button.textContent = 'Off';
+                        button.style.backgroundColor = '#666'; // 회색
+                    }
+                }
+            });
+        }
+
+        // DET MASK 버튼 상태 업데이트 함수
+        function updateDETMASKButtons(detMaskStatus) {
+            if (!detMaskStatus) return;
+            
+            // 각 DET MASK 버튼의 상태를 업데이트
+            const detMaskButtons = {
+                'LD1_DET_DL0_SISO_MASK': document.getElementById('LD1_DET_DL0_SISO_MASK'),
+                'LD2_DET_DL1_MIMO_MASK': document.getElementById('LD2_DET_DL1_MIMO_MASK'),
+                'PD1_DET_UL0_SISO_MASK': document.getElementById('PD1_DET_UL0_SISO_MASK'),
+                'PD2_DET_UL1_MIMO_MASK': document.getElementById('PD2_DET_UL1_MIMO_MASK')
+            };
+
+            // 각 버튼의 상태를 비트값에 따라 업데이트
+            Object.keys(detMaskButtons).forEach(detMaskId => {
+                const button = detMaskButtons[detMaskId];
+                if (button && detMaskStatus.hasOwnProperty(detMaskId)) {
+                    const isOn = detMaskStatus[detMaskId] === 1;
                     if (isOn) {
                         button.textContent = 'On';
                         button.style.backgroundColor = '#28a745'; // 녹색

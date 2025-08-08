@@ -68,6 +68,7 @@ def handle_hex_packet(data):
     try:
         binary_data = binascii.unhexlify(data)  # HEX → Binary 변환
         cmd = binary_data[6]
+        print(cmd)
         if cmd == 0x55 :
             update_status = parse_AllStatusPacket(binary_data)
             socketio.emit("update_status", {"packet": update_status})
@@ -84,6 +85,7 @@ def handle_hex_packet(data):
             print(f"[{current_time}] 📥 Received Status Packet")
             return {"status": "success", "received_hex": data}
         elif cmd == 0x91 :
+            print(cmd)
             tdd_status = parse_TddStatusPacket(binary_data)
             socketio.emit("tdd_status", {"packet": tdd_status})
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # 밀리초까지 포함 (뒤 3자리는 잘라내어 마이크로초 대신 밀리초 단위로 표시)
@@ -439,12 +441,22 @@ def parse_AllStatusPacket(packet):
 
     parsed_data['MaskMuAlarm'] = list(packet[628:640])
     
-    # packet[635]에서 0번째와 2번째 비트 추출
+    # packet[635]에서 0번째, 2번째, 5번째 비트 추출
     dl_alc_bits = {
         'SISO_MASK_DL_ALC': (packet[635] >> 0) & 1,  # 비트 0
-        'MIMO_MASK_DL_ALC': (packet[635] >> 2) & 1   # 비트 2
+        'MIMO_MASK_DL_ALC': (packet[635] >> 2) & 1,  # 비트 2
+        'EMS_DU_Link_MASK': (packet[635] >> 5) & 1   # 비트 5
     }
     parsed_data['DL_ALC_Bits'] = dl_alc_bits
+
+    # packet[634]에서 0번째, 1번째, 2번째, 3번째 비트 추출
+    det_mask_bits = {
+        'LD1_DET_DL0_SISO_MASK': (packet[634] >> 0) & 1,  # 비트 0
+        'LD2_DET_DL1_MIMO_MASK': (packet[634] >> 1) & 1,  # 비트 1
+        'PD1_DET_UL0_SISO_MASK': (packet[634] >> 2) & 1,  # 비트 2
+        'PD2_DET_UL1_MIMO_MASK': (packet[634] >> 3) & 1   # 비트 3
+    }
+    parsed_data['DET_MASK_Bits'] = det_mask_bits
 
         # 알람 비트 매핑 정의
     alarm_mask_bit_map = [
@@ -1309,7 +1321,9 @@ def parse_TddStatusPacket(packet):
     parsed_data['F_Mode'] = packet[39]
     parsed_data['TDD_Slot_Format'] = packet[40:200]
     parsed_data['TDD_3gpp_table'] = packet[200:984]
-    parsed_data['TDD_Freq'] = struct.unpack('<I', bytes([packet[984], packet[985], packet[986], packet[987]]))[0]
+    # TDD Frequency (60KHz 단위를 MHz로 변환하여 2자리까지 표시)
+    tdd_freq_raw = struct.unpack('<I', bytes([packet[984], packet[985], packet[986], packet[987]]))[0]
+    parsed_data['TDD_Freq'] = round(tdd_freq_raw / 1000, 2)
     parsed_data['TDD_Arfcn'] = struct.unpack('<I', bytes([packet[988], packet[989], packet[990], packet[991]]))[0]
     parsed_data['MvbxSsbMu'] = packet[992]
     parsed_data['MvbxPssType'] = packet[993]
