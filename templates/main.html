@@ -5355,6 +5355,53 @@
             console.log("⚫ RX Box: OFF");
         });
 
+        socket.on("tdd_status", function (data) {
+
+            const updateValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    console.log(`updateValue: ${id} = ${value} (before: ${el.value})`);
+                    el.value = value;
+                    console.log(`updateValue: ${id} = ${value} (after: ${el.value})`);
+                    // ID 값 출력 시 텍스트 크기 조정
+                    el.style.fontSize = '0.85rem';
+                }
+            };
+
+            
+            // TDD Setup 업데이트
+            // Frequency 업데이트 (서버에서 이미 변환된 값)
+            if (data.packet.TDD_Freq) {
+                updateValue("TDD_Freq", data.packet.TDD_Freq);
+            }
+
+            // ARFCN 업데이트 (Range: 2054166~2104165)
+            if (data.packet.TDD_Arfcn) {
+                updateValue("TDD_Arfcn", data.packet.TDD_Arfcn);
+            }
+
+            // SSB MU 업데이트 (비트값 0이면120K, 1이면240K)
+            const ssbMuSelect = document.getElementById("MvbxSsbMu");
+            if (ssbMuSelect && data.packet.MvbxSsbMu !== undefined) {
+                if (data.packet.MvbxSsbMu === 0) {
+                    ssbMuSelect.value = "120K";
+                } else if (data.packet.MvbxSsbMu === 1) {
+                    ssbMuSelect.value = "240K";
+                }
+            }
+
+            // TDD Rate 업데이트 (비트값 0이면 3:1, 1이면 4:1)
+            const tddRateSelect = document.getElementById("MvbxTddRate");
+            if (tddRateSelect && data.packet.MvbxTddRate !== undefined) {
+                if (data.packet.MvbxTddRate === 0) {
+                    tddRateSelect.value = "3:1";
+                } else if (data.packet.MvbxTddRate === 1) {
+                    tddRateSelect.value = "4:1";
+                }
+            }
+
+        });
+
         socket.on("update_status", function (data) {
             //console.log("📥 Received update_status:", data.packet);
 
@@ -5861,36 +5908,7 @@
             // AGC Level 업데이트 (Range:-60~-100, Step:1)
             updateValue("Mvbx_RsAgcThreshold2", data.packet.Mvbx_RsAgcThreshold);
 
-            // TDD Setup 업데이트
-            // Frequency 업데이트 (서버에서 이미 변환된 값)
-            if (data.packet.TDD_Freq) {
-                updateValue("TDD_Freq", data.packet.TDD_Freq);
-            }
-
-            // ARFCN 업데이트 (Range: 2054166~2104165)
-            if (data.packet.TDD_Arfcn) {
-                updateValue("TDD_Arfcn", data.packet.TDD_Arfcn);
-            }
-
-            // SSB MU 업데이트 (비트값 0이면120K, 1이면240K)
-            const ssbMuSelect = document.getElementById("MvbxSsbMu");
-            if (ssbMuSelect && data.packet.MvbxSsbMu !== undefined) {
-                if (data.packet.MvbxSsbMu === 0) {
-                    ssbMuSelect.value = "120K";
-                } else if (data.packet.MvbxSsbMu === 1) {
-                    ssbMuSelect.value = "240K";
-                }
-            }
-
-            // TDD Rate 업데이트 (비트값 0이면 3:1, 1이면 4:1)
-            const tddRateSelect = document.getElementById("MvbxTddRate");
-            if (tddRateSelect && data.packet.MvbxTddRate !== undefined) {
-                if (data.packet.MvbxTddRate === 0) {
-                    tddRateSelect.value = "3:1";
-                } else if (data.packet.MvbxTddRate === 1) {
-                    tddRateSelect.value = "4:1";
-                }
-            }
+            
 
             updateText('antArrayVer', data.packet.Gumstick_Ver);
             document.getElementById('temperComp').textContent = data.packet.BeamAntSelect === 1 ? 'On' : 'Off';
