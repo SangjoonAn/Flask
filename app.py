@@ -96,6 +96,38 @@ def handle_hex_packet(data):
         print(f"❌ Unexpected Error: {e}")
         return {"status": "error", "message": str(e)}
 
+@socketio.on('request_update_status')
+def handle_request_update_status():
+    """ update_status 패킷 요청 처리 """
+    try:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        print(f"[{current_time}] 📤 Client requested: update_status packet")
+        
+        # TODO: 실제 하드웨어에서 update_status 데이터를 가져와서 클라이언트로 전송
+        # 현재는 요청만 로그로 기록하고 실제 데이터 전송은 별도 구현 필요
+        
+        return {"status": "success", "message": "update_status request received"}
+        
+    except Exception as e:
+        print(f"❌ Update Status Request Error: {e}")
+        return {"status": "error", "message": str(e)}
+
+@socketio.on('request_tdd_status')
+def handle_request_tdd_status():
+    """ tdd_status 패킷 요청 처리 """
+    try:
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        print(f"[{current_time}] 📤 Client requested: tdd_status packet")
+        
+        # TODO: 실제 하드웨어에서 tdd_status 데이터를 가져와서 클라이언트로 전송
+        # 현재는 요청만 로그로 기록하고 실제 데이터 전송은 별도 구현 필요
+        
+        return {"status": "success", "message": "tdd_status request received"}
+        
+    except Exception as e:
+        print(f"❌ TDD Status Request Error: {e}")
+        return {"status": "error", "message": str(e)}
+
 @socketio.on('du_Ctrl_packet')
 def handle_du_control_packet(data):
     """ DU 제어 패킷 수신 및 처리 """
@@ -190,6 +222,11 @@ def parse_AllStatusPacket(packet):
     parsed_data['Rcv_Sub_Sys'] = packet[1]
     parsed_data['Rcv_Object'] = packet[2]
     parsed_data['Trans_Main_Sys'] = packet[3]
+    # Trans_Main_Sys 감지 시 TX 박스 토글 (1이면 켜기, 0이면 끄기)
+    if packet[3] == 1:
+        socketio.emit("tx_on")
+    else:
+        socketio.emit("tx_off")
     parsed_data['Trans_Sub_Sys'] = packet[4]
     parsed_data['Trans_Object'] = packet[5]
     parsed_data['CMD'] = packet[6]

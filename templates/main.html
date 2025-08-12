@@ -5559,6 +5559,63 @@
             }
         }
 
+        // 패킷 요청 타이머 변수들
+        let updateStatusTimer = null;
+        let tddStatusTimer = null;
+
+        // 패킷 요청 함수들
+        function requestUpdateStatus() {
+            socket.emit('request_update_status');
+            console.log('📤 Requested: update_status packet');
+        }
+
+        function requestTddStatus() {
+            socket.emit('request_tdd_status');
+            console.log('📤 Requested: tdd_status packet');
+        }
+
+        // 패킷 요청 시작 함수들 (1초마다 반복)
+        function startUpdateStatusRequest() {
+            // 기존 타이머가 있으면 정리
+            if (updateStatusTimer) {
+                clearInterval(updateStatusTimer);
+            }
+            // 즉시 한 번 요청
+            requestUpdateStatus();
+            // 1초마다 반복 요청
+            updateStatusTimer = setInterval(requestUpdateStatus, 1000);
+            console.log('🔄 Started update_status request timer (1s interval)');
+        }
+
+        function startTddStatusRequest() {
+            // 기존 타이머가 있으면 정리
+            if (tddStatusTimer) {
+                clearInterval(tddStatusTimer);
+            }
+            // 즉시 한 번 요청
+            requestTddStatus();
+            // 1초마다 반복 요청
+            tddStatusTimer = setInterval(requestTddStatus, 1000);
+            console.log('🔄 Started tdd_status request timer (1s interval)');
+        }
+
+        // 패킷 요청 중지 함수들
+        function stopUpdateStatusRequest() {
+            if (updateStatusTimer) {
+                clearInterval(updateStatusTimer);
+                updateStatusTimer = null;
+                console.log('⏹️ Stopped update_status request timer');
+            }
+        }
+
+        function stopTddStatusRequest() {
+            if (tddStatusTimer) {
+                clearInterval(tddStatusTimer);
+                tddStatusTimer = null;
+                console.log('⏹️ Stopped tdd_status request timer');
+            }
+        }
+
         // 화면 전환 함수
         function showScreen(screenId) {
             const duContent = document.getElementById('du_content_display');
@@ -5570,6 +5627,10 @@
             const su2NavDot = document.getElementById('su2_nav_dot');
             const su3NavDot = document.getElementById('su3_nav_dot');
             const su4NavDot = document.getElementById('su4_nav_dot');
+
+            // 기존 패킷 요청 타이머들 정리
+            stopUpdateStatusRequest();
+            stopTddStatusRequest();
 
             // 모든 네비게이션 점을 현재 알람 상태 색상으로 먼저 초기화 (비활성화 상태의 색상)
             updateNavDotColors();
@@ -5585,22 +5646,30 @@
                 syncModuleContent.style.display = 'none';
             }
 
-            // 선택된 화면 표시 (기존 방식대로 active 클래스 추가)
+            // 선택된 화면 표시 및 해당 패킷 요청 시작
             if (screenId === 'du_content') {
                 duContent.classList.add('active');
+                // DU 화면: update_status 패킷 요청 시작 (네비게이션 점, RX 박스 등)
+                startUpdateStatusRequest();
             } else if (screenId === 'su1_content') {
                 su1Content.classList.add('active');
                 console.log('SU #1 content activated.'); // 디버깅 로그
+                // SU1 화면: update_status 패킷 요청 시작
+                startUpdateStatusRequest();
             } else if (screenId === 'packet_info') {
                 if (packetInfoContent) {
                     packetInfoContent.classList.add('active');
                     packetInfoContent.style.display = 'block';
                 }
+                // Packet Info 화면: update_status 패킷 요청 시작
+                startUpdateStatusRequest();
             } else if (screenId === 'sync_module') {
                 // Sync Module 화면 표시
                 if (syncModuleContent) {
                     syncModuleContent.style.display = 'block';
                 }
+                // Sync Module 화면: tdd_status 패킷 요청 시작 (Sync Module 데이터)
+                startTddStatusRequest();
             }
              // SU #2 화면이 활성화될 경우 (현재는 구현되지 않음)
              else if (screenId === 'su2_content') {
@@ -5648,12 +5717,24 @@
             originalColor: null
         };
 
-        // RX 박스 초기 상태 저장
+        // TX 박스 상태 관리
+        let txBoxState = {
+            originalBg: null,
+            originalColor: null
+        };
+
+        // RX/TX 박스 초기 상태 저장
         document.addEventListener('DOMContentLoaded', function() {
             const rxBox = document.querySelector('.rx-box');
             if (rxBox) {
                 rxBoxState.originalBg = window.getComputedStyle(rxBox).backgroundColor;
                 rxBoxState.originalColor = window.getComputedStyle(rxBox).color;
+            }
+            
+            const txBox = document.querySelector('.tx-box');
+            if (txBox) {
+                txBoxState.originalBg = window.getComputedStyle(txBox).backgroundColor;
+                txBoxState.originalColor = window.getComputedStyle(txBox).color;
             }
             
             // 네비게이션 점 기본값 설정 (초록색)
@@ -5676,6 +5757,24 @@
                 rxbox.style.color = rxBoxState.originalColor;
             });
             console.log("⚫ RX Box: OFF");
+        });
+
+        // TX 박스 켜기
+        socket.on("tx_on", function () {
+            document.querySelectorAll('.tx-box').forEach(txbox => {
+                txbox.style.backgroundColor = 'yellow';
+                txbox.style.color = 'black';
+            });
+            console.log("🟡 TX Box: ON");
+        });
+
+        // TX 박스 끄기
+        socket.on("tx_off", function () {
+            document.querySelectorAll('.tx-box').forEach(txbox => {
+                txbox.style.backgroundColor = txBoxState.originalBg;
+                txbox.style.color = txBoxState.originalColor;
+            });
+            console.log("⚫ TX Box: OFF");
         });
 
         socket.on("tdd_status", function (data) {
@@ -6605,6 +6704,9 @@
 
         // Alarm Level 모달을 여는 함수
         function openAlarmLevelModal() {
+            // Alarm Level 모달: update_status 패킷 요청 시작 (알람 상태 정보)
+            startUpdateStatusRequest();
+            
             const modalElement = document.getElementById('alarmLevelModal');
             if (modalElement) {
                 // 기존 모달 인스턴스가 있다면 제거
@@ -6625,6 +6727,9 @@
 
         // Alarm History 모달을 여는 함수
         function openAlarmHistoryModal() {
+            // Alarm History 모달: update_status 패킷 요청 시작 (알람 히스토리 정보)
+            startUpdateStatusRequest();
+            
             const modalElement = document.getElementById('alarmHistoryModal');
             if (modalElement) {
                 // 기존 모달 인스턴스가 있다면 제거
@@ -7028,6 +7133,9 @@
 
         // User Management Modal 열기 함수
         function openUserManagementModal() {
+            // User Management 모달: update_status 패킷 요청 시작 (사용자 관리 정보)
+            startUpdateStatusRequest();
+            
             const modalElement = document.getElementById('userMgmtModal');
             if (modalElement) {
                 // 기존 모달 인스턴스가 있다면 제거
@@ -7206,6 +7314,9 @@
 
         // ===== Beam Info Modal Functions =====
         function openBeamInfoModal() {
+            // Beam Info 모달: update_status 패킷 요청 시작 (빔 정보)
+            startUpdateStatusRequest();
+            
             const modal = new bootstrap.Modal(document.getElementById('beaminfo2'));
             modal.show();
         }
