@@ -6,6 +6,7 @@
     <title>RF EMS Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 
     <style>
         body { 
@@ -146,6 +147,69 @@
 
 
 
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-dialog {
+            margin: 50px auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            border: 1px solid #888;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-header .close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            float: right;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-body table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modal-body table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .modal-body table input[type="text"],
+        .modal-body table textarea {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px 8px;
+        }
+
+        .modal-body table input[type="text"]:focus,
+        .modal-body table textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
 
         /* DU/SU Navigation Section Styles */
         .du-su-section {
@@ -1067,24 +1131,24 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 10px; margin: 0;">
                             <div class="modal-header" style="background-color: #666; border-bottom: none; padding: 1rem; border-radius: 10px 10px 0 0;">
-                                <h5 class="modal-title text-white" id="duInitialSetupModalLabel">Initial Setup</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
+                            <h5 class="modal-title text-white" id="duInitialSetupModalLabel">Initial Setup</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
 
                             <div class="modal-body" style="padding: 2rem;">
-                                <div class="p-3 mb-3" style="background-color: yellow; font-size: 2rem; font-weight: bold;">
-                                INITIAL SETUP
-                                </div>
-                                <div class="d-flex justify-content-center gap-3 mb-4">
-                                <button
-                                    class="btn btn-lg"
-                                    style="width: 120px; background-color: #d3dce6;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#usimCheckModal"
-                                    data-bs-dismiss="modal"
-                                    onclick="startUsimTimer()">
-                                    Start
-                                </button>
+                            <div class="p-3 mb-3" style="background-color: yellow; font-size: 2rem; font-weight: bold;">
+                            INITIAL SETUP
+                            </div>
+                            <div class="d-flex justify-content-center gap-3 mb-4">
+                            <button
+                                class="btn btn-lg"
+                                style="width: 120px; background-color: #d3dce6;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#usimCheckModal"
+                                data-bs-dismiss="modal"
+                                onclick="startUsimTimer()">
+                                Start
+                            </button>
 
 
                             <button class="btn btn-lg" style="width: 120px; background-color: #d3dce6;" data-bs-dismiss="modal">Close</button>
@@ -1176,25 +1240,25 @@
 
                       <!-- Body -->
                       <div class="modal-body text-center">
-                        <table style="margin: 0 auto; border-collapse: separate; border-spacing: 15px;">
+                        <table style="margin: 0 auto; border-collapse: collapse; border: none;">
                           <thead>
                             <tr>
-                              <th></th>
-                              <th>&lt;Company&gt;</th>
-                              <th>&lt;APN&gt;</th>
-                              <th></th>
+                              <th style="border: none; padding: 8px;"></th>
+                              <th style="border: none; padding: 8px;">&lt;Company&gt;</th>
+                              <th style="border: none; padding: 8px;">&lt;APN&gt;</th>
+                              <th style="border: none; padding: 8px;"></th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                              <td style="font-weight:bold; text-align:right; white-space:nowrap;">Mobile Company</td>
-                              <td>
+                              <td style="font-weight:bold; text-align:right; white-space:nowrap; border: none; padding: 8px;">Mobile Company</td>
+                              <td style="border: none; padding: 8px;">
                                 <input type="text" class="form-control text-center" style="width:100px;" value="uscc" readonly>
                               </td>
-                              <td>
+                              <td style="border: none; padding: 8px;">
                                 <input type="text" class="form-control text-center" style="width:300px;" value="uscc07454.enterprise3.usc-cdp">
                               </td>
-                              <td>
+                              <td style="border: none; padding: 8px;">
                                 <button class="btn btn-secondary">Set</button>
                               </td>
                             </tr>
@@ -1207,161 +1271,6 @@
                       <div class="modal-footer d-flex justify-content-center">
                         <button class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeSetUpModal()">Close</button>
                     </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Alarm Level Modal -->
-                <div class="modal fade" id="alarmLevelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-                  <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content" style="background:#d9d9db; border:0;">
-                      <!-- 상단 타이틀 바 -->
-                      <div class="d-flex align-items-center justify-content-between px-3 py-2"
-                           style="background:#7a7f82; color:#fff; border-radius:12px 12px 0 0;">
-                        <div class="d-flex align-items-center">
-                          <span style="width:20px;height:20px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:8px;">+</span>
-                          <span style="font-size:1.05rem;">Alarm Level</span>
-                        </div>
-                        <!-- BS5 닫기 버튼 -->
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-
-                      <!-- 본문 -->
-                      <div class="px-3 pt-2 pb-0" style="background:#eeeeef;">
-                        <!-- 우상단 버튼 -->
-                        <div class="d-flex justify-content-end my-2">
-                          <button class="btn btn-primary btn-sm me-2">Modify</button>
-                          <button class="btn btn-success btn-sm">Config</button>
-                        </div>
-
-                        <!-- 테이블 컨테이너 -->
-                        <div class="bg-white rounded" style="border:1px solid #c9c9cf;">
-                          <div class="table-wrap" style="max-height:58vh; overflow:auto; position:relative;">
-                            <table class="table table-sm m-0 text-center">
-                              <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd;">
-                                <tr>
-                                  <th style="min-width:110px; text-align:center;">Equip</th>
-                                  <th style="min-width:140px; text-align:center;">Alarm Level</th>
-                                  <th style="min-width:140px; text-align:center;">Module Name</th>
-                                  <th style="min-width:160px; text-align:center;">Sub Module Name</th>
-                                  <th style="min-width:220px; text-align:center;">Item Name</th>
-                                  <th style="min-width:140px; text-align:center;">Alarm Mask</th>
-                                  <th style="min-width:140px; text-align:center;">Update ID</th>
-                                </tr>
-                                <!-- 필터 행 (보기만) -->
-                                <tr>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                  <th><input class="form-control form-control-sm text-center" /></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <!-- 하드코딩 데이터 시작 -->
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Warning</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">EMS DU LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">FPGA LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Ant. Array Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">IF PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL LD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL LD Lower</td><td style="text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#1 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#2 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#3 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#4 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">UL PD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">UL PD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Decoding</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Sync PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">TSYNC LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">AC</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">BAT</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">DC</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Minor</td><td style="text-align:center;">Download</td><td style="text-align:center;"></td><td style="text-align:center;">Download</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Minor</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Temp</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">DU LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Ant. Array Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">IF PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
-                                <!-- 필요시 더 추가 -->
-                                <!-- 하드코딩 데이터 끝 -->
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <!-- 하단 푸터 -->
-                        <div class="d-flex justify-content-center py-3" style="background:#eeeeef; border-radius:0 0 12px 12px;">
-                          <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Alarm History Modal -->
-                <div class="modal fade" id="alarmHistoryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
-                  <div class="modal-dialog modal-xl modal-dialog-centered">
-                    <div class="modal-content" style="background:#d9d9db; border:0;">
-                      <!-- Title bar -->
-                      <div class="d-flex align-items-center justify-content-between px-3 py-2"
-                           style="background:#7a7f82; color:#fff; border-radius:12px 12px 0 0;">
-                        <div class="d-flex align-items-center">
-                          <span style="width:20px;height:20px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:8px;">+</span>
-                          <span style="font-size:1.05rem;">Alarm History</span>
-                        </div>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-
-                      <div class="px-3 pt-2 pb-0" style="background:#eeeeef;">
-                        <!-- Right action buttons -->
-                        <div class="d-flex justify-content-end my-2">
-                          <button class="btn btn-danger btn-sm me-2">Delete</button>
-                          <button class="btn btn-success btn-sm">Excel</button>
-                        </div>
-
-                        <!-- Table -->
-                        <div class="bg-white rounded" style="border:1px solid #c9c9cf;">
-                          <div class="table-wrap" style="max-height:58vh; overflow:auto; position:relative;">
-                            <table class="table table-sm m-0">
-                              <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd;">
-                                <tr>
-                                  <th style="min-width:150px;">Alarm Level</th>
-                                  <th style="min-width:380px;">Alarm Message</th>
-                                  <th style="min-width:180px;">Alarm Date</th>
-                                  <th style="min-width:120px;">Clear Y/N</th>
-                                  <th style="min-width:180px;">Clear Date</th>
-                                </tr>
-                              </thead>
-                              <tbody id="histBody">
-                                <!-- JS가 렌더링 -->
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <!-- Footer: status + pagination + cancel -->
-                        <div class="d-flex align-items-center justify-content-between py-3" style="background:#eeeeef;">
-                          <div id="histPageStatus" class="text-muted small ms-1" style="min-width: 150px; font-weight: bold; color: #666 !important;">Showing 1 of 8 pages</div>
-
-                          <ul id="histPager" class="pagination pagination-sm mb-0">
-                            <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-act="prev">&lsaquo;</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-act="next">&rsaquo;</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-act="last">&raquo;</a></li>
-                          </ul>
-
-                          <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -1784,10 +1693,10 @@
                 </div>
 
                 <!-- SU Setup Modal (Step 6/7) -->
-                <div class="modal fade" id="BtapnSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+                <div class="modal fade" id="SuSetupModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content" style="background-color:#d1d1d1; text-align:center; padding:20px;">
-                        
+
 
 
                         <!-- Body -->
@@ -2014,211 +1923,7 @@
                     </div>
                 </div>
 
-                <!-- User Management Modal -->
-                <div class="modal fade" id="userMgmtModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content" style="background:#efefef; border:0;">
-                            <!-- Title bar -->
-                            <div class="d-flex align-items-center justify-content-between px-3 py-2"
-                                 style="background:#7a7f82; color:#fff; border-radius:8px 8px 0 0;">
-                                <div class="d-flex align-items-center">
-                                    <span style="width:22px;height:22px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:10px;">+</span>
-                                    <span style="font-size:1.1rem;">User Management</span>
-                                </div>
-                                <button type="button" class="btn-close text-white m-0 p-0" data-bs-dismiss="modal" aria-label="Close" style="font-size:28px; line-height:1;"></button>
-                            </div>
 
-                            <div class="px-3 pt-3 pb-0">
-                                <!-- Search row -->
-                                <div class="d-flex align-items-center mb-3" style="gap:14px;">
-                                    <div class="dropdown">
-                                        <button class="btn btn-light dropdown-toggle d-flex align-items-center"
-                                                type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                style="min-width:180px; justify-content:space-between;">
-                                            <span id="userFilterFieldLabel">User ID</span>
-                                        </button>
-                                        <ul class="dropdown-menu" id="userFilterFieldMenu">
-                                            <li><a class="dropdown-item" href="#" data-field="id">User ID</a></li>
-                                            <li><a class="dropdown-item" href="#" data-field="name">Name</a></li>
-                                            <li><a class="dropdown-item" href="#" data-field="level">Level Name</a></li>
-                                            <li><a class="dropdown-item" href="#" data-field="email">E-mail</a></li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="position-relative" style="flex:1 1 auto; max-width:540px;">
-                                        <input type="text" id="userSearch" class="form-control" placeholder="Search…" style="padding-right:42px;">
-                                        <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); opacity:.6;">🔍</span>
-                                    </div>
-
-                                    <div class="ml-auto d-flex" style="gap:10px;">
-                                        <button class="btn btn-success">Add</button>
-                                        <button class="btn btn-primary">Modify</button>
-                                        <button class="btn btn-danger">Delete</button>
-                                    </div>
-                                </div>
-
-                                <!-- Table -->
-                                <div class="bg-white rounded" style="border:1px solid #cfd3d8;">
-                                    <div class="table-responsive" style="max-height:52vh; overflow:auto;">
-                                        <table class="table table-sm mb-0">
-                                            <thead style="background:#74767a; color:#fff; position:sticky; top:0; z-index:2;">
-                                                <tr>
-                                                    <th style="min-width:160px;">ID</th>
-                                                    <th style="min-width:160px;">Name</th>
-                                                    <th style="min-width:180px;">Level Name</th>
-                                                    <th style="min-width:240px;">E-mail</th>
-                                                    <th style="min-width:110px;">Recv Y/N</th>
-                                                    <th style="min-width:150px;">Tel</th>
-                                                    <th style="min-width:260px;">Remark</th>
-                                                    <th style="min-width:160px;">Update ID</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="userBody">
-                                                <!-- JS renders -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- Footer: status + pagination + Cancel -->
-                                <div class="d-flex align-items-center justify-content-between mt-3 mb-4">
-                                    <div class="text-muted" id="userStatus">Showing 1 page of 1 pages</div>
-
-                                    <ul id="userPager" class="pagination pagination-sm mb-0">
-                                        <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" data-act="prev">Previous</a></li>
-                                        <!-- windowed page buttons (3 visible) will be injected here -->
-                                        <li class="page-item"><a class="page-link" href="#" data-act="next">Next</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" data-act="last">&raquo;</a></li>
-                                    </ul>
-                                </div>
-
-                                <div class="d-flex justify-content-center pb-4">
-                                    <button class="btn" data-bs-dismiss="modal"
-                                            style="background:#6b7280; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Beam Info Modal (BS4, same style as your sample) -->
-                <div class="modal fade" id="beamInfoModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content" style="background:#efefef; border:0;">
-
-                            <!-- Title bar -->
-                            <div class="d-flex align-items-center justify-content-between px-3 py-2"
-                                 style="background:#7a7f82; color:#fff; border-radius:8px 8px 0 0;">
-                                <div class="d-flex align-items-center">
-                                    <span style="width:22px;height:22px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:10px;">+</span>
-                                    <span style="font-size:1.1rem;">Beam Info</span>
-                                </div>
-                                <button type="button" class="btn-close text-white m-0 p-0" data-bs-dismiss="modal" aria-label="Close" style="font-size:28px; line-height:1;"></button>
-                            </div>
-
-                            <div class="px-3 pt-3 pb-0">
-                                <!-- Panel -->
-                                <div class="rounded" style="background:#e1e1e1; border:1px solid #cfd3d8; padding:22px;">
-
-                                    <!-- DU header -->
-                                    <div class="d-flex align-items-center mb-2" style="gap:10px; color:#3e3e3e; font-weight:600;">
-                                        <span style="width:22px;height:18px;display:inline-block;background:linear-gradient(#666,#666) 0 50%/22px 2px no-repeat;border:2px solid #666;border-radius:4px;"></span>
-                                        <span>DU</span>
-                                    </div>
-                                    <div style="border-bottom:1px dashed #bdbdbd; margin:6px 0 16px;"></div>
-
-                                    <!-- DU rows -->
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Latitude</label>
-                                        <div class="col-md-4 col-8 mb-2 mb-md-0">
-                                            <input type="text" class="form-control form-control-sm" />
-                                        </div>
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Longitude</label>
-                                        <div class="col-md-4 col-8">
-                                            <input type="text" class="form-control form-control-sm" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Azimuth:</label>
-                                        <div class="col-md-10 col-8">
-                                            <div class="d-flex align-items-center" style="gap:28px; color:#5a5a5a;">
-                                                <div>Orientation
-                                                    <span class="ml-2" style="display:inline-block;min-width:40px;text-align:center;border:1px solid #bcbcbc;border-radius:4px;background:#f6f6f6;padding:2px 8px;">0</span>
-                                                </div>
-                                                <div> Tilt
-                                                    <span class="ml-2" style="display:inline-block;min-width:40px;text-align:center;border:1px solid #bcbcbc;border-radius:4px;background:#f6f6f6;padding:2px 8px;">0</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- SU header -->
-                                    <div class="d-flex align-items-center mt-3 mb-2" style="gap:10px; color:#3e3e3e; font-weight:600;">
-                                        <span style="width:22px;height:18px;display:inline-block;background:linear-gradient(#666,#666) 0 50%/22px 2px no-repeat;border:2px solid #666;border-radius:4px;"></span>
-                                        <span>SU</span>
-                                    </div>
-                                    <div style="border-bottom:1px dashed #bdbdbd; margin:6px 0 16px;"></div>
-
-                                    <!-- SU#1 label line -->
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">SU#1</label>
-                                        <div class="col-md-10 col-8"></div>
-                                    </div>
-
-                                    <!-- SU rows -->
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Latitude</label>
-                                        <div class="col-md-4 col-8 mb-2 mb-md-0">
-                                            <input type="text" class="form-control form-control-sm" />
-                                        </div>
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Longitude</label>
-                                        <div class="col-md-4 col-8">
-                                            <input type="text" class="form-control form-control-sm" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row align-items-center">
-                                        <label class="col-md-2 col-4 col-form-label text-muted mb-2 mb-md-0">Azimuth:</label>
-                                        <div class="col-md-10 col-8">
-                                            <div class="d-flex align-items-center" style="gap:28px; color:#5a5a5a;">
-                                                <div>Orientation
-                                                    <span class="ml-2" style="display:inline-block;min-width:40px;text-align:center;border:1px solid #bcbcbc;border-radius:4px;background:#f6f6f6;padding:2px 8px;">&nbsp;</span>
-                                                </div>
-                                                <div>Tilt
-                                                    <span class="ml-2" style="display:inline-block;min-width:40px;text-align:center;border:1px solid #bcbcbc;border-radius:4px;background:#f6f6f6;padding:2px 8px;">&nbsp;</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Remark -->
-                                    <div class="form-group row">
-                                        <label class="col-md-2 col-12 col-form-label text-muted">Remark</label>
-                                        <div class="col-md-10 col-12">
-                                            <textarea rows="3" class="form-control"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Footer buttons -->
-                                <div class="d-flex justify-content-center py-4">
-                                    <button class="btn mr-2" data-bs-dismiss="modal"
-                                            style="background:#6b7280; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
-                                        Cancel
-                                    </button>
-                                    <button id="beamSaveBtn" class="btn"
-                                            style="background:#667089; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
-                                        Save
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- DU Hidden Modal -->
                 <div class="modal fade" id="duHiddenModal" tabindex="-1" aria-labelledby="duHiddenModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -2886,32 +2591,32 @@
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="suTimeAdvance" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <table class="table table-sm table-borderless mb-0">
+                                                            <table class="table table-sm table-borderless mb-0" style="border: none;">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th scope="col" class="text-center"></th>
-                                                                        <th scope="col" class="text-center">[Actual]</th>
-                                                                        <th scope="col" class="text-center">[Adjust]</th>
+                                                                        <th scope="col" class="text-center" style="border: none; padding: 8px;"></th>
+                                                                        <th scope="col" class="text-center" style="border: none; padding: 8px;">[Actual]</th>
+                                                                        <th scope="col" class="text-center" style="border: none; padding: 8px;">[Adjust]</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     <tr>
-                                                                        <td class="text-center">
+                                                                        <td class="text-center" style="border: none; padding: 8px;">
                                                                             <small class="text-muted">Orientation</small>
                                                                         </td>
-                                                                        <td class="text-center">
+                                                                        <td class="text-center" style="border: none; padding: 8px;">
                                                                             <input type="text" class="form-control form-control-sm" id="orientationActual" value="0" style="width: 60px; margin-left: 20px;">
                                                                         </td>
-                                                                        <td class="text-center text-muted">[0]</td>
+                                                                        <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                                     </tr>
                                                                     <tr>
-                                                                        <td class="text-center">
+                                                                        <td class="text-center" style="border: none; padding: 8px;">
                                                                             <small class="text-muted">Tilt</small>
                                                                         </td>
-                                                                        <td class="text-center">
+                                                                        <td class="text-center" style="border: none; padding: 8px;">
                                                                             <input type="text" class="form-control form-control-sm" id="tiltActual" value="2" style="width: 60px; margin-left: 20px;">
                                                                         </td>
-                                                                        <td class="text-center text-muted">[0]</td>
+                                                                        <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -2930,6 +2635,8 @@
                         </div>
                     </div>
                 </div>
+
+
 
                 <!-- DU Alarm Mask Modal -->
                 <div class="modal fade" id="alarmMaskModal" tabindex="-1" aria-labelledby="alarmMaskModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
@@ -3834,7 +3541,7 @@
                     <div style="font-size: 1.5rem; font-weight: bold; color: #343a40;">SU #1 <i class="fas fa-pencil-alt text-muted fs-6"></i></div>
                     <div>
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">RESET</button>
-                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">Beam Info</button>
+                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" onclick="openBeamInfoModal()">Beam Info</button>
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">Alarm Mask</button>
                         <button class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
                     </div>
@@ -4770,7 +4477,13 @@
                     <div style="font-size: 1.2rem; font-weight: bold; color: #343a40; background-color: #6c757d; color: white; padding: 8px 16px; border-radius: 4px;">
                         Sync Module
                     </div>
-                    <button class="btn btn-secondary btn-sm">Set Mode</button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-secondary btn-sm">3Gpp Format Form</button>
+                        <button class="btn btn-secondary btn-sm">Slot Format Form</button>
+                        <button class="btn btn-secondary btn-sm">3Gpp Format Load</button>
+                        <button class="btn btn-secondary btn-sm">Slot Format Load</button>
+                        <button class="btn btn-secondary btn-sm">Set Mode</button>
+                    </div>
                 </div>
 
                 <!-- Slot Format Section -->
@@ -4794,7 +4507,7 @@
                                       {% for col in range(row, row + 20) %}
                                       <td>
                                         <div style="font-weight: bold; margin-bottom: 6px;">{{ col }}</div>
-                                        <input type="text" class="form-control form-control-sm mt-1" style="height: 15px; font-size: 0.5rem; padding: 1px 3px; text-align: center;" value="">
+                                        <input id="slot_format_{{ col }}" type="text" class="form-control form-control-sm mt-1" style="height: 15px; font-size: 0.5rem; padding: 1px 3px; text-align: center;" value="">
                                       </td>
                                       {% endfor %}
                                     </tr>
@@ -4814,22 +4527,25 @@
                         <div class="col-md-3 px-2">
                             <div class="sync-card">
                                 <div class="sync-label">TTG CTRL #1</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="ttg_ctrl_1" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">RTG CTRL #1</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="rtg_ctrl_1" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC Delay #1</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="tsync_delay_1" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #1</div>
-                                <select class="form-select form-select-sm mb-2">
-                                    <option selected>DL(L)</option>
+                                <select id="tsync_out_sel_1" class="form-select form-select-sm mb-2">
+                                    <option value="0">AUTO</option>
+                                    <option value="1">DL(L)</option>
+                                    <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #1</div>
-                                <select class="form-select form-select-sm">
-                                    <option selected>NORMAL</option>
+                                <select id="tsync_out_mode_1" class="form-select form-select-sm">
+                                    <option value="0">NORMAL</option>
+                                    <option value="1">INVERT</option>
                                 </select>
                             </div>
                         </div>
@@ -4838,22 +4554,25 @@
                         <div class="col-md-3 px-2">
                             <div class="sync-card">
                                 <div class="sync-label">TTG CTRL #2</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="ttg_ctrl_2" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">RTG CTRL #2</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="rtg_ctrl_2" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC Delay #2</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="tsync_delay_2" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #2</div>
-                                <select class="form-select form-select-sm mb-2">
-                                    <option selected>DL(L)</option>
+                                <select id="tsync_out_sel_2" class="form-select form-select-sm mb-2">
+                                    <option value="0">AUTO</option>
+                                    <option value="1">DL(L)</option>
+                                    <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #2</div>
-                                <select class="form-select form-select-sm">
-                                    <option selected>NORMAL</option>
+                                <select id="tsync_out_mode_2" class="form-select form-select-sm">
+                                    <option value="0">NORMAL</option>
+                                    <option value="1">INVERT</option>
                                 </select>
                             </div>
                         </div>
@@ -4862,22 +4581,25 @@
                         <div class="col-md-3 px-2">
                             <div class="sync-card">
                                 <div class="sync-label">TTG CTRL #3</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="ttg_ctrl_3" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">RTG CTRL #3</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="rtg_ctrl_3" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC Delay #3</div>
-                                <div class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">0.0 [us]</div>
+                                <div id="tsync_delay_3" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #3</div>
-                                <select class="form-select form-select-sm mb-2">
-                                    <option selected>DL(L)</option>
+                                <select id="tsync_out_sel_3" class="form-select form-select-sm mb-2">
+                                    <option value="0">AUTO</option>
+                                    <option value="1">DL(L)</option>
+                                    <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #3</div>
-                                <select class="form-select form-select-sm">
-                                    <option selected>NORMAL</option>
+                                <select id="tsync_out_mode_3" class="form-select form-select-sm">
+                                    <option value="0">NORMAL</option>
+                                    <option value="1">INVERT</option>
                                 </select>
                             </div>
                         </div>
@@ -4886,13 +4608,17 @@
                         <div class="col-md-3 px-2">
                             <div class="sync-card">
                                 <div class="sync-label">SSB MU</div>
-                                <select class="form-select form-select-sm mb-2">
-                                    <option selected>240K</option>
+                                <select id="ssb_mu" class="form-select form-select-sm mb-2">
+                                    <option value="120">120K</option>
+                                    <option value="240">240K</option>
                                 </select>
 
                                 <div class="sync-label">TDD Rate</div>
-                                <select class="form-select form-select-sm">
-                                    <option selected>4:1</option>
+                                <select id="tdd_rate" class="form-select form-select-sm">
+                                    <option value="0">4:1</option>
+                                    <option value="1">DL</option>
+                                    <option value="2">UL</option>
+                                    <option value="3">CUS</option>
                                 </select>
                             </div>
                         </div>
@@ -4901,8 +4627,8 @@
 
                 <!-- Frequency Bar -->
                 <div class="frequency-bar" style="margin-top: 1rem;">
-                    <div>Frequency &nbsp;&nbsp; <input type="text" class="form-control form-control-sm" value="28086.24" style="display: inline-block; width: 120px; margin-left: 10px;"> &nbsp; [MHz]</div>
-                    <div>ARFCN &nbsp;&nbsp; <input type="text" class="form-control form-control-sm" value="2080603" style="display: inline-block; width: 100px; margin-left: 10px;"></div>
+                    <div>Frequency &nbsp;&nbsp; <div id="TDD_Freq2" class="form-control form-control-sm" style="display: inline-block; width: 120px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A</div> &nbsp; [MHz]</div>
+                    <div>ARFCN &nbsp;&nbsp; <div id="TDD_Arfcn2" class="form-control form-control-sm" style="display: inline-block; width: 100px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A</div></div>
                 </div>
 
                 <!-- Slot 3gpp Format Section -->
@@ -4935,10 +4661,10 @@
                                         <!-- Dropdowns -->
                                         {% for col in range(14) %}
                                         <td style="text-align: center; border: 1px solid #dee2e6;">
-                                            <select style="font-size: 0.75rem; padding: 2px 4px; width: 100%; border: none; background: transparent;">
-                                                <option>D</option>
-                                                <option>U</option>
-                                                <option>F</option>
+                                            <select id="slot_3gpp_format_{{ row }}_{{ col }}" class="slot-3gpp-format-select" data-row="{{ row }}" data-col="{{ col }}" style="font-size: 0.75rem; padding: 2px 4px; width: 100%; border: none; background: transparent;">
+                                                <option value="0">D</option>
+                                                <option value="1">U</option>
+                                                <option value="2">F</option>
                                             </select>
                                         </td>
                                         {% endfor %}
@@ -4953,9 +4679,9 @@
                 <!-- F Mode Section -->
                 <div class="mb-4" style="margin-top: 2rem;">
                     <div class="frequency-bar">
-                        <div>F Mode &nbsp;&nbsp; <select class="form-select form-select-sm" style="display: inline-block; width: 120px; margin-left: 10px;">
-                            <option selected>UL</option>
-                            <option>DL</option>
+                        <div>F Mode &nbsp;&nbsp; <select id="F_Mode" class="form-select form-select-sm" style="display: inline-block; width: 120px; margin-left: 10px;">
+                            <option value="0">DL</option>
+                            <option value="1">UL</option>
                         </select></div>
                     </div>
                 </div>
@@ -5617,28 +5343,43 @@
         function goToStep6() {
             bootstrap.Modal.getInstance(document.getElementById('InitialSetupModal'))?.hide();
             if (timeLeft <= 0) return;
-            new bootstrap.Modal(document.getElementById('BtapnSetupModal')).show();
+            new bootstrap.Modal(document.getElementById('SuSetupModal')).show();
             updateTimerDisplays();
         }
 
         function backToInitialSetup() {
-            bootstrap.Modal.getInstance(document.getElementById('BtapnSetupModal'))?.hide();
+            bootstrap.Modal.getInstance(document.getElementById('SuSetupModal'))?.hide();
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('InitialSetupModal')).show();
             updateTimerDisplays();
         }
 
         function goToStep7() {
-            bootstrap.Modal.getInstance(document.getElementById('BtapnSetupModal'))?.hide();
+            // SuSetupModal을 닫기 (Step 6/7)
+            const suModal = bootstrap.Modal.getInstance(document.getElementById('SuSetupModal'));
+            if (suModal) {
+                suModal.hide();
+            }
+            
             if (timeLeft <= 0) return;
-            new bootstrap.Modal(document.getElementById('FinalSetupModal')).show();
+            
+            // FinalSetupModal 열기 (Step 7/7)
+            const finalModal = new bootstrap.Modal(document.getElementById('FinalSetupModal'));
+            finalModal.show();
             updateTimerDisplays();
         }
 
         function backToBtapnSetup() {
-            bootstrap.Modal.getInstance(document.getElementById('FinalSetupModal'))?.hide();
+            // FinalSetupModal을 닫기 (Step 7/7)
+            const finalModal = bootstrap.Modal.getInstance(document.getElementById('FinalSetupModal'));
+            if (finalModal) {
+                finalModal.hide();
+            }
+            
             if (timeLeft <= 0) return;
-            new bootstrap.Modal(document.getElementById('BtapnSetupModal')).show();
+            
+            // SuSetupModal 열기 (Step 6/7)
+            new bootstrap.Modal(document.getElementById('SuSetupModal')).show();
             updateTimerDisplays();
         }
 
@@ -5865,6 +5606,35 @@
              else if (screenId === 'su2_content') {
                 showInfoModal('SU #2 화면 전환 기능은 아직 구현되지 않았습니다.');
             }
+
+            // 화면 전환 시 모든 모달 닫기
+            closeAllModals();
+        }
+
+        // 모든 모달 닫기 함수
+        function closeAllModals() {
+            // Bootstrap 모달 인스턴스들 가져오기
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modalElement => {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                } else {
+                    // 모달 인스턴스가 없으면 직접 숨기기
+                    modalElement.style.display = 'none';
+                    modalElement.classList.remove('show');
+                    // backdrop 제거
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
+                }
+            });
+            
+            // body에서 modal-open 클래스 제거
+            document.body.classList.remove('modal-open');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
         }
 
 
@@ -5921,6 +5691,9 @@
                 }
             };
 
+            
+            // Sync Module 데이터 업데이트
+            updateSyncModuleData(data);
             
             // TDD Setup 업데이트
             // Frequency 업데이트 (서버에서 이미 변환된 값)
@@ -6832,14 +6605,42 @@
 
         // Alarm Level 모달을 여는 함수
         function openAlarmLevelModal() {
-            const alarmModal = new bootstrap.Modal(document.getElementById('alarmLevelModal'));
-            alarmModal.show();
+            const modalElement = document.getElementById('alarmLevelModal');
+            if (modalElement) {
+                // 기존 모달 인스턴스가 있다면 제거
+                const existingModal = bootstrap.Modal.getInstance(modalElement);
+                if (existingModal) {
+                    existingModal.dispose();
+                }
+                
+                // 새로운 모달 인스턴스 생성
+                const modal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                
+                modal.show();
+            }
         }
 
         // Alarm History 모달을 여는 함수
         function openAlarmHistoryModal() {
-            const alarmHistoryModal = new bootstrap.Modal(document.getElementById('alarmHistoryModal'));
-            alarmHistoryModal.show();
+            const modalElement = document.getElementById('alarmHistoryModal');
+            if (modalElement) {
+                // 기존 모달 인스턴스가 있다면 제거
+                const existingModal = bootstrap.Modal.getInstance(modalElement);
+                if (existingModal) {
+                    existingModal.dispose();
+                }
+                
+                // 새로운 모달 인스턴스 생성
+                const modal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                
+                modal.show();
+            }
         }
 
 
@@ -7102,46 +6903,151 @@
         }
 
         // Sync Module 데이터 업데이트 함수
-        function updateSyncModuleData() {
-            // Sync Module 화면에서 사용할 데이터 업데이트 로직
-            console.log('Sync Module 데이터 업데이트');
+        function updateSyncModuleData(data) {
+            if (!data || !data.packet) {
+                console.log('Sync Module 데이터가 없습니다.');
+                return;
+            }
+
+            console.log('Sync Module 데이터 업데이트:', data.packet);
+
+            // Channel 1 업데이트
+            updateSyncValue('ttg_ctrl_1', data.packet.TTG_CTRL1, 'us');
+            updateSyncValue('rtg_ctrl_1', data.packet.RTG_CTRL1, 'us');
+            updateSyncValue('tsync_delay_1', data.packet.TSYNC_DELAY1, 'us');
+            updateSyncSelect('tsync_out_sel_1', data.packet.TSYNC_OUT_SEL1);
+            updateSyncSelect('tsync_out_mode_1', data.packet.TSYNC_OUT_SEL1);
+
+            // Channel 2 업데이트
+            updateSyncValue('ttg_ctrl_2', data.packet.TTG_CTRL2, 'us');
+            updateSyncValue('rtg_ctrl_2', data.packet.RTG_CTRL2, 'us');
+            updateSyncValue('tsync_delay_2', data.packet.TSYNC_DELAY2, 'us');
+            updateSyncSelect('tsync_out_sel_2', data.packet.TSYNC_OUT_SEL2);
+            updateSyncSelect('tsync_out_mode_2', data.packet.TSYNC_OUT_SEL2);
+
+            // Channel 3 업데이트
+            updateSyncValue('ttg_ctrl_3', data.packet.TTG_CTRL3, 'us');
+            updateSyncValue('rtg_ctrl_3', data.packet.RTG_CTRL3, 'us');
+            updateSyncValue('tsync_delay_3', data.packet.TSYNC_DELAY3, 'us');
+            updateSyncSelect('tsync_out_sel_3', data.packet.TSYNC_OUT_SEL3);
+            updateSyncSelect('tsync_out_mode_3', data.packet.TSYNC_OUT_SEL3);
+
+            // Frequency, ARFCN, F_Mode 업데이트
+            updateSyncValue('TDD_Freq2', data.packet.TDD_Freq);
+            updateSyncValue('TDD_Arfcn2', data.packet.TDD_Arfcn);
+            updateSyncSelect('F_Mode', data.packet.F_Mode);
+
+                                // Slot Format 업데이트 (160개)
+                    if (data.packet.TDD_Slot_Format) {
+                        // ArrayBuffer를 Uint8Array로 변환
+                        const slotFormatArray = new Uint8Array(data.packet.TDD_Slot_Format);
+                        updateSlotFormat(Array.from(slotFormatArray));
+                    }
+
+                    // Slot 3gpp Format 업데이트 (56x14 = 784개)
+                    if (data.packet.TDD_3gpp_table) {
+                        // ArrayBuffer를 Uint8Array로 변환
+                        const slot3gppArray = new Uint8Array(data.packet.TDD_3gpp_table);
+                        updateSlot3gppFormat(Array.from(slot3gppArray));
+                    }
+        }
+
+        // Sync Module 값 업데이트 헬퍼 함수
+        function updateSyncValue(elementId, value, unit = '') {
+            const element = document.getElementById(elementId);
+            if (element) {
+                if (value === -999 || value === undefined) {
+                    element.textContent = unit ? `N/A [${unit}]` : 'N/A';
+                } else {
+                    // app.py에서 이미 변환된 값 사용, 단위 유지
+                    element.textContent = unit ? `${value} [${unit}]` : value;
+                }
+            }
+        }
+
+        // Sync Module select 업데이트 헬퍼 함수
+        function updateSyncSelect(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                if (value === -999 || value === undefined) {
+                    element.selectedIndex = 0; // 기본값
+                } else {
+                    // TSYNC_OUT_SEL: Bit[1:0] 처리
+                    if (elementId.includes('tsync_out_sel')) {
+                        const selValue = value & 0x03; // Bit[1:0]만 추출
+                        element.value = selValue.toString();
+                    }
+                    // TSYNC_OUT_MODE: Bit 7 처리
+                    else if (elementId.includes('tsync_out_mode')) {
+                        const modeValue = (value >> 7) & 0x01; // Bit 7만 추출
+                        element.value = modeValue.toString();
+                    }
+                    // F_Mode 처리 (0=DL, 1=UL)
+                    else if (elementId === 'F_Mode') {
+                        element.value = value.toString();
+                    }
+                }
+            }
+        }
+
+        // Sync Module input 업데이트 헬퍼 함수
+        function updateSyncInput(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                if (value === -999 || value === undefined) {
+                    element.value = 'N/A';
+                } else {
+                    element.value = value;
+                }
+            }
+        }
+
+        // Slot Format 업데이트 헬퍼 함수 (160개)
+        function updateSlotFormat(slotFormatData) {
+            for (let i = 0; i < 160; i++) {
+                const element = document.getElementById(`slot_format_${i}`);
+                if (element && slotFormatData[i] !== undefined) {
+                    element.value = slotFormatData[i];
+                }
+            }
+        }
+
+        // Slot 3gpp Format 업데이트 헬퍼 함수 (56x14 = 784개)
+        function updateSlot3gppFormat(slot3gppData) {
+            for (let row = 0; row < 56; row++) {
+                for (let col = 0; col < 14; col++) {
+                    const index = row * 14 + col;
+                    const element = document.getElementById(`slot_3gpp_format_${row}_${col}`);
+                    if (element && slot3gppData[index] !== undefined) {
+                        // 0=D, 1=U, 2=F
+                        element.value = slot3gppData[index].toString();
+                    }
+                }
+            }
         }
 
         // User Management Modal 열기 함수
         function openUserManagementModal() {
-            const modal = new bootstrap.Modal(document.getElementById('userMgmtModal'));
-            modal.show();
-            
-            // 모달이 열린 후 이벤트 리스너 설정
-            setTimeout(function() {
-                setupUserManagementEvents();
-            }, 100);
-        }
-
-        // Beam Info Modal 열기 함수
-        function openBeamInfoModal() {
-            const modal = new bootstrap.Modal(document.getElementById('beamInfoModal'));
-            modal.show();
-            
-            // Save 버튼 이벤트 리스너 설정
-            setTimeout(function() {
-                setupBeamInfoEvents();
-            }, 100);
-        }
-
-        // Beam Info 이벤트 리스너 설정 함수
-        function setupBeamInfoEvents() {
-            const saveBtn = document.getElementById('beamSaveBtn');
-            if (saveBtn) {
-                saveBtn.addEventListener('click', function(){
-                    // TODO: 값 수집 & 서버 전송
-                    console.log('Beam Info saved');
-                    // 저장 후 닫기
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('beamInfoModal'));
-                    if (modal) {
-                        modal.hide();
-                    }
+            const modalElement = document.getElementById('userMgmtModal');
+            if (modalElement) {
+                // 기존 모달 인스턴스가 있다면 제거
+                const existingModal = bootstrap.Modal.getInstance(modalElement);
+                if (existingModal) {
+                    existingModal.dispose();
+                }
+                
+                // 새로운 모달 인스턴스 생성
+                const modal = new bootstrap.Modal(modalElement, {
+                    backdrop: 'static',
+                    keyboard: false
                 });
+                
+                modal.show();
+                
+                // 모달이 열린 후 이벤트 리스너 설정
+                setTimeout(function() {
+                    setupUserManagementEvents();
+                }, 100);
             }
         }
 
@@ -7298,8 +7204,364 @@
             }
         }
 
+        // ===== Beam Info Modal Functions =====
+        function openBeamInfoModal() {
+            const modal = new bootstrap.Modal(document.getElementById('beaminfo2'));
+            modal.show();
+        }
+
+        function closeModal(modalId) {
+            const modalElement = document.getElementById(modalId);
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) {
+                    modal.hide();
+                }
+            }
+        }
+
+        // Close modal when clicking outside (Bootstrap handles this automatically)
+        // No need for custom window.onclick handler
+
+        // Save button event listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const saveBtn = document.getElementById('beamSaveBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function() {
+                    // 여기에 저장 로직을 추가할 수 있습니다
+                    alert('Beam Info saved successfully!');
+                    closeModal('beaminfo2');
+                });
+            }
+        });
+
     </script>
 
+    <!-- Beam Info Modal -->
+    <div id="beaminfo2" class="modal fade" tabindex="-1" aria-labelledby="beaminfo2Label" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" style="width: 800px;">
+            <div class="modal-content" style="border-radius: 8px; overflow: hidden; border: none;">
+
+                <!-- Modal Header -->
+                <div class="modal-header" style="background-color: #888; color: white; padding: 10px; border-radius: 8px 8px 0 0; margin: 0;">
+                    <span><i class="bi bi-plus-square"></i> Beam Info</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: white;"></button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body" style="background-color: #e0e0e0; padding: 20px;">
+
+                    <!-- DU Section -->
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                        <tr>
+                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px;">
+                                <i class="bi bi-folder"></i> DU
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 80px;">Latitude</td>
+                            <td><input type="text" style="width: 100%;"></td>
+                            <td style="width: 80px;">Longitude</td>
+                            <td><input type="text" style="width: 100%;"></td>
+                        </tr>
+                        <tr>
+                            <td>Azimuth:</td>
+                            <td>Orientation [ 0 ]</td>
+                            <td>Tilt</td>
+                            <td>[ 0 ]</td>
+                        </tr>
+                    </table>
+
+                    <!-- SU Section -->
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px;">
+                                <i class="bi bi-folder"></i> SU
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>SU#1</td>
+                            <td>Latitude <input type="text" style="width: 80px;"></td>
+                            <td>Longitude <input type="text" style="width: 80px;"></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Azimuth:</td>
+                            <td>Orientation [ ]</td>
+                            <td>Tilt</td>
+                            <td>[ ]</td>
+                        </tr>
+                        <tr>
+                            <td>Remark</td>
+                            <td colspan="3">
+                                <textarea style="width: 100%; height: 60px;"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <!-- Footer buttons (Bootstrap 5) -->
+                <div class="d-flex justify-content-center py-4" style="gap:8px;">
+                    <button type="button" class="btn" data-bs-dismiss="modal"
+                            style="background:#6b7280; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
+                        Cancel
+                    </button>
+                    <button type="button" id="beamSaveBtn" class="btn"
+                            style="background:#667089; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
+                        Save
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+                    
+    <!-- User Management Modal -->
+    <div class="modal fade" id="userMgmtModal" tabindex="-1" data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content" style="background:#efefef; border:0;">
+                <!-- Title bar -->
+                <div class="d-flex align-items-center justify-content-between px-3 py-2"
+                     style="background:#7a7f82; color:#fff; border-radius:8px 8px 0 0;">
+                    <div class="d-flex align-items-center">
+                        <span style="width:22px;height:22px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:10px;">+</span>
+                        <span style="font-size:1.1rem;">User Management</span>
+                    </div>
+                    <button type="button" class="btn-close text-white m-0 p-0" data-bs-dismiss="modal" aria-label="Close" style="font-size:28px; line-height:1;"></button>
+                </div>
+
+                <div class="px-3 pt-3 pb-0">
+                    <!-- Search row -->
+                    <div class="d-flex align-items-center mb-3" style="gap:14px;">
+                        <div class="dropdown">
+                            <button class="btn btn-light dropdown-toggle d-flex align-items-center"
+                                    type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    style="min-width:180px; justify-content:space-between;">
+                                <span id="userFilterFieldLabel">User ID</span>
+                    </button>
+                            <ul class="dropdown-menu" id="userFilterFieldMenu">
+                                <li><a class="dropdown-item" href="#" data-field="id">User ID</a></li>
+                                <li><a class="dropdown-item" href="#" data-field="name">Name</a></li>
+                                <li><a class="dropdown-item" href="#" data-field="level">Level Name</a></li>
+                                <li><a class="dropdown-item" href="#" data-field="email">E-mail</a></li>
+                            </ul>
+                </div>
+
+                        <div class="position-relative" style="flex:1 1 auto; max-width:540px;">
+                            <input type="text" id="userSearch" class="form-control" placeholder="Search…" style="padding-right:42px;">
+                            <span style="position:absolute; right:12px; top:50%; transform:translateY(-50%); opacity:.6;">🔍</span>
+                        </div>
+
+                        <div class="ml-auto d-flex" style="gap:10px;">
+                            <button class="btn btn-success">Add</button>
+                            <button class="btn btn-primary">Modify</button>
+                            <button class="btn btn-danger">Delete</button>
+            </div>
+        </div>
+
+                    <!-- Table -->
+                    <div class="bg-white rounded" style="border:1px solid #cfd3d8;">
+                        <div class="table-responsive" style="max-height:52vh; overflow:auto;">
+                            <table class="table table-sm mb-0">
+                                <thead style="background:#74767a; color:#fff; position:sticky; top:0; z-index:2;">
+                                    <tr>
+                                        <th style="min-width:160px;">ID</th>
+                                        <th style="min-width:160px;">Name</th>
+                                        <th style="min-width:180px;">Level Name</th>
+                                        <th style="min-width:240px;">E-mail</th>
+                                        <th style="min-width:110px;">Recv Y/N</th>
+                                        <th style="min-width:150px;">Tel</th>
+                                        <th style="min-width:260px;">Remark</th>
+                                        <th style="min-width:160px;">Update ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userBody">
+                                    <!-- JS renders -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Footer: status + pagination + Cancel -->
+                    <div class="d-flex align-items-center justify-content-between mt-3 mb-4">
+                        <div class="text-muted" id="userStatus">Showing 1 page of 1 pages</div>
+
+                        <ul id="userPager" class="pagination pagination-sm mb-0">
+                            <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="prev">Previous</a></li>
+                            <!-- windowed page buttons (3 visible) will be injected here -->
+                            <li class="page-item"><a class="page-link" href="#" data-act="next">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="last">&raquo;</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="d-flex justify-content-center pb-4">
+                        <button class="btn" data-bs-dismiss="modal"
+                                style="background:#6b7280; color:#fff; font-weight:700; padding:.6rem 1.6rem; border-radius:8px;">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alarm Level Modal -->
+    <div class="modal fade" id="alarmLevelModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content" style="background:#d9d9db; border:0;">
+                <!-- 상단 타이틀 바 -->
+                <div class="d-flex align-items-center justify-content-between px-3 py-2"
+                     style="background:#7a7f82; color:#fff; border-radius:12px 12px 0 0;">
+                    <div class="d-flex align-items-center">
+                        <span style="width:20px;height:20px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:8px;">+</span>
+                        <span style="font-size:1.05rem;">Alarm Level</span>
+                    </div>
+                    <!-- BS5 닫기 버튼 -->
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <!-- 본문 -->
+                <div class="px-3 pt-2 pb-0" style="background:#eeeeef;">
+                    <!-- 우상단 버튼 -->
+                    <div class="d-flex justify-content-end my-2">
+                        <button class="btn btn-primary btn-sm me-2">Modify</button>
+                        <button class="btn btn-success btn-sm">Config</button>
+                    </div>
+
+                    <!-- 테이블 컨테이너 -->
+                    <div class="bg-white rounded" style="border:1px solid #c9c9cf;">
+                        <div class="table-wrap" style="max-height:58vh; overflow:auto; position:relative;">
+                            <table class="table table-sm m-0 text-center">
+                                <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd;">
+                                    <tr>
+                                        <th style="min-width:110px; text-align:center;">Equip</th>
+                                        <th style="min-width:140px; text-align:center;">Alarm Level</th>
+                                        <th style="min-width:140px; text-align:center;">Module Name</th>
+                                        <th style="min-width:160px; text-align:center;">Sub Module Name</th>
+                                        <th style="min-width:220px; text-align:center;">Item Name</th>
+                                        <th style="min-width:140px; text-align:center;">Alarm Mask</th>
+                                        <th style="min-width:140px; text-align:center;">Update ID</th>
+                                    </tr>
+                                    <!-- 필터 행 (보기만) -->
+                                    <tr>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                        <th><input class="form-control form-control-sm text-center" /></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- 하드코딩 데이터 시작 -->
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Warning</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">EMS DU LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">FPGA LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Ant. Array Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">IF PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL LD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL LD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#1 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#2 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#3 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">SU#4 Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">UL PD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">UL PD Lower</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Decoding</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Sync PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">TSYNC LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">AC</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">BAT</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">DC</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Minor</td><td style="text-align:center;">Download</td><td style="text-align:center;"></td><td style="text-align:center;">Download</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">DU</td><td style="text-align:center;">Minor</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Temp</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">MIMO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;">SISO</td><td style="text-align:center;">DL ALC Level</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Major</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">DU LINK</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">Ant. Array Link</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <tr><td style="text-align:center;">SU #1</td><td style="text-align:center;">Critical</td><td style="text-align:center;">Main</td><td style="text-align:center;"></td><td style="text-align:center;">IF PLL</td><td style="color:#d9534f; text-align:center;">Not Use</td><td style="text-align:center;"></td></tr>
+                                    <!-- 필요시 더 추가 -->
+                                    <!-- 하드코딩 데이터 끝 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 하단 푸터 -->
+                    <div class="d-flex justify-content-center py-3" style="background:#eeeeef; border-radius:0 0 12px 12px;">
+                        <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alarm History Modal -->
+    <div class="modal fade" id="alarmHistoryModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content" style="background:#d9d9db; border:0;">
+                <!-- Title bar -->
+                <div class="d-flex align-items-center justify-content-between px-3 py-2"
+                     style="background:#7a7f82; color:#fff; border-radius:12px 12px 0 0;">
+                    <div class="d-flex align-items-center">
+                        <span style="width:20px;height:20px;border:2px solid #fff;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-weight:700;margin-right:8px;">+</span>
+                        <span style="font-size:1.05rem;">Alarm History</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="px-3 pt-2 pb-0" style="background:#eeeeef;">
+                    <!-- Right action buttons -->
+                    <div class="d-flex justify-content-end my-2">
+                        <button class="btn btn-danger btn-sm me-2">Delete</button>
+                        <button class="btn btn-success btn-sm">Excel</button>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="bg-white rounded" style="border:1px solid #c9c9cf;">
+                        <div class="table-wrap" style="max-height:58vh; overflow:auto; position:relative;">
+                            <table class="table table-sm m-0">
+                                <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd;">
+                                    <tr>
+                                        <th style="min-width:150px;">Alarm Level</th>
+                                        <th style="min-width:380px;">Alarm Message</th>
+                                        <th style="min-width:180px;">Alarm Date</th>
+                                        <th style="min-width:120px;">Clear Y/N</th>
+                                        <th style="min-width:180px;">Clear Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="histBody">
+                                    <!-- JS가 렌더링 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Footer: status + pagination + cancel -->
+                    <div class="d-flex align-items-center justify-content-between py-3" style="background:#eeeeef;">
+                        <div id="histPageStatus" class="text-muted small ms-1" style="min-width: 150px; font-weight: bold; color: #666 !important;">Showing 1 of 8 pages</div>
+
+                        <ul id="histPager" class="pagination pagination-sm mb-0">
+                            <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="prev">&lsaquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="next">&rsaquo;</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="last">&raquo;</a></li>
+                        </ul>
+
+                        <button class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>
