@@ -1048,7 +1048,7 @@
                     <span style="font-weight: bold;">DU</span>
                 </div>
 
-                <div class="su-item" id="nav_su1" onclick="showScreen('su1_content')">
+                <div class="su-item" id="nav_su1" data-page-key="dashboard" onclick="showScreen('su1_content')">
                     <div class="du-item-circle status-circle" id="su1_nav_dot"></div> <!-- status-circle 클래스 추가 -->
                     <span>SU #1</span>
                 </div>
@@ -4699,6 +4699,153 @@
     <script>
         // ✅ 통합된 JavaScript
         let socket = io();
+
+        // 1) 어떤 페이지/모달에서 어떤 패킷을 돌릴지 선언 (원하면 키만 추가)
+        //    값이 true면 1초 폴링, false/null이면 안 돌림
+        const PAGE_POLL = {
+            dashboard: { update: true,  tdd: false }, // 예: 대시보드는 update_status만
+            alarms:    { update: true,  tdd: false },
+            tddview:   { update: false, tdd: true  }, // 예: TDD 전용 페이지
+            // 필요시 추가...
+        };
+
+        const MODAL_POLL = {
+            '#tddModal':    { tdd: true  }, // 예: TDD 모달 열리면 tdd_status
+            '#statusModal': { update: true }, // 예: 상태 모달 열리면 update_status
+            '#alarmLevelModal': { update: true }, // 알람 레벨 모달: update_status 폴링
+            '#alarmHistoryModal': { update: true }, // 알람 히스토리 모달: update_status 폴링
+            '#userMgmtModal': { update: true }, // 사용자 관리 모달: update_status 폴링
+            '#beaminfo2': { update: true, tdd: true }, // 빔 정보 모달: update_status + tdd_status 폴링
+            // 필요시 추가...
+        };
+
+        // 2) 타이머 매니저 (한 종류당 타이머 1개만 유지)
+        const PollManager = (() => {
+            const timers = {};
+            const start = (key, fn, interval=1000) => {
+                if (timers[key]) return;
+                fn(); // 즉시 1회
+                timers[key] = setInterval(fn, interval);
+                console.log(`[POLL] start ${key} (${interval}ms)`);
+            };
+            const stop = (key) => {
+                if (!timers[key]) return;
+                clearInterval(timers[key]);
+                delete timers[key];
+                console.log(`[POLL] stop ${key}`);
+            };
+            return { start, stop };
+        })();
+
+        // 3) 활성 소스(페이지/모달) 집합으로 필요 여부를 계산
+        const active = { update: new Set(), tdd: new Set() };
+        let currentPage = null;
+        let currentPageKeys = { update: null, tdd: null }; // 현재 페이지가 등록한 소스
+
+        function reconcile() {
+            if (active.update.size > 0) {
+                PollManager.start('update', () => socket.emit('request_update_status'), 1000);
+            } else {
+                PollManager.stop('update');
+            }
+            if (active.tdd.size > 0) {
+                PollManager.start('tdd', () => socket.emit('request_tdd_status'), 1000);
+            } else {
+                PollManager.stop('tdd');
+            }
+        }
+
+        // 4) 페이지 전환 처리: PAGE_POLL에 따라 active 집합 갱신
+        function enterPage(pageKey) {
+            currentPage = pageKey;
+
+            // 이전 페이지 기여 제거
+            if (currentPageKeys.update) active.update.delete(currentPageKeys.update);
+            if (currentPageKeys.tdd)    active.tdd.delete(currentPageKeys.tdd);
+            currentPageKeys = { update: null, tdd: null };
+
+            const cfg = PAGE_POLL[pageKey] || {};
+            if (cfg.update) {
+                currentPageKeys.update = `page:${pageKey}`;
+                active.update.add(currentPageKeys.update);
+            }
+            if (cfg.tdd) {
+                currentPageKeys.tdd = `page:${pageKey}`;
+                active.tdd.add(currentPageKeys.tdd);
+            }
+            console.log(`[PAGE] enter ${pageKey}`, cfg);
+            reconcile();
+        }
+
+        // 5) 모달 열림/닫힘 처리: MODAL_POLL에 따라 active 집합 갱신
+        function modalOpened(selector) {
+            const cfg = MODAL_POLL[selector] || {};
+            if (cfg.update) active.update.add(`modal:${selector}`);
+            if (cfg.tdd)    active.tdd.add(`modal:${selector}`);
+            console.log(`[MODAL] open ${selector}`, cfg);
+            reconcile();
+        }
+        function modalClosed(selector) {
+            active.update.delete(`modal:${selector}`);
+            active.tdd.delete(`modal:${selector}`);
+            console.log(`[MODAL] close ${selector}`);
+            reconcile();
+        }
+
+        // 6) 초기 페이지 지정 + 네비게이션/모달 훅 연결
+        document.addEventListener('DOMContentLoaded', () => {
+            // 초기 페이지 키를 너가 사용하는 현재 화면에 맞춰 지정
+            enterPage('dashboard'); // 예시: 대시보드부터 시작
+
+            // 네비게이션 버튼에 data-page-key 달아놓고 클릭 시 전환
+            document.querySelectorAll('[data-page-key]').forEach(el => {
+                el.addEventListener('click', () => enterPage(el.getAttribute('data-page-key')));
+            });
+
+            // Bootstrap 모달 예시: tddModal/statusModal이 Bootstrap 5 기준일 때
+            const tddModal    = document.getElementById('tddModal');
+            const statusModal = document.getElementById('statusModal');
+            const alarmLevelModal = document.getElementById('alarmLevelModal');
+            const alarmHistoryModal = document.getElementById('alarmHistoryModal');
+            const userMgmtModal = document.getElementById('userMgmtModal');
+            const beaminfo2 = document.getElementById('beaminfo2');
+
+            if (tddModal) {
+                tddModal.addEventListener('shown.bs.modal',  () => modalOpened('#tddModal'));
+                tddModal.addEventListener('hidden.bs.modal', () => modalClosed('#tddModal'));
+            }
+            if (statusModal) {
+                statusModal.addEventListener('shown.bs.modal',  () => modalOpened('#statusModal'));
+                statusModal.addEventListener('hidden.bs.modal', () => modalClosed('#statusModal'));
+            }
+            if (alarmLevelModal) {
+                alarmLevelModal.addEventListener('shown.bs.modal',  () => modalOpened('#alarmLevelModal'));
+                alarmLevelModal.addEventListener('hidden.bs.modal', () => modalClosed('#alarmLevelModal'));
+            }
+            if (alarmHistoryModal) {
+                alarmHistoryModal.addEventListener('shown.bs.modal',  () => modalOpened('#alarmHistoryModal'));
+                alarmHistoryModal.addEventListener('hidden.bs.modal', () => modalClosed('#alarmHistoryModal'));
+            }
+            if (userMgmtModal) {
+                userMgmtModal.addEventListener('shown.bs.modal',  () => modalOpened('#userMgmtModal'));
+                userMgmtModal.addEventListener('hidden.bs.modal', () => modalClosed('#userMgmtModal'));
+            }
+            if (beaminfo2) {
+                beaminfo2.addEventListener('shown.bs.modal',  () => modalOpened('#beaminfo2'));
+                beaminfo2.addEventListener('hidden.bs.modal', () => modalClosed('#beaminfo2'));
+            }
+        });
+
+        // 탭 비활성화되면 모두 정지 / 복귀 시 현재 활성 소스로 재가동
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                PollManager.stop('update');
+                PollManager.stop('tdd');
+            } else {
+                reconcile(); // active 집합 기준으로 재기동
+            }
+        });
+
         let autoCloseTimeout;
         let timerInterval;
         let usimTimerInterval;
@@ -5559,11 +5706,7 @@
             }
         }
 
-        // 패킷 요청 타이머 변수들
-        let updateStatusTimer = null;
-        let tddStatusTimer = null;
-
-        // 패킷 요청 함수들
+        // 패킷 요청 함수들 (간단한 래퍼)
         function requestUpdateStatus() {
             socket.emit('request_update_status');
             console.log('📤 Requested: update_status packet');
@@ -5572,48 +5715,6 @@
         function requestTddStatus() {
             socket.emit('request_tdd_status');
             console.log('📤 Requested: tdd_status packet');
-        }
-
-        // 패킷 요청 시작 함수들 (1초마다 반복)
-        function startUpdateStatusRequest() {
-            // 기존 타이머가 있으면 정리
-            if (updateStatusTimer) {
-                clearInterval(updateStatusTimer);
-            }
-            // 즉시 한 번 요청
-            requestUpdateStatus();
-            // 1초마다 반복 요청
-            updateStatusTimer = setInterval(requestUpdateStatus, 1000);
-            console.log('🔄 Started update_status request timer (1s interval)');
-        }
-
-        function startTddStatusRequest() {
-            // 기존 타이머가 있으면 정리
-            if (tddStatusTimer) {
-                clearInterval(tddStatusTimer);
-            }
-            // 즉시 한 번 요청
-            requestTddStatus();
-            // 1초마다 반복 요청
-            tddStatusTimer = setInterval(requestTddStatus, 1000);
-            console.log('🔄 Started tdd_status request timer (1s interval)');
-        }
-
-        // 패킷 요청 중지 함수들
-        function stopUpdateStatusRequest() {
-            if (updateStatusTimer) {
-                clearInterval(updateStatusTimer);
-                updateStatusTimer = null;
-                console.log('⏹️ Stopped update_status request timer');
-            }
-        }
-
-        function stopTddStatusRequest() {
-            if (tddStatusTimer) {
-                clearInterval(tddStatusTimer);
-                tddStatusTimer = null;
-                console.log('⏹️ Stopped tdd_status request timer');
-            }
         }
 
         // 화면 전환 함수
@@ -5646,30 +5747,30 @@
                 syncModuleContent.style.display = 'none';
             }
 
-            // 선택된 화면 표시 및 해당 패킷 요청 시작
+            // 선택된 화면 표시
             if (screenId === 'du_content') {
                 duContent.classList.add('active');
-                // DU 화면: update_status 패킷 요청 시작 (네비게이션 점, RX 박스 등)
-                startUpdateStatusRequest();
+                // DU 화면: dashboard 페이지로 설정 (update_status 폴링)
+                enterPage('dashboard');
             } else if (screenId === 'su1_content') {
                 su1Content.classList.add('active');
                 console.log('SU #1 content activated.'); // 디버깅 로그
-                // SU1 화면: update_status 패킷 요청 시작
-                startUpdateStatusRequest();
+                // SU1 화면: dashboard 페이지로 설정 (update_status 폴링)
+                enterPage('dashboard');
             } else if (screenId === 'packet_info') {
                 if (packetInfoContent) {
                     packetInfoContent.classList.add('active');
                     packetInfoContent.style.display = 'block';
                 }
-                // Packet Info 화면: update_status 패킷 요청 시작
-                startUpdateStatusRequest();
+                // Packet Info 화면: dashboard 페이지로 설정 (update_status 폴링)
+                enterPage('dashboard');
             } else if (screenId === 'sync_module') {
                 // Sync Module 화면 표시
                 if (syncModuleContent) {
                     syncModuleContent.style.display = 'block';
                 }
-                // Sync Module 화면: tdd_status 패킷 요청 시작 (Sync Module 데이터)
-                startTddStatusRequest();
+                // Sync Module 화면: tddview 페이지로 설정 (tdd_status 폴링)
+                enterPage('tddview');
             }
              // SU #2 화면이 활성화될 경우 (현재는 구현되지 않음)
              else if (screenId === 'su2_content') {
@@ -5827,6 +5928,7 @@
 
         });
 
+        // ------- 서버가 보내주는 파싱 완료 패킷 수신 (UI 업데이트) -------
         socket.on("update_status", function (data) {
             //console.log("📥 Received update_status:", data.packet);
 
@@ -6705,7 +6807,7 @@
         // Alarm Level 모달을 여는 함수
         function openAlarmLevelModal() {
             // Alarm Level 모달: update_status 패킷 요청 시작 (알람 상태 정보)
-            startUpdateStatusRequest();
+            modalOpened('#alarmLevelModal');
             
             const modalElement = document.getElementById('alarmLevelModal');
             if (modalElement) {
@@ -6728,7 +6830,7 @@
         // Alarm History 모달을 여는 함수
         function openAlarmHistoryModal() {
             // Alarm History 모달: update_status 패킷 요청 시작 (알람 히스토리 정보)
-            startUpdateStatusRequest();
+            modalOpened('#alarmHistoryModal');
             
             const modalElement = document.getElementById('alarmHistoryModal');
             if (modalElement) {
@@ -7134,7 +7236,7 @@
         // User Management Modal 열기 함수
         function openUserManagementModal() {
             // User Management 모달: update_status 패킷 요청 시작 (사용자 관리 정보)
-            startUpdateStatusRequest();
+            modalOpened('#userMgmtModal');
             
             const modalElement = document.getElementById('userMgmtModal');
             if (modalElement) {
@@ -7314,8 +7416,8 @@
 
         // ===== Beam Info Modal Functions =====
         function openBeamInfoModal() {
-            // Beam Info 모달: update_status 패킷 요청 시작 (빔 정보)
-            startUpdateStatusRequest();
+            // Beam Info 모달: update_status + tdd_status 패킷 요청 시작 (빔 정보 + 동기화 모듈)
+            modalOpened('#beaminfo2');
             
             const modal = new bootstrap.Modal(document.getElementById('beaminfo2'));
             modal.show();
@@ -7342,6 +7444,16 @@
                     // 여기에 저장 로직을 추가할 수 있습니다
                     alert('Beam Info saved successfully!');
                     closeModal('beaminfo2');
+                });
+            }
+
+            // beaminfo2 모달 이벤트 리스너 추가
+            const beaminfo2Modal = document.getElementById('beaminfo2');
+            if (beaminfo2Modal) {
+                beaminfo2Modal.addEventListener('hidden.bs.modal', function() {
+                    // 모달이 닫힐 때 tdd_status 패킷 요청 중지
+                    stopTddStatusRequest();
+                    console.log('[UI] 🔒 beaminfo2 modal closed, stopped tdd_status polling');
                 });
             }
         });

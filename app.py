@@ -97,33 +97,25 @@ def handle_hex_packet(data):
         return {"status": "error", "message": str(e)}
 
 @socketio.on('request_update_status')
-def handle_request_update_status():
-    """ update_status 패킷 요청 처리 """
+def handle_request_update_status(data=None):
     try:
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         print(f"[{current_time}] 📤 Client requested: update_status packet")
-        
-        # TODO: 실제 하드웨어에서 update_status 데이터를 가져와서 클라이언트로 전송
-        # 현재는 요청만 로그로 기록하고 실제 데이터 전송은 별도 구현 필요
-        
-        return {"status": "success", "message": "update_status request received"}
-        
+        # 시뮬레이터(test.py)에게 요청을 재전파
+        socketio.emit('request_update_status')
+        return {"status": "success", "message": "update_status request forwarded"}
     except Exception as e:
         print(f"❌ Update Status Request Error: {e}")
         return {"status": "error", "message": str(e)}
 
 @socketio.on('request_tdd_status')
-def handle_request_tdd_status():
-    """ tdd_status 패킷 요청 처리 """
+def handle_request_tdd_status(data=None):
     try:
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         print(f"[{current_time}] 📤 Client requested: tdd_status packet")
-        
-        # TODO: 실제 하드웨어에서 tdd_status 데이터를 가져와서 클라이언트로 전송
-        # 현재는 요청만 로그로 기록하고 실제 데이터 전송은 별도 구현 필요
-        
-        return {"status": "success", "message": "tdd_status request received"}
-        
+        # 시뮬레이터(test.py)에게 요청을 재전파
+        socketio.emit('request_tdd_status')
+        return {"status": "success", "message": "tdd_status request forwarded"}
     except Exception as e:
         print(f"❌ TDD Status Request Error: {e}")
         return {"status": "error", "message": str(e)}
