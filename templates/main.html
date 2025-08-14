@@ -4714,12 +4714,10 @@
 
         const MODAL_POLL = {
             // TDD 관련 모달들
-            '#tddModal':    { tdd: true  }, // TDD 모달: tdd_status만
             '#beaminfo2': { update: false, tdd: false }, // 빔 정보 모달: 둘 다 (빔 정보 + TDD 설정)
             '#beamInfoModal': { update: false, tdd: false }, // DU Beam Control 모달: 폴링 없음
             
             // 상태/설정 관련 모달들
-            '#statusModal': { update: true }, // 상태 모달: update_status만
             '#alarmLevelModal': { update: false, tdd: false }, // 알람 레벨 모달: update_status만
             '#alarmHistoryModal': { update: false, tdd: false }, // 알람 히스토리 모달: update_status만
             '#userMgmtModal': { update: false, tdd: false }, // 사용자 관리 모달: update_status만
@@ -4763,14 +4761,39 @@
         let currentPage = null;
         let currentPageKeys = { update: null, tdd: null }; // 현재 페이지가 등록한 소스
 
+        // TX 박스 깜빡임 함수
+        function pulseTxBox(onDuration = 200) {
+            // ON: TX 박스는 초록색으로
+            document.querySelectorAll('.tx-box').forEach(txbox => {
+                txbox.style.backgroundColor = 'green';  // TX는 초록색
+                txbox.style.color = 'black';            // 텍스트는 검정색
+            });
+            // OFF: 원래색 복원
+            setTimeout(() => {
+                document.querySelectorAll('.tx-box').forEach(txbox => {
+                    // txBoxState가 초기화되지 않았으면 기본값 사용
+                    const originalBg = txBoxState.originalBg || '#6c757d';
+                    const originalColor = txBoxState.originalColor || 'white';
+                    txbox.style.backgroundColor = originalBg;
+                    txbox.style.color = originalColor;
+                });
+            }, onDuration);
+        }
+
         function reconcile() {
             if (active.update.size > 0) {
-                PollManager.start('update', () => socket.emit('request_update_status'), 1000);
+                PollManager.start('update', () => {
+                    socket.emit('request_update_status');
+                    pulseTxBox();  // 요청 시점에 TX 깜빡
+                }, 1000);
             } else {
                 PollManager.stop('update');
             }
             if (active.tdd.size > 0) {
-                PollManager.start('tdd', () => socket.emit('request_tdd_status'), 1000);
+                PollManager.start('tdd', () => {
+                    socket.emit('request_tdd_status');
+                    pulseTxBox();  // 요청 시점에 TX 깜빡
+                }, 1000);
             } else {
                 PollManager.stop('tdd');
             }
@@ -4842,12 +4865,12 @@
 
         // 6) 초기 페이지 지정 + 네비게이션/모달 훅 연결
         document.addEventListener('DOMContentLoaded', () => {
-            // 초기 페이지 설정: 현재 활성화된 화면에 따라 폴링 설정
-            const activeContent = document.querySelector('.content-section.active') || 
-                                 document.querySelector('#du_content_display');
-            if (activeContent && activeContent.id === 'du_content_display') {
-                enterPage('dashboard'); // DU 메인화면이 활성화되어 있으면 update_status 폴링 시작
-            }
+            // 초기 페이지 설정: 자동 폴링 시작하지 않음 (사용자가 페이지 클릭할 때만 시작)
+            // const activeContent = document.querySelector('.content-section.active') || 
+            //                      document.querySelector('#du_content_display');
+            // if (activeContent && activeContent.id === 'du_content_display') {
+            //     enterPage('dashboard'); // DU 메인화면이 활성화되어 있으면 update_status 폴링 시작
+            // }
 
             // data-page-key 이벤트 리스너 제거 (showScreen에서 enterPage 호출로 통일)
 
@@ -5893,7 +5916,7 @@
         // TX 박스 켜기
         socket.on("tx_on", function () {
             document.querySelectorAll('.tx-box').forEach(txbox => {
-                txbox.style.backgroundColor = 'yellow';
+                txbox.style.backgroundColor = 'green';
                 txbox.style.color = 'black';
             });
             console.log("🟡 TX Box: ON");
