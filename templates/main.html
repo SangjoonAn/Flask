@@ -982,12 +982,12 @@
                 <span id="browser-time">Local: Loading...</span>
             </div>
             <div class="icon-container d-flex align-items-center">
-                <i class="fas fa-user me-3" style="cursor: pointer;" data-page-key="dashboard" onclick="openUserManagementModal()"></i> 
-                <i class="fas fa-compass me-3" style="cursor: pointer;" data-page-key="dashboard" onclick="openBeamInfoModal()"></i>                
+                <i class="fas fa-user me-3" style="cursor: pointer;" onclick="openUserManagementModal()"></i> 
+                <i class="fas fa-compass me-3" style="cursor: pointer;" onclick="openBeamInfoModal()"></i>                
                 <div style="position: relative; display: inline-block;" class="me-3">
-                    <i class="fas fa-bell" style="cursor: pointer;" data-page-key="alarms" onclick="openAlarmHistoryModal()"></i> <span class="badge rounded-pill bg-danger" style="position: absolute; top: -5px; right: -5px; font-size: 0.6em;">125</span>
+                    <i class="fas fa-bell" style="cursor: pointer;" onclick="openAlarmHistoryModal()"></i> <span class="badge rounded-pill bg-danger" style="position: absolute; top: -5px; right: -5px; font-size: 0.6em;">125</span>
                 </div>
-                <i class="fas fa-cog me-3" data-page-key="alarms" onclick="openAlarmLevelModal()"></i> <div class="dropdown">
+                <i class="fas fa-cog me-3" onclick="openAlarmLevelModal()"></i> <div class="dropdown">
                     <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
                         <span class="me-2">primaer</span> </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
@@ -1043,12 +1043,12 @@
 
             <!-- DU/SU Navigation Section -->
             <div class="du-su-section">
-                <div class="du-item" id="nav_du" data-page-key="dashboard" onclick="showScreen('du_content')">
+                <div class="du-item" id="nav_du" onclick="showScreen('du_content')">
                     <div class="du-item-circle status-circle" id="du_nav_dot"></div> <!-- status-circle 클래스 추가 -->
                     <span style="font-weight: bold;">DU</span>
                 </div>
 
-                <div class="su-item" id="nav_su1" data-page-key="dashboard" onclick="showScreen('su1_content')">
+                <div class="su-item" id="nav_su1" onclick="showScreen('su1_content')">
                     <div class="du-item-circle status-circle" id="su1_nav_dot"></div> <!-- status-circle 클래스 추가 -->
                     <span>SU #1</span>
                 </div>
@@ -1070,8 +1070,8 @@
             </div>
 
             <hr>
-                            <button class="btn btn-secondary w-100" data-page-key="dashboard" onclick="showPacketInfo()">Packet Info</button>
-                <button class="btn btn-secondary w-100 mt-2" data-page-key="tddview" onclick="showSyncModule()">Sync Module</button>
+                            <button class="btn btn-secondary w-100" onclick="showPacketInfo()">Packet Info</button>
+                <button class="btn btn-secondary w-100 mt-2" onclick="showSyncModule()">Sync Module</button>
             <button class="btn btn-secondary w-100 mt-2">Modem AtCmd</button>
             <button class="btn btn-secondary w-100 mt-2">Download</button>
         </div>
@@ -4704,8 +4704,10 @@
         //    값이 true면 1초 폴링, false/null이면 안 돌림
         const PAGE_POLL = {
             dashboard: { update: true,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
+            su1:       { update: false, tdd: false }, // SU #1: 폴링 없음
             alarms:    { update: true,  tdd: false }, // 알람 페이지: update_status만 (알람 상태)
             tddview:   { update: false, tdd: true  }, // TDD 전용 페이지: tdd_status만
+            packet_info: { update: true, tdd: false }, // Packet Info: update_status만
             none:      { update: false, tdd: false }, // 폴링 없음 (정보만 표시)
             // 필요시 추가...
         };
@@ -4713,14 +4715,15 @@
         const MODAL_POLL = {
             // TDD 관련 모달들
             '#tddModal':    { tdd: true  }, // TDD 모달: tdd_status만
-            '#beaminfo2': { update: true, tdd: true }, // 빔 정보 모달: 둘 다 (빔 정보 + TDD 설정)
+            '#beaminfo2': { update: false, tdd: false }, // 빔 정보 모달: 둘 다 (빔 정보 + TDD 설정)
+            '#beamInfoModal': { update: false, tdd: false }, // DU Beam Control 모달: 폴링 없음
             
             // 상태/설정 관련 모달들
             '#statusModal': { update: true }, // 상태 모달: update_status만
-            '#alarmLevelModal': { update: true }, // 알람 레벨 모달: update_status만
-            '#alarmHistoryModal': { update: true }, // 알람 히스토리 모달: update_status만
-            '#userMgmtModal': { update: true }, // 사용자 관리 모달: update_status만
-            '#alarmMaskModal': { update: true }, // 알람 마스크 모달: update_status만
+            '#alarmLevelModal': { update: false, tdd: false }, // 알람 레벨 모달: update_status만
+            '#alarmHistoryModal': { update: false, tdd: false }, // 알람 히스토리 모달: update_status만
+            '#userMgmtModal': { update: false, tdd: false }, // 사용자 관리 모달: update_status만
+            '#alarmMaskModal': { update: false, tdd: false }, // 알람 마스크 모달: update_status만
             
             // Initial Setup 모달들
             '#duInitialSetupModal': { update: false, tdd: false }, // Initial Setup: Step 4/7에서만 수동으로 폴링 시작
@@ -4728,7 +4731,7 @@
             '#apnSetupModal': { update: false, tdd: false },
             '#BtapnSetupModal': { update: false, tdd: false },
             '#DeviceSetupModal': { update: false, tdd: false },
-            '#AgcSetupModal': { update: false, tdd: false },
+            '#AgcSetupModal': { update: true, tdd: true }, // Step 4/7: update_status + tdd_status
             '#InitialSetupModal': { update: false, tdd: false },
             '#SuSetupModal': { update: false, tdd: false },
             '#FinalSetupModal': { update: false, tdd: false },
@@ -4746,13 +4749,11 @@
                 if (timers[key]) return;
                 fn(); // 즉시 1회
                 timers[key] = setInterval(fn, interval);
-                console.log(`[POLL] start ${key} (${interval}ms)`);
             };
             const stop = (key) => {
                 if (!timers[key]) return;
                 clearInterval(timers[key]);
                 delete timers[key];
-                console.log(`[POLL] stop ${key}`);
             };
             return { start, stop };
         })();
@@ -4780,8 +4781,12 @@
             currentPage = pageKey;
 
             // 이전 페이지 기여 제거
-            if (currentPageKeys.update) active.update.delete(currentPageKeys.update);
-            if (currentPageKeys.tdd)    active.tdd.delete(currentPageKeys.tdd);
+            if (currentPageKeys.update) {
+                active.update.delete(currentPageKeys.update);
+            }
+            if (currentPageKeys.tdd) {
+                active.tdd.delete(currentPageKeys.tdd);
+            }
             currentPageKeys = { update: null, tdd: null };
 
             const cfg = PAGE_POLL[pageKey] || {};
@@ -4793,39 +4798,63 @@
                 currentPageKeys.tdd = `page:${pageKey}`;
                 active.tdd.add(currentPageKeys.tdd);
             }
-            console.log(`[PAGE] enter ${pageKey}`, cfg);
+            
             reconcile();
         }
 
         // 5) 모달 열림/닫힘 처리: MODAL_POLL에 따라 active 집합 갱신
         function modalOpened(selector) {
             const cfg = MODAL_POLL[selector] || {};
-            if (cfg.update) active.update.add(`modal:${selector}`);
-            if (cfg.tdd)    active.tdd.add(`modal:${selector}`);
-            console.log(`[MODAL] open ${selector}`, cfg);
+            
+            // 모달이 열릴 때 현재 페이지의 폴링 일시 중지
+            if (currentPageKeys.update) {
+                active.update.delete(currentPageKeys.update);
+            }
+            if (currentPageKeys.tdd) {
+                active.tdd.delete(currentPageKeys.tdd);
+            }
+            
+            // 모달 폴링 시작
+            if (cfg.update) {
+                active.update.add(`modal:${selector}`);
+            }
+            if (cfg.tdd) {
+                active.tdd.add(`modal:${selector}`);
+            }
+            
             reconcile();
         }
         function modalClosed(selector) {
+            // 모달 폴링 중지
             active.update.delete(`modal:${selector}`);
             active.tdd.delete(`modal:${selector}`);
-            console.log(`[MODAL] close ${selector}`);
+            
+            // 모달이 닫힐 때 원래 페이지의 폴링 다시 시작
+            if (currentPageKeys.update) {
+                active.update.add(currentPageKeys.update);
+            }
+            if (currentPageKeys.tdd) {
+                active.tdd.add(currentPageKeys.tdd);
+            }
+            
             reconcile();
         }
 
         // 6) 초기 페이지 지정 + 네비게이션/모달 훅 연결
         document.addEventListener('DOMContentLoaded', () => {
-            // 초기 페이지 키를 너가 사용하는 현재 화면에 맞춰 지정
-            enterPage('dashboard'); // 예시: 대시보드부터 시작
+            // 초기 페이지 설정: 현재 활성화된 화면에 따라 폴링 설정
+            const activeContent = document.querySelector('.content-section.active') || 
+                                 document.querySelector('#du_content_display');
+            if (activeContent && activeContent.id === 'du_content_display') {
+                enterPage('dashboard'); // DU 메인화면이 활성화되어 있으면 update_status 폴링 시작
+            }
 
-            // 네비게이션 버튼에 data-page-key 달아놓고 클릭 시 전환
-            document.querySelectorAll('[data-page-key]').forEach(el => {
-                el.addEventListener('click', () => enterPage(el.getAttribute('data-page-key')));
-            });
+            // data-page-key 이벤트 리스너 제거 (showScreen에서 enterPage 호출로 통일)
 
             // Bootstrap 모달 이벤트 리스너 연결
             const modals = [
                 'tddModal', 'statusModal', 'alarmLevelModal', 'alarmHistoryModal', 
-                'userMgmtModal', 'beaminfo2', 'alarmMaskModal',
+                'userMgmtModal', 'beaminfo2', 'beamInfoModal', 'alarmMaskModal',
                 'duInitialSetupModal', 'usimCheckModal', 'apnSetupModal', 'BtapnSetupModal',
                 'DeviceSetupModal', 'AgcSetupModal', 'InitialSetupModal', 'SuSetupModal',
                 'FinalSetupModal', 'duHiddenModal', 'duBeamControlModal', 'confirmResetModal', 'infoModal'
@@ -5461,12 +5490,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('apnSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 2/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP2] Stopped Step 4/7 polling');
         }
 
         function goToStep3() {
@@ -5474,12 +5497,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('DeviceSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 3/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP3] Stopped Step 4/7 polling');
         }
 
         function goToStep4() {
@@ -5487,12 +5504,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('AgcSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 4/7에서 update_status + tdd_status 폴링 시작
-            active.update.add('modal:step4');
-            active.tdd.add('modal:step4');
-            reconcile();
-            console.log('[STEP4] Started update_status + tdd_status polling');
         }
 
         function goToStep5() {
@@ -5500,12 +5511,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('InitialSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 5/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP5] Stopped Step 4/7 polling');
         }
 
         function backToAgcSetup() {
@@ -5513,12 +5518,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('AgcSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 4/7로 돌아갈 때 update_status + tdd_status 폴링 다시 시작
-            active.update.add('modal:step4');
-            active.tdd.add('modal:step4');
-            reconcile();
-            console.log('[STEP4] Restarted update_status + tdd_status polling');
         }
 
         function goToStep6() {
@@ -5526,12 +5525,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('SuSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 6/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP6] Stopped Step 4/7 polling');
         }
 
         function backToInitialSetup() {
@@ -5539,12 +5532,6 @@
             if (timeLeft <= 0) return;
             new bootstrap.Modal(document.getElementById('InitialSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 5/7로 돌아갈 때 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP5] Stopped Step 4/7 polling');
         }
 
         function goToStep7() {
@@ -5560,12 +5547,6 @@
             const finalModal = new bootstrap.Modal(document.getElementById('FinalSetupModal'));
             finalModal.show();
             updateTimerDisplays();
-            
-            // Step 7/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP7] Stopped Step 4/7 polling');
         }
 
         function backToBtapnSetup() {
@@ -5598,23 +5579,11 @@
             bootstrap.Modal.getInstance(document.getElementById('AgcSetupModal'))?.hide();
             new bootstrap.Modal(document.getElementById('DeviceSetupModal')).show();
             updateTimerDisplays();
-            
-            // Step 3/7로 이동 시 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[STEP3] Stopped Step 4/7 polling');
         }
 
         function closeSetUpModal() {
             clearInterval(usimTimerInterval);
             usimTimerInterval = null;
-            
-            // Initial Setup 모달이 닫힐 때 Step 4/7 폴링 중지
-            active.update.delete('modal:step4');
-            active.tdd.delete('modal:step4');
-            reconcile();
-            console.log('[CLOSE] Stopped Step 4/7 polling');
         }
 
         // ✅ DOM 초기화 및 gNB Vendor 이벤트
@@ -5816,16 +5785,15 @@
                 enterPage('dashboard');
             } else if (screenId === 'su1_content') {
                 su1Content.classList.add('active');
-                console.log('SU #1 content activated.'); // 디버깅 로그
-                // SU1 화면: dashboard 페이지로 설정 (update_status 폴링)
-                enterPage('dashboard');
+                // SU1 화면: su1 전용 폴링 (폴링 없음)
+                enterPage('su1');
             } else if (screenId === 'packet_info') {
                 if (packetInfoContent) {
                     packetInfoContent.classList.add('active');
                     packetInfoContent.style.display = 'block';
                 }
-                // Packet Info 화면: 폴링 없음 (정보만 표시)
-                enterPage('none');
+                // Packet Info 화면: packet_info 전용 폴링
+                enterPage('packet_info');
             } else if (screenId === 'sync_module') {
                 // Sync Module 화면 표시
                 if (syncModuleContent) {
@@ -7504,7 +7472,6 @@
             if (saveBtn) {
                 saveBtn.addEventListener('click', function() {
                     // 여기에 저장 로직을 추가할 수 있습니다
-                    alert('Beam Info saved successfully!');
                     closeModal('beaminfo2');
                 });
             }
