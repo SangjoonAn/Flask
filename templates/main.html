@@ -4464,7 +4464,7 @@
                         <small class="text-muted">S/N :</small> <span id="conserialnum_sync2">N/A</span>
                     </div>
                     <div class="col-md-3 text-end">
-                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_sync3">N/A</span>
+                        <small class="text-muted">EMS ver :</small> <span id="emsversion2_sync2">N/A</span>
                     </div>
                 </div>
             </div>
@@ -4703,12 +4703,12 @@
         // 1) 어떤 페이지/모달에서 어떤 패킷을 돌릴지 선언 (원하면 키만 추가)
         //    값이 true면 1초 폴링, false/null이면 안 돌림
         const PAGE_POLL = {
-            dashboard: { update: true,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
+            dashboard: { update: false,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
             su1:       { update: false, tdd: false }, // SU #1: 폴링 없음
-            alarms:    { update: true,  tdd: false }, // 알람 페이지: update_status만 (알람 상태)
-            tddview:   { update: false, tdd: true  }, // TDD 전용 페이지: tdd_status만
+            //alarms:    { update: true,  tdd: false }, // 알람 페이지: update_status만 (알람 상태)
+            tddview:   { update: true, tdd: true  }, // sync module 페이지지
             packet_info: { update: true, tdd: false }, // Packet Info: update_status만
-            none:      { update: false, tdd: false }, // 폴링 없음 (정보만 표시)
+            //none:      { update: false, tdd: false }, // 폴링 없음 (정보만 표시)
             // 필요시 추가...
         };
 
@@ -6529,12 +6529,10 @@
             updateValue('du-name', data.packet.ConSerialNum);
 
             // Sync Module S/N과 EMS ver 업데이트
-            updateText('conserialnum_sync', data.packet.ConSerialNum);
-            updateText('emsversion2_sync', data.packet.EmsVersion);
-
-            // Packet Info S/N과 EMS ver 업데이트
             updateText('conserialnum_sync2', data.packet.ConSerialNum);
-            updateText('emsversion2_sync3', data.packet.EmsVersion);
+            updateText('emsversion2_sync2', data.packet.ModEmsFwVer);
+
+        
 
             // Packet 전송횟수와 응답횟수 업데이트
             if (data.packet.PackSendCount && data.packet.PackErrorCount) {
