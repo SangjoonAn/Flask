@@ -158,24 +158,6 @@ def handle_du_control_packet(data):
                 # 여기에 실제 하드웨어 통신 로직 추가
             else:
                 print("🔄 DU Reset 명령 없음 (비트 0 = 0)")
-            
-            # Polling Time 상태 확인 (비트 7)
-            if current_flag & 0x80:  # 0x80 = 10000000 (비트 7)
-                print("⏱️ Polling Time 활성화됨 (비트 7 = 1)")
-                # TODO: 실제 DU 장비로 Polling Time 활성화 전송
-                # 여기에 실제 하드웨어 통신 로직 추가
-            else:
-                print("⏱️ Polling Time 비활성화됨 (비트 7 = 0)")
-                # TODO: 실제 DU 장비로 Polling Time 비활성화 전송
-                # 여기에 실제 하드웨어 통신 로직 추가
-        
-        # Polling Time 값 확인 (별도 필드로 전송된 경우)
-        if 'PollingTime' in data:
-            polling_time = data['PollingTime']
-            print(f"⏱️ 사용자 입력 Polling Time: {polling_time}ms")
-        elif 'pollingTime' in data:
-            polling_time = data['pollingTime']
-            print(f"⏱️ 사용자 입력 Polling Time: {polling_time}ms")
         
         # 성공 응답
         socketio.emit("du_control_response", {"status": "success", "message": "DU Control packet processed"})

@@ -3202,7 +3202,7 @@
                             </div>
 
                             <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3"> <div class="col-6 mb-2">
-                                    <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
+                                    <button id="modemResetBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
                                 </div>
                                 <div class="col-6 mb-2">
                                     <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
@@ -3298,13 +3298,13 @@
                             </div>
 
                             <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3"> <div class="col-md-4 mb-2">
-                                    <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
+                                    <button id="rsrpReqBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
                                 </div>
                                 <div class="col-md-4 mb-2">
-                                    <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
+                                    <button id="pllRelockBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
                                 </div>
                                 <div class="col-md-4 mb-2">
-                                    <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
+                                    <button id="beamScanBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
                                 </div>
                             </div>
                                                 </div>
@@ -6224,20 +6224,7 @@
                         updateAlarmDot(`su1_${alarmId}`, isActive);
                     });
                 }
-                
-                // SU1 SU Enable 상태 업데이트 (DU와 동일한 패턴)
-                updateStatusBadge1("su1-enable-badge", data.packet.SU1_Enable);
-                updateStatusBadge2("su2-enable-badge", data.packet.SU2_Enable);
-                updateStatusBadge3("su3-enable-badge", data.packet.SU3_Enable);
-                updateStatusBadge1("su4-enable-badge", data.packet.SU4_Enable);
-                
-                // SU1 SU Link 상태 업데이트 (DU와 동일한 패턴)
-                updateStatusDot("su1-link-dot", data.packet.SU1_Link_Status);
-                updateStatusDot("su2-link-dot", data.packet.SU2_Link_Status);
-                updateStatusDot("su3-link-dot", data.packet.SU3_Link_Status);
-                updateStatusDot("su4-link-dot", data.packet.SU4_Link_Status);
-                
-
+            
                 
                 // SU1 Beam Status 업데이트 (DU와 동일한 패턴)
                 updateText("su1_beam_id", data.packet.Mvbx_BeamSet);
@@ -7178,54 +7165,7 @@
 
 
 
-        // Polling Time 입력 변경 처리 함수
-        function handlePollingTimeChange(inputValue) {
-            console.log('Polling Time이 변경되었습니다:', inputValue);
-            
-            // 입력값을 숫자로 변환
-            const pollingTime = parseInt(inputValue);
-            
-            // 유효성 검사 (100~5000ms 범위)
-            if (isNaN(pollingTime) || pollingTime < 100 || pollingTime > 5000) {
-                console.error('Polling Time은 100~5000ms 범위여야 합니다.');
-                return;
-            }
-            
-            console.log('Polling Time 설정:', pollingTime, 'ms');
-            
-            // sendPacketData에 PollingTime 설정 (ConMuFlag[0]의 비트 7 사용)
-            if (sendPacketData && sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
-                // 기존 ConMuFlag[0] 값을 가져와서 비트 7만 수정
-                let currentFlag = sendPacketData.ConMuFlag[0];
-                
-                // Polling Time 활성화 시 비트 7을 1로 설정, 비활성화 시 0으로 설정
-                // (예: 300ms 이상이면 활성화, 그렇지 않으면 비활성화)
-                if (pollingTime >= 300) {
-                    currentFlag |= (1 << 7); // 비트 7을 1로 설정
-                    console.log('Polling Time 활성화 (비트 7 = 1)');
-                } else {
-                    currentFlag &= ~(1 << 7); // 비트 7을 0으로 설정
-                    console.log('Polling Time 비활성화 (비트 7 = 0)');
-                }
-                
-                sendPacketData.ConMuFlag[0] = currentFlag;
-                console.log('sendPacketData.ConMuFlag[0] updated to:', sendPacketData.ConMuFlag[0]);
-                
-                // 실제 입력한 Polling Time 값도 함께 전송
-                sendPacketData.PollingTime = pollingTime;
-                console.log('sendPacketData.PollingTime set to:', sendPacketData.PollingTime);
-                
-                // Socket.IO를 통해 패킷 전송
-                if (socket) {
-                    socket.emit('du_Ctrl_packet', sendPacketData);
-                    console.log('Polling Time 패킷 전송 완료');
-                } else {
-                    console.error('Socket.IO is not connected. Cannot send Polling Time packet.');
-                }
-            } else {
-                console.error('sendPacketData.ConMuFlag is not defined or is empty.');
-            }
-        }
+
 
         // Reset 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
         function handleResetConfirmation(confirmed) {
@@ -8132,6 +8072,69 @@
             </div>
         </div>
     </div>
+
+    <!-- 새로운 버튼들의 이벤트 핸들러 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modem Reset 버튼 이벤트 핸들러
+            const modemResetBtn = document.getElementById('modemResetBtn');
+            if (modemResetBtn) {
+                modemResetBtn.addEventListener('click', function() {
+                    console.log('Modem Reset 버튼이 클릭되었습니다.');
+                    sendResetCommand();
+                });
+            }
+
+            // RSRP Req 버튼 이벤트 핸들러
+            const rsrpReqBtn = document.getElementById('rsrpReqBtn');
+            if (rsrpReqBtn) {
+                rsrpReqBtn.addEventListener('click', function() {
+                    console.log('RSRP Req 버튼이 클릭되었습니다.');
+                    sendResetCommand();
+                });
+            }
+
+            // PLL Relock 버튼 이벤트 핸들러
+            const pllRelockBtn = document.getElementById('pllRelockBtn');
+            if (pllRelockBtn) {
+                pllRelockBtn.addEventListener('click', function() {
+                    console.log('PLL Relock 버튼이 클릭되었습니다.');
+                    sendResetCommand();
+                });
+            }
+
+            // Beam Scan 버튼 이벤트 핸들러
+            const beamScanBtn = document.getElementById('beamScanBtn');
+            if (beamScanBtn) {
+                beamScanBtn.addEventListener('click', function() {
+                    console.log('Beam Scan 버튼이 클릭되었습니다.');
+                    sendResetCommand();
+                });
+            }
+        });
+
+        // Reset 명령을 보내는 공통 함수
+        function sendResetCommand() {
+            console.log('Reset 명령을 보냅니다.');
+            
+            // ConMuFlag[0] 바이트를 1로 설정
+            if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
+                sendPacketData.ConMuFlag[0] = 0x01; // 10진수 1 또는 16진수 0x01
+                console.log('sendPacketData.ConMuFlag[0] set to 1:', sendPacketData.ConMuFlag[0]);
+            } else {
+                console.error('sendPacketData.ConMuFlag is not defined or is empty.');
+                return;
+            }
+
+            // Socket.IO를 통해 전역 변수 sendPacketData 전송
+            if (socket) {
+                socket.emit('du_Ctrl_packet', sendPacketData);
+                console.log('Reset packet sent via du_Ctrl_packet');
+            } else {
+                console.error('Socket.IO is not connected. Cannot send Reset packet.');
+            }
+        }
+    </script>
 
 </body>
 </html>
