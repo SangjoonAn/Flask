@@ -3510,9 +3510,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
             </div>
 
@@ -3528,11 +3525,11 @@
                             <small class="text-muted">Site Name :</small> Korea FRTek RF - EMIS
                         </div>
                         <div class="col-md-3 text-center">
-                            <small class="text-muted">S/N :</small> FRC24-224-0550
+                            <small class="text-muted">S/N :</small> <span id="su1_conserialnum_header">N/A</span>
                         </div>
                         <div class="col-md-3 text-end">
                             <small class="text-muted" >EMS ver :</small> 
-                            <span id="ems_version2">N/A</span>
+                            <span id="su1_emsversion2">N/A</span>
                         </div>
                     </div>
                     
@@ -3565,20 +3562,20 @@
                                     <span><strong>F/W Ver</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>{{ status.du_fw_ver if status else 'N/A' }}</span> 
+                                    <span id="su1_McuSwVer">N/A</span> 
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Rpt Type</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>DU_28G</span>
+                                    <span id="su1_rpttype">N/A</span>
                                 </div>
 
                                 <div class="col-3 mb-2">
-                                    
+                                    <span><strong>FPGA Ver</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                   
+                                    <span id="su1_FPGA_Ver">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Manufacturer</strong></span>
@@ -3591,13 +3588,13 @@
                                     <span><strong>Cur Time</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>2025-06-11 23:35:43</span>
+                                    <span id="su1_curtime">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Cur Temper</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>44 ℃</span>
+                                    <span id="su1_curtemper">N/A</span>
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3605,13 +3602,13 @@
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>80 ℃</span>
+                                    <span id="su1_tempupper">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span>-30 ℃</span>
+                                    <span id="su1_templower">N/A</span>
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3619,13 +3616,13 @@
                                     <span><strong>FPGA Boot Status</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span id="FpgaStatus">N/A</span>
+                                    <span id="su1_FpgaStatus">N/A</span>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Init Status</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span id="InitStatus">N/A</span>
+                                    <span id="su1_InitStatus">N/A</span>
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3633,13 +3630,7 @@
                                     <span><strong>Beam Scan Status</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span id="InitStatus">N/A</span>
-                                </div>
-                                <div class="col-3 mb-2">
-                                    <span></span>
-                                </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <span></span>
+                                    <span id="su1_ScanStatus">N/A</span>
                                 </div>
                             </div>
 
@@ -3655,20 +3646,20 @@
 
                             <div class="row text-secondary small mb-4">
                                     <div class="col-4">
-                                        <p id="alarm_dc2"><span class="status-circle"></span> DC</p>
-                                        <p id="alarm_temp2" style="color: gray;"><span class="status-circle"></span> Temp</p>
-                                        <p id="alarm_if_pll2" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                        <p id="su1_alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="su1_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="su1_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_ac2" style="color: gray;"><span class="status-circle"></span> AC</p>
-                                        <p id="alarm_bat2" style="color: gray;"><span class="status-circle"></span> BAT</p>
-                                        <p id="alarm_sync_pll2" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                        <p id="su1_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="su1_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="su1_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
                                     </div>
                                     <div class="col-4">
-                                        <p id="alarm_fpga_link2" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
-                                        <p id="alarm_aa_link2" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
-                                        <p id="alarm_tsync_link2" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
-                                        <p id="alarm_decoding2" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                        <p id="su1_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="su1_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="su1_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="su1_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
                                     
                             </div>
@@ -3685,10 +3676,10 @@
 
                             <div class="row text-secondary small">
                                 <div class="col-6 mb-2">
-                                    <span><strong>ISO Status</strong></span>
+                                    <span  class="small-text"><strong>ISO Status</strong></span>
                                 </div>
                                 <div class="col-6 mb-2 text-end">
-                                    <span id="du_iso_status">N/A</span>
+                                    <span id="su1_iso_status" class="small-text-2">N/A</span>
                                 </div>
 
                                 <div class="col-6 mb-2">
@@ -3717,65 +3708,65 @@
 
                             <div class="row text-secondary small mb-4"> <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Status</strong></span>
-                                        <span id="modstatus" class="text-success">N/A</span>
+                                        <span id="su1_modstatus" class="text-success">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMSI</strong></span>
-                                        <span id="modimsi">N/A</span>
+                                        <span id="su1_modimsi" class="small-text">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMEI</strong></span>
-                                        <span id="modimei">N/A</span>
+                                        <span id="su1_modimei" class="small-text">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Num</strong></span>
-                                        <span id="modnum">N/A</span>
+                                        <span id="su1_modnum">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod IP</strong></span>
-                                        <span id="modip">N/A</span>
+                                        <span id="su1_modip">N/A</span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
-                                        <span id="rsrp">N/A</span>
+                                        <span id="su1_rsrp">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRQ</strong></span>
-                                        <span id="rsrq">N/A</span>
+                                        <span id="su1_rsrq">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSSI</strong></span>
-                                        <span id="rssi">N/A</span>
+                                        <span id="su1_rssi">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>PCI</strong></span>
-                                        <span id="pci">N/A</span>
+                                        <span id="su1_pci">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>SINR</strong></span>
-                                        <span id="sinr">N/A</span>
+                                        <span id="su1_sinr">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Tx Pwr</strong></span>
-                                        <span id="txpwr">N/A</span>
+                                        <span id="su1_txpwr">N/A</span>
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod Ver</strong></span>
-                                        <span id="modver">N/A</span>
+                                        <span id="su1_modver">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>EMS Ver</strong></span>
-                                        <span id="emsversion">N/A</span>
+                                        <span id="su1_emsversion">N/A</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2">
                                         <span><strong>LAN</strong></span>
-                                        <span id="lan">N/A</span>
+                                        <span id="su1_lan">N/A</span>
                                     </div>
                                 </div>
                             </div>
@@ -3811,53 +3802,53 @@
                             <div class="row text-secondary small mb-4">
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Beam ID</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_beam_id">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_beam_rsrp">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>SNR</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_beam_snr">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>SSB</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_beam_ssb">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>PCI</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_beam_pci">N/A</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_gumstick_onoff">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_threshold">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_mvbx_rsagc_threshold">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span id="mvbx_rsagc_mode">N/A</span>
+                                        <span id="su1_mvbx_rsagc_mode">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
-                                        <span>N/A</span>
+                                        <span id="su1_agc_input_power">N/A</span>
                                     </div>
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Decoded count</strong></span>
-                                        <span>0</span>
+                                        <span id="su1_decoded_ssb_count">0</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Decoded success</strong></span>
-                                        <span>0</span>
+                                        <span id="su1_decoded_ssb_no_error_count">0</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Decoded rate</strong></span>
-                                        <span>0.0 [%]</span>
+                                        <span id="su1_decoded_rate">0.0 [%]</span>
                                     </div>
                                 </div>
                             </div>
@@ -3867,9 +3858,11 @@
                                     <span><strong>gNB Type</strong></span>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-select form-select-sm">
-                                        <option selected>Manual</option>
-                                        <option>Auto</option>
+                                    <select id="su1_gNB_Vendor" class="form-select form-select-sm">
+                                        <option value="Manual">Manual</option>
+                                        <option value="Samsung">Samsung</option>
+                                        <option value="Nokia">Nokia</option>
+                                        <option value="Ericsson">Ericsson</option>
                                     </select>
                                 </div>
                             </div>
@@ -3911,19 +3904,19 @@
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL Input</strong></span>
-                                                <span id="dl_input_siso">N/A</span>
+                                                <span id="su1_dl_input_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ATT</strong></span>
-                                                <span id="dl_att_siso">N/A</span>
+                                                <span id="su1_dl_att_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <span id="dl_alc_level_siso">N/A</span>
+                                                <span id="su1_dl_alc_level_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_dl_alc_onoff_siso">On</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3932,15 +3925,15 @@
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL Output(EIRP)</strong></span>
-                                                <span id="ul_input_siso">N/A</span>
+                                                <span id="su1_ul_output_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ATT</strong></span>
-                                                <span id="ul_att_siso">N/A</span>
+                                                <span id="su1_ul_att_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <span id="ul_iso_level_siso">N/A</span>
+                                                <span id="su1_ul_iso_level_siso">N/A</span>
                                             </div>
                                         </div>
                                     </div>
@@ -3948,15 +3941,15 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id="mvbx_tx_gain_set_siso">NA</span>
+                                            <span id="su1_mvbx_tx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id="mvbx_rx_gain_set_siso">NA</span>
+                                            <span id="su1_mvbx_rx_gain_set_siso">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong id="ul_iso_att_siso">UL ISO ATT</strong></span>
-                                            <span>N/A</span>
+                                            <span><strong>UL ISO ATT</strong></span>
+                                            <span id="su1_ul_iso_att_siso">N/A</span>
                                         </div>
                                     </div>
                                 </div>
@@ -3974,20 +3967,20 @@
                                                 <i class="fas fa-plus-circle me-1"></i> DL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_input_mimo">DL Input</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL Input</strong></span>
+                                                <span id="su1_dl_input_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_att_mimo">DL ATT</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL ATT</strong></span>
+                                                <span id="su1_dl_att_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="dl_alc_level_mimo">DL ALC Level</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>DL ALC Level</strong></span>
+                                                <span id="su1_dl_alc_level_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;">On</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_dl_alc_onoff_mimo">On</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3995,16 +3988,16 @@
                                                 <i class="fas fa-plus-circle me-1"></i> UL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_input_mimo">UL Output(EIRP)</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL Output(EIRP)</strong></span>
+                                                <span id="su1_ul_output_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_att_mimo">UL ATT</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL ATT</strong></span>
+                                                <span id="su1_ul_att_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong id="ul_iso_level_mimo">UL ISO Level</strong></span>
-                                                <span>N/A</span>
+                                                <span><strong>UL ISO Level</strong></span>
+                                                <span id="su1_ul_iso_level_mimo">N/A</span>
                                             </div>
                                         </div>
                                     </div>
@@ -4012,15 +4005,15 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id="mvbx_tx_gain_set_miso">NA</span>
+                                            <span id="su1_mvbx_tx_gain_set_mimo">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id="mvbx_rx_gain_set_miso">NA</span>
+                                            <span id="su1_mvbx_rx_gain_set_mimo">NA</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong id="ul_iso_att_mimo">UL ISO ATT</strong></span>
-                                            <span>N/A</span>
+                                            <span><strong>UL ISO ATT</strong></span>
+                                            <span id="su1_ul_iso_att_mimo">N/A</span>
                                         </div>
                                     </div>
                                 </div>
@@ -4035,21 +4028,21 @@
                                     <div class="row mt-3">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL LD</strong></span>
-                                            <span id="ld1_det_dl0_siso">N/A</span>
+                                            <span id="su1_ld1_det_dl0_siso">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL PD</strong></span>
-                                            <span id="pd1_det_ul0_siso">N/A</span>
+                                            <span id="su1_pd1_det_ul0_siso">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="ld1_det_dl0_siso_low">N/A</span>
+                                            <span id="su1_ld1_det_dl0_siso_low">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="pd1_det_ul0_siso_low">N/A</span>
+                                            <span id="su1_pd1_det_ul0_siso_low">N/A</span>
                                         </div>
                                     </div>
                                 </div>
@@ -4064,21 +4057,21 @@
                                     <div class="row mt-3">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL LD</strong></span>
-                                            <span id="ld2_det_dl1_mimo">N/A</span>
+                                            <span id="su1_ld2_det_dl1_mimo">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL PD</strong></span>
-                                            <span id="pd2_det_ul1_mimo">N/A</span>
+                                            <span id="su1_pd2_det_ul1_mimo">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="ld2_det_dl1_mimo_low">N/A</span>
+                                            <span id="su1_ld2_det_dl1_mimo_low">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="pd2_det_ul1_mimo_low">N/A</span>
+                                            <span id="su1_pd2_det_ul1_mimo_low">N/A</span>
                                         </div>
                                     </div>
                                 </div>
@@ -4086,7 +4079,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
 
@@ -4703,8 +4695,8 @@
         // 1) 어떤 페이지/모달에서 어떤 패킷을 돌릴지 선언 (원하면 키만 추가)
         //    값이 true면 1초 폴링, false/null이면 안 돌림
         const PAGE_POLL = {
-            dashboard: { update: false,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
-            su1:       { update: false, tdd: false }, // SU #1: 폴링 없음
+            dashboard: { update: true,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
+            su1:       { update: true, tdd: false }, // SU #1: update_status 폴링 (SU1 패킷 요청)
             //alarms:    { update: true,  tdd: false }, // 알람 페이지: update_status만 (알람 상태)
             tddview:   { update: true, tdd: true  }, // sync module 페이지지
             packet_info: { update: true, tdd: false }, // Packet Info: update_status만
@@ -4781,13 +4773,34 @@
         }
 
         function reconcile() {
+            console.log(`🔄 reconcile called. Active sets:`, { update: [...active.update], tdd: [...active.tdd] });
+            
             if (active.update.size > 0) {
                 PollManager.start('update', () => {
-                    socket.emit('request_update_status');
+                    // DU(0x30) vs SU1(0x40) 페이로드 선택
+                    let payload = { rcv_main_sys: 0x30 }; // 기본: DU 상태
+                    const labels = [...active.update];
+                    console.log(`📤 Polling update_status. Labels:`, labels);
+                    
+                    if (labels.length) {
+                        const label = labels[0];
+                        if (label.startsWith('page:')) {
+                            const key = label.slice(5);
+                            if (key === 'su1') {
+                                payload = { rcv_main_sys: 0x40 };
+                                console.log(`🚀 SU1 패킷 요청:`, payload);
+                            } else if (key === 'dashboard') {
+                                payload = { rcv_main_sys: 0x30 };
+                                console.log(`🚀 DU 패킷 요청:`, payload);
+                            }
+                        }
+                    }
+                    socket.emit('request_update_status', payload);
                     pulseTxBox();  // 요청 시점에 TX 깜빡
                 }, 1000);
             } else {
                 PollManager.stop('update');
+                console.log(`⏹️ Stopped update polling`);
             }
             if (active.tdd.size > 0) {
                 PollManager.start('tdd', () => {
@@ -4801,6 +4814,7 @@
 
         // 4) 페이지 전환 처리: PAGE_POLL에 따라 active 집합 갱신
         function enterPage(pageKey) {
+            console.log(`🔀 enterPage called with: ${pageKey}`);
             currentPage = pageKey;
 
             // 이전 페이지 기여 제거
@@ -4813,15 +4827,20 @@
             currentPageKeys = { update: null, tdd: null };
 
             const cfg = PAGE_POLL[pageKey] || {};
+            console.log(`📋 PAGE_POLL config for ${pageKey}:`, cfg);
+            
             if (cfg.update) {
                 currentPageKeys.update = `page:${pageKey}`;
                 active.update.add(currentPageKeys.update);
+                console.log(`✅ Added update polling for ${pageKey}`);
             }
             if (cfg.tdd) {
                 currentPageKeys.tdd = `page:${pageKey}`;
                 active.tdd.add(currentPageKeys.tdd);
+                console.log(`✅ Added tdd polling for ${pageKey}`);
             }
             
+            console.log(`🔍 Current active sets:`, { update: [...active.update], tdd: [...active.tdd] });
             reconcile();
         }
 
@@ -5763,9 +5782,11 @@
         }
 
         // 패킷 요청 함수들 (간단한 래퍼)
-        function requestUpdateStatus() {
-            socket.emit('request_update_status');
-            console.log('📤 Requested: update_status packet');
+        // DU(0x30), SU(0x40) 요청을 payload로 보냄
+        function requestUpdateStatus(rcvMainSys = 0x30) {
+            const payload = { rcv_main_sys: rcvMainSys };
+            socket.emit('request_update_status', payload);
+            console.log(`📤 Requested: update_status (Rcv_Main_Sys=0x${rcvMainSys.toString(16)})`);
         }
 
         function requestTddStatus() {
@@ -5810,6 +5831,8 @@
                 su1Content.classList.add('active');
                 // SU1 화면: su1 전용 폴링 (폴링 없음)
                 enterPage('su1');
+                // SU1 진입 시 한 번 SU1 패킷 요청
+                requestUpdateStatus(0x40);
             } else if (screenId === 'packet_info') {
                 if (packetInfoContent) {
                     packetInfoContent.classList.add('active');
@@ -5983,7 +6006,8 @@
 
         // ------- 서버가 보내주는 파싱 완료 패킷 수신 (UI 업데이트) -------
         socket.on("update_status", function (data) {
-            //console.log("📥 Received update_status:", data.packet);
+            console.log("📥 Received update_status:", data.packet);
+            console.log("📊 Packet type - rcvMainSys:", data.packet.rcvMainSys);
 
             // SuLinkFailBits 처리 (1비트씩)
             if (data.packet.SuLinkFailBits) {
@@ -6108,6 +6132,7 @@
 
             */
 
+            // DU System 페이지 업데이트 (rcvMainSys = 0x30)
             updateText("McuSwVer", data.packet.McuSwVer);
             updateText("modipaddress", data.packet.ModIpAddress);
 
@@ -6139,6 +6164,256 @@
             
             if (data.packet.SysTemperLowLvl !== undefined) {
             updateText("templower", `${data.packet.SysTemperLowLvl} ℃`);
+            }
+
+            // SU1 페이지 업데이트 (Rcv_Main_Sys = 0x40)
+            if (data.packet.Rcv_Main_Sys === 0x40) {
+                console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
+
+                updateText("su1_conserialnum_header", data.packet.ConSerialNum);
+                updateText("su1_emsversion2", data.packet.ModEmsFwVer);
+                
+                // 기본 정보
+                updateText("su1_McuSwVer", data.packet.McuSwVer);
+                updateText("su1_rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
+                updateText("su1_FPGA_Ver", data.packet.FPGA_Ver);
+                
+                // 시스템 시간 및 온도
+                updateText("su1_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
+                updateText("su1_curtemper", `${data.packet.SysTemper} ℃`);
+                updateText("su1_tempupper", `${data.packet.SysTemperHighLvl} ℃`);
+                updateText("su1_templower", `${data.packet.SysTemperLowLvl} ℃`);
+                
+                // FPGA 상태 (DU와 동일한 패턴으로 updateStatusBadge 함수 사용)
+                updateStatusBadge1("su1_FpgaStatus", data.packet.FPGA_Boot_Status);
+                updateStatusBadge2("su1_InitStatus", data.packet.FPGA_Init_Status);
+                updateStatusBadge3("su1_ScanStatus", data.packet.Beam_Scan_Status);
+                
+                // Modem 상태
+                updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
+                updateText("su1_modimsi", data.packet.ModIMSINum);
+                updateText("su1_modimei", data.packet.ModIMEINum);
+                updateText("su1_modnum", data.packet.ModPhonNumber);
+                updateText("su1_modip", data.packet.ModIpAddress);
+                updateText("su1_rsrp", data.packet.ModRsrp + " [dBm]");
+                updateText("su1_rsrq", data.packet.ModRsrq + " [dBm]");
+                updateText("su1_rssi", data.packet.ModRssi + " [dBm]");
+                updateText("su1_pci", data.packet.ModPci);
+                updateText("su1_sinr", data.packet.ModSinr + " [dB]");
+                updateText("su1_txpwr", data.packet.ModTxPwr + " [dBm]");
+                updateText("su1_modver", data.packet.ModVersion);
+                updateText("su1_emsversion", data.packet.ModEmsFwVer);
+                updateText("su1_lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
+                
+                // ISO 상태 (Ready/Measuring/Fail/Success 표시)
+                const su1isoStatusText = {
+                    0: "Ready",
+                    1: "Measuring", 
+                    2: "Fail",
+                    3: "Success"
+                };
+                updateText("su1_iso_status", su1isoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
+
+                // SU1 알람 상태 업데이트 (DU와 동일한 방식으로 updateAlarmDot 함수 재사용)
+                if (data.packet.AlarmStatus) {
+                    const alarmStatus = data.packet.AlarmStatus;
+                    
+                    // 각 알람 상태에 따라 UI 업데이트 (DU와 동일한 패턴)
+                    Object.keys(alarmStatus).forEach(alarmId => {
+                        const isActive = alarmStatus[alarmId] === 1;
+                        updateAlarmDot(`su1_${alarmId}`, isActive);
+                    });
+                }
+                
+                // SU1 SU Enable 상태 업데이트 (DU와 동일한 패턴)
+                updateStatusBadge1("su1-enable-badge", data.packet.SU1_Enable);
+                updateStatusBadge2("su2-enable-badge", data.packet.SU2_Enable);
+                updateStatusBadge3("su3-enable-badge", data.packet.SU3_Enable);
+                updateStatusBadge1("su4-enable-badge", data.packet.SU4_Enable);
+                
+                // SU1 SU Link 상태 업데이트 (DU와 동일한 패턴)
+                updateStatusDot("su1-link-dot", data.packet.SU1_Link_Status);
+                updateStatusDot("su2-link-dot", data.packet.SU2_Link_Status);
+                updateStatusDot("su3-link-dot", data.packet.SU3_Link_Status);
+                updateStatusDot("su4-link-dot", data.packet.SU4_Link_Status);
+                
+
+                
+                // SU1 Beam Status 업데이트 (DU와 동일한 패턴)
+                updateText("su1_beam_id", data.packet.Mvbx_BeamSet);
+                updateText("su1_beam_rsrp", data.packet.MVBX_rsrp);
+                updateText("su1_beam_snr", data.packet.MVBX_snr);
+                updateText("su1_beam_ssb", data.packet.MVBX_ssb);
+                updateText("su1_beam_pci", data.packet.MVBX_pci);
+                
+                // SU1 Ant. Array On/Off 업데이트 (DU와 동일한 패턴)
+                const antArrayEl = document.getElementById("su1_ant_array_onoff");
+                if (antArrayEl) {
+                    if (data.packet.Ant_Array_OnOff === 1) {
+                        antArrayEl.textContent = "On";
+                        antArrayEl.className = "btn btn-success btn-sm";
+                    } else {
+                        antArrayEl.textContent = "Off";
+                        antArrayEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+                
+                // SU1 AGC On/Off 업데이트 (DU와 동일한 패턴)
+                const agcEl = document.getElementById("su1_agc_onoff");
+                if (agcEl) {
+                    if (data.packet.AGC_OnOff === 1) {
+                        agcEl.textContent = "On";
+                        agcEl.className = "btn btn-success btn-sm";
+                    } else {
+                        agcEl.textContent = "Off";
+                        agcEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+                
+                // SU1 AGC Level 업데이트 (DU와 동일한 패턴)
+                updateText("su1_agc_level", data.packet.AGC_Level + " dBm");
+                
+                // SU1 AGC Input 업데이트 (DU와 동일한 패턴)
+                updateText("su1_agc_input", data.packet.AGC_Input + " dBm");
+                
+                // SU1 Decoded SSB 정보 업데이트 (DU와 동일한 패턴)
+                updateText("su1_decoded_ssb_count", data.packet.decoded_ssb_count);
+                updateText("su1_decoded_ssb_no_error_count", data.packet.decoded_ssb_no_error_count);
+                updateText("su1_decoded_rate", data.packet.DecodedRate + " [%]");
+                
+                // SU1 AOM & mmWave SISO RF 업데이트 (DU와 동일한 패턴)
+                updateText("su1_dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
+                updateText("su1_dl_att_siso", data.packet.DU_DlManualAtten_SISO + " [dB]");
+                updateText("su1_dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level + " [dBm]");
+                if (data.packet.DL_ALC_OnOff_SISO !== undefined) {
+                    const dlAlcSisoEl = document.getElementById("su1_dl_alc_onoff_siso");
+                    if (dlAlcSisoEl) {
+                        if (data.packet.DL_ALC_OnOff_SISO === 1) {
+                            dlAlcSisoEl.textContent = "On";
+                            dlAlcSisoEl.className = "btn btn-success btn-sm";
+                        } else {
+                            dlAlcSisoEl.textContent = "Off";
+                            dlAlcSisoEl.className = "btn btn-secondary btn-sm";
+                        }
+                    }
+                }
+                
+                updateText("su1_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
+                updateText("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO + " [dB]");
+                updateText("su1_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level + " [dBm]");
+                
+                updateText("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso + " [dB]");
+                updateText("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso + " [dB]");
+                updateText("su1_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
+                
+                // SU1 AOM & mmWave MIMO RF 업데이트 (DU와 동일한 패턴)
+                updateText("su1_dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
+                updateText("su1_dl_att_mimo", data.packet.DU_DlManualAtten_MIMO + " [dB]");
+                updateText("su1_dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level + " [dBm]");
+                if (data.packet.DL_ALC_OnOff_MIMO !== undefined) {
+                    const dlAlcMimoEl = document.getElementById("su1_dl_alc_onoff_mimo");
+                    if (dlAlcMimoEl) {
+                        if (data.packet.DL_ALC_OnOff_MIMO === 1) {
+                            dlAlcMimoEl.textContent = "On";
+                            dlAlcMimoEl.className = "btn btn-success btn-sm";
+                        } else {
+                            dlAlcMimoEl.textContent = "Off";
+                            dlAlcMimoEl.className = "btn btn-secondary btn-sm";
+                        }
+                    }
+                }
+                
+                updateText("su1_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
+                updateText("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO + " [dB]");
+                updateText("su1_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level + " [dBm]");
+                
+                updateText("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso + " [dB]");
+                updateText("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso + " [dB]");
+                updateText("su1_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
+                
+                // SU1 AOM & mmWave SISO OPTIC 업데이트 (DU와 동일한 패턴)
+                updateText("su1_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
+                updateText("su1_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
+                updateText("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low + " [dBm]");
+                updateText("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low + " [dBm]");
+                
+                // SU1 AOM & mmWave MIMO OPTIC 업데이트 (DU와 동일한 패턴)
+                updateText("su1_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
+                updateText("su1_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
+                updateText("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low + " [dBm]");
+                updateText("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low + " [dBm]");
+                
+                // SU1 gNB Type (Vendor) 업데이트 - DU와 동일 로직 재사용
+                if (typeof data.packet.gNB_Vendor === 'number') {
+                    let su1GnbVendorText = "Manual";
+                    if (data.packet.gNB_Vendor === 0) su1GnbVendorText = "Manual";
+                    else if (data.packet.gNB_Vendor === 1) su1GnbVendorText = "Samsung";
+                    else if (data.packet.gNB_Vendor === 2) su1GnbVendorText = "Nokia";
+                    else if (data.packet.gNB_Vendor === 3) su1GnbVendorText = "Ericsson";
+                    updateValue("su1_gNB_Vendor", su1GnbVendorText);
+                }
+
+                // SU1 Ant. Array On/Off (GumStick_OnOff) - DU와 동일 로직
+                const su1GumstickOnOffEl = document.getElementById("su1_gumstick_onoff");
+                if (su1GumstickOnOffEl) {
+                    if (data.packet.GumStick_OnOff === 1) {
+                        su1GumstickOnOffEl.textContent = "On";
+                        su1GumstickOnOffEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su1GumstickOnOffEl.textContent = "Off";
+                        su1GumstickOnOffEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+
+                // SU1 AGC On/Off (Mvbx_RsAgcThreshold) - DU와 동일 로직
+                const su1MvbxRsagcThresholdEl = document.getElementById("su1_mvbx_rsagc_threshold");
+                if (su1MvbxRsagcThresholdEl) {
+                    if (data.packet.Mvbx_RsAgcThreshold === 1) {
+                        su1MvbxRsagcThresholdEl.textContent = "On";
+                        su1MvbxRsagcThresholdEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su1MvbxRsagcThresholdEl.textContent = "Off";
+                        su1MvbxRsagcThresholdEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+
+                // SU1 AGC Level (Mvbx_RsAgcMode) - DU와 동일 로직
+                let su1AgcLevel = data.packet.Mvbx_RsAgcMode;
+                if (su1AgcLevel === -999) {
+                    updateText("su1_mvbx_rsagc_mode", "- - -");
+                } else {
+                    updateText("su1_mvbx_rsagc_mode", su1AgcLevel + " dBm");
+                }
+
+                                // SU1 AGC Input (AGC_Input_Power) - DU와 동일 로직
+                updateText("su1_agc_input_power", data.packet.AGC_Input_Power + " dBm");
+
+                // SU1 ALC DL0 SISO On/Off (1=ON, 0=OFF) - DU와 동일 로직
+                const su1AlcDl0SisoOnOffEl = document.getElementById("su1_dl_alc_onoff_siso");
+                if (su1AlcDl0SisoOnOffEl) {
+                    if (data.packet.DL_ALC_OnOff_SISO === 1) {
+                        su1AlcDl0SisoOnOffEl.textContent = "On";
+                        su1AlcDl0SisoOnOffEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su1AlcDl0SisoOnOffEl.textContent = "Off";
+                        su1AlcDl0SisoOnOffEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+                
+                // SU1 ALC DL1 MIMO On/Off (1=ON, 0=OFF) - DU와 동일 로직
+                const su1AlcDl1MimoOnOffEl = document.getElementById("su1_dl_alc_onoff_mimo");
+                if (su1AlcDl1MimoOnOffEl) {
+                    if (data.packet.DL_ALC_OnOff_MIMO === 1) {
+                        su1AlcDl1MimoOnOffEl.textContent = "On";
+                        su1AlcDl1MimoOnOffEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su1AlcDl1MimoOnOffEl.textContent = "Off";
+                        su1AlcDl1MimoOnOffEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+                
+                
+                console.log("✅ SU1 페이지 업데이트 완료");
             }
 
 
@@ -7021,7 +7296,7 @@
             }
         }
 
-        // 알람 버튼 상태 업데이트 함수
+        // 알람 버튼 상태 업데이트 함수 (DU용)
         function updateAlarmButtons(alarmStatus) {
             if (!alarmStatus) return;
             
@@ -7055,17 +7330,40 @@
             });
         }
 
+        // SU1 알람 점 업데이트는 DU의 updateAlarmDot 함수를 재사용
+        // (별도 함수 불필요 - updateAlarmDot('su1_alarm_dc', isActive) 형태로 호출)
+
         // Socket.IO 이벤트 리스너에서 알람 상태 업데이트
         socket.on('alarm_status_update', function(data) {
             if (data && data.AlarmStatus) {
+                // DU 알람 버튼 업데이트
                 updateAlarmButtons(data.AlarmStatus);
+                
+                // SU1 알람 점 업데이트 (SU1 페이지가 활성화된 경우, DU와 동일한 방식)
+                if (document.getElementById('su1_content_display').classList.contains('active')) {
+                    const alarmStatus = data.AlarmStatus;
+                    Object.keys(alarmStatus).forEach(alarmId => {
+                        const isActive = alarmStatus[alarmId] === 1;
+                        updateAlarmDot(`su1_${alarmId}`, isActive);
+                    });
+                }
             }
         });
 
         // Socket.IO 이벤트 리스너에서 Mask 알람 상태 업데이트
         socket.on('mask_alarm_status_update', function(data) {
             if (data && data.MaskAlarmStatus) {
+                // DU 알람 버튼 업데이트
                 updateAlarmButtons(data.MaskAlarmStatus);
+                
+                // SU1 알람 점 업데이트 (SU1 페이지가 활성화된 경우, DU와 동일한 방식)
+                if (document.getElementById('su1_content_display').classList.contains('active')) {
+                    const alarmStatus = data.MaskAlarmStatus;
+                    Object.keys(alarmStatus).forEach(alarmId => {
+                        const isActive = alarmStatus[alarmId] === 1;
+                        updateAlarmDot(`su1_${alarmId}`, isActive);
+                    });
+                }
             }
         });
 
