@@ -140,12 +140,8 @@ def handle_du_control_packet(data):
         print("📦 Received data:", data)
         
         # 패킷 데이터 처리
-        if 'ConMuFlag' in data and data['ConMuFlag']:
-            if data['ConMuFlag'][0] == 0x01:
-                print("🔄 DU Reset 명령 감지됨")
-                # TODO: 실제 DU 장비로 Reset 명령 전송
-                # 여기에 실제 하드웨어 통신 로직 추가
         
+        # ConMuFlag 비트 기반 명령 처리
         if 'ConMuFlag' in data and data['ConMuFlag']:
             current_flag = data['ConMuFlag'][0]
             print(f"🔍 ConMuFlag[0] 값: {current_flag} (0x{current_flag:02X})")
@@ -158,9 +154,57 @@ def handle_du_control_packet(data):
                 # 여기에 실제 하드웨어 통신 로직 추가
             else:
                 print("🔄 DU Reset 명령 없음 (비트 0 = 0)")
+            
+            # PLL Relock 명령 확인 (비트 7)
+            if current_flag & 0x80:
+                print("🔄 PLL Relock 명령 감지됨 (비트 7 = 1)")
+                # TODO: 실제 DU 장비로 PLL Relock 명령 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+            else:
+                print("🔄 PLL Relock 명령 없음 (비트 7 = 0)")
+            
+            # ConMuFlag[14] (packet[594]) 비트 기반 명령 처리
+            if len(data['ConMuFlag']) > 14:
+                flag_14 = data['ConMuFlag'][14]
+                print(f"🔍 ConMuFlag[14] 값: {flag_14} (0x{flag_14:02X})")
+                print(f"🔍 ConMuFlag[14] 비트: {bin(flag_14)[2:].zfill(8)}")
+                
+                # RSRP Request 명령 확인 (비트 5)
+                if flag_14 & 0x20:
+                    print("🔄 RSRP Request 명령 감지됨 (비트 5 = 1)")
+                    # TODO: 실제 DU 장비로 RSRP Request 명령 전송
+                    # 여기에 실제 하드웨어 통신 로직 추가
+                else:
+                    print("🔄 RSRP Request 명령 없음 (비트 5 = 0)")
+                
+                # Beam Scan 명령 확인 (비트 6)
+                if flag_14 & 0x40:
+                    print("🔄 Beam Scan 명령 감지됨 (비트 6 = 1)")
+                    # TODO: 실제 DU 장비로 Beam Scan 명령 전송
+                    # 여기에 실제 하드웨어 통신 로직 추가
+                else:
+                    print("🔄 Beam Scan 명령 없음 (비트 6 = 0)")
         
-        # 성공 응답
-        socketio.emit("du_control_response", {"status": "success", "message": "DU Control packet processed"})
+        # ConEmsModemReset 값 기반 명령 처리
+        if 'ConEmsModemReset' in data:
+            ems_modem_value = data['ConEmsModemReset']
+            print(f"🔍 ConEmsModemReset 값: {ems_modem_value} (0x{ems_modem_value:02X})")
+            
+            if ems_modem_value == 0x01:
+                print("🔄 Modem Reset 명령 감지됨 (0x01)")
+                # TODO: 실제 DU 장비로 Modem Reset 명령 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+            elif ems_modem_value == 0x02:
+                print("🔄 EMS Reset 명령 감지됨 (0x02)")
+                # TODO: 실제 DU 장비로 EMS Reset 명령 전송
+                # 여기에 실제 하드웨어 통신 로직 추가
+            elif ems_modem_value == 0x00:
+                print("🔄 ConEmsModemReset 명령 없음 (0x00)")
+            else:
+                print(f"⚠️ 알 수 없는 ConEmsModemReset 값: 0x{ems_modem_value:02X}")
+        
+        # test.py로 전송
+        socketio.emit('du_Ctrl_packet', data, include_self=False)
         return {"status": "success", "message": "DU Control packet received"}
         
     except Exception as e:

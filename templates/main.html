@@ -1306,111 +1306,207 @@
                   });
                 }
 
-                // ---------- Render ----------
-                var current = 1;                         // 현재 페이지
-                var totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
-                var pager, body, status;
+                // ===== Alarm History State =====
 
-                function renderTable(){
-                  var start = (current-1)*PAGE_SIZE;
-                  var slice = rows.slice(start, start+PAGE_SIZE);
-                  var html = slice.map(function(r){
-                    return '<tr>\
-                      <td><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:'+r.color+';margin-right:8px;vertical-align:middle;"></span>'+r.level+'</td>\
-                      <td>'+r.msg+'</td>\
-                      <td>'+r.date+'</td>\
-                      <td>'+r.yn+'</td>\
-                      <td>'+r.cdate+'</td>\
-                    </tr>';
-                  }).join('');
-                  body.innerHTML = html;
+                // ===== Alarm History State =====
+                var histCurrent = 1;
+                var histTotalPages = 8; // 하드코딩된 페이지 수
+                
+                // ===== Alarm History Helpers =====
+                function histRenderTable(){
+                  // body 요소를 다시 찾기 (전역 변수 참조 문제 해결)
+                  var bodyElement = document.getElementById('histBody');
+                  
+                  if (!bodyElement) {
+                    console.error('Alarm History - histRenderTable: body 요소를 찾을 수 없음', {
+                      bodyId: 'histBody'
+                    });
+                    return;
+                  }
+                  
+                  // 더미 알람 데이터 생성 (실제로는 서버에서 가져와야 함)
+                  var alarms = [];
+                  for(var i=1; i<=histTotalPages*10; i++){
+                    alarms.push({
+                      level: ['Critical', 'Major', 'Minor', 'Warning'][i%4],
+                      message: 'Alarm message ' + i + ' - This is a test alarm for demonstration',
+                      date: '2024-01-' + (i%28+1).toString().padStart(2,'0') + ' 12:00:00',
+                      clear: i%3===0 ? 'Y' : 'N',
+                      clearDate: i%3===0 ? '2024-01-' + (i%28+1).toString().padStart(2,'0') + ' 13:00:00' : ''
+                    });
+                  }
+                  
+                  var start = (histCurrent-1)*10;
+                  var slice = alarms.slice(start, start+10);
+                  
+                  console.log('Alarm History - histRenderTable 실행:', {alarmsLength: alarms.length, start, sliceLength: slice.length});
+                  
+                  bodyElement.innerHTML = slice.map(function(alarm){
+                    return '<tr>'+
+                      '<td style="text-align:center;">'+alarm.level+'</td>'+
+                      '<td>'+alarm.message+'</td>'+
+                      '<td style="text-align:center;">'+alarm.date+'</td>'+
+                      '<td style="text-align:center;">'+alarm.clear+'</td>'+
+                      '<td style="text-align:center;">'+alarm.clearDate+'</td>'+
+                    '</tr>';
+                  }).join('') || '<tr><td colspan="5" class="text-center text-muted">No data</td></tr>';
                 }
 
-                function renderPager(){
-                  // 좌우 버튼 상태 - 안전하게 찾기
-                  var first = pager.querySelector('[data-act="first"]');
-                  var prev  = pager.querySelector('[data-act="prev"]');
-                  var next  = pager.querySelector('[data-act="next"]');
-                  var last  = pager.querySelector('[data-act="last"]');
+                function histRenderPager(){
+                  // DOM 요소를 다시 찾기 (전역 변수 참조 문제 해결)
+                  var pagerElement = document.getElementById('histPager');
+                  var statusElement = document.getElementById('histPageStatus');
                   
-                  if(first && prev && next && last) {
-                    first.parentElement.classList.toggle('disabled', current===1);
-                    prev.parentElement.classList.toggle('disabled', current===1);
-                    next.parentElement.classList.toggle('disabled', current===totalPages);
-                    last.parentElement.classList.toggle('disabled', current===totalPages);
+                  if (!pagerElement || !statusElement) {
+                    console.error('Alarm History - histRenderPager: pager 또는 status 요소를 찾을 수 없음', {
+                      pager: !!pagerElement, 
+                      status: !!statusElement,
+                      pagerId: 'histPager',
+                      statusId: 'histPageStatus'
+                    });
+                    return;
                   }
-
-                  // 숫자 버튼 3개만(윈도우)
-                  // 윈도우의 시작 페이지 계산: 현재를 가운데에 가깝게 유지
-                  var start = Math.max(1, Math.min(current - Math.floor(WINDOW_SIZE/2), totalPages - WINDOW_SIZE + 1));
-                  var end   = Math.min(totalPages, start + WINDOW_SIZE - 1);
+                  
+                  console.log('Alarm History - histRenderPager 실행:', {histCurrent, histTotalPages, pager: !!pagerElement, status: !!statusElement});
+                  
+                  // 좌/우 버튼 상태
+                  var first = pagerElement.querySelector('[data-act="first"]').parentElement;
+                  var prev  = pagerElement.querySelector('[data-act="prev"]').parentElement;
+                  var next  = pagerElement.querySelector('[data-act="next"]').parentElement;
+                  var last  = pagerElement.querySelector('[data-act="last"]').parentElement;
+                  
+                  first.classList.toggle('disabled', histCurrent===1);
+                  prev .classList.toggle('disabled', histCurrent===1);
+                  next .classList.toggle('disabled', histCurrent===histTotalPages);
+                  last .classList.toggle('disabled', histCurrent===histTotalPages);
 
                   // 기존 숫자 버튼 제거
-                  [].slice.call(pager.querySelectorAll('a[data-page]')).forEach(function(a){ a.parentElement.remove(); });
+                  [].slice.call(pagerElement.querySelectorAll('a[data-page]')).forEach(function(a){ a.parentElement.remove(); });
 
-                  // 새 숫자 버튼 삽입 (first/prev 뒤에)
-                  var anchor = pager.querySelector('[data-act="prev"]');
-                  if(anchor) {
-                    anchor = anchor.parentElement;
-                    for(var p=start; p<=end; p++){
-                      var li = document.createElement('li');
-                      li.className = 'page-item' + (p===current?' active':'');
-                      li.innerHTML = '<a class="page-link" href="#" data-page="'+p+'">'+p+'</a>';
-                      anchor.after(li);
-                      anchor = li;
-                    }
+                  // 윈도우 계산 (3개만 보이도록)
+                  var WINDOW_SIZE = 3;
+                  var start = Math.max(1, Math.min(histCurrent - Math.floor(WINDOW_SIZE/2), histTotalPages - WINDOW_SIZE + 1));
+                  var end   = Math.min(histTotalPages, start + WINDOW_SIZE - 1);
+
+                  // 새 숫자 버튼 삽입 (prev 뒤에)
+                  var anchor = pagerElement.querySelector('[data-act="prev"]').parentElement;
+                  for(var p=start; p<=end; p++){
+                    var li = document.createElement('li');
+                    li.className = 'page-item' + (p===histCurrent?' active':'');
+                    li.innerHTML = '<a class="page-link" href="#" data-page="'+p+'">'+p+'</a>';
+                    anchor.after(li);
+                    anchor = li;
                   }
 
                   // 상태 문구 업데이트
-                  if(status) {
-                    status.textContent = 'Showing ' + current + ' of ' + totalPages + ' pages';
-
-                  }
+                  statusElement.textContent = 'Showing ' + histCurrent + ' of ' + histTotalPages + ' pages';
+                  console.log('Alarm History - 상태 업데이트 완료:', histCurrent, 'of', histTotalPages);
+                  
+                  // 실제 DOM에 반영되었는지 확인
+                  console.log('Alarm History - DOM 상태 확인:', {
+                    statusText: statusElement.textContent,
+                    statusInnerHTML: statusElement.innerHTML,
+                    statusVisible: statusElement.offsetParent !== null
+                  });
                 }
 
                 function initAlarmHistory(){
-                  // DOM 요소들 가져오기
-                  pager = document.getElementById('histPager');
-                  body  = document.getElementById('histBody');
-                  status= document.getElementById('histPageStatus');
+                  console.log('=== Alarm History 초기화 시작 ===');
                   
-                  if(pager && body && status){
+                  // 상태 초기화
+                  histCurrent = 1;
+                  
+                  // DOM 요소들 가져오기 (전역 변수 사용하지 않음)
+                  var pagerElement = document.getElementById('histPager');
+                  var bodyElement = document.getElementById('histBody');
+                  var statusElement = document.getElementById('histPageStatus');
+                  
+                  console.log('DOM 요소 검색 결과:', {
+                    pager: pagerElement ? '찾음' : '못찾음',
+                    body: bodyElement ? '찾음' : '못찾음', 
+                    status: statusElement ? '찾음' : '못찾음'
+                  });
+                  
+                  if(pagerElement && bodyElement && statusElement){
+                    console.log('페이지네이션 이벤트 리스너 추가 중...');
                     // 이벤트 리스너 추가
-                    pager.addEventListener('click', function(e){
+                    pagerElement.addEventListener('click', function(e){
                       var a = e.target.closest('a.page-link'); if(!a){return;}
                       e.preventDefault();
                       var act = a.getAttribute('data-act');
                       var num = a.getAttribute('data-page');
 
-                      if(act==='first') current = 1;
-                      else if(act==='prev') current = Math.max(1, current-1);
-                      else if(act==='next') current = Math.min(totalPages, current+1);
-                      else if(act==='last') current = totalPages;
-                      else if(num){ current = parseInt(num,10); }
+                      if(act==='first') histCurrent = 1;
+                      else if(act==='prev') histCurrent = Math.max(1, histCurrent-1);
+                      else if(act==='next') histCurrent = Math.min(histTotalPages, histCurrent+1);
+                      else if(act==='last') histCurrent = histTotalPages;
+                      else if(num){ histCurrent = parseInt(num,10); }
 
-                      console.log('클릭된 버튼:', act || num, '현재 페이지:', current, '총 페이지:', totalPages);
-                      renderTable();
-                      renderPager();
+                      console.log('Alarm History - 페이지 변경:', act || num, '현재:', histCurrent, '총:', histTotalPages);
+                      histRenderTable();
+                      histRenderPager();
                     });
+                    console.log('페이지네이션 이벤트 리스너 추가 완료');
 
                     // 초기 렌더
-                    renderTable();
-                    renderPager();
+                    console.log('초기 렌더 시작...');
+                    console.log('histRenderTable() 호출...');
+                    histRenderTable();
+                    console.log('histRenderPager() 호출...');
+                    histRenderPager();
+                    console.log('초기 렌더 완료');
+                  } else {
+                    console.error('Alarm History 초기화 실패: 필요한 DOM 요소가 없음');
                   }
+                  
+                  console.log('=== Alarm History 초기화 완료 ===');
                 }
 
-                // 모달이 열릴 때 초기화
-                document.addEventListener('DOMContentLoaded', function() {
-                  var alarmModal = document.getElementById('alarmHistoryModal');
-                  
-                  if(alarmModal) {
-                    alarmModal.addEventListener('shown.bs.modal', function() {
-                      setTimeout(function() {
-                        initAlarmHistory();
-                      }, 100); // 약간의 지연을 두어 DOM이 완전히 렌더링된 후 실행
-                    });
-                  }
-                });
+                        // 모달이 열릴 때 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+          console.log('=== DOM 로드 완료, 모달 이벤트 리스너 설정 시작 ===');
+          
+          // Alarm History 모달 초기화
+          var alarmModal = document.getElementById('alarmHistoryModal');
+          if(alarmModal) {
+            console.log('Alarm History 모달 찾음, 이벤트 리스너 추가 중...');
+            alarmModal.addEventListener('shown.bs.modal', function() {
+              console.log('Alarm History 모달 열림 이벤트 발생!');
+              setTimeout(function() {
+                console.log('Alarm History 모달 초기화 시작 (500ms 지연 후)');
+                initAlarmHistory();
+              }, 500); // User Management와 동일한 지연 시간
+            });
+            console.log('Alarm History 모달 이벤트 리스너 추가 완료');
+          } else {
+            console.error('Alarm History 모달을 찾을 수 없음!');
+          }
+          
+          // User Management 모달 초기화
+          var userModal = document.getElementById('userMgmtModal');
+          if(userModal) {
+            console.log('User Management 모달 찾음, 이벤트 리스너 추가 중...');
+            userModal.addEventListener('shown.bs.modal', function() {
+              console.log('User Management 모달 열림 이벤트 발생!');
+              setTimeout(function() {
+                console.log('User Management 모달 초기화 시작 (500ms 지연 후)');
+                setupUserManagementEvents();
+              }, 500); // Alarm History와 동일한 지연 시간
+            });
+            
+            // 모달이 닫힐 때 초기화 상태 리셋
+            userModal.addEventListener('hidden.bs.modal', function() {
+              console.log('User Management 모달 닫힘, 초기화 상태 리셋');
+              window.userManagementInitialized = false;
+            });
+            
+            console.log('User Management 모달 이벤트 리스너 추가 완료');
+          } else {
+            console.error('User Management 모달을 찾을 수 없음!');
+          }
+          
+          console.log('=== 모달 이벤트 리스너 설정 완료 ===');
+        });
                 </script>
 
                 <!-- Device Time Setup Modal -->
@@ -1577,6 +1673,166 @@
                                         style="width: 100px; background-color: #d3dce6;"
                                         data-bs-dismiss="modal"
                                         onclick="handleResetConfirmation(false)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm Modem Reset Modal -->
+                <div class="modal fade" id="confirmModemResetModal" tabindex="-1" aria-labelledby="confirmModemResetModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                            <div class="modal-body p-4">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fas fa-question-circle text-blue-400 text-5xl"></i>
+                                </div>
+                                <p class="text-lg text-gray-700 mb-6">Do you want to Modem Reset it?</p>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleModemResetConfirmation(true)">
+                                        Ok
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleModemResetConfirmation(false)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm EMS Reset Modal -->
+                <div class="modal fade" id="confirmEmsResetModal" tabindex="-1" aria-labelledby="confirmEmsResetModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                            <div class="modal-body p-4">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fas fa-question-circle text-blue-400 text-5xl"></i>
+                                </div>
+                                <p class="text-lg text-gray-700 mb-6">Do you want to EMS Reset it?<br>(EMS will reboot.)</p>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleEmsResetConfirmation(true)">
+                                        Ok
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleEmsResetConfirmation(false)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm RSRP Req Modal -->
+                <div class="modal fade" id="confirmRsrpReqModal" tabindex="-1" aria-labelledby="confirmRsrpReqModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                            <div class="modal-body p-4">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fas fa-question-circle text-blue-400 text-5xl"></i>
+                                </div>
+                                <p class="text-lg text-gray-700 mb-6">Do you want to RSRP Req refresh set it?</p>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleRsrpReqConfirmation(true)">
+                                        Ok
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleRsrpReqConfirmation(false)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm PLL Relock Modal -->
+                <div class="modal fade" id="confirmPllRelockModal" tabindex="-1" aria-labelledby="confirmPllRelockModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                            <div class="modal-body p-4">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fas fa-question-circle text-blue-400 text-5xl"></i>
+                                </div>
+                                <p class="text-lg text-gray-700 mb-6">Do you want to PLL Relock it?</p>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handlePllRelockConfirmation(true)">
+                                        Ok
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handlePllRelockConfirmation(false)">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm Beam Scan Modal -->
+                <div class="modal fade" id="confirmBeamScanModal" tabindex="-1" aria-labelledby="confirmBeamScanModalLabel" data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content" style="background-color: #f5f5f5; text-align: center; border: 1px solid #ccc; border-radius: 5px;">
+                            <div class="modal-body p-4">
+                                <div class="flex justify-center mb-4">
+                                    <i class="fas fa-question-circle text-blue-400 text-5xl"></i>
+                                </div>
+                                <p class="text-lg text-gray-700 mb-6">Do you want to start Beam Scan it?</p>
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleBeamScanConfirmation(true)">
+                                        Ok
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-lg"
+                                        style="width: 100px; background-color: #d3dce6;"
+                                        data-bs-dismiss="modal"
+                                        onclick="handleBeamScanConfirmation(false)">
                                         Cancel
                                     </button>
                                 </div>
@@ -3201,11 +3457,11 @@
                                 </div>
                             </div>
 
-                            <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3"> <div class="col-6 mb-2">
-                                    <button id="modemResetBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
+                            <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3">                                 <div class="col-6 mb-2">
+                                    <button id="modemResetBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#confirmModemResetModal">Modem Reset</button>
                                 </div>
                                 <div class="col-6 mb-2">
-                                    <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
+                                    <button id="emsResetBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#confirmEmsResetModal">EMS Reset</button>
                                 </div>
                                 <div class="col-6 mb-2">
                                     <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Disable</button>
@@ -3297,14 +3553,14 @@
                                 </div>
                             </div>
 
-                            <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3"> <div class="col-md-4 mb-2">
-                                    <button id="rsrpReqBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
+                            <hr class="my-3" style="border-top: 1px dotted black;" /> <div class="row text-center mt-3">                                 <div class="col-md-4 mb-2">
+                                    <button id="rsrpReqBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#confirmRsrpReqModal">RSRP Req</button>
                                 </div>
                                 <div class="col-md-4 mb-2">
-                                    <button id="pllRelockBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
+                                    <button id="pllRelockBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#confirmPllRelockModal">PLL Relock</button>
                                 </div>
                                 <div class="col-md-4 mb-2">
-                                    <button id="beamScanBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
+                                    <button id="beamScanBtn" class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;" data-bs-toggle="modal" data-bs-target="#confirmBeamScanModal">Beam Scan</button>
                                 </div>
                             </div>
                                                 </div>
@@ -4707,25 +4963,25 @@
         const MODAL_POLL = {
             // TDD 관련 모달들
             '#beaminfo2': { update: false, tdd: false }, // 빔 정보 모달: 둘 다 (빔 정보 + TDD 설정)
-            '#beamInfoModal': { update: false, tdd: false }, // DU Beam Control 모달: 폴링 없음
+            '#beamInfoModal': { update: true, tdd: false }, // DU Beam Control 모달: 폴링 없음
             
             // 상태/설정 관련 모달들
             '#alarmLevelModal': { update: false, tdd: false }, // 알람 레벨 모달: update_status만
             '#alarmHistoryModal': { update: false, tdd: false }, // 알람 히스토리 모달: update_status만
             '#userMgmtModal': { update: false, tdd: false }, // 사용자 관리 모달: update_status만
-            '#alarmMaskModal': { update: false, tdd: false }, // 알람 마스크 모달: update_status만
+            '#alarmMaskModal': { update: true, tdd: false }, // 알람 마스크 모달: update_status만
             
             // Initial Setup 모달들
-            '#duInitialSetupModal': { update: false, tdd: false }, // Initial Setup: Step 4/7에서만 수동으로 폴링 시작
-            '#usimCheckModal': { update: false, tdd: false },
-            '#apnSetupModal': { update: false, tdd: false },
-            '#BtapnSetupModal': { update: false, tdd: false },
-            '#DeviceSetupModal': { update: false, tdd: false },
-            '#AgcSetupModal': { update: true, tdd: true }, // Step 4/7: update_status + tdd_status
-            '#InitialSetupModal': { update: false, tdd: false },
-            '#SuSetupModal': { update: false, tdd: false },
-            '#FinalSetupModal': { update: false, tdd: false },
-            '#duHiddenModal': { update: false, tdd: false },
+            '#duInitialSetupModal': { update: false, tdd: false }, // Initial Setup: Step 0/7 (메인 시작 모달)
+            '#usimCheckModal': { update: false, tdd: false }, // Initial Setup: Step 1/7 (USIM 체크)
+            '#apnSetupModal': { update: false, tdd: false }, // Initial Setup: Step 2/7 (APN 설정)
+            '#BtapnSetupModal': { update: false, tdd: false }, // Initial Setup: Step 3/7 (B타입 APN 설정)
+            '#DeviceSetupModal': { update: false, tdd: false }, // Initial Setup: Step 4/7 (디바이스 설정)
+            '#AgcSetupModal': { update: true, tdd: true }, // Initial Setup: Step 5/7 (AGC 설정) - update_status + tdd_status
+            '#InitialSetupModal': { update: true, tdd: false }, // Initial Setup: Step 6/7 (초기 설정)
+            '#SuSetupModal': { update: true, tdd: false }, // Initial Setup: Step 7/7 (SU 설정)
+            '#FinalSetupModal': { update: false, tdd: false }, // Initial Setup: 완료 모달
+            '#duHiddenModal': { update: true, tdd: false },
             '#duBeamControlModal': { update: false, tdd: false },
             '#confirmResetModal': { update: false, tdd: false },
             '#infoModal': { update: false, tdd: false },
@@ -5826,7 +6082,7 @@
             if (screenId === 'du_content') {
                 duContent.classList.add('active');
                 // DU 화면: dashboard 페이지로 설정 (update_status 폴링)
-                enterPage('dashboard');
+                enterPage('dashboard'); // 자동 폴링 시작 - 주석처리
             } else if (screenId === 'su1_content') {
                 su1Content.classList.add('active');
                 // SU1 화면: su1 전용 폴링 (폴링 없음)
@@ -5887,6 +6143,17 @@
         // ✅ Socket.IO 연결
         socket.on('connect', () => console.log('🟢 Connected to Flask Server'));
         socket.on('disconnect', () => console.log('🔴 Disconnected from Flask Server'));
+        
+        // DU Control 명령 응답 처리
+        socket.on('du_control_response', function(response) {
+            if (response.status === 'success') {
+                console.log('✅ DU Control 명령이 성공적으로 처리되었습니다.');
+                // 성공 시 추가 처리 (예: 버튼 상태 변경, 알림 등)
+            } else {
+                console.error('❌ DU Control 명령 처리 실패:', response.message);
+                // 실패 시 추가 처리 (예: 에러 알림, 재시도 등)
+            }
+        });
 
         // RX 박스 상태 관리
         let rxBoxState = {
@@ -7167,11 +7434,20 @@
 
 
 
+        // ConMuFlag 전체 초기화 함수
+        function resetConMuFlag() {
+            if (sendPacketData.ConMuFlag) {
+                sendPacketData.ConMuFlag = sendPacketData.ConMuFlag.map(() => 0x00);
+            }
+        }
+
         // Reset 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
         function handleResetConfirmation(confirmed) {
             if (confirmed) {
-                // 'Ok' 버튼을 눌렀을 때 DU Reset 동작을 수행 (예: 소켓 통신을 통해 서버에 reset 명령 전송)
                 console.log('DU Reset이 확인되었습니다. Reset 명령을 보냅니다.');
+
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
 
                 // ConMuFlag[0] 바이트를 1로 수정
                 if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
@@ -7186,15 +7462,180 @@
                     socket.emit('du_Ctrl_packet', sendPacketData);
                     console.log('DU Reset packet sent:');
                 } else {
-                    console.error('Socket.IO is not connected. Cannot send DU Reset packet.');
+                    console.error('Socket is not connected.');
                 }
 
-            } else {
-                console.log('DU Reset이 취소되었습니다.');
+                // 마지막에 사용한 비트만 초기화
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
+                    sendPacketData.ConMuFlag[0] = 0x00; // 0번 바이트 전체 초기화
+                }
             }
         }
 
+        // Modem Reset 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
+        function handleModemResetConfirmation(confirmed) {
+            if (confirmed) {
+                console.log('Modem Reset이 확인되었습니다. Reset 명령을 보냅니다.');
 
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
+
+                // ConEmsModemReset 개별 초기화 (이 함수에서 사용하므로)
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x00;
+                }
+
+                // ConEmsModemReset 필드를 0x01로 설정 (Modem reset)
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x01; // 0x01 = Modem reset
+                    console.log('sendPacketData.ConEmsModemReset set to 0x01 (Modem reset):', sendPacketData.ConEmsModemReset);
+                } else {
+                    console.error('sendPacketData.ConEmsModemReset is not defined.');
+                }
+
+                // Socket.IO를 통해 전역 변수 sendPacketData 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('Modem Reset packet sent:');
+                } else {
+                    console.error('Socket is not connected.');
+                }
+
+                // 마지막에 사용한 필드만 초기화
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x00;
+                }
+            }
+        }
+
+        // EMS Reset 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
+        function handleEmsResetConfirmation(confirmed) {
+            if (confirmed) {
+                console.log('EMS Reset이 확인되었습니다. Reset 명령을 보냅니다.');
+
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
+
+                // ConEmsModemReset 개별 초기화 (이 함수에서 사용하므로)
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x00;
+                }
+
+                // ConEmsModemReset 필드를 0x02로 설정 (EMS reset)
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x02; // 0x02 = EMS reset
+                    console.log('sendPacketData.ConEmsModemReset set to 0x02 (EMS reset):', sendPacketData.ConEmsModemReset);
+                } else {
+                    console.error('sendPacketData.ConEmsModemReset is not defined.');
+                }
+
+                // Socket.IO를 통해 전역 변수 sendPacketData 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('EMS Reset packet sent:');
+                } else {
+                    console.error('Socket is not connected.');
+                }
+
+                // 마지막에 사용한 필드만 초기화
+                if (sendPacketData.ConEmsModemReset !== undefined) {
+                    sendPacketData.ConEmsModemReset = 0x00;
+                }
+            }
+        }
+
+        // RSRP Req 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
+        function handleRsrpReqConfirmation(confirmed) {
+            if (confirmed) {
+                console.log('RSRP Request가 확인되었습니다. RSRP 요청을 보냅니다.');
+
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
+
+                // ConMuFlag[14] (packet[594])의 5번 비트를 1로 설정
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 14) {
+                    sendPacketData.ConMuFlag[14] |= 0x20; // 0x20 = 32 = 2^5 (5번 비트)
+                    console.log('sendPacketData.ConMuFlag[14] set to:', sendPacketData.ConMuFlag[14]);
+                } else {
+                    console.error('sendPacketData.ConMuFlag is not defined or is too short.');
+                }
+
+                // Socket.IO를 통해 전역 변수 sendPacketData 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('RSRP Request packet sent:');
+                } else {
+                    console.error('Socket is not connected.');
+                }
+
+                // 마지막에 사용한 비트만 초기화
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 14) {
+                    sendPacketData.ConMuFlag[14] = 0x00; // 14번 바이트 전체 초기화
+                }
+            }
+        }
+
+        // PLL Relock 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
+        function handlePllRelockConfirmation(confirmed) {
+            if (confirmed) {
+                console.log('PLL Relock이 확인되었습니다. PLL Relock 명령을 보냅니다.');
+
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
+
+                // ConMuFlag[0] (packet[580])의 7번 비트를 1로 설정
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
+                    sendPacketData.ConMuFlag[0] |= 0x80; // 0x80 = 128 = 2^7 (7번 비트)
+                    console.log('sendPacketData.ConMuFlag[0] set to:', sendPacketData.ConMuFlag[0]);
+                } else {
+                    console.error('sendPacketData.ConMuFlag is not defined or is empty.');
+                }
+
+                // Socket.IO를 통해 전역 변수 sendPacketData 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('PLL Relock packet sent:');
+                } else {
+                    console.error('Socket is not connected.');
+                }
+
+                // 마지막에 사용한 비트만 초기화
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
+                    sendPacketData.ConMuFlag[0] = 0x00; // 0번 바이트 전체 초기화
+                }
+            }
+        }
+
+        // Beam Scan 확인 모달에서 Ok/Cancel 버튼을 처리하는 함수
+        function handleBeamScanConfirmation(confirmed) {
+            if (confirmed) {
+                console.log('Beam Scan이 확인되었습니다. Beam Scan 명령을 보냅니다.');
+
+                // ConMuFlag 전체 초기화 (전역 함수 사용)
+                resetConMuFlag();
+
+                // ConMuFlag[14] (packet[594])의 6번 비트를 1로 설정
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 14) {
+                    sendPacketData.ConMuFlag[14] |= 0x40; // 0x40 = 64 = 2^6 (6번 비트)
+                    console.log('sendPacketData.ConMuFlag[14] set to:', sendPacketData.ConMuFlag[14]);
+                } else {
+                    console.error('sendPacketData.ConMuFlag is not defined or is too short.');
+                }
+
+                // Socket.IO를 통해 전역 변수 sendPacketData 전송
+                if (socket) {
+                    socket.emit('du_Ctrl_packet', sendPacketData);
+                    console.log('Beam Scan packet sent:');
+                } else {
+                    console.error('Socket is not connected.');
+                }
+
+                // 마지막에 사용한 비트만 초기화
+                if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 14) {
+                    sendPacketData.ConMuFlag[14] = 0x00; // 14번 바이트 전체 초기화
+                }
+            }
+        }
 
         // Packet Info 화면을 표시하는 함수
         function showPacketInfo() {
@@ -7543,8 +7984,9 @@
                 
                 modal.show();
                 
-                // 모달이 열린 후 이벤트 리스너 설정
+                // 모달이 열린 후 이벤트 리스너 설정 (중복 방지)
                 setTimeout(function() {
+                    console.log('openUserManagementModal에서 setupUserManagementEvents 호출');
                     setupUserManagementEvents();
                 }, 100);
             }
@@ -7577,28 +8019,46 @@
         var term = '';
 
         // ===== Elements =====
-        var body  = document.getElementById('userBody');
-        var pager = document.getElementById('userPager');
-        var status= document.getElementById('userStatus');
-        var search= document.getElementById('userSearch');
-        var fieldMenu = document.getElementById('userFilterFieldMenu');
-        var fieldLabel= document.getElementById('userFilterFieldLabel');
+        var body, pager, status, search, fieldMenu, fieldLabel;
 
         // ===== Helpers =====
         function filtered(){
-            if(!term) return USERS;
+            if(!term) {
+                console.log('User Management - filtered: 검색어 없음, 전체 사용자 반환:', USERS.length);
+                return USERS;
+            }
             var t = term.toLowerCase();
-            return USERS.filter(function(u){
+            var filteredUsers = USERS.filter(function(u){
                 return String(u[filterField]||'').toLowerCase().indexOf(t) !== -1;
             });
+            console.log('User Management - filtered: 검색어 "' + term + '", 결과:', filteredUsers.length);
+            return filteredUsers;
         }
-        function pageCount(){ return Math.max(1, Math.ceil(filtered().length / PAGE_SIZE)); }
+        function pageCount(){ 
+            var filteredData = filtered();
+            var count = Math.max(1, Math.ceil(filteredData.length / PAGE_SIZE));
+            console.log('User Management - pageCount:', {filteredLength: filteredData.length, PAGE_SIZE, count});
+            return count;
+        }
 
         function renderTable(){
+            // body 요소를 다시 찾기 (전역 변수 참조 문제 해결)
+            var bodyElement = document.getElementById('userBody');
+            
+            if (!bodyElement) {
+                console.error('User Management - renderTable: body 요소를 찾을 수 없음', {
+                    bodyId: 'userBody'
+                });
+                return;
+            }
+            
             var data = filtered();
             var start = (current-1)*PAGE_SIZE;
             var slice = data.slice(start, start+PAGE_SIZE);
-            body.innerHTML = slice.map(function(u){
+            
+            console.log('User Management - renderTable 실행:', {dataLength: data.length, start, sliceLength: slice.length});
+            
+            bodyElement.innerHTML = slice.map(function(u){
                 return '<tr>'+
                     '<td>'+u.id+'</td>'+
                     '<td>'+u.name+'</td>'+
@@ -7613,8 +8073,22 @@
         }
 
         function renderPager(){
+            // status 요소를 다시 찾기 (전역 변수 참조 문제 해결)
+            var statusElement = document.getElementById('userStatus');
+            
+            if (!pager || !statusElement) {
+                console.error('User Management - renderPager: pager 또는 status 요소를 찾을 수 없음', {
+                    pager: !!pager, 
+                    status: !!statusElement,
+                    statusId: 'userStatus'
+                });
+                return;
+            }
+            
             var total = pageCount();
             current = Math.min(current, total);
+
+            console.log('User Management - renderPager 실행:', {current, total, pager: !!pager, status: !!statusElement});
 
             // 좌/우 버튼 상태
             var first = pager.querySelector('[data-act="first"]').parentElement;
@@ -7643,20 +8117,51 @@
                 anchor = li;
             }
 
-            status.textContent = 'Showing ' + current + ' page of ' + total + ' pages';
+            // 상태 텍스트 업데이트 - 중요!
+            statusElement.textContent = 'Showing ' + current + ' of ' + total + ' pages';
+            console.log('User Management - 상태 업데이트 완료:', current, 'of', total);
+            
+            // 실제 DOM에 반영되었는지 확인
+            console.log('DOM 상태 확인:', {
+                statusText: statusElement.textContent,
+                statusInnerHTML: statusElement.innerHTML,
+                statusVisible: statusElement.offsetParent !== null
+            });
         }
 
         // User Management 이벤트 리스너 설정 함수
         function setupUserManagementEvents() {
+            console.log('=== User Management 초기화 시작 ===');
+            
+            // 중복 초기화 방지
+            if (window.userManagementInitialized) {
+                console.log('User Management 이미 초기화됨, 중복 실행 방지');
+                return;
+            }
+            
             // 요소들 다시 가져오기
-            var body = document.getElementById('userBody');
-            var pager = document.getElementById('userPager');
-            var status = document.getElementById('userStatus');
-            var search = document.getElementById('userSearch');
-            var fieldMenu = document.getElementById('userFilterFieldMenu');
-            var fieldLabel = document.getElementById('userFilterFieldLabel');
+            body = document.getElementById('userBody');
+            pager = document.getElementById('userPager');
+            status = document.getElementById('userStatus');
+            search = document.getElementById('userSearch');
+            fieldMenu = document.getElementById('userFilterFieldMenu');
+            fieldLabel = document.getElementById('userFilterFieldLabel');
+            
+            console.log('DOM 요소 검색 결과:', {
+                body: body ? '찾음' : '못찾음',
+                pager: pager ? '찾음' : '못찾음', 
+                status: status ? '찾음' : '못찾음',
+                search: search ? '찾음' : '못찾음',
+                fieldMenu: fieldMenu ? '찾음' : '못찾음',
+                fieldLabel: fieldLabel ? '찾음' : '못찾음'
+            });
+            
+            // 상태 초기화
+            current = 1;
+            term = '';
             
             if (pager) {
+                console.log('페이지네이션 이벤트 리스너 추가 중...');
                 pager.addEventListener('click', function(e){
                     var a = e.target.closest('a.page-link'); if(!a){return;}
                     e.preventDefault();
@@ -7670,8 +8175,13 @@
                     else if(act==='last') current = total;
                     else if(num){ current = parseInt(num,10); }
 
-                    renderTable(); renderPager();
+                    console.log('User Management - 페이지 변경:', act || num, '현재:', current, '총:', total);
+                    renderTable(); 
+                    renderPager();
                 });
+                console.log('페이지네이션 이벤트 리스너 추가 완료');
+            } else {
+                console.error('페이지네이션 요소를 찾을 수 없음!');
             }
 
             // 검색/필드 변경 이벤트 리스너
@@ -7697,10 +8207,21 @@
             }
 
             // 초기 렌더
+            console.log('초기 렌더 시작...');
             if (body && pager) {
+                console.log('renderTable() 호출...');
                 renderTable();
+                console.log('renderPager() 호출...');
                 renderPager();
+                console.log('초기 렌더 완료');
+                
+                // 초기화 완료 표시
+                window.userManagementInitialized = true;
+            } else {
+                console.error('초기 렌더 실패: body 또는 pager가 없음');
             }
+            
+            console.log('=== User Management 초기화 완료 ===');
         }
 
         // ===== Beam Info Modal Functions =====
@@ -7762,49 +8283,49 @@
                 <div class="modal-body" style="background-color: #e0e0e0; padding: 20px;">
 
                     <!-- DU Section -->
-                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; border: none;">
                         <tr>
-                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px;">
+                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px; border: none;">
                                 <i class="bi bi-folder"></i> DU
                             </td>
                         </tr>
-                        <tr>
-                            <td style="width: 80px;">Latitude</td>
-                            <td><input type="text" style="width: 100%;"></td>
-                            <td style="width: 80px;">Longitude</td>
-                            <td><input type="text" style="width: 100%;"></td>
+                        <tr style="border: none;">
+                            <td style="width: 80px; border: none; padding: 5px;">Latitude</td>
+                            <td style="border: none; padding: 5px;"><input type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px; padding: 4px;"></td>
+                            <td style="width: 80px; border: none; padding: 5px;">Longitude</td>
+                            <td style="border: none; padding: 5px;"><input type="text" style="width: 100%; border: 1px solid #ccc; border-radius: 4px; padding: 4px;"></td>
                         </tr>
-                        <tr>
-                            <td>Azimuth:</td>
-                            <td>Orientation [ 0 ]</td>
-                            <td>Tilt</td>
-                            <td>[ 0 ]</td>
+                        <tr style="border: none;">
+                            <td style="border: none; padding: 5px;">Azimuth:</td>
+                            <td style="border: none; padding: 5px;">Orientation [ 0 ]</td>
+                            <td style="border: none; padding: 5px;">Tilt</td>
+                            <td style="border: none; padding: 5px;">[ 0 ]</td>
                         </tr>
                     </table>
 
                     <!-- SU Section -->
-                    <table style="width: 100%; border-collapse: collapse;">
+                    <table style="width: 100%; border-collapse: collapse; border: none;">
                         <tr>
-                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px;">
+                            <td colspan="4" style="font-weight: bold; border-bottom: 1px dashed #999; padding-bottom: 5px; border: none;">
                                 <i class="bi bi-folder"></i> SU
                             </td>
                         </tr>
-                        <tr>
-                            <td>SU#1</td>
-                            <td>Latitude <input type="text" style="width: 80px;"></td>
-                            <td>Longitude <input type="text" style="width: 80px;"></td>
-                            <td></td>
+                        <tr style="border: none;">
+                            <td style="border: none; padding: 5px;">SU#1</td>
+                            <td style="border: none; padding: 5px;">Latitude <input type="text" style="width: 80px; border: 1px solid #ccc; border-radius: 4px; padding: 4px;"></td>
+                            <td style="border: none; padding: 5px;">Longitude <input type="text" style="width: 80px; border: 1px solid #ccc; border-radius: 4px; padding: 4px;"></td>
+                            <td style="border: none; padding: 5px;"></td>
                         </tr>
-                        <tr>
-                            <td>Azimuth:</td>
-                            <td>Orientation [ ]</td>
-                            <td>Tilt</td>
-                            <td>[ ]</td>
+                        <tr style="border: none;">
+                            <td style="border: none; padding: 5px;">Azimuth:</td>
+                            <td style="border: none; padding: 5px;">Orientation [ ]</td>
+                            <td style="border: none; padding: 5px;">Tilt</td>
+                            <td style="border: none; padding: 5px;">[ ]</td>
                         </tr>
-                        <tr>
-                            <td>Remark</td>
-                            <td colspan="3">
-                                <textarea style="width: 100%; height: 60px;"></textarea>
+                        <tr style="border: none;">
+                            <td style="border: none; padding: 5px;">Remark</td>
+                            <td colspan="3" style="border: none; padding: 5px;">
+                                <textarea style="width: 100%; height: 60px; border: 1px solid #ccc; border-radius: 4px; padding: 4px;"></textarea>
                             </td>
                         </tr>
                     </table>
@@ -7873,36 +8394,46 @@
 
                     <!-- Table -->
                     <div class="bg-white rounded" style="border:1px solid #cfd3d8;">
-                        <div class="table-responsive" style="max-height:52vh; overflow:auto;">
-                            <table class="table table-sm mb-0">
-                                <thead style="background:#74767a; color:#fff; position:sticky; top:0; z-index:2;">
+                        <div class="table-responsive" style="max-height:58vh; overflow:auto;">
+                            <table class="table table-sm mb-0" style="font-size: 0.75rem;">
+                                <thead style="background:#74767a; color:#fff; position:sticky; top:0; z-index:2; font-size: 0.8rem;">
                                     <tr>
-                                        <th style="min-width:160px;">ID</th>
-                                        <th style="min-width:160px;">Name</th>
-                                        <th style="min-width:180px;">Level Name</th>
-                                        <th style="min-width:240px;">E-mail</th>
-                                        <th style="min-width:110px;">Recv Y/N</th>
-                                        <th style="min-width:150px;">Tel</th>
-                                        <th style="min-width:260px;">Remark</th>
-                                        <th style="min-width:160px;">Update ID</th>
+                                        <th style="min-width:120px; padding: 0.4rem 0.3rem; text-align: center;">ID</th>
+                                        <th style="min-width:120px; padding: 0.4rem 0.3rem; text-align: center;">Name</th>
+                                        <th style="min-width:140px; padding: 0.4rem 0.3rem; text-align: center;">Level Name</th>
+                                        <th style="min-width:180px; padding: 0.4rem 0.3rem; text-align: center;">E-mail</th>
+                                        <th style="min-width:80px; padding: 0.4rem 0.3rem; text-align: center;">Recv Y/N</th>
+                                        <th style="min-width:120px; padding: 0.4rem 0.3rem; text-align: center;">Tel</th>
+                                        <th style="min-width:200px; padding: 0.4rem 0.3rem; text-align: center;">Remark</th>
+                                        <th style="min-width:120px; padding: 0.4rem 0.3rem; text-align: center;">Update ID</th>
                                     </tr>
                                 </thead>
-                                <tbody id="userBody">
+                                <tbody id="userBody" style="font-size: 0.75rem;">
                                     <!-- JS renders -->
                                 </tbody>
+                                <style>
+                                    #userBody tr td {
+                                        padding: 0.3rem 0.2rem !important;
+                                        vertical-align: middle;
+                                        text-align: center !important;
+                                    }
+                                    #userBody tr:hover {
+                                        background-color: #f8f9fa;
+                                    }
+                                </style>
                             </table>
                         </div>
                     </div>
 
                     <!-- Footer: status + pagination + Cancel -->
                     <div class="d-flex align-items-center justify-content-between mt-3 mb-4">
-                        <div class="text-muted" id="userStatus">Showing 1 page of 1 pages</div>
+                        <div class="text-muted small ms-1" id="userStatus" style="min-width: 150px; font-weight: bold; color: #666 !important;">Loading...</div>
 
                         <ul id="userPager" class="pagination pagination-sm mb-0">
                             <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
-                            <li class="page-item"><a class="page-link" href="#" data-act="prev">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="prev">&lsaquo;</a></li>
                             <!-- windowed page buttons (3 visible) will be injected here -->
-                            <li class="page-item"><a class="page-link" href="#" data-act="next">Next</a></li>
+                            <li class="page-item"><a class="page-link" href="#" data-act="next">&rsaquo;</a></li>
                             <li class="page-item"><a class="page-link" href="#" data-act="last">&raquo;</a></li>
                         </ul>
                     </div>
@@ -8035,26 +8566,36 @@
                     <!-- Table -->
                     <div class="bg-white rounded" style="border:1px solid #c9c9cf;">
                         <div class="table-wrap" style="max-height:58vh; overflow:auto; position:relative;">
-                            <table class="table table-sm m-0">
-                                <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd;">
+                            <table class="table table-sm m-0" style="font-size: 0.75rem;">
+                                <thead style="position:sticky; top:0; z-index:2; background:#f8f9fa; box-shadow:0 1px 0 #ddd; font-size: 0.8rem;">
                                     <tr>
-                                        <th style="min-width:150px;">Alarm Level</th>
-                                        <th style="min-width:380px;">Alarm Message</th>
-                                        <th style="min-width:180px;">Alarm Date</th>
-                                        <th style="min-width:120px;">Clear Y/N</th>
-                                        <th style="min-width:180px;">Clear Date</th>
+                                        <th style="min-width:150px; text-align: center; padding: 0.4rem 0.3rem;">Alarm Level</th>
+                                        <th style="min-width:380px; text-align: center; padding: 0.4rem 0.3rem;">Alarm Message</th>
+                                        <th style="min-width:180px; text-align: center; padding: 0.4rem 0.3rem;">Alarm Date</th>
+                                        <th style="min-width:120px; text-align: center; padding: 0.4rem 0.3rem;">Clear Y/N</th>
+                                        <th style="min-width:180px; text-align: center; padding: 0.4rem 0.3rem;">Clear Date</th>
                                     </tr>
                                 </thead>
-                                <tbody id="histBody">
+                                <tbody id="histBody" style="font-size: 0.75rem;">
                                     <!-- JS가 렌더링 -->
                                 </tbody>
+                                <style>
+                                    #histBody tr td {
+                                        padding: 0.3rem 0.2rem !important;
+                                        vertical-align: middle;
+                                        text-align: center !important;
+                                    }
+                                    #histBody tr:hover {
+                                        background-color: #f8f9fa;
+                                    }
+                                </style>
                             </table>
                         </div>
                     </div>
 
                     <!-- Footer: status + pagination + cancel -->
                     <div class="d-flex align-items-center justify-content-between py-3" style="background:#eeeeef;">
-                        <div id="histPageStatus" class="text-muted small ms-1" style="min-width: 150px; font-weight: bold; color: #666 !important;">Showing 1 of 8 pages</div>
+                        <div id="histPageStatus" class="text-muted small ms-1" style="min-width: 150px; font-weight: bold; color: #666 !important;">Loading...</div>
 
                         <ul id="histPager" class="pagination pagination-sm mb-0">
                             <li class="page-item"><a class="page-link" href="#" data-act="first">&laquo;</a></li>
@@ -8073,68 +8614,7 @@
         </div>
     </div>
 
-    <!-- 새로운 버튼들의 이벤트 핸들러 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Modem Reset 버튼 이벤트 핸들러
-            const modemResetBtn = document.getElementById('modemResetBtn');
-            if (modemResetBtn) {
-                modemResetBtn.addEventListener('click', function() {
-                    console.log('Modem Reset 버튼이 클릭되었습니다.');
-                    sendResetCommand();
-                });
-            }
 
-            // RSRP Req 버튼 이벤트 핸들러
-            const rsrpReqBtn = document.getElementById('rsrpReqBtn');
-            if (rsrpReqBtn) {
-                rsrpReqBtn.addEventListener('click', function() {
-                    console.log('RSRP Req 버튼이 클릭되었습니다.');
-                    sendResetCommand();
-                });
-            }
-
-            // PLL Relock 버튼 이벤트 핸들러
-            const pllRelockBtn = document.getElementById('pllRelockBtn');
-            if (pllRelockBtn) {
-                pllRelockBtn.addEventListener('click', function() {
-                    console.log('PLL Relock 버튼이 클릭되었습니다.');
-                    sendResetCommand();
-                });
-            }
-
-            // Beam Scan 버튼 이벤트 핸들러
-            const beamScanBtn = document.getElementById('beamScanBtn');
-            if (beamScanBtn) {
-                beamScanBtn.addEventListener('click', function() {
-                    console.log('Beam Scan 버튼이 클릭되었습니다.');
-                    sendResetCommand();
-                });
-            }
-        });
-
-        // Reset 명령을 보내는 공통 함수
-        function sendResetCommand() {
-            console.log('Reset 명령을 보냅니다.');
-            
-            // ConMuFlag[0] 바이트를 1로 설정
-            if (sendPacketData.ConMuFlag && sendPacketData.ConMuFlag.length > 0) {
-                sendPacketData.ConMuFlag[0] = 0x01; // 10진수 1 또는 16진수 0x01
-                console.log('sendPacketData.ConMuFlag[0] set to 1:', sendPacketData.ConMuFlag[0]);
-            } else {
-                console.error('sendPacketData.ConMuFlag is not defined or is empty.');
-                return;
-            }
-
-            // Socket.IO를 통해 전역 변수 sendPacketData 전송
-            if (socket) {
-                socket.emit('du_Ctrl_packet', sendPacketData);
-                console.log('Reset packet sent via du_Ctrl_packet');
-            } else {
-                console.error('Socket.IO is not connected. Cannot send Reset packet.');
-            }
-        }
-    </script>
 
 </body>
 </html>
