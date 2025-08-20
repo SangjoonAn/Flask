@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 import binascii
@@ -8,6 +8,9 @@ import time # 시간을 측정하기 위해 time 모듈 추가
 from datetime import datetime # 현재 시간을 가져오기 위해 datetime 모듈 추가
 
 import os
+
+# Set Mode 중인 SID 관리
+paused_sids = set()
 
 # Flask 애플리케이션 생성 및 설정
 app = Flask(__name__)
@@ -81,7 +84,7 @@ def handle_hex_packet(data):
                 print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ⚠️ Unknown Rcv_Main_Sys: 0x{rcv_main_sys:02X}")
                 return {"status": "error", "message": f"Unknown Rcv_Main_Sys: 0x{rcv_main_sys:02X}"}
             
-            socketio.emit("update_status", {"packet": update_status})
+            emit_status_to_all("update_status", {"packet": update_status})
                     
             # 알람 상태를 별도로 전송 (DU와 SU 패킷 모두)
             if 'AlarmStatus' in update_status:
@@ -96,7 +99,7 @@ def handle_hex_packet(data):
             return {"status": "success", "received_hex": data}
         elif cmd == 0x91 :
             tdd_status = parse_TddStatusPacket(binary_data)
-            socketio.emit("tdd_status", {"packet": tdd_status})
+            emit_status_to_all("tdd_status", {"packet": tdd_status})
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S") # 밀리초까지 포함 (뒤 3자리는 잘라내어 마이크로초 대신 밀리초 단위로 표시)
             print(f"[{current_time}] 📥 Received Tdd Status Packet")
             return {"Tddstatus": "success", "received_hex": data}
@@ -211,6 +214,32 @@ def handle_du_control_packet(data):
         print(f"❌ DU Control Packet Error: {e}")
         socketio.emit("du_control_response", {"status": "error", "message": str(e)})
         return {"status": "error", "message": str(e)}
+
+@socketio.on("enter_set_mode")
+def enter_set_mode(payload=None):
+    payload = payload or {}
+    paused_sids.add(request.sid)              # 이 브라우저 정지
+    socketio.emit("du_Ctrl_packet", {"ConMuFlag": payload.get("ConMuFlag", [])}, include_self=False)
+    emit("du_set_mode_ack", {"ok": True})
+
+@socketio.on("leave_set_mode")
+def leave_set_mode(payload=None):
+    payload = payload or {}
+    paused_sids.discard(request.sid)
+    socketio.emit("du_Ctrl_packet", {"ConMuFlag": payload.get("ConMuFlag", [])}, include_self=False)
+    emit("du_status_mode_ack", {"ok": True})
+
+@socketio.on("apply_du_values")
+def apply_du_values(payload):
+    socketio.emit("du_Ctrl_packet", payload or {}, include_self=False)
+    emit("du_apply_ack", {"ok": True})
+
+# 상태 전송 시 Set Mode SID 제외
+def emit_status_to_all(event_name, data):
+    ns = '/'
+    for sid in socketio.server.manager.get_participants(ns, None):
+        if sid in paused_sids: continue
+        socketio.emit(event_name, data, to=sid)
 
 
 

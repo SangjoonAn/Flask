@@ -982,12 +982,13 @@
                 <span id="browser-time">Local: Loading...</span>
             </div>
             <div class="icon-container d-flex align-items-center">
-                <i class="fas fa-user me-3" style="cursor: pointer;" onclick="openUserManagementModal()"></i> 
-                <i class="fas fa-compass me-3" style="cursor: pointer;" onclick="openBeamInfoModal()"></i>                
-                <div style="position: relative; display: inline-block;" class="me-3">
+                <i class="fas fa-user me-3 js-top-icon" style="cursor: pointer;" onclick="openUserManagementModal()"></i> 
+                <i class="fas fa-compass me-3 js-top-icon" style="cursor: pointer;" onclick="openBeamInfoModal()"></i>                
+                <div style="position: relative; display: inline-block;" class="me-3 js-top-icon">
                     <i class="fas fa-bell" style="cursor: pointer;" onclick="openAlarmHistoryModal()"></i> <span class="badge rounded-pill bg-danger" style="position: absolute; top: -5px; right: -5px; font-size: 0.6em;">125</span>
                 </div>
-                <i class="fas fa-cog me-3" onclick="openAlarmLevelModal()"></i> <div class="dropdown">
+                <i class="fas fa-cog me-3 js-top-icon" onclick="openAlarmLevelModal()"></i> 
+                <div class="dropdown js-top-icon">
                     <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: white !important;">
                         <span class="me-2">primaer</span> </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
@@ -995,6 +996,8 @@
                         <li><a class="dropdown-item" href="#">Logout</a></li>
                     </ul>
                 </div>
+                
+
             </div>
         </div>
     </nav>
@@ -1120,7 +1123,9 @@
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;"
                                 data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>       
                         <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
-                        <button class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                        <button id="btnStatusMode" class="btn btn-secondary btn-sm me-2 d-none">Status Mode</button>
+                        <button id="btnApply" class="btn btn-success btn-sm d-none">Set</button>
+                        <button id="btnSetMode" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
                     </div>
                 </div>
 
@@ -2885,7 +2890,9 @@
                                 </div>
                             </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
                                 <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                                <button class="btn btn-primary" style="visibility: visible; opacity: 1;">Set Mode</button>
+                                <button class="btn btn-primary" id="btnSetMode" style="visibility: visible; opacity: 1;">Set Mode</button>
+                                <button class="btn btn-success d-none" id="btnApply">Apply</button>
+                                <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
                             </div>
 
                         </div>
@@ -3225,13 +3232,13 @@
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span id="tempupper">N/A</span>
+                                    <input type="text" id="tempupper" data-editable="true" class="form-control form-control-sm" value="80" readonly>
                                 </div>
                                 <div class="col-3 mb-2">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
                                 <div class="col-3 mb-2 text-end">
-                                    <span id="templower">N/A</span>
+                                    <input type="text" id="templower" data-editable="true" class="form-control form-control-sm" value="-30" readonly>
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3509,15 +3516,15 @@
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_mode">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span id="mvbx_rsagc_thresholdmvbx_rsagc_mode">N/A</span>
+                                        <input type="text" id="mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
@@ -3544,7 +3551,7 @@
                                     <span><strong>gNB Type</strong></span>
                                 </div>
                                 <div class="col-md-9">
-                                    <select id="gNB_Vendor" class="form-select form-select-sm">
+                                    <select id="gNB_Vendor" data-editable="true" class="form-select form-select-sm">
                                         <option value="Manual">Manual</option>
                                         <option value="Samsung">Samsung</option>
                                         <option value="Nokia">Nokia</option>
@@ -3595,15 +3602,15 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ATT</strong></span>
-                                                <span id="dl_att_siso">N/A</span>
+                                                <input type="text" id="dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <span id="dl_alc_level_siso">N/A</span>
+                                                <input type="text" id="dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode">N/A</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3616,11 +3623,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ATT</strong></span>
-                                                <span id="ul_att_siso">N/A</span>
+                                                <input type="text" id="ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <span id="ul_iso_level_siso">N/A</span>
+                                                <input type="text" id="ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -3628,11 +3635,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id = "mvbx_tx_gain_set_siso">NA</span>
+                                            <input type="text" id="mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id = "mvbx_rx_gain_set_siso">NA</span>
+                                            <input type="text" id="mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3659,15 +3666,15 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ATT</strong></span>
-                                                <span id="dl_att_mimo">N/A</span>
+                                                <input type="text" id="dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <span id="dl_alc_level_mimo">N/A</span>
+                                                <input type="text" id="dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode">N/A</button>
+                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3680,11 +3687,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ATT</strong></span>
-                                                <span id="ul_att_mimo">N/A</span>
+                                                <input type="text" id="ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <span id="ul_iso_level_mimo">N/A</span>
+                                                <input type="text" id="ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -3692,11 +3699,11 @@
                                     <div class="row mt-2">
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id = "mvbx_tx_gain_set_miso">NA</span>
+                                            <input type="text" id="mvbx_tx_gain_set_miso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id = "mvbx_rx_gain_set_miso">NA</span>
+                                            <input type="text" id="mvbx_rx_gain_set_miso" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3724,12 +3731,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="ld1_det_dl0_siso_low">N/A</span>
+                                            <input type="text" id="ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="pd1_det_ul0_siso_low">N/A</span>
+                                            <input type="text" id="pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -3753,12 +3760,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="ld2_det_dl1_mimo_low">N/A</span>
+                                            <input type="text" id="ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="pd2_det_ul1_mimo_low">N/A</span>
+                                            <input type="text" id="pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -6425,13 +6432,13 @@
             updateText("curtemper", `${data.packet.SysTemper} ℃`);
             }
             
-            if (data.packet.SysTemperHighLvl !== undefined) {
-            updateText("tempupper", `${data.packet.SysTemperHighLvl} ℃`);
-            }
+                            if (data.packet.SysTemperHighLvl !== undefined) {
+                    updateValue("tempupper", data.packet.SysTemperHighLvl);
+                }
             
-            if (data.packet.SysTemperLowLvl !== undefined) {
-            updateText("templower", `${data.packet.SysTemperLowLvl} ℃`);
-            }
+                            if (data.packet.SysTemperLowLvl !== undefined) {
+                    updateValue("templower", data.packet.SysTemperLowLvl);
+                }
 
             // SU1 페이지 업데이트 (Rcv_Main_Sys = 0x40)
             if (data.packet.Rcv_Main_Sys === 0x40) {
@@ -6806,24 +6813,24 @@
 
             // SISO RF
             updateText("dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
-            updateText("dl_att_siso", data.packet.DU_DlManualAtten_SISO + " [dB]");
-            updateText("dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level + " [dBm]");
+                            updateValue("dl_att_siso", data.packet.DU_DlManualAtten_SISO);
+                updateValue("dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level);
             updateText("ul_input_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
-            updateText("ul_att_siso", data.packet.DU_UlManualAtten_SISO + " [dB]");
-            updateText("ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level + " [dBm]");
-            updateText("mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso + " [dB]");
-            updateText("mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso + " [dB]");
+                            updateValue("ul_att_siso", data.packet.DU_UlManualAtten_SISO);
+                updateValue("ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
+                            updateValue("mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
+                updateValue("mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
             updateText("ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
 
             // MIMO RF
             updateText("dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
-            updateText("dl_att_mimo", data.packet.DU_DlManualAtten_MIMO + " [dB]");
-            updateText("dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level + " [dBm]");
+                            updateValue("dl_att_mimo", data.packet.DU_DlManualAtten_MIMO);
+                updateValue("dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level);
             updateText("ul_input_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
-            updateText("ul_att_mimo", data.packet.DU_UlManualAtten_MIMO + " [dB]");
-            updateText("ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level + " [dBm]");
-            updateText("mvbx_tx_gain_set_miso", data.packet.Mvbx_TxGainSetMiso + " [dB]");
-            updateText("mvbx_rx_gain_set_miso", data.packet.Mvbx_RxGainSetMiso + " [dB]");
+                            updateValue("ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
+                updateValue("ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+                            updateValue("mvbx_tx_gain_set_miso", data.packet.Mvbx_TxGainSetMiso);
+                updateValue("mvbx_rx_gain_set_miso", data.packet.Mvbx_RxGainSetMiso);
             updateText("ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
 
             // RF Configuration Fields Update
@@ -6877,10 +6884,10 @@
             updateText("pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
             
             //mimo optic
-            updateText("ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low + " [dBm]");
-            updateText("ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low + " [dBm]");
-            updateText("pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low + " [dBm]");
-            updateText("pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low + " [dBm]");
+                            updateValue("ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
+                updateValue("ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
+                updateValue("pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
+                updateValue("pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
 
 
             if (data.packet.AlarmStatus) {
@@ -6928,64 +6935,64 @@
             updateText("du_iso_status", duIsoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
         
 
-            // 1. Ant. Array On/Off (GumStick_OnOff)
-            const gumstickOnOffEl = document.getElementById("gumstick_onoff");
-            if (gumstickOnOffEl) {
-                if (data.packet.GumStick_OnOff === 1) {
-                    gumstickOnOffEl.textContent = "On";
-                    gumstickOnOffEl.className = "btn btn-success btn-sm";
-                } else {
-                    gumstickOnOffEl.textContent = "Off";
-                    gumstickOnOffEl.className = "btn btn-secondary btn-sm";
+                            // 1. Ant. Array On/Off (GumStick_OnOff)
+                const gumstickOnOffEl = document.getElementById("gumstick_onoff");
+                if (gumstickOnOffEl) {
+                    if (data.packet.GumStick_OnOff === 1) {
+                        gumstickOnOffEl.textContent = "On";
+                        gumstickOnOffEl.className = "btn btn-success btn-sm";
+                    } else {
+                        gumstickOnOffEl.textContent = "Off";
+                        gumstickOnOffEl.className = "btn btn-secondary btn-sm";
+                    }
                 }
-            }
 
-            // 2. AGC On/Off (Mvbx_RsAgcMode)
-            const mvbxRsagcModeEl = document.getElementById("mvbx_rsagc_mode");
-            if (mvbxRsagcModeEl) {
-                if (data.packet.Mvbx_RsAgcMode === 1) {
-                    mvbxRsagcModeEl.textContent = "On";
-                    mvbxRsagcModeEl.className = "btn btn-success btn-sm";
-                } else {
-                    mvbxRsagcModeEl.textContent = "Off";
-                    mvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
+                            // 2. AGC On/Off (Mvbx_RsAgcMode)
+                const mvbxRsagcModeEl = document.getElementById("mvbx_rsagc_mode");
+                if (mvbxRsagcModeEl) {
+                    if (data.packet.Mvbx_RsAgcMode === 1) {
+                        mvbxRsagcModeEl.textContent = "On";
+                        mvbxRsagcModeEl.className = "btn btn-success btn-sm";
+                    } else {
+                        mvbxRsagcModeEl.textContent = "Off";
+                        mvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
+                    }
                 }
-            }
 
-            // 3. AGC Level (Mvbx_RsAgcThreshold)
-            let agcLevel = data.packet.Mvbx_RsAgcThreshold;
-            if (agcLevel === -999) {
-                updateText("mvbx_rsagc_threshold", "- - -");
-            } else {
-                updateText("mvbx_rsagc_threshold", agcLevel + " dBm");
-            }
+                            // 3. AGC Level (Mvbx_RsAgcThreshold)
+                let agcLevel = data.packet.Mvbx_RsAgcThreshold;
+                if (agcLevel === -999) {
+                    updateText("mvbx_rsagc_threshold", "- - -");
+                } else {
+                    updateText("mvbx_rsagc_threshold", agcLevel + " dBm");
+                }
 
             // 4. AGC Input (AGC_Input_Power)
             updateText("agc_input_power", data.packet.AGC_Input_Power + " dBm");
 
             // ALC DL0 SISO Mode (1=ON, 0=OFF)
-            const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
-            if (alcDl0SisoEl) {
-                if (data.packet.ALC_DL0_SISO_Mode === 1) {
-                    alcDl0SisoEl.textContent = "On";
-                    alcDl0SisoEl.className = "btn btn-success btn-sm";
-                } else {
-                    alcDl0SisoEl.textContent = "Off";
-                    alcDl0SisoEl.className = "btn btn-secondary btn-sm";
+                            const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
+                if (alcDl0SisoEl) {
+                    if (data.packet.ALC_DL0_SISO_Mode === 1) {
+                        alcDl0SisoEl.textContent = "On";
+                        alcDl0SisoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        alcDl0SisoEl.textContent = "Off";
+                        alcDl0SisoEl.className = "btn btn-secondary btn-sm";
+                    }
                 }
-            }
             
             // ALC DL1 MIMO Mode (1=ON, 0=OFF)
-            const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
-            if (alcDl1MimoEl) {
-                if (data.packet.ALC_DL1_MIMO_Mode === 1) {
-                    alcDl1MimoEl.textContent = "On";
-                    alcDl1MimoEl.className = "btn btn-success btn-sm";
-                } else {
-                    alcDl1MimoEl.textContent = "Off";
-                    alcDl1MimoEl.className = "btn btn-secondary btn-sm";
+                            const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
+                if (alcDl1MimoEl) {
+                    if (data.packet.ALC_DL1_MIMO_Mode === 1) {
+                        alcDl1MimoEl.textContent = "On";
+                        alcDl1MimoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        alcDl1MimoEl.textContent = "Off";
+                        alcDl1MimoEl.className = "btn btn-secondary btn-sm";
+                    }
                 }
-            }
 
             // gNB Type: 0=Manual, 1=Samsung, 2=Nokia, 3=Ericsson
             console.log('gNB_Vendor data:', data.packet.gNB_Vendor);
@@ -8614,7 +8621,182 @@
         </div>
     </div>
 
+    <!-- Set Mode JavaScript -->
+    <script>
+    //==== 전역 상태 ====
+    let SET_MODE=false, LIVE_UPDATES=true, SNAPSHOT_PENDING=false;
 
+    //==== UI id ↔ 데이터 필드 매핑 ====
+    const FIELD_MAP = {
+      // DU System
+      tempupper:       { key:'SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
+      templower:       { key:'SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+
+      // Beam Status
+      gumstick_onoff:  { key:'GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      mvbx_rsagc_mode: { key:'Mvbx_RsAgcMode',        type:'u8',    min:0, max:1 },
+      mvbx_rsagc_threshold: { key:'Mvbx_RsAgcThreshold', type:'i8', min:-128, max:127 },
+      gNB_Vendor:      { key:'gNB_Vendor',            type:'u8',    min:0, max:255 },
+
+      // SISO RF
+      dl_att_siso:     { key:'DU_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
+      dl_alc_level_siso: { key:'ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      alc_dl0_siso_mode: { key:'ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
+      mvbx_tx_gain_set_siso: { key:'Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
+      ul_att_siso:     { key:'DU_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
+      ul_iso_level_siso: { key:'ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      mvbx_rx_gain_set_siso: { key:'Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+
+      // MIMO RF
+      dl_att_mimo:     { key:'DU_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
+      dl_alc_level_mimo: { key:'ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      alc_dl1_mimo_mode: { key:'ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
+      mvbx_tx_gain_set_miso: { key:'Mvbx_TxGainSetMiso', type:'u8', min:0, max:255 },
+      ul_att_mimo:     { key:'DU_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
+      ul_iso_level_mimo: { key:'ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      mvbx_rx_gain_set_miso: { key:'Mvbx_RxGainSetMiso', type:'u8', min:0, max:255 },
+
+      // OPTIC
+      ld1_det_dl0_siso_low: { key:'LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+    };
+
+    //==== ConMuFlag 컨트롤 비트 (packet[580]을 index 0으로, [상대인덱스, bit]) ====
+    const CONTROL_BITS = {
+      SysTemperHighLvl:[0,3], SysTemperLowLvl:[0,3],
+
+      GumStick_OnOff:[7,1],
+      Mvbx_RsAgcMode:[16,5],
+      Mvbx_RsAgcThreshold:[16,4],
+      gNB_Vendor:[14,2],
+
+      DU_DlManualAtten_SISO:[4,0],
+      ALC_DL0_SISO_Level:[7,4],
+      ALC_DL0_SISO_Mode:[3,2],
+      Mvbx_TxGainSetSiso:[16,0],
+      DU_UlManualAtten_SISO:[4,4],
+      ALC_UL0_SISO_Level:[7,6],
+      Mvbx_RxGainSetSiso:[16,1],
+
+      DU_DlManualAtten_MIMO:[4,2],
+      ALC_DL1_MIMO_Level:[7,5],
+      ALC_DL1_MIMO_Mode:[3,3],
+      Mvbx_TxGainSetMiso:[16,2],
+      DU_UlManualAtten_MIMO:[4,7],
+      ALC_UL1_MIMO_Level:[7,7],
+      Mvbx_RxGainSetMiso:[16,3],
+
+      LD1_DET_DL0_SISO_Low:[8,0],
+      PD1_DET_UL0_SISO_Low:[8,2],
+      LD2_DET_DL1_MIMO_Low:[8,1],
+      PD2_DET_UL1_MIMO_Low:[8,3],
+    };
+
+    //==== 값 업데이트 함수 ====
+    function updateValue(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        
+        if (el.type === 'button') {
+            el.textContent = value;
+            el.className = value === 'On' ? 'btn btn-success btn-sm' : 'btn btn-secondary btn-sm';
+        } else if (el.tagName === 'SELECT') {
+            el.value = value;
+        } else {
+            el.value = value;
+        }
+    }
+
+    //==== UI 모드 토글 ====
+    function applyUiMode(){
+      // Set Mode 관련 버튼들 토글
+      document.getElementById('btnSetMode').classList.toggle('d-none', SET_MODE);
+      document.getElementById('btnApply').classList.toggle('d-none', !SET_MODE);
+      document.getElementById('btnStatusMode').classList.toggle('d-none', !SET_MODE);
+      
+      // 사진에 보이는 모든 버튼들 숨김/표시 (Initial Setup, APN, RESET, HIDDEN, Beam Info, Alarm Mask)
+      const buttonsToHide = [
+        'initialSetupBtn', 'apnBtn', 'resetBtn', 'openModalBtn', 
+        'beamInfoBtn', 'alarmMaskBtn'
+      ];
+      buttonsToHide.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.toggle('d-none', SET_MODE);
+      });
+      
+      // 또는 data-bs-toggle 속성이 있는 모든 버튼 숨김 (모달 버튼들)
+      document.querySelectorAll('[data-bs-toggle="modal"]').forEach(el=>{
+        el.classList.toggle('d-none', SET_MODE);
+      });
+
+      // 편집 가능한 필드들 토글
+      document.querySelectorAll('[data-editable="true"]').forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE;
+        else el.toggleAttribute('readonly', !SET_MODE);
+        el.classList.toggle('editable-on', SET_MODE);
+      });
+    }
+
+    //==== 상태 수신: 스냅샷 1회만 반영 ====
+    socket.on("tdd_status", ({packet})=>{
+      if (!LIVE_UPDATES && !SNAPSHOT_PENDING) return;
+      // 예시: updateValue('temp_upper', packet.SysTemperHighLvl); 등
+      if (SNAPSHOT_PENDING) SNAPSHOT_PENDING=false;
+    });
+
+    //==== 컨트롤비트 빌드(24바이트) ====
+    function buildConMuFlag(enable=true){
+      const bytes = new Array(24).fill(0);
+      if (!enable) return bytes;
+      for (const [key,[idx,bit]] of Object.entries(CONTROL_BITS)){
+        bytes[idx] |= (1<<bit);
+      }
+      return bytes;
+    }
+
+    //==== 값 수집/검증 ====
+    function collectFields(){
+      const out = {};
+      for (const [id, spec] of Object.entries(FIELD_MAP)){
+        const el = document.getElementById(id);
+        if (!el) continue;
+        let v = (spec.type.startsWith('u') || spec.type==='i8') && el.type==='checkbox'
+                ? (el.checked?1:0) : Number(el.value);
+        if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        out[spec.key] = v;
+      }
+      return out;
+    }
+
+    //==== 버튼 핸들러 ====
+    function enterSetMode(){
+      SET_MODE=true; LIVE_UPDATES=false; SNAPSHOT_PENDING=true;
+      applyUiMode();
+      socket.emit('enter_set_mode', { ConMuFlag: buildConMuFlag(true) });
+      socket.emit('request_update_status', { rcv_main_sys: 0x30 }); // 스냅샷 1회
+    }
+    function leaveSetMode(){
+      SET_MODE=false; LIVE_UPDATES=true; SNAPSHOT_PENDING=false;
+      applyUiMode();
+      socket.emit('leave_set_mode', { ConMuFlag: buildConMuFlag(false) });
+      socket.emit('request_update_status', { rcv_main_sys: 0x30 });
+    }
+    function applySet(){
+      try{
+        const fields = collectFields();
+        socket.emit('apply_du_values', { Fields: fields });
+      }catch(e){ alert('입력 오류: ' + e.message); }
+    }
+
+    //==== 버튼 바인딩 ====
+    document.getElementById('btnSetMode')?.addEventListener('click', enterSetMode);
+    document.getElementById('btnStatusMode')?.addEventListener('click', leaveSetMode);
+    document.getElementById('btnApply')?.addEventListener('click', applySet);
+    </script>
 
 </body>
 </html>
