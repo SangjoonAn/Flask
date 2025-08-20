@@ -2827,23 +2827,23 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="beam-scan-field">
-                                                            <label for="apiLogLevel">API Log Level (2~4)</label>
+                                                            <label for="apiLogLevel">API Log Level [2~6]</label>
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="apiLogLevel" value="5">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="apiAdcSel">API Adc Sel (0~3dB)</label>
+                                                            <label for="apiAdcSel">API Adc Sel [0-3 :6dB]</label>
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="apiAdcSel" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="syncPathGain">Sync Path Gain (0~15.2dB)</label>
+                                                            <label for="syncPathGain">Sync Path Gain [0-15 :2dB]</label>
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="syncPathGain" value="15">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="duTimeAdvance">DU Time Advance (10.5us)</label>
+                                                            <label for="duTimeAdvance">DU Time Advance [1:0.5us]</label>
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="duTimeAdvance" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
-                                                            <label for="suTimeAdvance">SU Time Advance (10.5us)</label>
+                                                            <label for="suTimeAdvance">SU Time Advance [1:0.5us]</label>
                                                             <input type="text" class="form-control form-control-sm ms-auto w-25" id="suTimeAdvance" value="0">
                                                         </div>
                                                         <div class="beam-scan-field">
@@ -3513,11 +3513,11 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_threshold">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_mode">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span id="mvbx_rsagc_mode">N/A</span>
+                                        <span id="mvbx_rsagc_thresholdmvbx_rsagc_mode">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
@@ -4083,11 +4083,11 @@
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_mvbx_rsagc_threshold">N/A</button>
+                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_mvbx_rsagc_mode">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
-                                        <span id="su1_mvbx_rsagc_mode">N/A</span>
+                                        <span id="su1_mvbx_rsagc_threshold">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
@@ -5012,10 +5012,10 @@
         // TX 박스 깜빡임 함수
         function pulseTxBox(onDuration = 200) {
             // ON: TX 박스는 초록색으로
-            document.querySelectorAll('.tx-box').forEach(txbox => {
-                txbox.style.backgroundColor = 'green';  // TX는 초록색
-                txbox.style.color = 'black';            // 텍스트는 검정색
-            });
+                    document.querySelectorAll('.tx-box').forEach(txbox => {
+            txbox.style.backgroundColor = 'yellow';  // TX는 노란색 (RX와 동일)
+            txbox.style.color = 'black';            // 텍스트는 검정색
+        });
             // OFF: 원래색 복원
             setTimeout(() => {
                 document.querySelectorAll('.tx-box').forEach(txbox => {
@@ -6205,10 +6205,10 @@
 
         // TX 박스 켜기
         socket.on("tx_on", function () {
-            document.querySelectorAll('.tx-box').forEach(txbox => {
-                txbox.style.backgroundColor = 'green';
-                txbox.style.color = 'black';
-            });
+                    document.querySelectorAll('.tx-box').forEach(txbox => {
+            txbox.style.backgroundColor = 'yellow';  // RX와 동일한 노란색
+            txbox.style.color = 'black';
+        });
             console.log("🟡 TX Box: ON");
         });
 
@@ -6619,24 +6619,24 @@
                     }
                 }
 
-                // SU1 AGC On/Off (Mvbx_RsAgcThreshold) - DU와 동일 로직
-                const su1MvbxRsagcThresholdEl = document.getElementById("su1_mvbx_rsagc_threshold");
-                if (su1MvbxRsagcThresholdEl) {
-                    if (data.packet.Mvbx_RsAgcThreshold === 1) {
-                        su1MvbxRsagcThresholdEl.textContent = "On";
-                        su1MvbxRsagcThresholdEl.className = "btn btn-success btn-sm";
+                // SU1 AGC On/Off (Mvbx_RsAgcMode) - DU와 동일 로직
+                const su1MvbxRsagcModeEl = document.getElementById("su1_mvbx_rsagc_mode");
+                if (su1MvbxRsagcModeEl) {
+                    if (data.packet.Mvbx_RsAgcMode === 1) {
+                        su1MvbxRsagcModeEl.textContent = "On";
+                        su1MvbxRsagcModeEl.className = "btn btn-success btn-sm";
                     } else {
-                        su1MvbxRsagcThresholdEl.textContent = "Off";
-                        su1MvbxRsagcThresholdEl.className = "btn btn-secondary btn-sm";
+                        su1MvbxRsagcModeEl.textContent = "Off";
+                        su1MvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
                     }
                 }
 
-                // SU1 AGC Level (Mvbx_RsAgcMode) - DU와 동일 로직
-                let su1AgcLevel = data.packet.Mvbx_RsAgcMode;
+                // SU1 AGC Level (Mvbx_RsAgcThreshold) - DU와 동일 로직
+                let su1AgcLevel = data.packet.Mvbx_RsAgcThreshold;
                 if (su1AgcLevel === -999) {
-                    updateText("su1_mvbx_rsagc_mode", "- - -");
+                    updateText("su1_mvbx_rsagc_threshold", "- - -");
                 } else {
-                    updateText("su1_mvbx_rsagc_mode", su1AgcLevel + " dBm");
+                    updateText("su1_mvbx_rsagc_threshold", su1AgcLevel + " dBm");
                 }
 
                                 // SU1 AGC Input (AGC_Input_Power) - DU와 동일 로직
@@ -6940,24 +6940,24 @@
                 }
             }
 
-            // 2. AGC On/Off (Mvbx_RsAgcThreshold)
-            const mvbxRsagcThresholdEl = document.getElementById("mvbx_rsagc_threshold");
-            if (mvbxRsagcThresholdEl) {
-                if (data.packet.Mvbx_RsAgcThreshold === 1) {
-                    mvbxRsagcThresholdEl.textContent = "On";
-                    mvbxRsagcThresholdEl.className = "btn btn-success btn-sm";
+            // 2. AGC On/Off (Mvbx_RsAgcMode)
+            const mvbxRsagcModeEl = document.getElementById("mvbx_rsagc_mode");
+            if (mvbxRsagcModeEl) {
+                if (data.packet.Mvbx_RsAgcMode === 1) {
+                    mvbxRsagcModeEl.textContent = "On";
+                    mvbxRsagcModeEl.className = "btn btn-success btn-sm";
                 } else {
-                    mvbxRsagcThresholdEl.textContent = "Off";
-                    mvbxRsagcThresholdEl.className = "btn btn-secondary btn-sm";
+                    mvbxRsagcModeEl.textContent = "Off";
+                    mvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
                 }
             }
 
-            // 3. AGC Level (Mvbx_RsAgcMode)
-            let agcLevel = data.packet.Mvbx_RsAgcMode;
+            // 3. AGC Level (Mvbx_RsAgcThreshold)
+            let agcLevel = data.packet.Mvbx_RsAgcThreshold;
             if (agcLevel === -999) {
-                updateText("mvbx_rsagc_mode", "- - -");
+                updateText("mvbx_rsagc_threshold", "- - -");
             } else {
-                updateText("mvbx_rsagc_mode", agcLevel + " dBm");
+                updateText("mvbx_rsagc_threshold", agcLevel + " dBm");
             }
 
             // 4. AGC Input (AGC_Input_Power)
