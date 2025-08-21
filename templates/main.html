@@ -2890,7 +2890,7 @@
                                 </div>
                             </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
                                 <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                                <button class="btn btn-primary" id="btnSetMode" style="visibility: visible; opacity: 1;">Set Mode</button>
+                                <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
                                 <button class="btn btn-success d-none" id="btnApply">Apply</button>
                                 <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
                             </div>
@@ -3516,11 +3516,11 @@
                                 </div>
                                 <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 50px;" id="gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 50px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Level</strong></span>
@@ -3610,7 +3610,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode" data-editable="true">N/A</button>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl0_siso_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3674,7 +3674,7 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-2">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode" data-editable="true">N/A</button>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 50px;" id="alc_dl1_mimo_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -6229,13 +6229,23 @@
         });
 
         socket.on("tdd_status", function (data) {
+            // Set Mode 중이면 실시간 업데이트 중단 (스냅샷만 허용)
+            if (!LIVE_UPDATES && !SNAPSHOT_PENDING) {
+                console.log('🔒 tdd_status blocked: Set Mode active and no snapshot pending');
+                return;
+            }
 
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
-                    console.log(`updateValue: ${id} = ${value} (before: ${el.value})`);
+                    // Set Mode에서는 값 업데이트 방지 (사용자가 편집 중인 값 덮어쓰기 방지)
+                    if (SET_MODE && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                        return;
+                    }
+                    
+                    console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE})`);
                     el.value = value;
-                    console.log(`updateValue: ${id} = ${value} (after: ${el.value})`);
                     // ID 값 출력 시 텍스트 크기 조정
                     el.style.fontSize = '0.85rem';
                 }
@@ -6280,6 +6290,12 @@
 
         // ------- 서버가 보내주는 파싱 완료 패킷 수신 (UI 업데이트) -------
         socket.on("update_status", function (data) {
+            // Set Mode 중이면 실시간 업데이트 중단
+            if (SET_MODE) {
+                console.log('🔒 update_status blocked: Set Mode active');
+                return;
+            }
+            
             console.log("📥 Received update_status:", data.packet);
             console.log("📊 Packet type - rcvMainSys:", data.packet.rcvMainSys);
 
@@ -6371,9 +6387,14 @@
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
-                    console.log(`updateValue: ${id} = ${value} (before: ${el.value})`);
+                    // Set Mode에서는 값 업데이트 방지 (사용자가 편집 중인 값 덮어쓰기 방지)
+                    if (SET_MODE && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                        return;
+                    }
+                    
+                    console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE})`);
                     el.value = value;
-                    console.log(`updateValue: ${id} = ${value} (after: ${el.value})`);
                     // ID 값 출력 시 텍스트 크기 조정
                     el.style.fontSize = '0.85rem';
                 }
@@ -8624,7 +8645,7 @@
     <!-- Set Mode JavaScript -->
     <script>
     //==== 전역 상태 ====
-    let SET_MODE=false, LIVE_UPDATES=true, SNAPSHOT_PENDING=false;
+    let SET_MODE = false;
 
     //==== UI id ↔ 데이터 필드 매핑 ====
     const FIELD_MAP = {
@@ -8699,6 +8720,14 @@
         const el = document.getElementById(id);
         if (!el) return;
         
+        // Set Mode에서는 값 업데이트 방지 (사용자가 편집 중인 값 덮어쓰기 방지)
+        if (SET_MODE && el.hasAttribute('data-editable')) {
+            console.log(`🔒 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+            return;
+        }
+        
+        console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE})`);
+        
         if (el.type === 'button') {
             el.textContent = value;
             el.className = value === 'On' ? 'btn btn-success btn-sm' : 'btn btn-secondary btn-sm';
@@ -8711,6 +8740,8 @@
 
     //==== UI 모드 토글 ====
     function applyUiMode(){
+      console.log(`🔧 applyUiMode: SET_MODE=${SET_MODE}`);
+      
       // Set Mode 관련 버튼들 토글
       document.getElementById('btnSetMode').classList.toggle('d-none', SET_MODE);
       document.getElementById('btnApply').classList.toggle('d-none', !SET_MODE);
@@ -8727,23 +8758,29 @@
       });
       
       // 또는 data-bs-toggle 속성이 있는 모든 버튼 숨김 (모달 버튼들)
-      document.querySelectorAll('[data-bs-toggle="modal"]').forEach(el=>{
+      const modalButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+      modalButtons.forEach(el=>{
         el.classList.toggle('d-none', SET_MODE);
       });
+      console.log(`🔧 Hidden ${modalButtons.length} modal buttons`);
 
       // 편집 가능한 필드들 토글
-      document.querySelectorAll('[data-editable="true"]').forEach(el=>{
+      const editableFields = document.querySelectorAll('[data-editable="true"]');
+      editableFields.forEach(el=>{
         if (el.type==='checkbox') el.disabled = !SET_MODE;
         else el.toggleAttribute('readonly', !SET_MODE);
         el.classList.toggle('editable-on', SET_MODE);
       });
+      console.log(`🔧 Toggled ${editableFields.length} editable fields`);
     }
 
-    //==== 상태 수신: 스냅샷 1회만 반영 ====
+    //==== 상태 수신: Set Mode에서는 값 업데이트 차단 ====
     socket.on("tdd_status", ({packet})=>{
-      if (!LIVE_UPDATES && !SNAPSHOT_PENDING) return;
+      if (SET_MODE) {
+        console.log('🔒 tdd_status blocked: Set Mode active');
+        return;
+      }
       // 예시: updateValue('temp_upper', packet.SysTemperHighLvl); 등
-      if (SNAPSHOT_PENDING) SNAPSHOT_PENDING=false;
     });
 
     //==== 컨트롤비트 빌드(24바이트) ====
@@ -8762,8 +8799,22 @@
       for (const [id, spec] of Object.entries(FIELD_MAP)){
         const el = document.getElementById(id);
         if (!el) continue;
-        let v = (spec.type.startsWith('u') || spec.type==='i8') && el.type==='checkbox'
-                ? (el.checked?1:0) : Number(el.value);
+        
+        let v;
+        if (el.type === 'checkbox') {
+          // 체크박스: 체크되면 1, 아니면 0
+          v = el.checked ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // 드롭다운: 텍스트 값을 숫자로 매핑
+          v = getDropdownNumericValue(id, el.value);
+        } else if (el.type === 'button') {
+          // 버튼: On/Off 텍스트를 숫자로 변환
+          v = el.textContent === 'On' ? 1 : 0;
+        } else {
+          // 일반 입력 필드: 숫자로 변환
+          v = Number(el.value);
+        }
+        
         if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
         if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
         if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
@@ -8771,19 +8822,59 @@
       }
       return out;
     }
+    
+    //==== 드롭다운 텍스트 값을 16진수로 변환 ====
+    function getDropdownNumericValue(id, textValue) {
+      switch(id) {
+        case 'gNB_Vendor':
+          switch(textValue) {
+            case 'Manual': return 0x00;
+            case 'Samsung': return 0x01;
+            case 'Nokia': return 0x02;
+            case 'Ericsson': return 0x03;
+            default: return 0x00;
+          }
+        // 다른 드롭다운들도 여기에 추가
+        default:
+          return Number(textValue); // 기본적으로는 숫자로 변환 시도
+      }
+    }
+    
+    //==== On/Off 버튼 토글 함수 ====
+    function toggleOnOffButton(buttonId) {
+      if (!SET_MODE) return; // Set Mode가 아니면 토글 불가
+      
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      const currentState = button.textContent;
+      if (currentState === 'On') {
+        button.textContent = 'Off';
+        button.className = 'btn btn-secondary btn-sm';
+      } else {
+        button.textContent = 'On';
+        button.className = 'btn btn-success btn-sm';
+      }
+      
+      console.log(`🔘 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
 
     //==== 버튼 핸들러 ====
     function enterSetMode(){
-      SET_MODE=true; LIVE_UPDATES=false; SNAPSHOT_PENDING=true;
+      console.log('🔧 Entering Set Mode...');
+      SET_MODE = true;
+      console.log(`🔧 State: SET_MODE=${SET_MODE}`);
       applyUiMode();
-      socket.emit('enter_set_mode', { ConMuFlag: buildConMuFlag(true) });
-      socket.emit('request_update_status', { rcv_main_sys: 0x30 }); // 스냅샷 1회
+      socket.emit('enter_set_mode');
+      console.log('🔧 Set Mode activated');
     }
     function leaveSetMode(){
-      SET_MODE=false; LIVE_UPDATES=true; SNAPSHOT_PENDING=false;
+      console.log('🔧 Leaving Set Mode...');
+      SET_MODE = false;
+      console.log(`🔧 State: SET_MODE=${SET_MODE}`);
       applyUiMode();
-      socket.emit('leave_set_mode', { ConMuFlag: buildConMuFlag(false) });
-      socket.emit('request_update_status', { rcv_main_sys: 0x30 });
+      socket.emit('leave_set_mode');
+      console.log('🔧 Status Mode activated');
     }
     function applySet(){
       try{
@@ -8793,9 +8884,23 @@
     }
 
     //==== 버튼 바인딩 ====
-    document.getElementById('btnSetMode')?.addEventListener('click', enterSetMode);
+    // 메인 화면의 Set Mode 버튼에만 이벤트 연결 (1127라인)
+    document.querySelector('button[id="btnSetMode"]:not([style*="visibility"])')?.addEventListener('click', enterSetMode);
     document.getElementById('btnStatusMode')?.addEventListener('click', leaveSetMode);
     document.getElementById('btnApply')?.addEventListener('click', applySet);
+    
+    //==== On/Off 버튼 토글 이벤트 연결 ====
+    // Set Mode에서만 작동하는 On/Off 버튼들
+    const onOffButtons = [
+      'gumstick_onoff', 'mvbx_rsagc_mode', 'alc_dl0_siso_mode', 'alc_dl1_mimo_mode'
+    ];
+    
+    onOffButtons.forEach(buttonId => {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.addEventListener('click', () => toggleOnOffButton(buttonId));
+      }
+    });
     </script>
 
 </body>
