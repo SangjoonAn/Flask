@@ -131,6 +131,8 @@
             width: 50px;
         }
 
+
+
         .small-text-2 {
             font-size: 0.7rem;
         }
@@ -3228,17 +3230,17 @@
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                <div class="col-3 mb-2">
+                                <div class="col-3 mb-1">
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <input type="text" id="tempupper" data-editable="true" class="form-control form-control-sm" value="80" readonly style="width: 50%;">
+                                <div class="col-3 mb-1 text-end">
+                                    <input type="text" id="tempupper" data-editable="true" class="form-control form-control-sm" value="80" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
                                 </div>
-                                <div class="col-3 mb-2">
+                                <div class="col-3 mb-1">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <input type="text" id="templower" data-editable="true" class="form-control form-control-sm" value="-30" readonly style="width: 50%;">
+                                <div class="col-3 mb-1 text-end">
+                                    <input type="text" id="templower" data-editable="true" class="form-control form-control-sm" value="-30" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3514,17 +3516,17 @@
                                         <span id="mvbx_pci">N/A</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">                                     <div class="d-flex justify-content-end mb-2">
-                                        <span style="min-width: 120px;"><strong>Ant. Array On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 31px;" id="gumstick_onoff" data-editable="true">N/A</button>
+                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-1">
+                                        <span><strong>Ant. Array On/Off</strong></span>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 52%; height: 25px; padding: 2px 6px;" id="gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
-                                    <div class="d-flex justify-content-end mb-2">
-                                        <span style="min-width: 120px;"><strong>AGC On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 31px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span><strong>AGC On/Off</strong></span>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 25px; padding: 2px 6px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
-                                        <input type="text" id="mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly style="width: 40%;">
+                                        <input type="text" id="mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly style="width: 40%; height: 25px; padding: 2px 6px;">
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
@@ -3600,17 +3602,17 @@
                                                 <span><strong>DL Input</strong></span>
                                                 <span id="dl_input_siso">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <input type="text" id="dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <input type="text" id="dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%;" id="alc_dl0_siso_mode" data-editable="true">N/A</button>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="alc_dl0_siso_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3621,25 +3623,25 @@
                                                 <span><strong>UL Output(EIRP)</strong></span>
                                                 <span id="ul_input_siso">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                    <div class="row mt-2">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                    <div class="row mt-1">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3664,17 +3666,17 @@
                                                 <span><strong>DL Input</strong></span>
                                                 <span id="dl_input_mimo">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <input type="text" id="dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <input type="text" id="dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%;" id="alc_dl1_mimo_mode" data-editable="true">N/A</button>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="alc_dl1_mimo_mode" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -3685,25 +3687,25 @@
                                                 <span><strong>UL Output(EIRP)</strong></span>
                                                 <span id="ul_input_mimo">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                                <input type="text" id="ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                    <div class="row mt-2">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                    <div class="row mt-1">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_tx_gain_set_miso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="mvbx_tx_gain_set_miso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_rx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="mvbx_rx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3728,15 +3730,15 @@
                                             <span><strong>UL PD</strong></span>
                                             <span id="pd1_det_ul0_siso">N/A</span>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                     </div>
                                 </div>
@@ -3757,15 +3759,14 @@
                                             <span><strong>UL PD</strong></span>
                                             <span id="pd2_det_ul1_mimo">N/A</span>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
-                                            <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%;">
+                                            <input type="text" id="pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                     </div>
                                 </div>
@@ -3800,10 +3801,12 @@
                 <div class="d-flex justify-content-between align-items-center"> 
                     <div style="font-size: 1.5rem; font-weight: bold; color: #343a40;">SU #1 <i class="fas fa-pencil-alt text-muted fs-6"></i></div>
                     <div>
-                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">RESET</button>
-                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" onclick="openBeamInfoModal()">Beam Info</button>
-                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;">Alarm Mask</button>
-                        <button class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#confirmResetModal">RESET</button>
+                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>
+                        <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
+                        <button id="btnSetModeSu1" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                        <button id="btnStatusModeSu1" class="btn btn-secondary btn-sm me-2 d-none">Status Mode</button>
+                        <button id="btnApplySu1" class="btn btn-success btn-sm d-none">Set</button>
                     </div>
                 </div>
 
@@ -3861,17 +3864,17 @@
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                <div class="col-3 mb-2">
+                                <div class="col-3 mb-1">
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <span id="su1_tempupper">N/A</span>
+                                <div class="col-3 mb-1 text-end">
+                                    <input type="text" id="su1_tempupper" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
                                 </div>
-                                <div class="col-3 mb-2">
+                                <div class="col-3 mb-1">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
-                                <div class="col-3 mb-2 text-end">
-                                    <span id="su1_templower">N/A</span>
+                                <div class="col-3 mb-1 text-end">
+                                    <input type="text" id="su1_templower" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -4084,17 +4087,17 @@
                                         <span id="su1_beam_pci">N/A</span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-2">
+                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_gumstick_onoff">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 52%; height: 25px; padding: 2px 6px;" id="su1_gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_mvbx_rsagc_mode">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 25px; padding: 2px 6px;" id="su1_mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
-                                    <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
-                                        <span id="su1_mvbx_rsagc_threshold">N/A</span>
+                                        <input type="text" id="su1_mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly style="width: 40%; height: 25px; padding: 2px 6px;">
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
@@ -4121,7 +4124,7 @@
                                     <span><strong>gNB Type</strong></span>
                                 </div>
                                 <div class="col-md-9">
-                                    <select id="su1_gNB_Vendor" class="form-select form-select-sm">
+                                    <select id="su1_gNB_Vendor" data-editable="true" class="form-select form-select-sm">
                                         <option value="Manual">Manual</option>
                                         <option value="Samsung">Samsung</option>
                                         <option value="Nokia">Nokia</option>
@@ -4169,18 +4172,18 @@
                                                 <span><strong>DL Input</strong></span>
                                                 <span id="su1_dl_input_siso">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>DL ATT</strong></span>
-                                                <span id="su1_dl_att_siso">N/A</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>DL ALC Level</strong></span>
-                                                <span id="su1_dl_alc_level_siso">N/A</span>
-                                            </div>
-                                            <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_dl_alc_onoff_siso">On</button>
-                                            </div>
+                                                                                <div class="d-flex justify-content-between mb-1">
+                                        <span><strong>DL ATT</strong></span>
+                                        <input type="text" id="su1_dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span><strong>DL ALC Level</strong></span>
+                                        <input type="text" id="su1_dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <span><strong>DL ALC On/Off</strong></span>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_siso" data-editable="true">On</button>
+                                    </div>
                                         </div>
                                         <div class="col-6">
                                             <h6 class="text-secondary d-flex align-items-center mb-2">
@@ -4190,25 +4193,25 @@
                                                 <span><strong>UL Output(EIRP)</strong></span>
                                                 <span id="su1_ul_output_siso">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <span id="su1_ul_att_siso">N/A</span>
+                                                <input type="text" id="su1_ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <span id="su1_ul_iso_level_siso">N/A</span>
+                                                <input type="text" id="su1_ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                    <div class="row mt-2">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                    <div class="row mt-1">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id="su1_mvbx_tx_gain_set_siso">NA</span>
+                                            <input type="text" id="su1_mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id="su1_mvbx_rx_gain_set_siso">NA</span>
+                                            <input type="text" id="su1_mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4233,17 +4236,17 @@
                                                 <span><strong>DL Input</strong></span>
                                                 <span id="su1_dl_input_mimo">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <span id="su1_dl_att_mimo">N/A</span>
+                                                <input type="text" id="su1_dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <span id="su1_dl_alc_level_mimo">N/A</span>
+                                                <input type="text" id="su1_dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button class="btn btn-success btn-sm" style="width: 50px;" id="su1_dl_alc_onoff_mimo">On</button>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_mimo" data-editable="true">On</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -4254,25 +4257,25 @@
                                                 <span><strong>UL Output(EIRP)</strong></span>
                                                 <span id="su1_ul_output_mimo">N/A</span>
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <span id="su1_ul_att_mimo">N/A</span>
+                                                <input type="text" id="su1_ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
-                                            <div class="d-flex justify-content-between mb-2">
+                                            <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <span id="su1_ul_iso_level_mimo">N/A</span>
+                                                <input type="text" id="su1_ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                             </div>
                                         </div>
                                     </div>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
-                                    <div class="row mt-2">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                    <div class="row mt-1">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <span id="su1_mvbx_tx_gain_set_mimo">NA</span>
+                                            <input type="text" id="su1_mvbx_tx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
+                                        <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <span id="su1_mvbx_rx_gain_set_mimo">NA</span>
+                                            <input type="text" id="su1_mvbx_rx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4297,15 +4300,15 @@
                                             <span><strong>UL PD</strong></span>
                                             <span id="su1_pd1_det_ul0_siso">N/A</span>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="su1_ld1_det_dl0_siso_low">N/A</span>
+                                            <input type="text" id="su1_ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="su1_pd1_det_ul0_siso_low">N/A</span>
+                                            <input type="text" id="su1_pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                     </div>
                                 </div>
@@ -4326,15 +4329,15 @@
                                             <span><strong>UL PD</strong></span>
                                             <span id="su1_pd2_det_ul1_mimo">N/A</span>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <span id="su1_ld2_det_dl1_mimo_low">N/A</span>
+                                            <input type="text" id="su1_ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2 align-items-center">
+                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <span id="su1_pd2_det_ul1_mimo_low">N/A</span>
+                                            <input type="text" id="su1_pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
                                         </div>
                                     </div>
                                 </div>
@@ -6290,11 +6293,7 @@
 
         // ------- 서버가 보내주는 파싱 완료 패킷 수신 (UI 업데이트) -------
         socket.on("update_status", function (data) {
-            // Set Mode 중이면 실시간 업데이트 중단
-            if (SET_MODE) {
-                console.log('🔒 update_status blocked: Set Mode active');
-                return;
-            }
+            // 섹션별 차단은 updateValue에서 처리 (각 필드별로 독립적 차단)
             
             console.log("📥 Received update_status:", data.packet);
             console.log("📊 Packet type - rcvMainSys:", data.packet.rcvMainSys);
@@ -6387,13 +6386,16 @@
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
-                    // Set Mode에서는 값 업데이트 방지 (사용자가 편집 중인 값 덮어쓰기 방지)
-                    if (SET_MODE && el.hasAttribute('data-editable')) {
-                        console.log(`🔒 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                    // 섹션별 Set Mode에서 편집 가능한 필드만 업데이트 방지
+                    const isSu1 = id.startsWith('su1_');
+                    const editLock = (isSu1 ? SET_MODE_SU1 : SET_MODE);
+                    
+                    if (editLock && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 ${isSu1 ? 'SU1' : 'DU'} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
                         return;
                     }
                     
-                    console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE})`);
+                    console.log(`📝 updateValue: ${id} = ${value} (DU_SET_MODE: ${SET_MODE}, SU1_SET_MODE: ${SET_MODE_SU1})`);
                     el.value = value;
                     // ID 값 출력 시 텍스트 크기 조정
                     el.style.fontSize = '0.85rem';
@@ -6476,8 +6478,8 @@
                 // 시스템 시간 및 온도
                 updateText("su1_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
                 updateText("su1_curtemper", `${data.packet.SysTemper} ℃`);
-                updateText("su1_tempupper", `${data.packet.SysTemperHighLvl} ℃`);
-                updateText("su1_templower", `${data.packet.SysTemperLowLvl} ℃`);
+                updateValue("su1_tempupper", data.packet.SysTemperHighLvl);
+                updateValue("su1_templower", data.packet.SysTemperLowLvl);
                 
                 // FPGA 상태 (DU와 동일한 패턴으로 updateStatusBadge 함수 사용)
                 updateStatusBadge1("su1_FpgaStatus", data.packet.FPGA_Boot_Status);
@@ -6565,8 +6567,8 @@
                 
                 // SU1 AOM & mmWave SISO RF 업데이트 (DU와 동일한 패턴)
                 updateText("su1_dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
-                updateText("su1_dl_att_siso", data.packet.DU_DlManualAtten_SISO + " [dB]");
-                updateText("su1_dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level + " [dBm]");
+                updateValue("su1_dl_att_siso", data.packet.DU_DlManualAtten_SISO);
+                updateValue("su1_dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level);
                 if (data.packet.DL_ALC_OnOff_SISO !== undefined) {
                     const dlAlcSisoEl = document.getElementById("su1_dl_alc_onoff_siso");
                     if (dlAlcSisoEl) {
@@ -6581,17 +6583,17 @@
                 }
                 
                 updateText("su1_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
-                updateText("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO + " [dB]");
-                updateText("su1_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level + " [dBm]");
+                updateValue("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
+                updateValue("su1_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
                 
-                updateText("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso + " [dB]");
-                updateText("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso + " [dB]");
+                updateValue("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
+                updateValue("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
                 updateText("su1_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
                 
                 // SU1 AOM & mmWave MIMO RF 업데이트 (DU와 동일한 패턴)
                 updateText("su1_dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
-                updateText("su1_dl_att_mimo", data.packet.DU_DlManualAtten_MIMO + " [dB]");
-                updateText("su1_dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level + " [dBm]");
+                updateValue("su1_dl_att_mimo", data.packet.DU_DlManualAtten_MIMO);
+                updateValue("su1_dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level);
                 if (data.packet.DL_ALC_OnOff_MIMO !== undefined) {
                     const dlAlcMimoEl = document.getElementById("su1_dl_alc_onoff_mimo");
                     if (dlAlcMimoEl) {
@@ -6606,24 +6608,24 @@
                 }
                 
                 updateText("su1_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
-                updateText("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO + " [dB]");
-                updateText("su1_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level + " [dBm]");
+                updateValue("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
+                updateValue("su1_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
                 
-                updateText("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso + " [dB]");
-                updateText("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso + " [dB]");
+                updateValue("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
+                updateValue("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
                 updateText("su1_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
                 
                 // SU1 AOM & mmWave SISO OPTIC 업데이트 (DU와 동일한 패턴)
                 updateText("su1_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
                 updateText("su1_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
-                updateText("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low + " [dBm]");
-                updateText("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low + " [dBm]");
+                updateValue("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
+                updateValue("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
                 
                 // SU1 AOM & mmWave MIMO OPTIC 업데이트 (DU와 동일한 패턴)
                 updateText("su1_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
                 updateText("su1_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
-                updateText("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low + " [dBm]");
-                updateText("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low + " [dBm]");
+                updateValue("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
+                updateValue("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
                 
                 // SU1 gNB Type (Vendor) 업데이트 - DU와 동일 로직 재사용
                 if (typeof data.packet.gNB_Vendor === 'number') {
@@ -6662,9 +6664,9 @@
                 // SU1 AGC Level (Mvbx_RsAgcThreshold) - DU와 동일 로직
                 let su1AgcLevel = data.packet.Mvbx_RsAgcThreshold;
                 if (su1AgcLevel === -999) {
-                    updateText("su1_mvbx_rsagc_threshold", "- - -");
+                    updateValue("su1_mvbx_rsagc_threshold", "- - -");
                 } else {
-                    updateText("su1_mvbx_rsagc_threshold", su1AgcLevel + " dBm");
+                    updateValue("su1_mvbx_rsagc_threshold", su1AgcLevel);
                 }
 
                                 // SU1 AGC Input (AGC_Input_Power) - DU와 동일 로직
@@ -8682,6 +8684,40 @@
       pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
       ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
       pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+
+      // SU1 System
+      su1_tempupper:       { key:'SU1_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
+      su1_templower:       { key:'SU1_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+      
+      // SU1 Beam Status
+      su1_gumstick_onoff:  { key:'SU1_GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      su1_mvbx_rsagc_mode: { key:'SU1_Mvbx_RsAgcMode',        type:'u8',    min:0, max:1 },
+      su1_mvbx_rsagc_threshold: { key:'SU1_Mvbx_RsAgcThreshold', type:'i8', min:-128, max:127 },
+      su1_gNB_Vendor:      { key:'SU1_gNB_Vendor',            type:'u8',    min:0, max:255 },
+
+      // SU1 SISO RF
+      su1_dl_att_siso:     { key:'SU1_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
+      su1_dl_alc_level_siso: { key:'SU1_ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su1_dl_alc_onoff_siso: { key:'SU1_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
+      su1_mvbx_tx_gain_set_siso: { key:'SU1_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
+      su1_ul_att_siso:     { key:'SU1_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
+      su1_ul_iso_level_siso: { key:'SU1_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su1_mvbx_rx_gain_set_siso: { key:'SU1_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+
+      // SU1 MIMO RF
+      su1_dl_att_mimo:     { key:'SU1_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
+      su1_dl_alc_level_mimo: { key:'SU1_ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su1_dl_alc_onoff_mimo: { key:'SU1_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
+      su1_mvbx_tx_gain_set_mimo: { key:'SU1_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
+      su1_ul_att_mimo:     { key:'SU1_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
+      su1_ul_iso_level_mimo: { key:'SU1_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su1_mvbx_rx_gain_set_mimo: { key:'SU1_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
+
+      // SU1 OPTIC
+      su1_ld1_det_dl0_siso_low: { key:'SU1_LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd1_det_ul0_siso_low: { key:'SU1_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld2_det_dl1_mimo_low: { key:'SU1_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd2_det_ul1_mimo_low: { key:'SU1_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== ConMuFlag 컨트롤 비트 (packet[580]을 index 0으로, [상대인덱스, bit]) ====
@@ -8720,13 +8756,16 @@
         const el = document.getElementById(id);
         if (!el) return;
         
-        // Set Mode에서는 값 업데이트 방지 (사용자가 편집 중인 값 덮어쓰기 방지)
-        if (SET_MODE && el.hasAttribute('data-editable')) {
-            console.log(`🔒 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+        // 섹션별 Set Mode 차단 (사용자가 편집 중인 값 덮어쓰기 방지)
+        const isSu1 = id.startsWith('su1_');
+        const editLock = (isSu1 ? SET_MODE_SU1 : SET_MODE);
+        
+        if (editLock && el.hasAttribute('data-editable')) {
+            console.log(`🔒 ${isSu1 ? 'SU1' : 'DU'} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
             return;
         }
         
-        console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE})`);
+        console.log(`📝 updateValue: ${id} = ${value} (SET_MODE: ${SET_MODE}, SET_MODE_SU1: ${SET_MODE_SU1})`);
         
         if (el.type === 'button') {
             el.textContent = value;
@@ -8774,13 +8813,28 @@
       console.log(`🔧 Toggled ${editableFields.length} editable fields`);
     }
 
-    //==== 상태 수신: Set Mode에서는 값 업데이트 차단 ====
+    //==== 상태 수신: 섹션별 차단은 updateValue에서 처리 ====
     socket.on("tdd_status", ({packet})=>{
-      if (SET_MODE) {
-        console.log('🔒 tdd_status blocked: Set Mode active');
-        return;
-      }
       // 예시: updateValue('temp_upper', packet.SysTemperHighLvl); 등
+    });
+    
+    //==== SU1 Set Mode 응답 수신 ====
+    socket.on("su1_set_mode_ack", (data) => {
+      console.log('🔧 SU1 Set Mode acknowledged:', data);
+    });
+    
+    socket.on("su1_status_mode_ack", (data) => {
+      console.log('🔧 SU1 Status Mode acknowledged:', data);
+    });
+    
+    socket.on("su1_apply_ack", (data) => {
+      console.log('🔧 SU1 Apply acknowledged:', data);
+      if (data.ok) {
+        console.log('✅ SU1 values applied successfully');
+      } else {
+        console.error('❌ SU1 values apply failed:', data.error);
+        alert('SU1 값 적용 실패: ' + data.error);
+      }
     });
 
     //==== 컨트롤비트 빌드(24바이트) ====
@@ -8797,6 +8851,9 @@
     function collectFields(){
       const out = {};
       for (const [id, spec] of Object.entries(FIELD_MAP)){
+        // DU 필드만 수집 (su1_ 접두사가 없는 필드들)
+        if (id.startsWith('su1_')) continue;
+        
         const el = document.getElementById(id);
         if (!el) continue;
         
@@ -8827,6 +8884,7 @@
     function getDropdownNumericValue(id, textValue) {
       switch(id) {
         case 'gNB_Vendor':
+        case 'su1_gNB_Vendor':
           switch(textValue) {
             case 'Manual': return 0x00;
             case 'Samsung': return 0x01;
@@ -8858,7 +8916,94 @@
       
       console.log(`🔘 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
     }
+    
+    //==== SU1 On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonSu1(buttonId) {
+      if (!SET_MODE_SU1) return; // SU1 Set Mode가 아니면 토글 불가
+      
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      const currentState = button.textContent;
+      if (currentState === 'On') {
+        button.textContent = 'Off';
+        button.className = 'btn btn-secondary btn-sm';
+      } else {
+        button.textContent = 'On';
+        button.className = 'btn btn-success btn-sm';
+      }
+      
+      console.log(`🔘 SU1 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
 
+    //==== 전역 상태 ====
+    let SET_MODE_SU1 = false;
+    
+    //==== SU1 UI 모드 토글 ====
+    function applyUiModeSu1(){
+      console.log(`🔧 applyUiModeSu1: SET_MODE_SU1=${SET_MODE_SU1}`);
+      
+      // Set Mode 관련 버튼들 토글
+      document.getElementById('btnSetModeSu1').classList.toggle('d-none', SET_MODE_SU1);
+      document.getElementById('btnApplySu1').classList.toggle('d-none', !SET_MODE_SU1);
+      document.getElementById('btnStatusModeSu1').classList.toggle('d-none', !SET_MODE_SU1);
+      
+      // 사진에 보이는 모든 버튼들 숨김/표시 (Initial Setup, APN, RESET, HIDDEN, Beam Info, Alarm Mask)
+      const buttonsToHide = [
+        'initialSetupBtn', 'apnBtn', 'resetBtn', 'openModalBtn', 
+        'beamInfoBtn', 'alarmMaskBtn'
+      ];
+      buttonsToHide.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.toggle('d-none', SET_MODE_SU1);
+      });
+      
+      // data-bs-toggle 속성이 있는 모든 버튼 숨김 (모달 버튼들)
+      const modalButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
+      modalButtons.forEach(el=>{
+        el.classList.toggle('d-none', SET_MODE_SU1);
+      });
+      console.log(`🔧 Hidden ${modalButtons.length} modal buttons`);
+
+      // SU1 편집 가능한 필드들 토글
+      const su1EditableFields = document.querySelectorAll('#su1_content_display [data-editable="true"]');
+      su1EditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_SU1;
+        else el.toggleAttribute('readonly', !SET_MODE_SU1);
+        el.classList.toggle('editable-on', SET_MODE_SU1);
+      });
+      console.log(`🔧 Toggled ${su1EditableFields.length} SU1 editable fields`);
+    }
+    
+    //==== SU1 값 수집/검증 ====
+    function collectFieldsSu1(){
+      const out = {};
+      for (const [id, spec] of Object.entries(FIELD_MAP)){
+        // SU1 필드만 수집 (su1_ 접두사가 있는 필드들)
+        if (!id.startsWith('su1_')) continue;
+        
+        const el = document.getElementById(id);
+        if (!el) continue;
+        
+        let v;
+        if (el.type === 'checkbox') {
+          v = el.checked ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          v = getDropdownNumericValue(id, el.value);
+        } else if (el.type === 'button') {
+          v = el.textContent === 'On' ? 1 : 0;
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        out[spec.key] = v;
+      }
+      return out;
+    }
+    
     //==== 버튼 핸들러 ====
     function enterSetMode(){
       console.log('🔧 Entering Set Mode...');
@@ -8882,12 +9027,41 @@
         socket.emit('apply_du_values', { Fields: fields });
       }catch(e){ alert('입력 오류: ' + e.message); }
     }
+    
+    //==== SU1 버튼 핸들러 ====
+    function enterSetModeSu1(){
+      console.log('🔧 Entering SU1 Set Mode...');
+      SET_MODE_SU1 = true;
+      console.log(`🔧 State: SET_MODE_SU1=${SET_MODE_SU1}`);
+      applyUiModeSu1();
+      socket.emit('enter_su1_set_mode');
+      console.log('🔧 SU1 Set Mode activated');
+    }
+    function leaveSetModeSu1(){
+      console.log('🔧 Leaving SU1 Set Mode...');
+      SET_MODE_SU1 = false;
+      console.log(`🔧 State: SET_MODE_SU1=${SET_MODE_SU1}`);
+      applyUiModeSu1();
+      socket.emit('leave_su1_set_mode');
+      console.log('🔧 SU1 Status Mode activated');
+    }
+    function applySetSu1(){
+      try{
+        const fields = collectFieldsSu1();
+        socket.emit('apply_su1_values', { Fields: fields });
+      }catch(e){ alert('SU1 입력 오류: ' + e.message); }
+    }
 
     //==== 버튼 바인딩 ====
     // 메인 화면의 Set Mode 버튼에만 이벤트 연결 (1127라인)
     document.querySelector('button[id="btnSetMode"]:not([style*="visibility"])')?.addEventListener('click', enterSetMode);
     document.getElementById('btnStatusMode')?.addEventListener('click', leaveSetMode);
     document.getElementById('btnApply')?.addEventListener('click', applySet);
+    
+    //==== SU1 Set Mode 버튼 바인딩 ====
+    document.getElementById('btnSetModeSu1')?.addEventListener('click', enterSetModeSu1);
+    document.getElementById('btnStatusModeSu1')?.addEventListener('click', leaveSetModeSu1);
+    document.getElementById('btnApplySu1')?.addEventListener('click', applySetSu1);
     
     //==== On/Off 버튼 토글 이벤트 연결 ====
     // Set Mode에서만 작동하는 On/Off 버튼들
@@ -8899,6 +9073,18 @@
       const button = document.getElementById(buttonId);
       if (button) {
         button.addEventListener('click', () => toggleOnOffButton(buttonId));
+      }
+    });
+    
+    //==== SU1 On/Off 버튼 토글 이벤트 연결 ====
+    const su1OnOffButtons = [
+      'su1_gumstick_onoff', 'su1_mvbx_rsagc_mode', 'su1_dl_alc_onoff_siso', 'su1_dl_alc_onoff_mimo'
+    ];
+    
+    su1OnOffButtons.forEach(buttonId => {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.addEventListener('click', () => toggleOnOffButtonSu1(buttonId));
       }
     });
     </script>

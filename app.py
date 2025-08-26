@@ -222,6 +222,16 @@ def leave_set_mode(payload=None):
     print(f"🔧 Client leaving Set Mode")
     emit("du_status_mode_ack", {"ok": True})
 
+@socketio.on("enter_su1_set_mode")
+def enter_su1_set_mode(payload=None):
+    print(f"🔧 Client entering SU1 Set Mode")
+    emit("su1_set_mode_ack", {"ok": True})
+
+@socketio.on("leave_su1_set_mode")
+def leave_su1_set_mode(payload=None):
+    print(f"🔧 Client leaving SU1 Set Mode")
+    emit("su1_status_mode_ack", {"ok": True})
+
 @socketio.on("apply_du_values")
 def apply_du_values(payload):
     try:
@@ -250,6 +260,36 @@ def apply_du_values(payload):
         error_msg = f"Unexpected error: {str(e)}"
         print(f"❌ {error_msg}")
         emit("du_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
+
+@socketio.on("apply_su1_values")
+def apply_su1_values(payload):
+    try:
+        print(f"🔧 Applying SU1 values: {payload}")
+        
+        # payload 검증
+        if not payload:
+            raise ValueError("Payload is empty")
+        
+        # test.py로 전송 (DU와 동일한 방식)
+        socketio.emit("su1_Ctrl_packet", payload, include_self=False)
+        
+        # 클라이언트에게 성공 응답
+        emit("su1_apply_ack", {"ok": True})
+        
+        print("✅ SU1 values successfully sent to test.py")
+        return {"status": "success", "message": "SU1 values packet received and sent to test.py"}
+        
+    except ValueError as ve:
+        error_msg = f"Validation error: {str(ve)}"
+        print(f"❌ {error_msg}")
+        emit("su1_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
+        
+    except Exception as e:
+        error_msg = f"Unexpected error: {str(e)}"
+        print(f"❌ {error_msg}")
+        emit("su1_apply_ack", {"ok": False, "error": error_msg})
         return {"status": "error", "message": error_msg}
 
 
