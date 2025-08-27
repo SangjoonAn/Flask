@@ -107,6 +107,33 @@
             border-radius: 50%;
             display: flex;
             align-items: center;
+        }
+
+        /* Set Mode 관련 스타일 */
+        .editable-on {
+            background-color: #fff !important;
+        }
+
+        /* Sync Module 입력 요소 스타일 */
+        .sync-input {
+            transition: all 0.2s ease;
+        }
+
+        .sync-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .sync-select {
+            transition: all 0.2s ease;
+        }
+
+        .sync-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .plus-icon {
             justify-content: center;
             position: relative;
         }
@@ -1568,7 +1595,7 @@
                                 <div class="mb-3 row align-items-center">
                                     <label class="col-5 col-form-label">AGC On/Off</label>
                                     <div class="col-7">
-                                    <button id="Mvbx_RsAgcMode2" class="btn btn-success btn-sm w-100" style="width: 50px;">On</button>
+                                    <button id="Mvbx_RsAgcMode2" class="btn btn-success btn-sm w-100" style="width: 50px;">ON</button>
                                     </div>
                                 </div>
 
@@ -1968,7 +1995,7 @@
                             <!-- SU Enable Section -->
                             <div class="mb-4">
                                 <div style="font-weight:bold; font-size:1.1rem; text-align:left; border-bottom:1px dashed #999; padding-bottom:5px; margin-bottom:15px;">
-                                    <i class="bi bi-folder"></i> SU Enable
+                                    <i class="bi bi-folder"></i>SU Enable
                                 </div>
                                 
                                 <div class="row gx-5">
@@ -2803,11 +2830,11 @@
                                                     <div class="col-md-6">
                                                         <div class="beam-scan-field">
                                                             <label for="beamRetry">Beam Retry</label>
-                                                            <button class="btn btn-sm ms-auto btn-on" id="beamRetrySwitch">On</button>
+                                                            <button class="btn btn-sm ms-auto btn-on" id="beamRetrySwitch">ON</button>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="decodeAGC">Decode AGC</label>
-                                                            <button class="btn btn-sm ms-auto btn-on" id="decodeAGCSwitch">On</button>
+                                                            <button class="btn btn-sm ms-auto btn-on" id="decodeAGCSwitch">ON</button>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="retryCount">Retry Count [1:5min]</label>
@@ -2925,29 +2952,29 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">DC</small>
-                                                        <button id="alarm_mask_madc" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_madc" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">AC</small>
-                                                        <button id="alarm_mask_ac" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_ac" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">FPGA Link</small>
-                                                        <button id="alarm_mask_fpga_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_fpga_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">EMS Link</small>
-                                                        <button id="EMS_DU_Link_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="EMS_DU_Link_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                 </div>
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Temp</small>
-                                                        <button id="alarm_mask_temp" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_temp" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">BAT</small>
-                                                        <button id="alarm_mask_bat" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_bat" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;"></small>
@@ -2961,11 +2988,11 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">IF PLL</small>
-                                                        <button id="alarm_mask_if_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_if_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Sync PLL</small>
-                                                        <button id="alarm_mask_sync_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_sync_pll" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;"></small>
@@ -2975,15 +3002,15 @@
                                                 <div class="col-3">
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">TSync Link</small>
-                                                        <button id="alarm_mask_tsync_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_tsync_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Decoding</small>
-                                                        <button id="alarm_mask_decoding" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_decoding" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
                                                         <small style="font-size: 9px;">Ant. Array Link</small>
-                                                        <button id="alarm_mask_aa_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">Off</button>
+                                                        <button id="alarm_mask_aa_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3021,16 +3048,16 @@
                                                         <small style="font-size: 13px;">PATH#0</small>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button id="SU1_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU1_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button id="SU2_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU2_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button id="SU3_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU3_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                     </div>
                                                     <div class="text-center" style="width: 80px;">
-                                                        <button id="SU4_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                        <button id="SU4_MASK_LINK_FAIL" class="btn btn-sm su-fail-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3063,7 +3090,7 @@
                                             <div class="mb-2">
                                                 <div class="d-flex align-items-center">
                                                     <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
-                                                    <button id="SISO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    <button id="SISO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3095,7 +3122,7 @@
                                             <div class="mb-2">
                                                 <div class="d-flex align-items-center">
                                                     <small style="font-size: 13px; margin-right: 10px;">DL ALC</small>
-                                                    <button id="MIMO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">Off</button>
+                                                    <button id="MIMO_MASK_DL_ALC" class="btn btn-sm dl-alc-btn" style="background-color: #666; border: none; color: white; font-size: 13px; width: 65px; height: 30px;">OFF</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3117,7 +3144,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button id="LD1_DET_DL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="LD1_DET_DL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">OFF</button>
                                                         </div>
                                                     </div>
                                                     <div class="col-3">
@@ -3127,7 +3154,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button id="PD1_DET_UL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="PD1_DET_UL0_SISO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">OFF</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3151,7 +3178,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button id="LD2_DET_DL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="LD2_DET_DL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">OFF</button>
                                                         </div>
                                                     </div>
                                                     <div class="col-3">
@@ -3161,7 +3188,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="d-flex align-items-center justify-content-center">
-                                                            <button id="PD2_DET_UL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">Off</button>
+                                                            <button id="PD2_DET_UL1_MIMO_MASK" class="btn btn-sm" style="background-color: #666; border: none; color: white; font-size: 11px; width: 50px; height: 25px;">OFF</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -3234,13 +3261,13 @@
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
                                 <div class="col-3 mb-1 text-end">
-                                    <input type="text" id="tempupper" data-editable="true" class="form-control form-control-sm" value="80" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
+                                    <input type="text" id="tempupper" data-editable="true" value="80" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                 </div>
                                 <div class="col-3 mb-1">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
                                 <div class="col-3 mb-1 text-end">
-                                    <input type="text" id="templower" data-editable="true" class="form-control form-control-sm" value="-30" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
+                                    <input type="text" id="templower" data-editable="true" value="-30" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3269,7 +3296,7 @@
 
                             <div class="p-3 mt-4 rounded shadow-sm" style="background-color: #f0ffff;">
                                 <h5 class="text-primary d-flex align-items-center mb-3">
-                                    <i class="fas fa-folder me-6"></i> SU Enable
+                                    <i class="fas fa-folder me-2"></i>SU Enable
                                 </h5>
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                 <div class="row text-secondary small">
@@ -3395,71 +3422,70 @@
                     <div class="col-md-6"> <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Modem Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 390px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Modem Status
                             </h5>
                             <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
 
-                            <div class="row text-secondary small mb-4"> <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                            <div class="row text-secondary small mb-4">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Status</strong></span>
                                         <span id="modstatus" class="text-success">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMSI</strong></span>
-                                        <span id="modimsi" class="small-text">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <span id="modimsi">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMEI</strong></span>
-                                        <span id="modimei" class="small-text">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <span id="modimei">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Num</strong></span>
                                         <span id="modnum">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod IP</strong></span>
                                         <span id="modip">N/A</span>
-                                        </div>
                                     </div>
-
-                                    <div class="col-md-4">
-                                        <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
                                         <span id="rsrp">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRQ</strong></span>
                                         <span id="rsrq">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSSI</strong></span>
                                         <span id="rssi">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>PCI</strong></span>
                                         <span id="pci">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>SINR</strong></span>
                                         <span id="sinr">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Tx Pwr</strong></span>
                                         <span id="txpwr">N/A</span>
-                                        </div>
                                     </div>
-
-                                    <div class="col-md-4">
-                                        <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod Ver</strong></span>
                                         <span id="modver">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>EMS Ver</strong></span>
                                         <span id="emsversion">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>LAN</strong></span>
                                         <span id="lan">N/A</span>
                                     </div>
@@ -3488,14 +3514,15 @@
                         <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Beam Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 390px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Beam Status
                             </h5>
                             <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
 
                             <div class="row text-secondary small mb-4">
-                                <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Beam ID</strong></span>
                                         <span id="mvbx_beamset">N/A</span>
                                     </div>
@@ -3515,36 +3542,37 @@
                                         <span><strong>PCI</strong></span>
                                         <span id="mvbx_pci">N/A</span>
                                     </div>
-                                </div>
-                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-1">
+                                    <div class="d-flex justify-content-between mb-1">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 52%; height: 25px; padding: 2px 6px;" id="gumstick_onoff" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 25px; padding: 2px 6px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
-                                        <input type="text" id="mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly style="width: 40%; height: 25px; padding: 2px 6px;">
+                                        <input type="text" id="mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
                                         <span id="agc_input_power">N/A</span>
                                     </div>
-                                </div>
-                                <div class="col-md-4">                                       <div class="d-flex justify-content-between mb-2">
-                                          <span><strong>Decoded count</strong></span>
-                                          <span id="decoded_ssb_count">N/A</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between mb-2">
-                                          <span><strong>Decoded success</strong></span>
-                                          <span id="decoded_ssb_no_error_count">N/A</span>
-                                      </div>
-                                      <div class="d-flex justify-content-between mb-2">
-                                          <span><strong>Decoded rate</strong></span>
-                                          <span id="DecodedRate">N/A [%]</span>
-                                      </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>Decoded count</strong></span>
+                                        <span id="decoded_ssb_count">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>Decoded success</strong></span>
+                                        <span id="decoded_ssb_no_error_count">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>Decoded rate</strong></span>
+                                        <span id="DecodedRate">N/A [%]</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -3604,11 +3632,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <input type="text" id="dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="dl_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <input type="text" id="dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="dl_alc_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
@@ -3625,11 +3653,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="ul_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="ul_iso_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                         </div>
                                     </div>
@@ -3637,11 +3665,11 @@
                                     <div class="row mt-1">
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="mvbx_tx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="mvbx_rx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3668,11 +3696,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <input type="text" id="dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="dl_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <input type="text" id="dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="dl_alc_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 22px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
@@ -3689,11 +3717,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="ul_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="ul_iso_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                         </div>
                                     </div>
@@ -3701,11 +3729,11 @@
                                     <div class="row mt-1">
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_tx_gain_set_miso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="mvbx_tx_gain_set_miso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="mvbx_rx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="mvbx_rx_gain_set_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -3733,12 +3761,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="ld1_det_dl0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="pd1_det_ul0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                     </div>
                                 </div>
@@ -3762,11 +3790,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="ld2_det_dl1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                            <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="pd2_det_ul1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                     </div>
                                 </div>
@@ -3868,13 +3897,13 @@
                                     <span><strong>Temp Upper</strong></span>
                                 </div>
                                 <div class="col-3 mb-1 text-end">
-                                    <input type="text" id="su1_tempupper" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
+                                    <input type="text" id="su1_tempupper" data-editable="true" value="0" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                 </div>
                                 <div class="col-3 mb-1">
                                     <span><strong>Temp Lower</strong></span>
                                 </div>
                                 <div class="col-3 mb-1 text-end">
-                                    <input type="text" id="su1_templower" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 50%; height: 25px; padding: 2px 6px;">
+                                    <input type="text" id="su1_templower" data-editable="true" value="0" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                 </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -3967,70 +3996,70 @@
                     <div class="col-md-6"> <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Modem Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;"> <h5 class="text-primary d-flex align-items-center mb-3">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                            <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Modem Status
                             </h5>
                             <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
 
-                            <div class="row text-secondary small mb-4"> <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                            <div class="row text-secondary small mb-4">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Status</strong></span>
                                         <span id="su1_modstatus" class="text-success">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMSI</strong></span>
-                                        <span id="su1_modimsi" class="small-text">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <span id="su1_modimsi">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>IMEI</strong></span>
-                                        <span id="su1_modimei" class="small-text">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <span id="su1_modimei">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Num</strong></span>
                                         <span id="su1_modnum">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod IP</strong></span>
                                         <span id="su1_modip">N/A</span>
-                                        </div>
                                     </div>
-
-                                    <div class="col-md-4">
-                                        <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
                                         <span id="su1_rsrp">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRQ</strong></span>
                                         <span id="su1_rsrq">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSSI</strong></span>
                                         <span id="su1_rssi">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>PCI</strong></span>
                                         <span id="su1_pci">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>SINR</strong></span>
                                         <span id="su1_sinr">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Tx Pwr</strong></span>
                                         <span id="su1_txpwr">N/A</span>
-                                        </div>
                                     </div>
-
-                                    <div class="col-md-4">
-                                        <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Mod Ver</strong></span>
                                         <span id="su1_modver">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>EMS Ver</strong></span>
                                         <span id="su1_emsversion">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>LAN</strong></span>
                                         <span id="su1_lan">N/A</span>
                                     </div>
@@ -4059,14 +4088,15 @@
                         <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                             Beam Status
                         </div>
-                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 300px;">
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
                             <h5 class="text-primary d-flex align-items-center mb-3">
                                 <i class="fas fa-folder me-2"></i> Beam Status
                             </h5>
                             <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
 
                             <div class="row text-secondary small mb-4">
-                                <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                                <div class="col-md-6">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Beam ID</strong></span>
                                         <span id="su1_beam_id">N/A</span>
                                     </div>
@@ -4086,25 +4116,26 @@
                                         <span><strong>PCI</strong></span>
                                         <span id="su1_beam_pci">N/A</span>
                                     </div>
-                                </div>
-                                <div class="col-md-4">                                     <div class="d-flex justify-content-between mb-1">
+                                    <div class="d-flex justify-content-between mb-1">
                                         <span><strong>Ant. Array On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 52%; height: 25px; padding: 2px 6px;" id="su1_gumstick_onoff" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_gumstick_onoff" data-editable="true">N/A</button>
                                     </div>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 40%; height: 25px; padding: 2px 6px;" id="su1_mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
-                                        <input type="text" id="su1_mvbx_rsagc_threshold" data-editable="true" class="form-control form-control-sm" value="-97" readonly style="width: 40%; height: 25px; padding: 2px 6px;">
+                                        <input type="text" id="su1_mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>AGC Input</strong></span>
                                         <span id="su1_agc_input_power">N/A</span>
                                     </div>
-                                </div>
-                                <div class="col-md-4"> <div class="d-flex justify-content-between mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Decoded count</strong></span>
                                         <span id="su1_decoded_ssb_count">0</span>
                                     </div>
@@ -4174,15 +4205,15 @@
                                             </div>
                                                                                 <div class="d-flex justify-content-between mb-1">
                                         <span><strong>DL ATT</strong></span>
-                                        <input type="text" id="su1_dl_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                                                        <input type="text" id="su1_dl_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                     </div>
-                                    <div class="d-flex justify-content-between mb-1">
-                                        <span><strong>DL ALC Level</strong></span>
-                                        <input type="text" id="su1_dl_alc_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
-                                    </div>
+                                                                                <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>DL ALC Level</strong></span>
+                                                                                                                                                                                                   <input type="text" id="su1_dl_alc_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 22px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>DL ALC On/Off</strong></span>
-                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_siso" data-editable="true">On</button>
+                                        <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_siso" data-editable="true">ON</button>
                                     </div>
                                         </div>
                                         <div class="col-6">
@@ -4195,11 +4226,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="su1_ul_att_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_ul_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="su1_ul_iso_level_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_ul_iso_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                         </div>
                                     </div>
@@ -4207,11 +4238,11 @@
                                     <div class="row mt-1">
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="su1_mvbx_tx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_mvbx_tx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="su1_mvbx_rx_gain_set_siso" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_mvbx_rx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4238,15 +4269,15 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ATT</strong></span>
-                                                <input type="text" id="su1_dl_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_dl_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC Level</strong></span>
-                                                <input type="text" id="su1_dl_alc_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_dl_alc_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 22px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>DL ALC On/Off</strong></span>
-                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_mimo" data-editable="true">On</button>
+                                                <button type="button" class="btn btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_dl_alc_onoff_mimo" data-editable="true">ON</button>
                                             </div>
                                         </div>
                                         <div class="col-6">
@@ -4259,11 +4290,11 @@
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ATT</strong></span>
-                                                <input type="text" id="su1_ul_att_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_ul_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
                                                 <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="su1_ul_iso_level_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                                <input type="text" id="su1_ul_iso_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                         </div>
                                     </div>
@@ -4271,11 +4302,11 @@
                                     <div class="row mt-1">
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>DL Front End ATT</strong></span>
-                                            <input type="text" id="su1_mvbx_tx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_mvbx_tx_gain_set_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
-                                            <input type="text" id="su1_mvbx_rx_gain_set_mimo" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_mvbx_rx_gain_set_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4303,12 +4334,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="su1_ld1_det_dl0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_ld1_det_dl0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="su1_pd1_det_ul0_siso_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_pd1_det_ul0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                     </div>
                                 </div>
@@ -4332,12 +4363,12 @@
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="su1_ld2_det_dl1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_ld2_det_dl1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
                                             <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
                                             <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="su1_pd2_det_ul1_mimo_low" data-editable="true" class="form-control form-control-sm" value="0" readonly style="width: 30%; height: 25px; padding: 2px 6px;">
+                                            <input type="text" id="su1_pd2_det_ul1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
                                     </div>
                                 </div>
@@ -4537,7 +4568,7 @@
                                             <div class="flex flex-col gap-2">
                                                 <div class="flex justify-between items-center">
                                                     <span class="font-semibold">Beam Retry</span>
-                                                    <button class="bg-green-500 text-white rounded-md px-3 py-1 text-xs">On</button>
+                                                    <button class="bg-green-500 text-white rounded-md px-3 py-1 text-xs">ON</button>
                                                 </div>
                                                 <div class="flex justify-between items-center">
                                                     <span class="font-semibold">Retry Count(1/5min)</span>
@@ -4736,11 +4767,13 @@
                         Sync Module
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-secondary btn-sm">3Gpp Format Form</button>
-                        <button class="btn btn-secondary btn-sm">Slot Format Form</button>
-                        <button class="btn btn-secondary btn-sm">3Gpp Format Load</button>
-                        <button class="btn btn-secondary btn-sm">Slot Format Load</button>
-                        <button class="btn btn-secondary btn-sm">Set Mode</button>
+                        <button id="sync_3gpp_form_btn" class="btn btn-secondary btn-sm d-none">3Gpp Format Form</button>
+                        <button id="sync_slot_form_btn" class="btn btn-secondary btn-sm d-none">Slot Format Form</button>
+                        <button id="sync_3gpp_load_btn" class="btn btn-secondary btn-sm d-none">3Gpp Format Load</button>
+                        <button id="sync_slot_load_btn" class="btn btn-secondary btn-sm d-none">Slot Format Load</button>
+                        <button id="sync_set_mode_btn" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                        <button id="sync_status_mode_btn" class="btn btn-secondary btn-sm d-none">Status Mode</button>
+                        <button id="sync_apply_btn" class="btn btn-success btn-sm d-none">Set</button>
                     </div>
                 </div>
 
@@ -4765,7 +4798,7 @@
                                       {% for col in range(row, row + 20) %}
                                       <td>
                                         <div style="font-weight: bold; margin-bottom: 6px;">{{ col }}</div>
-                                        <input id="slot_format_{{ col }}" type="text" class="form-control form-control-sm mt-1" style="height: 15px; font-size: 0.5rem; padding: 1px 3px; text-align: center;" value="">
+                                        <input id="slot_format_{{ col }}" type="text" class="form-control form-control-sm mt-1 sync-input" style="height: 15px; font-size: 0.5rem; padding: 0px 3px; text-align: center;" value="" readonly>
                                       </td>
                                       {% endfor %}
                                     </tr>
@@ -4794,14 +4827,14 @@
                                 <div id="tsync_delay_1" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #1</div>
-                                <select id="tsync_out_sel_1" class="form-select form-select-sm mb-2">
+                                <select id="tsync_out_sel_1" class="form-select form-select-sm mb-2 sync-select" disabled>
                                     <option value="0">AUTO</option>
                                     <option value="1">DL(L)</option>
                                     <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #1</div>
-                                <select id="tsync_out_mode_1" class="form-select form-select-sm">
+                                <select id="tsync_out_mode_1" class="form-select form-select-sm sync-select" disabled>
                                     <option value="0">NORMAL</option>
                                     <option value="1">INVERT</option>
                                 </select>
@@ -4821,14 +4854,14 @@
                                 <div id="tsync_delay_2" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #2</div>
-                                <select id="tsync_out_sel_2" class="form-select form-select-sm mb-2">
+                                <select id="tsync_out_sel_2" class="form-select form-select-sm mb-2 sync-select" disabled>
                                     <option value="0">AUTO</option>
                                     <option value="1">DL(L)</option>
                                     <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #2</div>
-                                <select id="tsync_out_mode_2" class="form-select form-select-sm">
+                                <select id="tsync_out_mode_2" class="form-select form-select-sm sync-select" disabled>
                                     <option value="0">NORMAL</option>
                                     <option value="1">INVERT</option>
                                 </select>
@@ -4848,14 +4881,14 @@
                                 <div id="tsync_delay_3" class="form-control form-control-sm mb-2 text-end" style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A [us]</div>
 
                                 <div class="sync-label">TSYNC OUT SEL #3</div>
-                                <select id="tsync_out_sel_3" class="form-select form-select-sm mb-2">
+                                <select id="tsync_out_sel_3" class="form-select form-select-sm mb-2 sync-select" disabled>
                                     <option value="0">AUTO</option>
                                     <option value="1">DL(L)</option>
                                     <option value="2">UL(H)</option>
                                 </select>
 
                                 <div class="sync-label">TSYNC OUT MODE #3</div>
-                                <select id="tsync_out_mode_3" class="form-select form-select-sm">
+                                <select id="tsync_out_mode_3" class="form-select form-select-sm sync-select" disabled>
                                     <option value="0">NORMAL</option>
                                     <option value="1">INVERT</option>
                                 </select>
@@ -4866,13 +4899,13 @@
                         <div class="col-md-3 px-2">
                             <div class="sync-card">
                                 <div class="sync-label">SSB MU</div>
-                                <select id="ssb_mu" class="form-select form-select-sm mb-2">
+                                <select id="ssb_mu" class="form-select form-select-sm mb-2 sync-select" disabled>
                                     <option value="120">120K</option>
                                     <option value="240">240K</option>
                                 </select>
 
                                 <div class="sync-label">TDD Rate</div>
-                                <select id="tdd_rate" class="form-select form-select-sm">
+                                <select id="tdd_rate" class="form-select form-select-sm sync-select" disabled>
                                     <option value="0">4:1</option>
                                     <option value="1">DL</option>
                                     <option value="2">UL</option>
@@ -4885,8 +4918,8 @@
 
                 <!-- Frequency Bar -->
                 <div class="frequency-bar" style="margin-top: 1rem;">
-                    <div>Frequency &nbsp;&nbsp; <div id="TDD_Freq2" class="form-control form-control-sm" style="display: inline-block; width: 120px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A</div> &nbsp; [MHz]</div>
-                    <div>ARFCN &nbsp;&nbsp; <div id="TDD_Arfcn2" class="form-control form-control-sm" style="display: inline-block; width: 100px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;">N/A</div></div>
+                    <div>Frequency &nbsp;&nbsp; <input id="TDD_Freq2" type="text" class="form-control form-control-sm sync-input" style="display: inline-block; width: 120px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;" value="N/A" readonly> &nbsp; [MHz]</div>
+                    <div>ARFCN &nbsp;&nbsp; <input id="TDD_Arfcn2" type="text" class="form-control form-control-sm sync-input" style="display: inline-block; width: 100px; margin-left: 10px; background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 0.375rem 0.75rem; font-size: 0.875rem;" value="N/A" readonly></div>
                 </div>
 
                 <!-- Slot 3gpp Format Section -->
@@ -4919,7 +4952,7 @@
                                         <!-- Dropdowns -->
                                         {% for col in range(14) %}
                                         <td style="text-align: center; border: 1px solid #dee2e6;">
-                                            <select id="slot_3gpp_format_{{ row }}_{{ col }}" class="slot-3gpp-format-select" data-row="{{ row }}" data-col="{{ col }}" style="font-size: 0.75rem; padding: 2px 4px; width: 100%; border: none; background: transparent;">
+                                            <select id="slot_3gpp_format_{{ row }}_{{ col }}" class="slot-3gpp-format-select sync-select" data-row="{{ row }}" data-col="{{ col }}" style="font-size: 0.75rem; padding: 2px 4px; width: 100%; border: none; background: transparent;" disabled>
                                                 <option value="0">D</option>
                                                 <option value="1">U</option>
                                                 <option value="2">F</option>
@@ -4937,7 +4970,7 @@
                 <!-- F Mode Section -->
                 <div class="mb-4" style="margin-top: 2rem;">
                     <div class="frequency-bar">
-                        <div>F Mode &nbsp;&nbsp; <select id="F_Mode" class="form-select form-select-sm" style="display: inline-block; width: 120px; margin-left: 10px;">
+                        <div>F Mode &nbsp;&nbsp; <select id="F_Mode" class="form-select form-select-sm sync-select" style="display: inline-block; width: 120px; margin-left: 10px;" disabled>
                             <option value="0">DL</option>
                             <option value="1">UL</option>
                         </select></div>
@@ -4964,7 +4997,7 @@
             dashboard: { update: true,  tdd: false }, // 대시보드: update_status만 (네비게이션, 기본 상태)
             su1:       { update: true, tdd: false }, // SU #1: update_status 폴링 (SU1 패킷 요청)
             //alarms:    { update: true,  tdd: false }, // 알람 페이지: update_status만 (알람 상태)
-            tddview:   { update: true, tdd: true  }, // sync module 페이지지
+            tddview:   { update: true, tdd: true  }, // sync module 페이지
             packet_info: { update: true, tdd: false }, // Packet Info: update_status만
             //none:      { update: false, tdd: false }, // 폴링 없음 (정보만 표시)
             // 필요시 추가...
@@ -6233,10 +6266,10 @@
 
         socket.on("tdd_status", function (data) {
             // Set Mode 중이면 실시간 업데이트 중단 (스냅샷만 허용)
-            if (!LIVE_UPDATES && !SNAPSHOT_PENDING) {
-                console.log('🔒 tdd_status blocked: Set Mode active and no snapshot pending');
-                return;
-            }
+            // if (!LIVE_UPDATES && !SNAPSHOT_PENDING) {
+            //     console.log('🔒 tdd_status blocked: Set Mode active and no snapshot pending');
+            //     return;
+            // }
 
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
@@ -6534,10 +6567,10 @@
                 const antArrayEl = document.getElementById("su1_ant_array_onoff");
                 if (antArrayEl) {
                     if (data.packet.Ant_Array_OnOff === 1) {
-                        antArrayEl.textContent = "On";
+                        antArrayEl.textContent = "ON";
                         antArrayEl.className = "btn btn-success btn-sm";
                     } else {
-                        antArrayEl.textContent = "Off";
+                        antArrayEl.textContent = "OFF";
                         antArrayEl.className = "btn btn-secondary btn-sm";
                     }
                 }
@@ -6546,10 +6579,10 @@
                 const agcEl = document.getElementById("su1_agc_onoff");
                 if (agcEl) {
                     if (data.packet.AGC_OnOff === 1) {
-                        agcEl.textContent = "On";
+                        agcEl.textContent = "ON";
                         agcEl.className = "btn btn-success btn-sm";
                     } else {
-                        agcEl.textContent = "Off";
+                        agcEl.textContent = "OFF";
                         agcEl.className = "btn btn-secondary btn-sm";
                     }
                 }
@@ -6573,10 +6606,10 @@
                     const dlAlcSisoEl = document.getElementById("su1_dl_alc_onoff_siso");
                     if (dlAlcSisoEl) {
                         if (data.packet.DL_ALC_OnOff_SISO === 1) {
-                            dlAlcSisoEl.textContent = "On";
+                            dlAlcSisoEl.textContent = "ON";
                             dlAlcSisoEl.className = "btn btn-success btn-sm";
                         } else {
-                            dlAlcSisoEl.textContent = "Off";
+                            dlAlcSisoEl.textContent = "OFF";
                             dlAlcSisoEl.className = "btn btn-secondary btn-sm";
                         }
                     }
@@ -6598,10 +6631,10 @@
                     const dlAlcMimoEl = document.getElementById("su1_dl_alc_onoff_mimo");
                     if (dlAlcMimoEl) {
                         if (data.packet.DL_ALC_OnOff_MIMO === 1) {
-                            dlAlcMimoEl.textContent = "On";
+                            dlAlcMimoEl.textContent = "ON";
                             dlAlcMimoEl.className = "btn btn-success btn-sm";
                         } else {
-                            dlAlcMimoEl.textContent = "Off";
+                            dlAlcMimoEl.textContent = "OFF";
                             dlAlcMimoEl.className = "btn btn-secondary btn-sm";
                         }
                     }
@@ -6638,25 +6671,27 @@
                 }
 
                 // SU1 Ant. Array On/Off (GumStick_OnOff) - DU와 동일 로직
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
                 const su1GumstickOnOffEl = document.getElementById("su1_gumstick_onoff");
                 if (su1GumstickOnOffEl) {
                     if (data.packet.GumStick_OnOff === 1) {
-                        su1GumstickOnOffEl.textContent = "On";
+                        su1GumstickOnOffEl.textContent = "ON";
                         su1GumstickOnOffEl.className = "btn btn-success btn-sm";
                     } else {
-                        su1GumstickOnOffEl.textContent = "Off";
+                        su1GumstickOnOffEl.textContent = "OFF";
                         su1GumstickOnOffEl.className = "btn btn-secondary btn-sm";
                     }
                 }
 
                 // SU1 AGC On/Off (Mvbx_RsAgcMode) - DU와 동일 로직
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
                 const su1MvbxRsagcModeEl = document.getElementById("su1_mvbx_rsagc_mode");
                 if (su1MvbxRsagcModeEl) {
                     if (data.packet.Mvbx_RsAgcMode === 1) {
-                        su1MvbxRsagcModeEl.textContent = "On";
+                        su1MvbxRsagcModeEl.textContent = "ON";
                         su1MvbxRsagcModeEl.className = "btn btn-success btn-sm";
                     } else {
-                        su1MvbxRsagcModeEl.textContent = "Off";
+                        su1MvbxRsagcModeEl.textContent = "OFF";
                         su1MvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
                     }
                 }
@@ -6673,6 +6708,7 @@
                 updateText("su1_agc_input_power", data.packet.AGC_Input_Power + " dBm");
 
                 // SU1 ALC DL0 SISO On/Off (1=ON, 0=OFF) - DU와 동일 로직
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
                 const su1AlcDl0SisoOnOffEl = document.getElementById("su1_dl_alc_onoff_siso");
                 if (su1AlcDl0SisoOnOffEl) {
                     if (data.packet.DL_ALC_OnOff_SISO === 1) {
@@ -6685,6 +6721,7 @@
                 }
                 
                 // SU1 ALC DL1 MIMO On/Off (1=ON, 0=OFF) - DU와 동일 로직
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
                 const su1AlcDl1MimoOnOffEl = document.getElementById("su1_dl_alc_onoff_mimo");
                 if (su1AlcDl1MimoOnOffEl) {
                     if (data.packet.DL_ALC_OnOff_MIMO === 1) {
@@ -6959,25 +6996,27 @@
         
 
                             // 1. Ant. Array On/Off (GumStick_OnOff)
+                if (SET_MODE) return; // Set Mode에서 업데이트 차단
                 const gumstickOnOffEl = document.getElementById("gumstick_onoff");
                 if (gumstickOnOffEl) {
                     if (data.packet.GumStick_OnOff === 1) {
-                        gumstickOnOffEl.textContent = "On";
+                        gumstickOnOffEl.textContent = "ON";
                         gumstickOnOffEl.className = "btn btn-success btn-sm";
                     } else {
-                        gumstickOnOffEl.textContent = "Off";
+                        gumstickOnOffEl.textContent = "OFF";
                         gumstickOnOffEl.className = "btn btn-secondary btn-sm";
                     }
                 }
 
                             // 2. AGC On/Off (Mvbx_RsAgcMode)
+                if (SET_MODE) return; // Set Mode에서 업데이트 차단
                 const mvbxRsagcModeEl = document.getElementById("mvbx_rsagc_mode");
                 if (mvbxRsagcModeEl) {
                     if (data.packet.Mvbx_RsAgcMode === 1) {
-                        mvbxRsagcModeEl.textContent = "On";
+                        mvbxRsagcModeEl.textContent = "ON";
                         mvbxRsagcModeEl.className = "btn btn-success btn-sm";
                     } else {
-                        mvbxRsagcModeEl.textContent = "Off";
+                        mvbxRsagcModeEl.textContent = "OFF";
                         mvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
                     }
                 }
@@ -6994,25 +7033,27 @@
             updateText("agc_input_power", data.packet.AGC_Input_Power + " dBm");
 
             // ALC DL0 SISO Mode (1=ON, 0=OFF)
-                            const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
+                if (SET_MODE) return; // Set Mode에서 업데이트 차단
+                const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
                 if (alcDl0SisoEl) {
                     if (data.packet.ALC_DL0_SISO_Mode === 1) {
-                        alcDl0SisoEl.textContent = "On";
+                        alcDl0SisoEl.textContent = "ON";
                         alcDl0SisoEl.className = "btn btn-success btn-sm";
                     } else {
-                        alcDl0SisoEl.textContent = "Off";
+                        alcDl0SisoEl.textContent = "OFF";
                         alcDl0SisoEl.className = "btn btn-secondary btn-sm";
                     }
                 }
             
             // ALC DL1 MIMO Mode (1=ON, 0=OFF)
-                            const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
+                if (SET_MODE) return; // Set Mode에서 업데이트 차단
+                const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
                 if (alcDl1MimoEl) {
                     if (data.packet.ALC_DL1_MIMO_Mode === 1) {
-                        alcDl1MimoEl.textContent = "On";
+                        alcDl1MimoEl.textContent = "ON";
                         alcDl1MimoEl.className = "btn btn-success btn-sm";
                     } else {
-                        alcDl1MimoEl.textContent = "Off";
+                        alcDl1MimoEl.textContent = "OFF";
                         alcDl1MimoEl.className = "btn btn-secondary btn-sm";
                     }
                 }
@@ -7036,10 +7077,10 @@
             const agcModeEl2 = document.getElementById("Mvbx_RsAgcMode2");
             if (agcModeEl2) {
                 if (data.packet.Mvbx_RsAgcMode === 1) {
-                    agcModeEl2.textContent = "On";
+                    agcModeEl2.textContent = "ON";
                     agcModeEl2.className = "btn btn-success btn-sm w-100";
                 } else {
-                    agcModeEl2.textContent = "Off";
+                    agcModeEl2.textContent = "OFF";
                     agcModeEl2.className = "btn btn-secondary btn-sm w-100";
                 }
             }
@@ -7823,10 +7864,10 @@
                 if (button && detMaskStatus.hasOwnProperty(detMaskId)) {
                     const isOn = detMaskStatus[detMaskId] === 1;
                     if (isOn) {
-                        button.textContent = 'On';
+                        button.textContent = 'ON';
                         button.style.backgroundColor = '#28a745'; // 녹색
                     } else {
-                        button.textContent = 'Off';
+                        button.textContent = 'OFF';
                         button.style.backgroundColor = '#666'; // 회색
                     }
                 }
@@ -7853,10 +7894,10 @@
                 if (button && suLinkFailStatus.hasOwnProperty(suLinkFailId)) {
                     const isOn = suLinkFailStatus[suLinkFailId] === 1;
                     if (isOn) {
-                        button.textContent = 'On';
+                        button.textContent = 'ON';
                         button.style.backgroundColor = '#28a745'; // 녹색
                     } else {
-                        button.textContent = 'Off';
+                        button.textContent = 'OFF';
                         button.style.backgroundColor = '#666'; // 회색
                     }
                 }
@@ -7873,6 +7914,12 @@
         function updateSyncModuleData(data) {
             if (!data || !data.packet) {
                 console.log('Sync Module 데이터가 없습니다.');
+                return;
+            }
+
+            // Set Mode일 때는 수정 가능한 필드 업데이트 차단
+            if (SYNC_SET_MODE) {
+                console.log('🔧 Sync Module Set Mode: 데이터 업데이트 차단됨');
                 return;
             }
 
@@ -7904,19 +7951,19 @@
             updateSyncValue('TDD_Arfcn2', data.packet.TDD_Arfcn);
             updateSyncSelect('F_Mode', data.packet.F_Mode);
 
-                                // Slot Format 업데이트 (160개)
-                    if (data.packet.TDD_Slot_Format) {
-                        // ArrayBuffer를 Uint8Array로 변환
-                        const slotFormatArray = new Uint8Array(data.packet.TDD_Slot_Format);
-                        updateSlotFormat(Array.from(slotFormatArray));
-                    }
+            // Slot Format 업데이트 (160개)
+            if (data.packet.TDD_Slot_Format) {
+                // ArrayBuffer를 Uint8Array로 변환
+                const slotFormatArray = new Uint8Array(data.packet.TDD_Slot_Format);
+                updateSlotFormat(Array.from(slotFormatArray));
+            }
 
-                    // Slot 3gpp Format 업데이트 (56x14 = 784개)
-                    if (data.packet.TDD_3gpp_table) {
-                        // ArrayBuffer를 Uint8Array로 변환
-                        const slot3gppArray = new Uint8Array(data.packet.TDD_3gpp_table);
-                        updateSlot3gppFormat(Array.from(slot3gppArray));
-                    }
+            // Slot 3gpp Format 업데이트 (56x14 = 784개)
+            if (data.packet.TDD_3gpp_table) {
+                // ArrayBuffer를 Uint8Array로 변환
+                const slot3gppArray = new Uint8Array(data.packet.TDD_3gpp_table);
+                updateSlot3gppFormat(Array.from(slot3gppArray));
+            }
         }
 
         // Sync Module 값 업데이트 헬퍼 함수
@@ -7924,10 +7971,18 @@
             const element = document.getElementById(elementId);
             if (element) {
                 if (value === -999 || value === undefined) {
-                    element.textContent = unit ? `N/A [${unit}]` : 'N/A';
+                    if (element.tagName === 'INPUT') {
+                        element.value = unit ? `N/A [${unit}]` : 'N/A';
+                    } else {
+                        element.textContent = unit ? `N/A [${unit}]` : 'N/A';
+                    }
                 } else {
                     // app.py에서 이미 변환된 값 사용, 단위 유지
-                    element.textContent = unit ? `${value} [${unit}]` : value;
+                    if (element.tagName === 'INPUT') {
+                        element.value = unit ? `${value} [${unit}]` : value;
+                    } else {
+                        element.textContent = unit ? `${value} [${unit}]` : value;
+                    }
                 }
             }
         }
@@ -8786,31 +8841,34 @@
       document.getElementById('btnApply').classList.toggle('d-none', !SET_MODE);
       document.getElementById('btnStatusMode').classList.toggle('d-none', !SET_MODE);
       
-      // 사진에 보이는 모든 버튼들 숨김/표시 (Initial Setup, APN, RESET, HIDDEN, Beam Info, Alarm Mask)
-      const buttonsToHide = [
+      // DU 화면의 모달 버튼들만 숨김/표시 (DU Set Mode일 때만)
+      const duModalButtons = [
         'initialSetupBtn', 'apnBtn', 'resetBtn', 'openModalBtn', 
         'beamInfoBtn', 'alarmMaskBtn'
       ];
-      buttonsToHide.forEach(id => {
+      duModalButtons.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) btn.classList.toggle('d-none', SET_MODE);
       });
       
-      // 또는 data-bs-toggle 속성이 있는 모든 버튼 숨김 (모달 버튼들)
-      const modalButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
-      modalButtons.forEach(el=>{
+      // DU 화면의 data-bs-toggle 속성이 있는 버튼들만 숨김 (DU Set Mode일 때만)
+      const duModalToggleButtons = document.querySelectorAll('#du_content_display [data-bs-toggle="modal"]');
+      duModalToggleButtons.forEach(el=>{
         el.classList.toggle('d-none', SET_MODE);
       });
-      console.log(`🔧 Hidden ${modalButtons.length} modal buttons`);
+      console.log(`🔧 DU Modal buttons: ${SET_MODE ? 'Hidden' : 'Shown'}`);
 
-      // 편집 가능한 필드들 토글
-      const editableFields = document.querySelectorAll('[data-editable="true"]');
-      editableFields.forEach(el=>{
+      // DU 편집 가능한 필드들 토글
+      const duEditableFields = document.querySelectorAll('#du_content_display [data-editable="true"]');
+      duEditableFields.forEach(el=>{
         if (el.type==='checkbox') el.disabled = !SET_MODE;
         else el.toggleAttribute('readonly', !SET_MODE);
-        el.classList.toggle('editable-on', SET_MODE);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE);
+        }
       });
-      console.log(`🔧 Toggled ${editableFields.length} editable fields`);
+      console.log(`🔧 Toggled ${duEditableFields.length} DU editable fields`);
     }
 
     //==== 상태 수신: 섹션별 차단은 updateValue에서 처리 ====
@@ -8866,7 +8924,7 @@
           v = getDropdownNumericValue(id, el.value);
         } else if (el.type === 'button') {
           // 버튼: On/Off 텍스트를 숫자로 변환
-          v = el.textContent === 'On' ? 1 : 0;
+          v = el.textContent === 'ON' ? 1 : 0;
         } else {
           // 일반 입력 필드: 숫자로 변환
           v = Number(el.value);
@@ -8906,11 +8964,11 @@
       if (!button) return;
       
       const currentState = button.textContent;
-      if (currentState === 'On') {
-        button.textContent = 'Off';
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
         button.className = 'btn btn-secondary btn-sm';
       } else {
-        button.textContent = 'On';
+        button.textContent = 'ON';
         button.className = 'btn btn-success btn-sm';
       }
       
@@ -8925,11 +8983,11 @@
       if (!button) return;
       
       const currentState = button.textContent;
-      if (currentState === 'On') {
-        button.textContent = 'Off';
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
         button.className = 'btn btn-secondary btn-sm';
       } else {
-        button.textContent = 'On';
+        button.textContent = 'ON';
         button.className = 'btn btn-success btn-sm';
       }
       
@@ -8948,29 +9006,32 @@
       document.getElementById('btnApplySu1').classList.toggle('d-none', !SET_MODE_SU1);
       document.getElementById('btnStatusModeSu1').classList.toggle('d-none', !SET_MODE_SU1);
       
-      // 사진에 보이는 모든 버튼들 숨김/표시 (Initial Setup, APN, RESET, HIDDEN, Beam Info, Alarm Mask)
-      const buttonsToHide = [
+      // SU1 화면의 모달 버튼들만 숨김/표시 (SU1 Set Mode일 때만)
+      const su1ModalButtons = [
         'initialSetupBtn', 'apnBtn', 'resetBtn', 'openModalBtn', 
         'beamInfoBtn', 'alarmMaskBtn'
       ];
-      buttonsToHide.forEach(id => {
+      su1ModalButtons.forEach(id => {
         const btn = document.getElementById(id);
         if (btn) btn.classList.toggle('d-none', SET_MODE_SU1);
       });
       
-      // data-bs-toggle 속성이 있는 모든 버튼 숨김 (모달 버튼들)
-      const modalButtons = document.querySelectorAll('[data-bs-toggle="modal"]');
-      modalButtons.forEach(el=>{
+      // SU1 화면의 data-bs-toggle 속성이 있는 버튼들만 숨김 (SU1 Set Mode일 때만)
+      const su1ModalToggleButtons = document.querySelectorAll('#su1_content_display [data-bs-toggle="modal"]');
+      su1ModalToggleButtons.forEach(el=>{
         el.classList.toggle('d-none', SET_MODE_SU1);
       });
-      console.log(`🔧 Hidden ${modalButtons.length} modal buttons`);
+      console.log(`🔧 SU1 Modal buttons: ${SET_MODE_SU1 ? 'Hidden' : 'Shown'}`);
 
       // SU1 편집 가능한 필드들 토글
       const su1EditableFields = document.querySelectorAll('#su1_content_display [data-editable="true"]');
       su1EditableFields.forEach(el=>{
         if (el.type==='checkbox') el.disabled = !SET_MODE_SU1;
         else el.toggleAttribute('readonly', !SET_MODE_SU1);
-        el.classList.toggle('editable-on', SET_MODE_SU1);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_SU1);
+        }
       });
       console.log(`🔧 Toggled ${su1EditableFields.length} SU1 editable fields`);
     }
@@ -8991,7 +9052,7 @@
         } else if (el.tagName === 'SELECT') {
           v = getDropdownNumericValue(id, el.value);
         } else if (el.type === 'button') {
-          v = el.textContent === 'On' ? 1 : 0;
+          v = el.textContent === 'ON' ? 1 : 0;
         } else {
           v = Number(el.value);
         }
@@ -9063,6 +9124,30 @@
     document.getElementById('btnStatusModeSu1')?.addEventListener('click', leaveSetModeSu1);
     document.getElementById('btnApplySu1')?.addEventListener('click', applySetSu1);
     
+    //==== Sync Module Set Mode 버튼 바인딩 ====
+    document.getElementById('sync_set_mode_btn')?.addEventListener('click', enterSyncSetMode);
+    document.getElementById('sync_status_mode_btn')?.addEventListener('click', leaveSyncSetMode);
+    document.getElementById('sync_apply_btn')?.addEventListener('click', applySyncSet);
+    
+    //==== Sync Module Set Mode 응답 수신 ====
+    socket.on("sync_set_mode_ack", (data) => {
+      console.log('🔧 Sync Module Set Mode acknowledged:', data);
+    });
+    
+    socket.on("sync_status_mode_ack", (data) => {
+      console.log('🔧 Sync Module Status Mode acknowledged:', data);
+    });
+    
+    socket.on("sync_apply_ack", (data) => {
+      console.log('🔧 Sync Module Apply acknowledged:', data);
+      if (data.ok) {
+        console.log('✅ Sync Module values applied successfully');
+      } else {
+        console.error('❌ Sync Module values apply failed:', data.error);
+        alert('Sync Module 값 적용 실패: ' + data.error);
+      }
+    });
+    
     //==== On/Off 버튼 토글 이벤트 연결 ====
     // Set Mode에서만 작동하는 On/Off 버튼들
     const onOffButtons = [
@@ -9087,6 +9172,167 @@
         button.addEventListener('click', () => toggleOnOffButtonSu1(buttonId));
       }
     });
+
+    //==== Sync Module Set Mode 핸들러 ====
+    let SYNC_SET_MODE = false;
+    
+    function enterSyncSetMode() {
+      console.log('🔧 Entering Sync Module Set Mode...');
+      SYNC_SET_MODE = true;
+      console.log(`🔧 State: SYNC_SET_MODE=${SYNC_SET_MODE}`);
+      applySyncUiMode();
+      socket.emit('enter_sync_set_mode');
+      socket.emit('request_tdd_status'); // 스냅샷 1회
+      console.log('🔧 Sync Module Set Mode activated');
+    }
+    
+    function leaveSyncSetMode() {
+      console.log('🔧 Leaving Sync Module Set Mode...');
+      SYNC_SET_MODE = false;
+      console.log(`🔧 State: SYNC_SET_MODE=${SYNC_SET_MODE}`);
+      applySyncUiMode();
+      socket.emit('leave_sync_set_mode');
+      console.log('🔧 Sync Module Status Mode activated');
+    }
+    
+    function applySyncSet() {
+      try {
+        // Sync Module 값 수집 및 적용
+        const fields = collectSyncFields();
+        socket.emit('apply_sync_values', { Fields: fields });
+        console.log('🔧 Applying Sync Module values...');
+      } catch(e) { 
+        alert('Sync Module 입력 오류: ' + e.message); 
+      }
+    }
+    
+    // Sync Module 필드 값 수집 함수
+    function collectSyncFields() {
+      const out = {};
+      
+      // Slot Format 필드들 (160개)
+      for (let i = 0; i < 160; i++) {
+        const el = document.getElementById(`slot_format_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`slot_format_${i}`] = v;
+          }
+        }
+      }
+      
+      // TSYNC OUT SEL 필드들 (3개)
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`tsync_out_sel_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`tsync_out_sel_${i}`] = v;
+          }
+        }
+      }
+      
+      // TSYNC OUT MODE 필드들 (3개)
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`tsync_out_mode_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`tsync_out_mode_${i}`] = v;
+          }
+        }
+      }
+      
+      // Frequency, ARFCN 필드들
+      const freqEl = document.getElementById('TDD_Freq2');
+      if (freqEl && freqEl.value !== undefined) {
+        const v = Number(freqEl.value);
+        if (!Number.isNaN(v)) {
+          out['TDD_Freq'] = v;
+        }
+      }
+      
+      const arfcnEl = document.getElementById('TDD_Arfcn2');
+      if (arfcnEl && arfcnEl.value !== undefined) {
+        const v = Number(arfcnEl.value);
+        if (!Number.isNaN(v)) {
+          out['TDD_Arfcn'] = v;
+        }
+      }
+      
+      // F Mode, SSB MU, TDD Rate 필드들
+      const fModeEl = document.getElementById('F_Mode');
+      if (fModeEl && fModeEl.value !== undefined) {
+        const v = Number(fModeEl.value);
+        if (!Number.isNaN(v)) {
+          out['F_Mode'] = v;
+        }
+      }
+      
+      const ssbMuEl = document.getElementById('ssb_mu');
+      if (ssbMuEl && ssbMuEl.value !== undefined) {
+        const v = Number(ssbMuEl.value);
+        if (!Number.isNaN(v)) {
+          out['ssb_mu'] = v;
+        }
+      }
+      
+      const tddRateEl = document.getElementById('tdd_rate');
+      if (tddRateEl && tddRateEl.value !== undefined) {
+        const v = Number(tddRateEl.value);
+        if (!Number.isNaN(v)) {
+          out['tdd_rate'] = v;
+        }
+      }
+      
+      // Slot 3gpp Format 필드들 (784개)
+      for (let row = 0; row < 56; row++) {
+        for (let col = 0; col < 14; col++) {
+          const el = document.getElementById(`slot_3gpp_format_${row}_${col}`);
+          if (el && el.value !== undefined) {
+            const v = Number(el.value);
+            if (!Number.isNaN(v)) {
+              out[`slot_3gpp_format_${row}_${col}`] = v;
+            }
+          }
+        }
+      }
+      
+      console.log('🔧 Collected Sync Module fields:', out);
+      return out;
+    }
+    
+    function applySyncUiMode() {
+      console.log(`🔧 applySyncUiMode: SYNC_SET_MODE=${SYNC_SET_MODE}`);
+      
+      // Set Mode 버튼 표시/숨김
+      document.getElementById('sync_set_mode_btn').classList.toggle('d-none', SYNC_SET_MODE);
+      document.getElementById('sync_status_mode_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      document.getElementById('sync_apply_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      
+      // 4개 Format 버튼들 표시/숨김 (Set Mode일 때만 표시)
+      document.getElementById('sync_3gpp_form_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      document.getElementById('sync_slot_form_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      document.getElementById('sync_3gpp_load_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      document.getElementById('sync_slot_load_btn').classList.toggle('d-none', !SYNC_SET_MODE);
+      
+      // 모든 입력 요소 활성화/비활성화
+      document.querySelectorAll('.sync-input').forEach(el => {
+        if (SYNC_SET_MODE) {
+          el.readOnly = false;
+          el.style.backgroundColor = '#fff';
+        } else {
+          el.readOnly = true;
+          el.style.backgroundColor = '#f8f9fa';
+        }
+      });
+      
+      document.querySelectorAll('.sync-select').forEach(el => {
+        el.disabled = !SYNC_SET_MODE;
+      });
+      
+      console.log(`🔧 Toggled ${document.querySelectorAll('.sync-input, .sync-select').length} Sync Module editable fields`);
+    }
     </script>
 
 </body>

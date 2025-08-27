@@ -292,6 +292,46 @@ def apply_su1_values(payload):
         emit("su1_apply_ack", {"ok": False, "error": error_msg})
         return {"status": "error", "message": error_msg}
 
+@socketio.on("enter_sync_set_mode")
+def enter_sync_set_mode(payload=None):
+    print(f"🔧 Client entering Sync Module Set Mode")
+    emit("sync_set_mode_ack", {"ok": True})
+
+@socketio.on("leave_sync_set_mode")
+def leave_sync_set_mode(payload=None):
+    print(f"🔧 Client leaving Sync Module Set Mode")
+    emit("sync_status_mode_ack", {"ok": True})
+
+@socketio.on("apply_sync_values")
+def apply_sync_values(payload):
+    try:
+        print(f"🔧 Applying Sync Module values: {payload}")
+        
+        # payload 검증
+        if not payload:
+            raise ValueError("Payload is empty")
+        
+        # test.py로 전송 (DU, SU1과 동일한 방식)
+        socketio.emit("sync_Ctrl_packet", payload, include_self=False)
+        
+        # 클라이언트에게 성공 응답
+        emit("sync_apply_ack", {"ok": True})
+        
+        print("✅ Sync Module values successfully sent to test.py")
+        return {"status": "success", "message": "Sync Module values packet received and sent to test.py"}
+        
+    except ValueError as ve:
+        error_msg = f"Validation error: {str(ve)}"
+        print(f"❌ {error_msg}")
+        emit("sync_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
+        
+    except Exception as e:
+        error_msg = f"Unexpected error: {str(e)}"
+        print(f"❌ {error_msg}")
+        emit("sync_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
+
 
 
 
