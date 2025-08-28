@@ -3009,7 +3009,7 @@
                                                         <button id="alarm_mask_decoding" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                     <div class="mb-2 d-flex flex-column align-items-center">
-                                                        <small style="font-size: 9px;">Ant. Array Link</small>
+                                                        <small style="font-size: 9px;">Ant Link</small>
                                                         <button id="alarm_mask_aa_link" class="btn btn-sm alarm-btn" style="background-color: #666; border: none; color: white; font-size: 9px; height: 22px; width: 60px;">OFF</button>
                                                     </div>
                                                 </div>
@@ -3340,7 +3340,7 @@
                                     </div>
                                     <div class="col-4">
                                         <p id="alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
-                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
                                         <p id="alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
                                         <p id="alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
@@ -3431,6 +3431,14 @@
                             <div class="row text-secondary small mb-4">
                                 <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>Mod Ver</strong></span>
+                                        <span id="modver">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>EMS Ver</strong></span>
+                                        <span id="emsversion">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Status</strong></span>
                                         <span id="modstatus" class="text-success">N/A</span>
                                     </div>
@@ -3450,6 +3458,9 @@
                                         <span><strong>Mod IP</strong></span>
                                         <span id="modip">N/A</span>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
                                         <span id="rsrp">N/A</span>
@@ -3458,9 +3469,6 @@
                                         <span><strong>RSRQ</strong></span>
                                         <span id="rsrq">N/A</span>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSSI</strong></span>
                                         <span id="rssi">N/A</span>
@@ -3476,14 +3484,6 @@
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Tx Pwr</strong></span>
                                         <span id="txpwr">N/A</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span><strong>Mod Ver</strong></span>
-                                        <span id="modver">N/A</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span><strong>EMS Ver</strong></span>
-                                        <span id="emsversion">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>LAN</strong></span>
@@ -3542,6 +3542,9 @@
                                         <span><strong>PCI</strong></span>
                                         <span id="mvbx_pci">N/A</span>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>Ant. Array On/Off</strong></span>
                                         <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="gumstick_onoff" data-editable="true">N/A</button>
@@ -3550,9 +3553,6 @@
                                         <span><strong>AGC On/Off</strong></span>
                                         <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
                                         <input type="text" id="mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
@@ -3952,7 +3952,7 @@
                                     </div>
                                     <div class="col-4">
                                         <p id="su1_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
-                                        <p id="su1_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant. Array Link</p>
+                                        <p id="su1_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
                                         <p id="su1_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
                                         <p id="su1_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
                                     </div>
@@ -4005,6 +4005,14 @@
                             <div class="row text-secondary small mb-4">
                                 <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>Mod Ver</strong></span>
+                                        <span id="su1_modver">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span><strong>EMS Ver</strong></span>
+                                        <span id="su1_emsversion">N/A</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Status</strong></span>
                                         <span id="su1_modstatus" class="text-success">N/A</span>
                                     </div>
@@ -4024,6 +4032,9 @@
                                         <span><strong>Mod IP</strong></span>
                                         <span id="su1_modip">N/A</span>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSRP</strong></span>
                                         <span id="su1_rsrp">N/A</span>
@@ -4032,9 +4043,6 @@
                                         <span><strong>RSRQ</strong></span>
                                         <span id="su1_rsrq">N/A</span>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>RSSI</strong></span>
                                         <span id="su1_rssi">N/A</span>
@@ -4050,14 +4058,6 @@
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>Tx Pwr</strong></span>
                                         <span id="su1_txpwr">N/A</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span><strong>Mod Ver</strong></span>
-                                        <span id="su1_modver">N/A</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-2">
-                                        <span><strong>EMS Ver</strong></span>
-                                        <span id="su1_emsversion">N/A</span>
                                     </div>
                                     <div class="d-flex justify-content-between mb-2">
                                         <span><strong>LAN</strong></span>
@@ -4116,6 +4116,9 @@
                                         <span><strong>PCI</strong></span>
                                         <span id="su1_beam_pci">N/A</span>
                                     </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>Ant. Array On/Off</strong></span>
                                         <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_gumstick_onoff" data-editable="true">N/A</button>
@@ -4124,9 +4127,6 @@
                                         <span><strong>AGC On/Off</strong></span>
                                         <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_mvbx_rsagc_mode" data-editable="true">N/A</button>
                                     </div>
-                                </div>
-
-                                <div class="col-md-6">
                                     <div class="d-flex justify-content-between mb-1">
                                         <span><strong>AGC Level</strong></span>
                                         <input type="text" id="su1_mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
@@ -7024,9 +7024,9 @@
                             // 3. AGC Level (Mvbx_RsAgcThreshold)
                 let agcLevel = data.packet.Mvbx_RsAgcThreshold;
                 if (agcLevel === -999) {
-                    updateText("mvbx_rsagc_threshold", "- - -");
+                    updateValue("mvbx_rsagc_threshold", "- - -");
                 } else {
-                    updateText("mvbx_rsagc_threshold", agcLevel + " dBm");
+                    updateValue("mvbx_rsagc_threshold", agcLevel);
                 }
 
             // 4. AGC Input (AGC_Input_Power)
