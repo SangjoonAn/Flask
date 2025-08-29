@@ -1085,10 +1085,10 @@
                     <span>SU #1</span>
                 </div>
 
-                <div class="su-item" id="nav_su2" onclick="showInfoModal('SU #2 화면 전환 기능은 아직 구현되지 않았습니다.');">
-                    <div class="du-item-circle status-circle" id="su2_nav_dot"></div> <!-- status-circle 클래스 추가 -->
+                <div class="su-item" id="nav_su2" onclick="showScreen('su2_content')">
+                    <div class="du-item-circle status-circle" id="su2_nav_dot"></div>
                     <span>SU #2</span>
-                </div>
+                  </div>
 
                 <div class="su-item" id="nav_su3" onclick="showInfoModal('SU #3 화면 전환 기능은 아직 구현되지 않았습니다.');">
                     <div class="du-item-circle status-circle" id="su3_nav_dot"></div> <!-- status-circle 클래스 추가 -->
@@ -4377,6 +4377,1649 @@
                     </div>
                 </div>
             </div>
+
+
+            <!-- SU Content (SU #2) -->
+            <div id="su2_content_display">
+                <div class="bg-light p-3 rounded shadow-sm mb-2"> 
+                    <div class="row align-items-center mb-2"> 
+                        <div class="col-md-3">
+                            <small class="text-muted">Site ID :</small> Kor - FRTek - 002
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">Site Name :</small> Korea FRTek RF - EMIS
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">S/N :</small> <span id="su2_conserialnum_header">N/A</span>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <small class="text-muted">EMS ver :</small> 
+                            <span id="su2_emsversion2">N/A</span>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3" style="border-top: 1px dotted #000000;"> 
+                    <div class="d-flex justify-content-between align-items-center"> 
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #343a40;">SU #2 <i class="fas fa-pencil-alt text-muted fs-6"></i></div>
+                        <div>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#confirmResetModal">RESET</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
+                            <button id="btnSetModeSu2" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                            <button id="btnStatusModeSu2" class="btn btn-secondary btn-sm me-2 d-none">Status Mode</button>
+                            <button id="btnApplySu2" class="btn btn-success btn-sm d-none">Set</button>
+                        </div>
+                    </div>
+
+                    <!-- SU System -->
+                    <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white;" class="mb-2">SU System</div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> SU System
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-3 mb-2"><span><strong>F/W Ver</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_McuSwVer">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Rpt Type</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_rpttype">N/A</span></div>
+
+                                    <div class="col-3 mb-2"><span><strong>FPGA Ver</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_FPGA_Ver">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Manufacturer</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span>FRTek</span></div>
+
+                                    <div class="col-3 mb-2"><span><strong>Cur Time</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_curtime">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Cur Temper</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_curtemper">N/A</span></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-1"><span><strong>Temp Upper</strong></span></div>
+                                    <div class="col-3 mb-1 text-end"><input type="text" id="su2_tempupper" data-editable="true" value="0" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
+                                    <div class="col-3 mb-1"><span><strong>Temp Lower</strong></span></div>
+                                    <div class="col-3 mb-1 text-end"><input type="text" id="su2_templower" data-editable="true" value="0" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-2"><span><strong>FPGA Boot Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_FpgaStatus">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Init Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_InitStatus">N/A</span></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-2"><span><strong>Beam Scan Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su2_ScanStatus">N/A</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Alarm -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Alarm
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-4">
+                                        <p id="su2_alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="su2_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="su2_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su2_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="su2_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="su2_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su2_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="su2_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
+                                        <p id="su2_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="su2_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ISO -->
+                        <div class="col-md-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> ISO Measur
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-6 mb-2">
+                                        <span class="small-text"><strong>ISO Status</strong></span>
+                                    </div>
+                                    <div class="col-6 mb-2 text-end">
+                                        <span id="su2_iso_status" class="small-text-2">N/A</span>
+                                    </div>
+
+                                    <div class="col-6 mb-2"><span>#1</span></div>
+                                    <div class="col-6 mb-2 text-end"><span>-55dB</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modem Status -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Modem Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Modem Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod Ver</strong></span>
+                                            <span id="su2_modver">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>EMS Ver</strong></span>
+                                            <span id="su2_emsversion">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Status</strong></span>
+                                            <span id="su2_modstatus" class="text-success">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMSI</strong></span>
+                                            <span id="su2_modimsi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMEI</strong></span>
+                                            <span id="su2_modimei">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Num</strong></span>
+                                            <span id="su2_modnum">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod IP</strong></span>
+                                            <span id="su2_modip">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su2_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRQ</strong></span>
+                                            <span id="su2_rsrq">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSSI</strong></span>
+                                            <span id="su2_rssi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su2_pci">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SINR</strong></span>
+                                            <span id="su2_sinr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Tx Pwr</strong></span>
+                                            <span id="su2_txpwr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>LAN</strong></span>
+                                            <span id="su2_lan">N/A</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Disable</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Enable</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Beam Status -->
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Beam Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Beam Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Beam ID</strong></span>
+                                            <span id="su2_beam_id">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su2_beam_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SNR</strong></span>
+                                            <span id="su2_beam_snr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SSB</strong></span>
+                                            <span id="su2_beam_ssb">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su2_beam_pci">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>Ant. Array On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su2_gumstick_onoff" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su2_mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC Level</strong></span>
+                                            <input type="text" id="su2_mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>AGC Input</strong></span>
+                                            <span id="su2_agc_input_power">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded count</strong></span>
+                                            <span id="su2_decoded_ssb_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded success</strong></span>
+                                            <span id="su2_decoded_ssb_no_error_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded rate</strong></span>
+                                            <span id="su2_decoded_rate">0.0 [%]</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <span><strong>gNB Type</strong></span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select id="su2_gNB_Vendor" data-editable="true" class="form-select form-select-sm">
+                                            <option value="Manual">Manual</option>
+                                            <option value="Samsung">Samsung</option>
+                                            <option value="Nokia">Nokia</option>
+                                            <option value="Ericsson">Ericsson</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AOM & mmWave -->
+                    <div class="col-md-12 mb-4 mt-2">
+                        <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                            AOM & mmWave
+                        </div>
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;">
+                            <h5 class="text-primary d-flex align-items-center mb-3">
+                                <i class="fas fa-folder me-2"></i> AOM & mmWave
+                            </h5>
+                            <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                            <div class="row text-secondary small">
+                                <!-- SISO RF -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su2_dl_input_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su2_dl_att_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su2_dl_alc_level_siso" data-editable="true" value="0" readonly style="width:30%; height:22px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su2_dl_alc_onoff_siso" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su2_ul_output_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su2_ul_att_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su2_ul_iso_level_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su2_mvbx_tx_gain_set_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su2_mvbx_rx_gain_set_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su2_ul_iso_att_siso">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO RF -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su2_dl_input_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su2_dl_att_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su2_dl_alc_level_mimo" data-editable="true" value="0" readonly style="width:30%; height:22px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su2_dl_alc_onoff_mimo" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su2_ul_output_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su2_ul_att_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su2_ul_iso_level_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su2_mvbx_tx_gain_set_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su2_mvbx_rx_gain_set_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su2_ul_iso_att_mimo">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SISO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su2_ld1_det_dl0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su2_pd1_det_ul0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su2_ld1_det_dl0_siso_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su2_pd1_det_ul0_siso_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su2_ld2_det_dl1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su2_pd2_det_ul1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su2_ld2_det_dl1_mimo_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su2_pd2_det_ul1_mimo_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- /row -->
+                        </div>
+                    </div> <!-- /AOM & mmWave -->
+                </div>
+            </div>
+
+            <!-- SU Content (SU #3) -->
+            <div id="su3_content_display">
+                <div class="bg-light p-3 rounded shadow-sm mb-2"> 
+                    <div class="row align-items-center mb-2"> 
+                        <div class="col-md-3">
+                            <small class="text-muted">Site ID :</small> Kor - FRTek - 003
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">Site Name :</small> Korea FRTek RF - EMIS
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">S/N :</small> <span id="su3_conserialnum_header">N/A</span>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <small class="text-muted">EMS ver :</small> 
+                            <span id="su3_emsversion2">N/A</span>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3" style="border-top: 1px dotted #000000;"> 
+                    <div class="d-flex justify-content-between align-items-center"> 
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #343a40;">SU #3 <i class="fas fa-pencil-alt text-muted fs-6"></i></div>
+                        <div>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#confirmResetModal">RESET</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
+                            <button id="btnSetModeSu3" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                            <button id="btnStatusModeSu3" class="btn btn-secondary btn-sm me-2 d-none">Status Mode</button>
+                            <button id="btnApplySu3" class="btn btn-success btn-sm d-none">Set</button>
+                        </div>
+                    </div>
+
+                    <!-- SU System -->
+                    <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white;" class="mb-2">SU System</div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> SU System
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-3 mb-2"><span><strong>F/W Ver</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_McuSwVer">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Rpt Type</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_rpttype">N/A</span></div>
+
+                                    <div class="col-3 mb-2"><span><strong>FPGA Ver</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_FPGA_Ver">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Manufacturer</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span>FRTek</span></div>
+
+                                    <div class="col-3 mb-2"><span><strong>Cur Time</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_curtime">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Cur Temper</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_curtemper">N/A</span></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-1"><span><strong>Temp Upper</strong></span></div>
+                                    <div class="col-3 mb-1 text-end"><input type="text" id="su3_tempupper" data-editable="true" value="0" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
+                                    <div class="col-3 mb-1"><span><strong>Temp Lower</strong></span></div>
+                                    <div class="col-3 mb-1 text-end"><input type="text" id="su3_templower" data-editable="true" value="0" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-2"><span><strong>FPGA Boot Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_FpgaStatus">N/A</span></div>
+                                    <div class="col-3 mb-2"><span><strong>Init Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_InitStatus">N/A</span></div>
+
+                                    <hr class="my-2" />
+                                    <div class="col-3 mb-2"><span><strong>Beam Scan Status</strong></span></div>
+                                    <div class="col-3 mb-2 text-end"><span id="su3_ScanStatus">N/A</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Alarm -->
+                        <div class="col-md-4">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Alarm
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-4">
+                                        <p id="su3_alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="su3_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="su3_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su3_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="su3_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="su3_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su3_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="su3_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
+                                        <p id="su3_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="su3_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- ISO -->
+                        <div class="col-md-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> ISO Measur
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-6 mb-2">
+                                        <span class="small-text"><strong>ISO Status</strong></span>
+                                    </div>
+                                    <div class="col-6 mb-2 text-end">
+                                        <span id="su3_iso_status" class="small-text-2">N/A</span>
+                                    </div>
+
+                                    <div class="col-6 mb-2"><span>#1</span></div>
+                                    <div class="col-6 mb-2 text-end"><span>-55dB</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modem Status -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Modem Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Modem Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod Ver</strong></span>
+                                            <span id="su3_modver">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>EMS Ver</strong></span>
+                                            <span id="su3_emsversion">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Status</strong></span>
+                                            <span id="su3_modstatus" class="text-success">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMSI</strong></span>
+                                            <span id="su3_modimsi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMEI</strong></span>
+                                            <span id="su3_modimei">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Num</strong></span>
+                                            <span id="su3_modnum">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod IP</strong></span>
+                                            <span id="su3_modip">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su3_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRQ</strong></span>
+                                            <span id="su3_rsrq">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSSI</strong></span>
+                                            <span id="su3_rssi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su3_pci">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SINR</strong></span>
+                                            <span id="su3_sinr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Tx Pwr</strong></span>
+                                            <span id="su3_txpwr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>LAN</strong></span>
+                                            <span id="su3_lan">N/A</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Disable</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Enable</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Beam Status -->
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Beam Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Beam Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Beam ID</strong></span>
+                                            <span id="su3_beam_id">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su3_beam_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SNR</strong></span>
+                                            <span id="su3_beam_snr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SSB</strong></span>
+                                            <span id="su3_beam_ssb">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su3_beam_pci">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>Ant. Array On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su3_gumstick_onoff" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su3_mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC Level</strong></span>
+                                            <input type="text" id="su3_mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>AGC Input</strong></span>
+                                            <span id="su3_agc_input_power">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded count</strong></span>
+                                            <span id="su3_decoded_ssb_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded success</strong></span>
+                                            <span id="su3_decoded_ssb_no_error_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded rate</strong></span>
+                                            <span id="su3_decoded_rate">0.0 [%]</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <span><strong>gNB Type</strong></span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select id="su3_gNB_Vendor" data-editable="true" class="form-select form-select-sm">
+                                            <option value="Manual">Manual</option>
+                                            <option value="Samsung">Samsung</option>
+                                            <option value="Nokia">Nokia</option>
+                                            <option value="Ericsson">Ericsson</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AOM & mmWave -->
+                    <div class="col-md-12 mb-4 mt-2">
+                        <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                            AOM & mmWave
+                        </div>
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;">
+                            <h5 class="text-primary d-flex align-items-center mb-3">
+                                <i class="fas fa-folder me-2"></i> AOM & mmWave
+                            </h5>
+                            <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                            <div class="row text-secondary small">
+                                <!-- SISO RF -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su3_dl_input_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su3_dl_att_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su3_dl_alc_level_siso" data-editable="true" value="0" readonly style="width:30%; height:22px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su3_dl_alc_onoff_siso" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su3_ul_output_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su3_ul_att_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su3_ul_iso_level_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su3_mvbx_tx_gain_set_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su3_mvbx_rx_gain_set_siso" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su3_ul_iso_att_siso">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO RF -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su3_dl_input_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su3_dl_att_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su3_dl_alc_level_mimo" data-editable="true" value="0" readonly style="width:30%; height:22px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su3_dl_alc_onoff_mimo" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su3_ul_output_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su3_ul_att_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su3_ul_iso_level_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su3_mvbx_tx_gain_set_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su3_mvbx_rx_gain_set_mimo" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su3_ul_iso_att_mimo">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SISO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su3_ld1_det_dl0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su3_pd1_det_ul0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su3_ld1_det_dl0_siso_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su3_pd1_det_ul0_siso_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su3_ld2_det_dl1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su3_pd2_det_ul1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su3_ld2_det_dl1_mimo_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su3_pd2_det_ul1_mimo_low" data-editable="true" value="0" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- /row -->
+                        </div>
+                    </div> <!-- /AOM & mmWave -->
+                </div>
+            </div>
+
+            <!-- SU Content (SU #4 - Full) -->
+            <div id="su4_content_display">
+                <div class="bg-light p-3 rounded shadow-sm mb-2"> 
+                    <div class="row align-items-center mb-2"> 
+                        <div class="col-md-3">
+                            <small class="text-muted">Site ID :</small> Kor - FRTek - 004
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">Site Name :</small> Korea FRTek RF - EMIS
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <small class="text-muted">S/N :</small> <span id="su4_conserialnum_header">N/A</span>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <small class="text-muted">EMS ver :</small> 
+                            <span id="su4_emsversion2">N/A</span>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-3" style="border-top: 1px dotted #000000;"> 
+                    <div class="d-flex justify-content-between align-items-center"> 
+                        <div style="font-size: 1.5rem; font-weight: bold; color: #343a40;">SU #4 <i class="fas fa-pencil-alt text-muted fs-6"></i></div>
+                        <div>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#confirmResetModal">RESET</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#beamInfoModal">Beam Info</button>
+                            <button class="btn btn-sm me-2" style="background-color: gray; border: none; border-radius: 5px; color: white;" data-bs-toggle="modal" data-bs-target="#alarmMaskModal">Alarm Mask</button>
+                            <button id="btnSetModeSu4" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
+                            <button id="btnStatusModeSu4" class="btn btn-secondary btn-sm me-2 d-none">Status Mode</button>
+                            <button id="btnApplySu4" class="btn btn-success btn-sm d-none">Set</button>
+                        </div>
+                    </div>
+
+                    <!-- SU System -->
+                    <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white;" class="mb-2">SU System</div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> SU System
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-3 mb-2">
+                                        <span><strong>F/W Ver</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_McuSwVer">N/A</span> 
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Rpt Type</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_rpttype">N/A</span>
+                                    </div>
+
+                                    <div class="col-3 mb-2">
+                                        <span><strong>FPGA Ver</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_FPGA_Ver">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Manufacturer</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span>FRTek</span>
+                                    </div>
+
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Cur Time</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_curtime">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Cur Temper</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_curtemper">N/A</span>
+                                    </div>
+
+                                    <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                    <div class="col-3 mb-1">
+                                        <span><strong>Temp Upper</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-1 text-end">
+                                        <input type="text" id="su4_tempupper" data-editable="true" value="0" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                    </div>
+                                    <div class="col-3 mb-1">
+                                        <span><strong>Temp Lower</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-1 text-end">
+                                        <input type="text" id="su4_templower" data-editable="true" value="0" readonly style="width: 60%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                    </div>
+
+                                    <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                    <div class="col-3 mb-2">
+                                        <span><strong>FPGA Boot Status</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_FpgaStatus">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Init Status</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_InitStatus">N/A</span>
+                                    </div>
+
+                                    <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                    <div class="col-3 mb-2">
+                                        <span><strong>Beam Scan Status</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_ScanStatus">N/A</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Alarm
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-4">
+                                        <p id="su4_alarm_dc"><span class="status-circle"></span> DC</p>
+                                        <p id="su4_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                        <p id="su4_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su4_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                        <p id="su4_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                        <p id="su4_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                    </div>
+                                    <div class="col-4">
+                                        <p id="su4_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                        <p id="su4_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
+                                        <p id="su4_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                        <p id="su4_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> ISO Measur
+                                </h5>
+                                <hr class="my-2" />
+
+                                <div class="row text-secondary small">
+                                    <div class="col-6 mb-2">
+                                        <span  class="small-text"><strong>ISO Status</strong></span>
+                                    </div>
+                                    <div class="col-6 mb-2 text-end">
+                                        <span id="su4_iso_status" class="small-text-2">N/A</span>
+                                    </div>
+
+                                    <div class="col-6 mb-2">
+                                        <span>#1</span>
+                                    </div>
+                                    <div class="col-6 mb-2 text-end">
+                                        <span>-55dB</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <!-- Modem Status -->
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Modem Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Modem Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod Ver</strong></span>
+                                            <span id="su4_modver">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>EMS Ver</strong></span>
+                                            <span id="su4_emsversion">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Status</strong></span>
+                                            <span id="su4_modstatus" class="text-success">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMSI</strong></span>
+                                            <span id="su4_modimsi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>IMEI</strong></span>
+                                            <span id="su4_modimei">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Num</strong></span>
+                                            <span id="su4_modnum">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Mod IP</strong></span>
+                                            <span id="su4_modip">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su4_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRQ</strong></span>
+                                            <span id="su4_rsrq">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSSI</strong></span>
+                                            <span id="su4_rssi">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su4_pci">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SINR</strong></span>
+                                            <span id="su4_sinr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Tx Pwr</strong></span>
+                                            <span id="su4_txpwr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>LAN</strong></span>
+                                            <span id="su4_lan">N/A</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Disable</button>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Enable</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Beam Status -->
+                        <div class="col-md-6">
+                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                                Beam Status
+                            </div>
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                                <h5 class="text-primary d-flex align-items-center mb-3">
+                                    <i class="fas fa-folder me-2"></i> Beam Status
+                                </h5>
+                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                                <div class="row text-secondary small mb-4">
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Beam ID</strong></span>
+                                            <span id="su4_beam_id">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>RSRP</strong></span>
+                                            <span id="su4_beam_rsrp">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SNR</strong></span>
+                                            <span id="su4_beam_snr">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>SSB</strong></span>
+                                            <span id="su4_beam_ssb">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>PCI</strong></span>
+                                            <span id="su4_beam_pci">N/A</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>Ant. Array On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_gumstick_onoff" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC On/Off</strong></span>
+                                            <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_mvbx_rsagc_mode" data-editable="true">N/A</button>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><strong>AGC Level</strong></span>
+                                            <input type="text" id="su4_mvbx_rsagc_threshold" data-editable="true" value="-97" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>AGC Input</strong></span>
+                                            <span id="su4_agc_input_power">N/A</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded count</strong></span>
+                                            <span id="su4_decoded_ssb_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded success</strong></span>
+                                            <span id="su4_decoded_ssb_no_error_count">0</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><strong>Decoded rate</strong></span>
+                                            <span id="su4_decoded_rate">0.0 [%]</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row mb-3 align-items-center">
+                                    <div class="col-md-3">
+                                        <span><strong>gNB Type</strong></span>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <select id="su4_gNB_Vendor" data-editable="true" class="form-select form-select-sm">
+                                            <option value="Manual">Manual</option>
+                                            <option value="Samsung">Samsung</option>
+                                            <option value="Nokia">Nokia</option>
+                                            <option value="Ericsson">Ericsson</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <hr class="my-3" style="border-top: 1px dotted black;" />
+                                <div class="row text-center mt-3">
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
+                                    </div>
+                                    <div class="col-md-4 mb-2">
+                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AOM Status -->
+                    <div class="col-md-12 mb-4 mt-2">
+                        <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
+                            AOM & mmWave
+                        </div>
+                        <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5;">
+                            <h5 class="text-primary d-flex align-items-center mb-3">
+                                <i class="fas fa-folder me-2"></i> AOM & mmWave
+                            </h5>
+                            <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+
+                            <div class="row text-secondary small">
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su4_dl_input_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su4_dl_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su4_dl_alc_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 22px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_dl_alc_onoff_siso" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su4_ul_output_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su4_ul_att_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su4_ul_iso_level_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su4_mvbx_tx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su4_mvbx_rx_gain_set_siso" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su4_ul_iso_att_siso">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO RF -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO RF
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> DL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Input</strong></span>
+                                                    <span id="su4_dl_input_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ATT</strong></span>
+                                                    <input type="text" id="su4_dl_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC Level</strong></span>
+                                                    <input type="text" id="su4_dl_alc_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 22px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>DL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_dl_alc_onoff_mimo" data-editable="true">ON</button>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h6 class="text-secondary d-flex align-items-center mb-2">
+                                                    <i class="fas fa-plus-circle me-1"></i> UL
+                                                </h6>
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span id="su4_ul_output_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ATT</strong></span>
+                                                    <input type="text" id="su4_ul_att_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ISO Level</strong></span>
+                                                    <input type="text" id="su4_ul_iso_level_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-1">
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL Front End ATT</strong></span>
+                                                <input type="text" id="su4_mvbx_tx_gain_set_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>UL Front End ATT</strong></span>
+                                                <input type="text" id="su4_mvbx_rx_gain_set_mimo" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL ISO ATT</strong></span>
+                                                <span id="su4_ul_iso_att_mimo">N/A</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- SISO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> SISO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su4_ld1_det_dl0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su4_pd1_det_ul0_siso">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su4_ld1_det_dl0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su4_pd1_det_ul0_siso_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- MIMO OPTIC -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #e9ecef;">
+                                        <h6 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> MIMO OPTIC
+                                        </h6>
+                                        <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                                        <div class="row mt-3">
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>DL LD</strong></span>
+                                                <span id="su4_ld2_det_dl1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-2">
+                                                <span><strong>UL PD</strong></span>
+                                                <span id="su4_pd2_det_ul1_mimo">N/A</span>
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>DL LD Lower</strong></span>
+                                                <input type="text" id="su4_ld2_det_dl1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
+                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                <span><strong>UL PD Lower</strong></span>
+                                                <input type="text" id="su4_pd2_det_ul1_mimo_low" data-editable="true" value="0" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- /row -->
+                        </div>
+                    </div> <!-- /AOM section -->
+                </div>
+            </div>
+
+
+
 
 
 
