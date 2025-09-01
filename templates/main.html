@@ -6410,8 +6410,8 @@
                         Sync Module
                     </div>
                     <div class="d-flex gap-2">
-                        <button id="sync_3gpp_form_btn" class="btn btn-secondary btn-sm d-none">3Gpp Format Form</button>
-                        <button id="sync_slot_form_btn" class="btn btn-secondary btn-sm d-none">Slot Format Form</button>
+                        <button id="sync_3gpp_form_btn" class="btn btn-secondary btn-sm d-none">📊 3Gpp Format Excel</button>
+                        <button id="sync_slot_form_btn" class="btn btn-secondary btn-sm d-none">📊 Slot Format Excel</button>
                         <button id="sync_3gpp_load_btn" class="btn btn-secondary btn-sm d-none">3Gpp Format Load</button>
                         <button id="sync_slot_load_btn" class="btn btn-secondary btn-sm d-none">Slot Format Load</button>
                         <button id="sync_set_mode_btn" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
@@ -6629,6 +6629,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <script>
         // ✅ 통합된 JavaScript
@@ -10976,6 +10977,121 @@
       
       console.log(`🔧 Toggled ${document.querySelectorAll('.sync-input, .sync-select').length} Sync Module editable fields`);
     }
+
+    // 엑셀 다운로드 함수들
+    function downloadSlotFormatExcel() {
+      console.log('📊 Downloading Slot Format Excel...');
+      
+      // 워크북 생성
+      const wb = XLSX.utils.book_new();
+      
+      // 데이터 수집
+      const data = [];
+      
+      // 헤더 추가
+      const headers = ['Slot No', 'Slot Format'];
+      data.push(headers);
+      
+      // 160개 슬롯 데이터 수집
+      for (let slot = 0; slot < 160; slot++) {
+        const slotFormatEl = document.getElementById(`slot_format_${slot}`);
+        const slotFormat = slotFormatEl ? slotFormatEl.value : '';
+        
+        data.push([slot, slotFormat]);
+      }
+      
+      // 워크시트 생성
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      
+      // 컬럼 너비 설정
+      ws['!cols'] = [
+        { width: 10 }, // Slot No
+        { width: 15 }  // Slot Format
+      ];
+      
+      // 워크북에 워크시트 추가
+      XLSX.utils.book_append_sheet(wb, ws, 'Slot Format');
+      
+      // 파일 다운로드
+      const fileName = `slot_format_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      
+      console.log('📊 Slot Format Excel downloaded successfully');
+    }
+
+    function download3gppFormatExcel() {
+      console.log('📊 Downloading 3GPP Format Excel...');
+      
+      // 워크북 생성
+      const wb = XLSX.utils.book_new();
+      
+      // 데이터 수집
+      const data = [];
+      
+      // 헤더 추가 (0~13 컬럼)
+      const headers = [''];
+      for (let col = 0; col < 14; col++) {
+        headers.push(col.toString());
+      }
+      data.push(headers);
+      
+      // 56행 x 14열 데이터 수집
+      for (let row = 0; row < 56; row++) {
+        const rowData = [row.toString()]; // 첫 번째 컬럼은 행 번호
+        
+        for (let col = 0; col < 14; col++) {
+          const selectEl = document.getElementById(`slot_3gpp_format_${row}_${col}`);
+          let value = '';
+          
+          if (selectEl) {
+            const selectedValue = selectEl.value;
+            switch (selectedValue) {
+              case '0': value = 'D'; break;
+              case '1': value = 'U'; break;
+              case '2': value = 'F'; break;
+              default: value = '';
+            }
+          }
+          
+          rowData.push(value);
+        }
+        
+        data.push(rowData);
+      }
+      
+      // 워크시트 생성
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      
+      // 컬럼 너비 설정
+      ws['!cols'] = [
+        { width: 8 },  // 행 번호 컬럼
+        ...Array(14).fill({ width: 8 }) // 0~13 컬럼들
+      ];
+      
+      // 워크북에 워크시트 추가
+      XLSX.utils.book_append_sheet(wb, ws, '3GPP Format');
+      
+      // 파일 다운로드
+      const fileName = `3gpp_format_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      
+      console.log('📊 3GPP Format Excel downloaded successfully');
+    }
+
+    // 버튼 이벤트 리스너 추가
+    document.addEventListener('DOMContentLoaded', function() {
+      // 3Gpp Format Form 버튼 이벤트
+      const sync3gppFormBtn = document.getElementById('sync_3gpp_form_btn');
+      if (sync3gppFormBtn) {
+        sync3gppFormBtn.addEventListener('click', download3gppFormatExcel);
+      }
+      
+      // Slot Format Form 버튼 이벤트
+      const syncSlotFormBtn = document.getElementById('sync_slot_form_btn');
+      if (syncSlotFormBtn) {
+        syncSlotFormBtn.addEventListener('click', downloadSlotFormatExcel);
+      }
+    });
     </script>
 
 </body>
