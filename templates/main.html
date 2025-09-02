@@ -10980,33 +10980,45 @@
 
     // 엑셀 다운로드 함수들
     function downloadSlotFormatExcel() {
-      console.log('📊 Downloading Slot Format Excel...');
+      console.log('📊 Downloading Slot Format Excel (Corrected)...');
       
-      // 워크북 생성
+      // 1. 워크북 생성
       const wb = XLSX.utils.book_new();
-      
-      // 데이터 수집
       const data = [];
       
-      // 헤더 추가
-      const headers = ['Slot No', 'Slot Format'];
-      data.push(headers);
+      // 2. 첫 번째 행 (제목)
+      // 원본 파일과 유사하게 B1 셀에 제목을 넣도록 수정
+      const titleRow = Array(21).fill('');
+      titleRow[1] = 'Slot Format'; // B1 셀 (index 1)
+      data.push(titleRow);
       
-      // 160개 슬롯 데이터 수집
-      for (let slot = 0; slot < 160; slot++) {
-        const slotFormatEl = document.getElementById(`slot_format_${slot}`);
-        const slotFormat = slotFormatEl ? slotFormatEl.value : '';
+      // 3. 총 8개의 그룹 (0~159) 생성
+      // (슬롯 번호 행 -> 값 행) 순서로 8번 반복
+      for (let group = 0; group < 8; group++) {
         
-        data.push([slot, slotFormat]);
+        // (1) 슬롯 번호 행 생성 (0~19, 20~39, ...)
+        const slotRow = ['']; // A열은 항상 비워둠
+        const startNumber = group * 20; // 그룹 시작 번호 (0, 20, 40, ...)
+        for (let col = 0; col < 20; col++) {
+          slotRow.push(startNumber + col);
+        }
+        data.push(slotRow);
+        
+        // (2) 값 행 생성 ('Range:0-55' 와 0들)
+        const rangeRow = ['Range:0-55'];
+        for (let col = 0; col < 20; col++) {
+          rangeRow.push(0);
+        }
+        data.push(rangeRow);
       }
       
-      // 워크시트 생성
+      // 4. 워크시트 생성 및 파일 다운로드
       const ws = XLSX.utils.aoa_to_sheet(data);
       
-      // 컬럼 너비 설정
+      // 컬럼 너비 설정 (21개 컬럼)
       ws['!cols'] = [
-        { width: 10 }, // Slot No
-        { width: 15 }  // Slot Format
+        { width: 15 }, // A열 (Range:0-55)
+        ...Array(20).fill({ width: 8 }) // B~U열 (0~19)
       ];
       
       // 워크북에 워크시트 추가
@@ -11020,59 +11032,49 @@
     }
 
     function download3gppFormatExcel() {
-      console.log('📊 Downloading 3GPP Format Excel...');
+      console.log('📊 Downloading 3GPP Format Excel (Fixed Template)...');
       
-      // 워크북 생성
+      // 1. 워크북 생성
       const wb = XLSX.utils.book_new();
-      
-      // 데이터 수집
       const data = [];
       
-      // 헤더 추가 (0~13 컬럼)
-      const headers = [''];
-      for (let col = 0; col < 14; col++) {
-        headers.push(col.toString());
-      }
-      data.push(headers);
+      // 2. 제목 행 (F1~M1에 "Slot 3Gpp Format")
+      // 원본 파일에 제목이 없으므로, 필요 없다면 이 부분을 주석 처리하거나 삭제해도 됩니다.
+      const titleRow = ['', '', '', '', '', 'Slot 3Gpp Format', '', '', '', '', '', '', '', ''];
+      data.push(titleRow);
       
-      // 56행 x 14열 데이터 수집
+      // 3. 설명 행 (N2에 "D : 0 // U :1 // F : 2")
+      const descRow = ['', '', '', '', '', '', '', '', '', '', '', '', '', 'D : 0 // U :1 // F : 2'];
+      data.push(descRow);
+      
+      // 4. 컬럼 헤더 행 (B열부터 0~13)
+      const headerRow = ['', 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
+      data.push(headerRow);
+      
+      // 5. 데이터 생성 (핵심 수정 부분)
+      // 웹 페이지 값 대신, 모든 값을 0으로 고정하여 56x14 데이터를 생성합니다.
       for (let row = 0; row < 56; row++) {
-        const rowData = [row.toString()]; // 첫 번째 컬럼은 행 번호
+        const rowData = [row.toString()]; // 첫 번째 컬럼(A열)은 행 번호 (0~55)
         
+        // B열부터 O열까지 14개의 데이터 값을 모두 '0'으로 채웁니다.
         for (let col = 0; col < 14; col++) {
-          const selectEl = document.getElementById(`slot_3gpp_format_${row}_${col}`);
-          let value = '';
-          
-          if (selectEl) {
-            const selectedValue = selectEl.value;
-            switch (selectedValue) {
-              case '0': value = 'D'; break;
-              case '1': value = 'U'; break;
-              case '2': value = 'F'; break;
-              default: value = '';
-            }
-          }
-          
-          rowData.push(value);
+          rowData.push(0); 
         }
         
         data.push(rowData);
       }
       
-      // 워크시트 생성
+      // 6. 워크시트 생성 및 파일 다운로드
       const ws = XLSX.utils.aoa_to_sheet(data);
       
       // 컬럼 너비 설정
       ws['!cols'] = [
-        { width: 8 },  // 행 번호 컬럼
-        ...Array(14).fill({ width: 8 }) // 0~13 컬럼들
+        { width: 8 },  // A열
+        ...Array(14).fill({ width: 8 }) // B~O열
       ];
       
-      // 워크북에 워크시트 추가
       XLSX.utils.book_append_sheet(wb, ws, '3GPP Format');
-      
-      // 파일 다운로드
-      const fileName = `3gpp_format_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`;
+      const fileName = `3gpp_format_template_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`;
       XLSX.writeFile(wb, fileName);
       
       console.log('📊 3GPP Format Excel downloaded successfully');
