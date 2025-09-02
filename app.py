@@ -437,9 +437,75 @@ def apply_sync_values(payload):
     try:
         print(f"🔧 Applying Sync Module values: {payload}")
         
+        # payload 구조 확인 로그 추가
+        print(f"🔍 Payload 구조: {list(payload.keys())}")
+        if 'Fields' in payload:
+            print(f"🔍 Fields 구조: {list(payload['Fields'].keys())}")
+        
         # payload 검증
         if not payload:
             raise ValueError("Payload is empty")
+        
+        # ConMuFlag 비트 기반 명령 처리 (DU와 동일한 방식)
+        if 'ConMuFlag' in payload and payload['ConMuFlag']:
+            print(f"🔍 Sync Module ConMuFlag: {payload['ConMuFlag']}")
+            
+            # 4바이트 ConMuFlag 처리
+            if len(payload['ConMuFlag']) >= 4:
+                # packet[12] (index 0) 처리
+                flag_0 = payload['ConMuFlag'][0]
+                print(f"🔍 Sync ConMuFlag[0] 값: {flag_0} (0x{flag_0:02X})")
+                print(f"🔍 Sync ConMuFlag[0] 비트: {bin(flag_0)[2:].zfill(8)}")
+                
+                # TSYNC OUT SEL #1 (Bit3)
+                if flag_0 & 0x08:
+                    print("🔄 TSYNC OUT SEL #1 명령 감지됨 (Bit3 = 1)")
+                
+                # TSYNC OUT SEL #2 (Bit7)
+                if flag_0 & 0x80:
+                    print("🔄 TSYNC OUT SEL #2 명령 감지됨 (Bit7 = 1)")
+                
+                # packet[13] (index 1) 처리
+                flag_1 = payload['ConMuFlag'][1]
+                print(f"🔍 Sync ConMuFlag[1] 값: {flag_1} (0x{flag_1:02X})")
+                print(f"🔍 Sync ConMuFlag[1] 비트: {bin(flag_1)[2:].zfill(8)}")
+                
+                # TSYNC OUT SEL #3 (Bit3)
+                if flag_1 & 0x08:
+                    print("🔄 TSYNC OUT SEL #3 명령 감지됨 (Bit3 = 1)")
+                
+                # TDD SLOT FORMAT (Bit4)
+                if flag_1 & 0x10:
+                    print("🔄 TDD SLOT FORMAT 명령 감지됨 (Bit4 = 1)")
+                
+                # TDD FORMAT 3GPP TABLE (Bit5)
+                if flag_1 & 0x20:
+                    print("🔄 TDD FORMAT 3GPP TABLE 명령 감지됨 (Bit5 = 1)")
+                
+                # TDD Frequency (Bit6)
+                if flag_1 & 0x40:
+                    print("🔄 TDD Frequency 명령 감지됨 (Bit6 = 1)")
+                
+                # TDD ARFCN (Bit7)
+                if flag_1 & 0x80:
+                    print("🔄 TDD ARFCN 명령 감지됨 (Bit7 = 1)")
+                
+                # packet[14] (index 2) 처리
+                flag_2 = payload['ConMuFlag'][2]
+                print(f"🔍 Sync ConMuFlag[2] 값: {flag_2} (0x{flag_2:02X})")
+                print(f"🔍 Sync ConMuFlag[2] 비트: {bin(flag_2)[2:].zfill(8)}")
+                
+                # MVBX SSB MU (Bit0)
+                if flag_2 & 0x01:
+                    print("🔄 MVBX SSB MU 명령 감지됨 (Bit0 = 1)")
+                
+                # MVBX TDD RATE (Bit3)
+                if flag_2 & 0x08:
+                    print("🔄 MVBX TDD RATE 명령 감지됨 (Bit3 = 1)")
+                
+                # F Mode (Bit4)
+                if flag_2 & 0x10:
+                    print("🔄 F Mode 명령 감지됨 (Bit4 = 1)")
         
         # test.py로 전송 (DU, SU1과 동일한 방식)
         socketio.emit("sync_Ctrl_packet", payload, include_self=False)

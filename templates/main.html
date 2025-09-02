@@ -6411,9 +6411,11 @@
                     </div>
                     <div class="d-flex gap-2">
                         <button id="sync_3gpp_form_btn" class="btn btn-secondary btn-sm d-none">📊 3Gpp Format Excel</button>
+                        <button id="sync_3gpp_load_btn" class="btn btn-primary btn-sm d-none">📁 3Gpp Format Load</button>
+                        <input type="file" id="sync_3gpp_file_input" accept=".xlsx,.xls,.csv" style="display: none;">
                         <button id="sync_slot_form_btn" class="btn btn-secondary btn-sm d-none">📊 Slot Format Excel</button>
-                        <button id="sync_3gpp_load_btn" class="btn btn-secondary btn-sm d-none">3Gpp Format Load</button>
-                        <button id="sync_slot_load_btn" class="btn btn-secondary btn-sm d-none">Slot Format Load</button>
+                        <button id="sync_slot_load_btn" class="btn btn-primary btn-sm d-none">📁 Slot Format Load</button>
+                        <input type="file" id="sync_slot_file_input" accept=".xlsx,.xls,.csv" style="display: none;">
                         <button id="sync_set_mode_btn" class="btn btn-sm" style="background-color: gray; border: none; border-radius: 5px; color: white;">Set Mode</button>
                         <button id="sync_status_mode_btn" class="btn btn-secondary btn-sm d-none">Status Mode</button>
                         <button id="sync_apply_btn" class="btn btn-success btn-sm d-none">Set</button>
@@ -8063,14 +8065,15 @@
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
-                    // 섹션별 Set Mode에서 편집 가능한 필드만 업데이트 방지
-                    const isSu1 = id.startsWith('su1_');
-                    const editLock = (isSu1 ? SET_MODE_SU1 : SET_MODE);
-                    
-                    if (editLock && el.hasAttribute('data-editable')) {
-                        console.log(`🔒 ${isSu1 ? 'SU1' : 'DU'} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
-                        return;
-                    }
+                            // 섹션별 Set Mode에서 편집 가능한 필드만 업데이트 방지
+        const isSu1 = id.startsWith('su1_');
+        const isSync = id.startsWith('tsync_') || id.startsWith('TDD_') || id.startsWith('F_') || id.startsWith('ssb_') || id.startsWith('tdd_');
+        const editLock = (isSu1 ? SET_MODE_SU1 : (isSync ? SYNC_SET_MODE : SET_MODE));
+        
+        if (editLock && el.hasAttribute('data-editable')) {
+            console.log(`🔒 ${isSu1 ? 'SU1' : (isSync ? 'Sync' : 'DU')} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+            return;
+        }
                     
                     console.log(`📝 updateValue: ${id} = ${value} (DU_SET_MODE: ${SET_MODE}, SU1_SET_MODE: ${SET_MODE_SU1})`);
                     el.value = value;
@@ -10419,35 +10422,220 @@
       su1_pd2_det_ul1_mimo_low: { key:'SU1_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
-    //==== ConMuFlag 컨트롤 비트 (packet[580]을 index 0으로, [상대인덱스, bit]) ====
+    //==== Sync Module 필드 매핑 ====
+    const SYNC_FIELD_MAP = {
+      // TSYNC OUT SEL/MODE #1
+      tsync_out_sel_1: { key: 'TSYNC_OUT_SEL1', type: 'u8', min: 0, max: 255 },
+      
+      // TSYNC OUT SEL/MODE #2
+      tsync_out_sel_2: { key: 'TSYNC_OUT_SEL2', type: 'u8', min: 0, max: 255 },
+      
+      // TSYNC OUT SEL/MODE #3
+      tsync_out_sel_3: { key: 'TSYNC_OUT_SEL3', type: 'u8', min: 0, max: 255 },
+      
+      // Frequency (HTML에서 실제 사용하는 ID)
+      TDD_Freq2: { key: 'TDD_Freq', type: 'u32', min: 0, max: 4294967295 },
+      
+      // ARFCN (HTML에서 실제 사용하는 ID)
+      TDD_Arfcn2: { key: 'TDD_Arfcn', type: 'u16', min: 0, max: 65535 },
+      
+      // F Mode (HTML에서 실제 사용하는 ID)
+      F_Mode: { key: 'F_Mode', type: 'u8', min: 0, max: 255 },
+      
+      // SSB MU (HTML에서 실제 사용하는 ID)
+      ssb_mu: { key: 'MVBX_SSB_MU', type: 'u8', min: 0, max: 255 },
+      
+      // TDD Rate (HTML에서 실제 사용하는 ID)
+      tdd_rate: { key: 'MVBX_TDD_RATE', type: 'u8', min: 0, max: 255 },
+    };
+
+    //==== 기존 호환성을 위한 CONTROL_BITS (DU_CONTROL_BITS와 동일) ====
     const CONTROL_BITS = {
-      SysTemperHighLvl:[0,3], SysTemperLowLvl:[0,3],
+      // Temp Upper/Lower
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      
+      // Beam Status
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      Mvbx_RsAgcMode: [16, 5],         // packet[596]의 bit5 → index 16
+      Mvbx_RsAgcThreshold: [16, 4],    // packet[596]의 bit4 → index 16
+      gNB_Vendor: [14, 2],              // packet[594]의 bit2 → index 14
+      
+      // SISO RF
+      DU_DlManualAtten_SISO: [4, 0],   // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      DU_UlManualAtten_SISO: [4, 4],   // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      
+      // MIMO RF
+      DU_DlManualAtten_MIMO: [4, 2],   // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMiso: [16, 2],     // packet[596]의 bit2 → index 16
+      DU_UlManualAtten_MIMO: [4, 7],   // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      Mvbx_RxGainSetMiso: [16, 3],     // packet[596]의 bit3 → index 16
+      
+      // SISO OPTIC
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      
+      // MIMO OPTIC
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+    };
 
-      GumStick_OnOff:[7,1],
-      Mvbx_RsAgcMode:[16,5],
-      Mvbx_RsAgcThreshold:[16,4],
-      gNB_Vendor:[14,2],
+    //==== DU System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
+    const DU_CONTROL_BITS = {
+      // Temp Upper/Lower
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      
+      // Beam Status
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      Mvbx_RsAgcMode: [16, 5],         // packet[596]의 bit5 → index 16
+      Mvbx_RsAgcThreshold: [16, 4],    // packet[596]의 bit4 → index 16
+      gNB_Vendor: [14, 2],              // packet[594]의 bit2 → index 14
+      
+      // SISO RF
+      DU_DlManualAtten_SISO: [4, 0],   // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      DU_UlManualAtten_SISO: [4, 4],   // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      
+      // MIMO RF
+      DU_DlManualAtten_MIMO: [4, 2],   // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMiso: [16, 2],     // packet[596]의 bit2 → index 16
+      DU_UlManualAtten_MIMO: [4, 7],   // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      Mvbx_RxGainSetMiso: [16, 3],     // packet[596]의 bit3 → index 16
+      
+      // SISO OPTIC
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      
+      // MIMO OPTIC
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+    };
 
-      DU_DlManualAtten_SISO:[4,0],
-      ALC_DL0_SISO_Level:[7,4],
-      ALC_DL0_SISO_Mode:[3,2],
-      Mvbx_TxGainSetSiso:[16,0],
-      DU_UlManualAtten_SISO:[4,4],
-      ALC_UL0_SISO_Level:[7,6],
-      Mvbx_RxGainSetSiso:[16,1],
+    //==== SU1 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
+    const SU1_CONTROL_BITS = {
+      // Temp Upper/Lower
+      SU1_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SU1_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      
+      // Beam Status
+      SU1_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      SU1_Mvbx_RsAgcMode: [16, 5],         // packet[596]의 bit5 → index 16
+      SU1_Mvbx_RsAgcThreshold: [16, 4],    // packet[596]의 bit4 → index 16
+      SU1_gNB_Vendor: [14, 2],              // packet[594]의 bit2 → index 14
+      
+      // SISO RF
+      SU1_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      SU1_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      SU1_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      SU1_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      SU1_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      SU1_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU1_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      
+      // MIMO RF
+      SU1_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      SU1_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      SU1_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      SU1_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      SU1_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      SU1_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU1_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      
+      // SISO OPTIC
+      SU1_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      SU1_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      
+      // MIMO OPTIC
+      SU1_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      SU1_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+    };
 
-      DU_DlManualAtten_MIMO:[4,2],
-      ALC_DL1_MIMO_Level:[7,5],
-      ALC_DL1_MIMO_Mode:[3,3],
-      Mvbx_TxGainSetMiso:[16,2],
-      DU_UlManualAtten_MIMO:[4,7],
-      ALC_UL1_MIMO_Level:[7,7],
-      Mvbx_RxGainSetMiso:[16,3],
+    //==== SU2 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
+    const SU2_CONTROL_BITS = {
+      // Temp Upper/Lower
+      SU2_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SU2_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      
+      // Beam Status
+      SU2_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      SU2_Mvbx_RsAgcMode: [16, 5],         // packet[596]의 bit5 → index 16
+      SU2_Mvbx_RsAgcThreshold: [16, 4],    // packet[596]의 bit4 → index 16
+      SU2_gNB_Vendor: [14, 2],              // packet[594]의 bit2 → index 14
+      
+      // SISO RF
+      SU2_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      SU2_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      SU2_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      SU2_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      SU2_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      SU2_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU2_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      
+      // MIMO RF
+      SU2_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      SU2_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      SU2_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      SU2_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      SU2_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      SU2_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU2_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      
+      // SISO OPTIC
+      SU2_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      SU2_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      
+      // MIMO OPTIC
+      SU2_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      SU2_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+    };
 
-      LD1_DET_DL0_SISO_Low:[8,0],
-      PD1_DET_UL0_SISO_Low:[8,2],
-      LD2_DET_DL1_MIMO_Low:[8,1],
-      PD2_DET_UL1_MIMO_Low:[8,3],
+    //==== Sync Module 컨트롤 비트 (packet[12:16]을 index 0으로, [상대인덱스, bit]) ====
+    const SYNC_CONTROL_BITS = {
+      // TSYNC OUT SEL/MODE #1 (packet[12]의 Bit3)
+      TSYNC_OUT_SEL1: [0, 3],
+      
+      // TSYNC OUT SEL/MODE #2 (packet[12]의 Bit7)  
+      TSYNC_OUT_SEL2: [0, 7],
+      
+      // TSYNC OUT SEL/MODE #3 (packet[13]의 Bit3)
+      TSYNC_OUT_SEL3: [1, 3],
+      
+      // Slot Format (packet[13]의 Bit4)
+      TDD_SLOT_FORMAT: [1, 4],
+      
+      // Slot 3GPP Format (packet[13]의 Bit5)
+      TDD_FORMAT_3GPP_TABLE: [1, 5],
+      
+      // Frequency (packet[13]의 Bit6)
+      TDD_Freq: [1, 6],
+      
+      // ARFCN (packet[13]의 Bit7)
+      TDD_Arfcn: [1, 7],
+      
+      // SSB MU (packet[14]의 Bit0)
+      MVBX_SSB_MU: [2, 0],
+      
+      // TDD Rate (packet[14]의 Bit3)
+      MVBX_TDD_RATE: [2, 3],
+      
+      // F Mode (packet[14]의 Bit4)
+      F_Mode: [2, 4],
     };
 
     //==== 값 업데이트 함수 ====
@@ -10549,9 +10737,71 @@
       return bytes;
     }
 
+    //==== DU System 컨트롤비트 빌드(24바이트) ====
+    function buildDuConMuFlag(modifiedFields = {}){
+      const bytes = new Array(24).fill(0);
+      
+      // 수정된 필드에 해당하는 비트만 1로 설정
+      for (const [key,[idx,bit]] of Object.entries(DU_CONTROL_BITS)){
+        if (modifiedFields.hasOwnProperty(key)) {
+          bytes[idx] |= (1<<bit);
+        }
+      }
+      
+      return bytes;
+    }
+
+    //==== SU1 System 컨트롤비트 빌드(24바이트) ====
+    function buildSu1ConMuFlag(modifiedFields = {}){
+      const bytes = new Array(24).fill(0);
+      
+      // 수정된 필드에 해당하는 비트만 1로 설정
+      for (const [key,[idx,bit]] of Object.entries(SU1_CONTROL_BITS)){
+        if (modifiedFields.hasOwnProperty(key)) {
+          bytes[idx] |= (1<<bit);
+        }
+      }
+      
+      return bytes;
+    }
+
+    //==== SU2 System 컨트롤비트 빌드(24바이트) ====
+    function buildSu2ConMuFlag(modifiedFields = {}){
+      const bytes = new Array(24).fill(0);
+      
+      // 수정된 필드에 해당하는 비트만 1로 설정
+      for (const [key,[idx,bit]] of Object.entries(SU2_CONTROL_BITS)){
+        if (modifiedFields.hasOwnProperty(key)) {
+          bytes[idx] |= (1<<bit);
+        }
+      }
+      
+      return bytes;
+    }
+
+    //==== Sync Module 컨트롤비트 빌드(4바이트) ====
+    function buildSyncConMuFlag(modifiedFields = {}){
+      const bytes = new Array(4).fill(0);
+      
+      console.log('🔧 buildSyncConMuFlag - modifiedFields:', modifiedFields);
+      
+      // 수정된 필드에 해당하는 비트만 1로 설정
+      for (const [key,[idx,bit]] of Object.entries(SYNC_CONTROL_BITS)){
+        if (modifiedFields.hasOwnProperty(key)) {
+          bytes[idx] |= (1<<bit);
+          console.log(`🔧 비트 설정: ${key} → [${idx}, ${bit}] → bytes[${idx}] |= (1<<${bit})`);
+        }
+      }
+      
+      console.log('🔧 최종 ConMuFlag:', bytes);
+      return bytes;
+    }
+
     //==== 값 수집/검증 ====
     function collectFields(){
       const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
       for (const [id, spec] of Object.entries(FIELD_MAP)){
         // DU 필드만 수집 (su1_ 접두사가 없는 필드들)
         if (id.startsWith('su1_')) continue;
@@ -10577,13 +10827,35 @@
         if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
         if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
         if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
         out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          // 원본값이 이미 숫자인 경우 그대로 사용, 문자열인 경우 숫자로 변환
+          const originalValueNum = typeof originalValue === 'number' ? originalValue : Number(originalValue);
+          
+          // NaN 체크 및 안전한 비교
+          if (!Number.isNaN(originalValueNum) && !Number.isNaN(v) && v !== originalValueNum) {
+            modifiedFields[spec.key] = true;
+          }
+        }
       }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      out['ConMuFlag'] = buildDuConMuFlag(modifiedFields);
+      
       return out;
     }
     
     //==== 드롭다운 텍스트 값을 16진수로 변환 ====
     function getDropdownNumericValue(id, textValue) {
+      // textValue가 없거나 빈 문자열인 경우 기본값 반환
+      if (!textValue || textValue === '') {
+        return 0;
+      }
+      
       switch(id) {
         case 'gNB_Vendor':
         case 'su1_gNB_Vendor':
@@ -10596,7 +10868,11 @@
           }
         // 다른 드롭다운들도 여기에 추가
         default:
-          return Number(textValue); // 기본적으로는 숫자로 변환 시도
+          const numValue = Number(textValue);
+          if (Number.isNaN(numValue)) {
+            return 0;
+          }
+          return numValue;
       }
     }
     
@@ -10638,8 +10914,29 @@
       console.log(`🔘 SU1 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
     }
 
+    //==== SU2 On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonSu2(buttonId) {
+      if (!SET_MODE_SU2) return; // SU2 Set Mode가 아니면 토글 불가
+      
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = 'btn btn-secondary btn-sm';
+      } else {
+        button.textContent = 'ON';
+        button.className = 'btn btn-success btn-sm';
+      }
+      
+      console.log(`🔘 SU2 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+
     //==== 전역 상태 ====
     let SET_MODE_SU1 = false;
+    let SET_MODE_SU2 = false;
+    let SYNC_SET_MODE = false;
     
     //==== SU1 UI 모드 토글 ====
     function applyUiModeSu1(){
@@ -10680,9 +10977,50 @@
       console.log(`🔧 Toggled ${su1EditableFields.length} SU1 editable fields`);
     }
     
+    //==== SU2 UI 모드 토글 ====
+    function applyUiModeSu2(){
+      console.log(`🔧 applyUiModeSu2: SET_MODE_SU2=${SET_MODE_SU2}`);
+      
+      // Set Mode 관련 버튼들 토글
+      document.getElementById('btnSetModeSu2').classList.toggle('d-none', SET_MODE_SU2);
+      document.getElementById('btnApplySu2').classList.toggle('d-none', !SET_MODE_SU2);
+      document.getElementById('btnStatusModeSu2').classList.toggle('d-none', !SET_MODE_SU2);
+      
+      // SU2 화면의 모달 버튼들만 숨김/표시 (SU2 Set Mode일 때만)
+      const su2ModalButtons = [
+        'initialSetupBtn', 'apnBtn', 'resetBtn', 'openModalBtn', 
+        'beamInfoBtn', 'alarmMaskBtn'
+      ];
+      su2ModalButtons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.classList.toggle('d-none', SET_MODE_SU2);
+      });
+      
+      // SU2 화면의 data-bs-toggle 속성이 있는 버튼들만 숨김 (SU2 Set Mode일 때만)
+      const su2ModalToggleButtons = document.querySelectorAll('#su2_content_display [data-bs-toggle="modal"]');
+      su2ModalToggleButtons.forEach(el=>{
+        el.classList.toggle('d-none', SET_MODE_SU2);
+      });
+      console.log(`🔧 SU2 Modal buttons: ${SET_MODE_SU2 ? 'Hidden' : 'Shown'}`);
+
+      // SU2 편집 가능한 필드들 토글
+      const su2EditableFields = document.querySelectorAll('#su2_content_display [data-editable="true"]');
+      su2EditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_SU2;
+        else el.toggleAttribute('readonly', !SET_MODE_SU2);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_SU2);
+        }
+      });
+      console.log(`🔧 Toggled ${su2EditableFields.length} SU2 editable fields`);
+    }
+    
     //==== SU1 값 수집/검증 ====
     function collectFieldsSu1(){
       const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
       for (const [id, spec] of Object.entries(FIELD_MAP)){
         // SU1 필드만 수집 (su1_ 접두사가 있는 필드들)
         if (!id.startsWith('su1_')) continue;
@@ -10704,8 +11042,77 @@
         if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
         if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
         if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
         out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          // 원본값이 이미 숫자인 경우 그대로 사용, 문자열인 경우 숫자로 변환
+          const originalValueNum = typeof originalValue === 'number' ? 
+            originalValue : Number(originalValue);
+          
+          // NaN 체크 및 안전한 비교
+          if (!Number.isNaN(originalValueNum) && !Number.isNaN(v) && 
+              v !== originalValueNum) {
+            modifiedFields[spec.key] = true;
+          }
+        }
       }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      out['ConMuFlag'] = buildSu1ConMuFlag(modifiedFields);
+      
+      return out;
+    }
+
+    //==== SU2 값 수집/검증 ====
+    function collectFieldsSu2(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      for (const [id, spec] of Object.entries(FIELD_MAP)){
+        // SU2 필드만 수집 (su2_ 접두사가 있는 필드들)
+        if (!id.startsWith('su2_')) continue;
+        
+        const el = document.getElementById(id);
+        if (!el) continue;
+        
+        let v;
+        if (el.type === 'checkbox') {
+          v = el.checked ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          v = getDropdownNumericValue(id, el.value);
+        } else if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          // 원본값이 이미 숫자인 경우 그대로 사용, 문자열인 경우 숫자로 변환
+          const originalValueNum = typeof originalValue === 'number' ? 
+            originalValue : Number(originalValue);
+          
+          // NaN 체크 및 안전한 비교
+          if (!Number.isNaN(originalValueNum) && !Number.isNaN(v) && 
+              v !== originalValueNum) {
+            modifiedFields[spec.key] = true;
+          }
+        }
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      out['ConMuFlag'] = buildSu2ConMuFlag(modifiedFields);
+      
       return out;
     }
     
@@ -10714,6 +11121,10 @@
       console.log('🔧 Entering Set Mode...');
       SET_MODE = true;
       console.log(`🔧 State: SET_MODE=${SET_MODE}`);
+      
+      // 모든 DU 필드의 원본 값 저장
+      saveDuOriginalValues();
+      
       applyUiMode();
       socket.emit('enter_set_mode');
       console.log('🔧 Set Mode activated');
@@ -10729,7 +11140,9 @@
     function applySet(){
       try{
         const fields = collectFields();
-        socket.emit('apply_du_values', { Fields: fields });
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_du_values', fields);
+        console.log('🔧 Applying DU values with ConMuFlag:', fields);
       }catch(e){ alert('입력 오류: ' + e.message); }
     }
     
@@ -10738,6 +11151,10 @@
       console.log('🔧 Entering SU1 Set Mode...');
       SET_MODE_SU1 = true;
       console.log(`🔧 State: SET_MODE_SU1=${SET_MODE_SU1}`);
+      
+      // 모든 SU1 필드의 원본 값 저장
+      saveSu1OriginalValues();
+      
       applyUiModeSu1();
       socket.emit('enter_su1_set_mode');
       console.log('🔧 SU1 Set Mode activated');
@@ -10753,8 +11170,40 @@
     function applySetSu1(){
       try{
         const fields = collectFieldsSu1();
-        socket.emit('apply_su1_values', { Fields: fields });
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su1_values', fields);
+        console.log('🔧 Applying SU1 values with ConMuFlag:', fields);
       }catch(e){ alert('SU1 입력 오류: ' + e.message); }
+    }
+
+    //==== SU2 버튼 핸들러 ====
+    function enterSetModeSu2(){
+      console.log('🔧 Entering SU2 Set Mode...');
+      SET_MODE_SU2 = true;
+      console.log(`🔧 State: SET_MODE_SU2=${SET_MODE_SU2}`);
+      
+      // 모든 SU2 필드의 원본 값 저장
+      saveSu2OriginalValues();
+      
+      applyUiModeSu2();
+      socket.emit('enter_su2_set_mode');
+      console.log('🔧 SU2 Set Mode activated');
+    }
+    function leaveSetModeSu2(){
+      console.log('🔧 Leaving SU2 Set Mode...');
+      SET_MODE_SU2 = false;
+      console.log(`🔧 State: SET_MODE_SU2=${SET_MODE_SU2}`);
+      applyUiModeSu2();
+      socket.emit('leave_su2_set_mode');
+      console.log('🔧 SU2 Status Mode activated');
+    }
+    function applySetSu2(){
+      try{
+        const fields = collectFieldsSu2();
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su2_values', fields);
+        console.log('🔧 Applying SU2 values with ConMuFlag:', fields);
+      }catch(e){ alert('SU2 입력 오류: ' + e.message); }
     }
 
     //==== 버튼 바인딩 ====
@@ -10768,11 +11217,35 @@
     document.getElementById('btnStatusModeSu1')?.addEventListener('click', leaveSetModeSu1);
     document.getElementById('btnApplySu1')?.addEventListener('click', applySetSu1);
     
+    //==== SU2 Set Mode 버튼 바인딩 ====
+    document.getElementById('btnSetModeSu2')?.addEventListener('click', enterSetModeSu2);
+    document.getElementById('btnStatusModeSu2')?.addEventListener('click', leaveSetModeSu2);
+    document.getElementById('btnApplySu2')?.addEventListener('click', applySetSu2);
+    
     //==== Sync Module Set Mode 버튼 바인딩 ====
     document.getElementById('sync_set_mode_btn')?.addEventListener('click', enterSyncSetMode);
     document.getElementById('sync_status_mode_btn')?.addEventListener('click', leaveSyncSetMode);
     document.getElementById('sync_apply_btn')?.addEventListener('click', applySyncSet);
     
+    //==== DU System Set Mode 응답 수신 ====
+    socket.on("du_set_mode_ack", (data) => {
+      console.log('🔧 DU Set Mode acknowledged:', data);
+    });
+    
+    socket.on("du_status_mode_ack", (data) => {
+      console.log('🔧 DU Status Mode acknowledged:', data);
+    });
+    
+    socket.on("du_apply_ack", (data) => {
+      console.log('🔧 DU Apply acknowledged:', data);
+      if (data.ok) {
+        console.log('✅ DU values applied successfully');
+      } else {
+        console.error('❌ DU values apply failed:', data.error);
+        alert('DU 값 적용 실패: ' + data.error);
+      }
+    });
+
     //==== Sync Module Set Mode 응답 수신 ====
     socket.on("sync_set_mode_ack", (data) => {
       console.log('🔧 Sync Module Set Mode acknowledged:', data);
@@ -10818,12 +11291,14 @@
     });
 
     //==== Sync Module Set Mode 핸들러 ====
-    let SYNC_SET_MODE = false;
-    
     function enterSyncSetMode() {
       console.log('🔧 Entering Sync Module Set Mode...');
       SYNC_SET_MODE = true;
       console.log(`🔧 State: SYNC_SET_MODE=${SYNC_SET_MODE}`);
+      
+      // 모든 필드의 원본 값 저장
+      saveOriginalValues();
+      
       applySyncUiMode();
       socket.emit('enter_sync_set_mode');
       socket.emit('request_tdd_status'); // 스냅샷 1회
@@ -10843,25 +11318,122 @@
       try {
         // Sync Module 값 수집 및 적용
         const fields = collectSyncFields();
-        socket.emit('apply_sync_values', { Fields: fields });
-        console.log('🔧 Applying Sync Module values...');
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_sync_values', fields);
+        console.log('🔧 Applying Sync Module values with ConMuFlag:', fields);
       } catch(e) { 
         alert('Sync Module 입력 오류: ' + e.message); 
       }
     }
     
-    // Sync Module 필드 값 수집 함수
-    function collectSyncFields() {
-      const out = {};
+    //==== DU System 필드들의 원본 값 저장 ====
+    function saveDuOriginalValues() {
+      // FIELD_MAP을 기반으로 DU 필드들의 원본 값 저장
+      for (const [id, spec] of Object.entries(FIELD_MAP)) {
+        // DU 필드만 처리 (su1_ 접두사가 없는 필드들)
+        if (id.startsWith('su1_')) continue;
+        
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'checkbox') {
+            originalValue = el.checked ? '1' : '0';
+          } else if (el.tagName === 'SELECT') {
+            // 드롭다운의 경우 value가 없으면 첫 번째 옵션 사용
+            if (el.value && el.value !== '') {
+              // 드롭다운 값을 숫자로 변환해서 저장
+              originalValue = getDropdownNumericValue(id, el.value);
+            } else if (el.options.length > 0) {
+              originalValue = getDropdownNumericValue(id, el.options[0].value);
+            } else {
+              originalValue = 0; // 기본값 (숫자)
+            }
+          } else if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? '1' : '0';
+          } else {
+            originalValue = el.value || '0';
+          }
+          
+          el.setAttribute('data-original-value', originalValue);
+        }
+      }
+    }
+
+    //==== SU1 System 필드들의 원본 값 저장 ====
+    function saveSu1OriginalValues() {
+      // FIELD_MAP을 기반으로 SU1 필드들의 원본 값 저장
+      for (const [id, spec] of Object.entries(FIELD_MAP)) {
+        // SU1 필드만 처리 (su1_ 접두사가 있는 필드들)
+        if (!id.startsWith('su1_')) continue;
+        
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'checkbox') {
+            originalValue = el.checked ? '1' : '0';
+          } else if (el.tagName === 'SELECT') {
+            // 드롭다운의 경우 value가 없으면 첫 번째 옵션 사용
+            if (el.value && el.value !== '') {
+              // 드롭다운 값을 숫자로 변환해서 저장
+              originalValue = getDropdownNumericValue(id, el.value);
+            } else if (el.options.length > 0) {
+              originalValue = getDropdownNumericValue(id, el.options[0].value);
+            } else {
+              originalValue = 0; // 기본값 (숫자)
+            }
+          } else if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? '1' : '0';
+          } else {
+            originalValue = el.value || '0';
+          }
+          
+          el.setAttribute('data-original-value', originalValue);
+        }
+      }
+    }
+
+    //==== SU2 System 필드들의 원본 값 저장 ====
+    function saveSu2OriginalValues() {
+      // FIELD_MAP을 기반으로 SU2 필드들의 원본 값 저장
+      for (const [id, spec] of Object.entries(FIELD_MAP)) {
+        // SU2 필드만 처리 (su2_ 접두사가 있는 필드들)
+        if (!id.startsWith('su2_')) continue;
+        
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'checkbox') {
+            originalValue = el.checked ? '1' : '0';
+          } else if (el.tagName === 'SELECT') {
+            // 드롭다운의 경우 value가 없으면 첫 번째 옵션 사용
+            if (el.value && el.value !== '') {
+              // 드롭다운 값을 숫자로 변환해서 저장
+              originalValue = getDropdownNumericValue(id, el.value);
+            } else if (el.options.length > 0) {
+              originalValue = getDropdownNumericValue(id, el.options[0].value);
+            } else {
+              originalValue = 0; // 기본값 (숫자)
+            }
+          } else if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? '1' : '0';
+          } else {
+            originalValue = el.value || '0';
+          }
+          
+          el.setAttribute('data-original-value', originalValue);
+        }
+      }
+    }
+
+    // Sync Module 필드들의 원본 값 저장
+    function saveOriginalValues() {
+      console.log('🔧 Saving original values for Sync Module fields...');
       
       // Slot Format 필드들 (160개)
       for (let i = 0; i < 160; i++) {
         const el = document.getElementById(`slot_format_${i}`);
         if (el && el.value !== undefined) {
-          const v = Number(el.value);
-          if (!Number.isNaN(v)) {
-            out[`slot_format_${i}`] = v;
-          }
+          el.setAttribute('data-original-value', el.value);
         }
       }
       
@@ -10869,10 +11441,7 @@
       for (let i = 1; i <= 3; i++) {
         const el = document.getElementById(`tsync_out_sel_${i}`);
         if (el && el.value !== undefined) {
-          const v = Number(el.value);
-          if (!Number.isNaN(v)) {
-            out[`tsync_out_sel_${i}`] = v;
-          }
+          el.setAttribute('data-original-value', el.value);
         }
       }
       
@@ -10880,19 +11449,130 @@
       for (let i = 1; i <= 3; i++) {
         const el = document.getElementById(`tsync_out_mode_${i}`);
         if (el && el.value !== undefined) {
-          const v = Number(el.value);
-          if (!Number.isNaN(v)) {
-            out[`tsync_out_mode_${i}`] = v;
-          }
+          el.setAttribute('data-original-value', el.value);
         }
       }
       
       // Frequency, ARFCN 필드들
       const freqEl = document.getElementById('TDD_Freq2');
       if (freqEl && freqEl.value !== undefined) {
+        freqEl.setAttribute('data-original-value', freqEl.value);
+      }
+      
+      const arfcnEl = document.getElementById('TDD_Arfcn2');
+      if (arfcnEl && arfcnEl.value !== undefined) {
+        arfcnEl.setAttribute('data-original-value', arfcnEl.value);
+      }
+      
+      // F Mode, SSB MU, TDD Rate 필드들
+      const fModeEl = document.getElementById('F_Mode');
+      if (fModeEl && fModeEl.value !== undefined) {
+        fModeEl.setAttribute('data-original-value', fModeEl.value);
+      }
+      
+      const ssbMuEl = document.getElementById('ssb_mu');
+      if (ssbMuEl && ssbMuEl.value !== undefined) {
+        ssbMuEl.setAttribute('data-original-value', ssbMuEl.value);
+      }
+      
+      const tddRateEl = document.getElementById('tdd_rate');
+      if (tddRateEl && tddRateEl.value !== undefined) {
+        tddRateEl.setAttribute('data-original-value', tddRateEl.value);
+      }
+      
+      // Slot 3gpp Format 필드들 (784개)
+      for (let row = 0; row < 56; row++) {
+        for (let col = 0; col < 14; col++) {
+          const el = document.getElementById(`slot_3gpp_format_${row}_${col}`);
+          if (el && el.value !== undefined) {
+            el.setAttribute('data-original-value', el.value);
+          }
+        }
+      }
+      
+      console.log('🔧 Original values saved for all Sync Module fields');
+    }
+
+    // Sync Module 필드 값 수집 함수
+    function collectSyncFields() {
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      // Slot Format 필드들 (160개) - 실제 수정된 것만 감지
+      let slotFormatModified = false;
+      for (let i = 0; i < 160; i++) {
+        const el = document.getElementById(`slot_format_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`slot_format_${i}`] = v;
+            // 실제로 수정된 경우에만 비트 설정
+            if (el.hasAttribute('data-original-value')) {
+              const originalValue = Number(el.getAttribute('data-original-value'));
+              if (v !== originalValue) {
+                slotFormatModified = true;
+              }
+            }
+          }
+        }
+      }
+      if (slotFormatModified) {
+        modifiedFields['TDD_SLOT_FORMAT'] = true;
+      }
+      
+      // TSYNC OUT SEL 필드들 (3개) - 실제 수정된 것만 감지
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`tsync_out_sel_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`tsync_out_sel_${i}`] = v;
+            // 실제로 수정된 경우에만 비트 설정
+            if (el.hasAttribute('data-original-value')) {
+              const originalValue = Number(el.getAttribute('data-original-value'));
+              if (v !== originalValue) {
+                if (i === 1) modifiedFields['TSYNC_OUT_SEL1'] = true;
+                else if (i === 2) modifiedFields['TSYNC_OUT_SEL2'] = true;
+                else if (i === 3) modifiedFields['TSYNC_OUT_SEL3'] = true;
+              }
+            }
+          }
+        }
+      }
+      
+      // TSYNC OUT MODE 필드들 (3개) - 실제 수정된 것만 감지
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById(`tsync_out_mode_${i}`);
+        if (el && el.value !== undefined) {
+          const v = Number(el.value);
+          if (!Number.isNaN(v)) {
+            out[`tsync_out_mode_${i}`] = v;
+            // 실제로 수정된 경우에만 비트 설정 (SEL과 동일한 비트 사용)
+            if (el.hasAttribute('data-original-value')) {
+              const originalValue = Number(el.getAttribute('data-original-value'));
+              if (v !== originalValue) {
+                if (i === 1) modifiedFields['TSYNC_OUT_SEL1'] = true;
+                else if (i === 2) modifiedFields['TSYNC_OUT_SEL2'] = true;
+                else if (i === 3) modifiedFields['TSYNC_OUT_SEL3'] = true;
+              }
+            }
+          }
+        }
+      }
+      
+      // Frequency, ARFCN 필드들 - 실제 수정된 것만 감지
+      const freqEl = document.getElementById('TDD_Freq2');
+      if (freqEl && freqEl.value !== undefined) {
         const v = Number(freqEl.value);
         if (!Number.isNaN(v)) {
           out['TDD_Freq'] = v;
+          // 실제로 수정된 경우에만 비트 설정
+          if (freqEl.hasAttribute('data-original-value')) {
+            const originalValue = Number(freqEl.getAttribute('data-original-value'));
+            if (v !== originalValue) {
+              modifiedFields['TDD_Freq'] = true;
+            }
+          }
         }
       }
       
@@ -10901,15 +11581,29 @@
         const v = Number(arfcnEl.value);
         if (!Number.isNaN(v)) {
           out['TDD_Arfcn'] = v;
+          // 실제로 수정된 경우에만 비트 설정
+          if (arfcnEl.hasAttribute('data-original-value')) {
+            const originalValue = Number(arfcnEl.getAttribute('data-original-value'));
+            if (v !== originalValue) {
+              modifiedFields['TDD_Arfcn'] = true;
+            }
+          }
         }
       }
       
-      // F Mode, SSB MU, TDD Rate 필드들
+      // F Mode, SSB MU, TDD Rate 필드들 - 실제 수정된 것만 감지
       const fModeEl = document.getElementById('F_Mode');
       if (fModeEl && fModeEl.value !== undefined) {
         const v = Number(fModeEl.value);
         if (!Number.isNaN(v)) {
           out['F_Mode'] = v;
+          // 실제로 수정된 경우에만 비트 설정
+          if (fModeEl.hasAttribute('data-original-value')) {
+            const originalValue = Number(fModeEl.getAttribute('data-original-value'));
+            if (v !== originalValue) {
+              modifiedFields['F_Mode'] = true;
+            }
+          }
         }
       }
       
@@ -10918,6 +11612,13 @@
         const v = Number(ssbMuEl.value);
         if (!Number.isNaN(v)) {
           out['ssb_mu'] = v;
+          // 실제로 수정된 경우에만 비트 설정
+          if (ssbMuEl.hasAttribute('data-original-value')) {
+            const originalValue = Number(ssbMuEl.getAttribute('data-original-value'));
+            if (v !== originalValue) {
+              modifiedFields['MVBX_SSB_MU'] = true;
+            }
+          }
         }
       }
       
@@ -10926,10 +11627,18 @@
         const v = Number(tddRateEl.value);
         if (!Number.isNaN(v)) {
           out['tdd_rate'] = v;
+          // 실제로 수정된 경우에만 비트 설정
+          if (tddRateEl.hasAttribute('data-original-value')) {
+            const originalValue = Number(tddRateEl.getAttribute('data-original-value'));
+            if (v !== originalValue) {
+              modifiedFields['MVBX_TDD_RATE'] = true;
+            }
+          }
         }
       }
       
-      // Slot 3gpp Format 필드들 (784개)
+      // Slot 3gpp Format 필드들 (784개) - 실제 수정된 것만 감지
+      let slot3gppFormatModified = false;
       for (let row = 0; row < 56; row++) {
         for (let col = 0; col < 14; col++) {
           const el = document.getElementById(`slot_3gpp_format_${row}_${col}`);
@@ -10937,12 +11646,26 @@
             const v = Number(el.value);
             if (!Number.isNaN(v)) {
               out[`slot_3gpp_format_${row}_${col}`] = v;
+              // 실제로 수정된 경우에만 비트 설정
+              if (el.hasAttribute('data-original-value')) {
+                const originalValue = Number(el.getAttribute('data-original-value'));
+                if (v !== originalValue) {
+                  slot3gppFormatModified = true;
+                }
+              }
             }
           }
         }
       }
+      if (slot3gppFormatModified) {
+        modifiedFields['TDD_FORMAT_3GPP_TABLE'] = true;
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      out['ConMuFlag'] = buildSyncConMuFlag(modifiedFields);
       
       console.log('🔧 Collected Sync Module fields:', out);
+      console.log('🔧 Modified fields for ConMuFlag:', modifiedFields);
       return out;
     }
     
@@ -11080,6 +11803,322 @@
       console.log('📊 3GPP Format Excel downloaded successfully');
     }
 
+    //==== 3Gpp Format Load 함수 ====
+    function load3GppFormatFromExcel() {
+      console.log('📁 Loading 3GPP Format from Excel...');
+      
+      // 파일 입력 요소 클릭하여 파일 선택 다이얼로그 열기
+      const fileInput = document.getElementById('sync_3gpp_file_input');
+      if (fileInput) {
+        fileInput.click();
+      }
+    }
+
+    //==== Slot Format Load 함수 ====
+    function loadSlotFormatFromExcel() {
+      console.log('📁 Loading Slot Format from Excel...');
+      
+      // 파일 입력 요소 클릭하여 파일 선택 다이얼로그 열기
+      const fileInput = document.getElementById('sync_slot_file_input');
+      if (fileInput) {
+        fileInput.click();
+      }
+    }
+
+    //==== 3Gpp Format 파일 처리 함수 ====
+    function handle3GppFormatFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        console.log('❌ No file selected');
+        return;
+      }
+
+      console.log(`📁 Processing file: ${file.name}`);
+      console.log(`📁 File size: ${file.size} bytes`);
+      console.log(`📁 File type: ${file.type}`);
+      
+      // 파일 확장자 검증
+      const fileName = file.name.toLowerCase();
+      if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
+        alert('지원하지 않는 파일 형식입니다.\n\n지원 형식: .xlsx, .xls, .csv\n\n다운로드된 템플릿 파일(.xlsx)을 사용하시는 것을 권장합니다.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          console.log(`📊 File data length: ${data.length} bytes`);
+          
+          const workbook = XLSX.read(data, { type: 'array' });
+          console.log(`📊 Workbook sheets: ${workbook.SheetNames.join(', ')}`);
+          
+          // 첫 번째 워크시트 가져오기
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          console.log(`📊 Worksheet: ${workbook.SheetNames[0]}`);
+          
+          // 워크시트를 JSON으로 변환 (헤더 포함)
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          
+          console.log('📊 Excel data loaded:', jsonData);
+          console.log(`📊 Data rows: ${jsonData.length}`);
+          
+          if (jsonData.length > 0) {
+            console.log(`📊 First row: ${jsonData[0]}`);
+            console.log(`📊 First row length: ${jsonData[0].length}`);
+            
+            // 파일 구조 검증
+            if (jsonData.length < 4) {
+              alert('파일이 너무 짧습니다.\n\n다운로드된 템플릿 파일을 사용하시거나, 최소 4행 이상의 데이터가 필요합니다.');
+              return;
+            }
+            
+            // 첫 번째 행이 제목 행인지 확인
+            if (jsonData[0] && jsonData[0].length > 0 && 
+                jsonData[0][5] === 'Slot 3Gpp Format') {
+              console.log('✅ Valid template file detected');
+            } else {
+              console.log('⚠️ Template format not detected, but continuing...');
+            }
+          }
+          
+          // 데이터를 화면에 반영
+          apply3GppFormatToTable(jsonData);
+          
+        } catch (error) {
+          console.error('❌ Error processing Excel file:', error);
+          alert('엑셀 파일 처리 중 오류가 발생했습니다: ' + error.message);
+        }
+      };
+      
+      reader.onerror = function(error) {
+        console.error('❌ File reading error:', error);
+        alert('파일 읽기 중 오류가 발생했습니다.');
+      };
+      
+      reader.readAsArrayBuffer(file);
+    }
+
+    //==== Slot Format 파일 처리 함수 ====
+    function handleSlotFormatFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) {
+        console.log('❌ No file selected');
+        return;
+      }
+
+      console.log(`📁 Processing Slot Format file: ${file.name}`);
+      console.log(`📁 File size: ${file.size} bytes`);
+      console.log(`📁 File type: ${file.type}`);
+      
+      // 파일 확장자 검증
+      const fileName = file.name.toLowerCase();
+      if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
+        alert('지원하지 않는 파일 형식입니다.\n\n지원 형식: .xlsx, .xls, .csv\n\n다운로드된 템플릿 파일(.xlsx)을 사용하시는 것을 권장합니다.');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          console.log(`📊 File data length: ${data.length} bytes`);
+          
+          const workbook = XLSX.read(data, { type: 'array' });
+          console.log(`📊 Workbook sheets: ${workbook.SheetNames.join(', ')}`);
+          
+          // 첫 번째 워크시트 가져오기
+          const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          console.log(`📊 Worksheet: ${workbook.SheetNames[0]}`);
+          
+          // 워크시트를 JSON으로 변환 (헤더 포함)
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+          
+          console.log('📊 Slot Format Excel data loaded:', jsonData);
+          console.log(`📊 Data rows: ${jsonData.length}`);
+          
+          if (jsonData.length > 0) {
+            console.log(`📊 First row: ${jsonData[0]}`);
+            console.log(`📊 First row length: ${jsonData[0].length}`);
+            
+            // 파일 구조 검증
+            if (jsonData.length < 3) {
+              alert('파일이 너무 짧습니다.\n\n다운로드된 템플릿 파일을 사용하시거나, 최소 3행 이상의 데이터가 필요합니다.');
+              return;
+            }
+            
+            // 첫 번째 행이 제목 행인지 확인
+            if (jsonData[0] && jsonData[0].length > 0 && 
+                jsonData[0][1] === 'Slot Format') {
+              console.log('✅ Valid Slot Format template file detected');
+            } else {
+              console.log('⚠️ Slot Format template format not detected, but continuing...');
+            }
+          }
+          
+          // 데이터를 화면에 반영
+          applySlotFormatToTable(jsonData);
+          
+        } catch (error) {
+          console.error('❌ Error processing Slot Format Excel file:', error);
+          alert('Slot Format 엑셀 파일 처리 중 오류가 발생했습니다: ' + error.message);
+        }
+      };
+      
+      reader.onerror = function(error) {
+        console.error('❌ File reading error:', error);
+        alert('파일 읽기 중 오류가 발생했습니다.');
+      };
+      
+      reader.readAsArrayBuffer(file);
+    }
+
+    //==== 3Gpp Format 데이터를 테이블에 적용 ====
+    function apply3GppFormatToTable(excelData) {
+      console.log('🔄 Applying 3GPP Format data to table...');
+      console.log('📊 Raw Excel data:', excelData);
+      
+      let appliedCount = 0;
+      let validRows = 0;
+      
+      // 다운로드된 엑셀 파일 구조에 맞춰 처리:
+      // Row 0: 제목 행 (무시)
+      // Row 1: 설명 행 (무시) 
+      // Row 2: 헤더 행 (무시)
+      // Row 3~58: 실제 데이터 (슬롯 0~55)
+      
+      for (let rowIndex = 3; rowIndex < excelData.length; rowIndex++) {
+        const row = excelData[rowIndex];
+        
+        // 행이 존재하고 데이터가 있는지 확인
+        if (row && Array.isArray(row) && row.length >= 15) { // A~O열 (15개 컬럼)
+          console.log(`📝 Row ${rowIndex}:`, row);
+          
+          // 첫 번째 컬럼(A열)이 0~55 범위의 숫자인지 확인
+          const firstColValue = row[0];
+          if (firstColValue !== undefined && firstColValue !== null && 
+              !isNaN(parseInt(firstColValue)) && 
+              parseInt(firstColValue) >= 0 && parseInt(firstColValue) <= 55) {
+            
+            const slotIndex = parseInt(firstColValue);
+            console.log(`🔍 Processing slot index: ${slotIndex}`);
+            
+            // B열부터 O열까지의 데이터를 처리 (14개 컬럼)
+            for (let colIndex = 1; colIndex <= 14; colIndex++) {
+              const value = row[colIndex];
+              
+              // 값이 숫자인 경우만 처리 (0, 1, 2는 유효한 값)
+              if (value !== undefined && value !== null && value !== '' && 
+                  !isNaN(parseInt(value)) && 
+                  parseInt(value) >= 0 && parseInt(value) <= 2) {
+                
+                // 3Gpp Format 테이블의 해당 셀 찾기
+                // 실제 HTML 테이블의 셀 ID: slot_3gpp_format_${row}_${col}
+                const cellId = `slot_3gpp_format_${slotIndex}_${colIndex - 1}`;
+                const cellElement = document.getElementById(cellId);
+                
+                if (cellElement) {
+                  // 셀 값 업데이트
+                  cellElement.value = parseInt(value);
+                  appliedCount++;
+                  console.log(`✅ Updated ${cellId} = ${value} (Slot ${slotIndex}, Col ${colIndex-1})`);
+                } else {
+                  console.log(`⚠️ Cell not found: ${cellId}`);
+                }
+              } else {
+                console.log(`⚠️ Invalid value at row ${rowIndex}, col ${colIndex}: ${value} (should be 0, 1, or 2)`);
+              }
+            }
+            validRows++;
+          } else {
+            console.log(`⚠️ Row ${rowIndex} first column is not a valid slot number (0-55): ${firstColValue}`);
+          }
+        } else {
+          console.log(`⚠️ Row ${rowIndex} is empty or invalid (need 15 columns):`, row);
+        }
+      }
+      
+      console.log(`📊 Summary: ${validRows} valid rows, ${appliedCount} values applied`);
+      
+      if (appliedCount > 0) {
+        alert(`3GPP Format 테이블에 ${appliedCount}개의 값이 성공적으로 적용되었습니다.\n\n적용된 슬롯: ${validRows}개 (0~${validRows-1})`);
+      } else {
+        alert(`적용할 수 있는 데이터가 없습니다.\n\n파일 형식 확인사항:\n1. 첫 번째 열(A열)에 0~55의 슬롯 번호가 있어야 합니다\n2. B~O열에 0, 1, 2 등의 값이 있어야 합니다\n3. 현재 파일의 데이터 구조: ${validRows}개 유효 행, ${excelData.length}개 전체 행\n\n다운로드된 템플릿 파일을 사용하시는 것을 권장합니다.`);
+      }
+    }
+
+    //==== Slot Format 데이터를 테이블에 적용 ====
+    function applySlotFormatToTable(excelData) {
+      console.log('🔄 Applying Slot Format data to table...');
+      console.log('📊 Raw Slot Format Excel data:', excelData);
+      
+      let appliedCount = 0;
+      let validGroups = 0;
+      
+      // 다운로드된 엑셀 파일 구조에 맞춰 처리:
+      // Row 0: 제목 행 (무시)
+      // Row 1~16: 8개 그룹 (슬롯 번호 행 + 값 행)
+      //   - 홀수 행: 슬롯 번호 (0~19, 20~39, 40~59, 60~79, 80~99, 100~119, 120~139, 140~159)
+      //   - 짝수 행: 값들 (Range:0-55와 0들)
+      
+      for (let groupIndex = 0; groupIndex < 8; groupIndex++) {
+        const slotRowIndex = 1 + (groupIndex * 2);     // 슬롯 번호 행 (1, 3, 5, 7, 9, 11, 13, 15)
+        const valueRowIndex = 1 + (groupIndex * 2) + 1; // 값 행 (2, 4, 6, 8, 10, 12, 14, 16)
+        
+        const slotRow = excelData[slotRowIndex];
+        const valueRow = excelData[valueRowIndex];
+        
+        if (slotRow && valueRow && Array.isArray(slotRow) && Array.isArray(valueRow)) {
+          console.log(`📝 Group ${groupIndex}: Slot row ${slotRowIndex} = ${slotRow}, Value row ${valueRowIndex} = ${valueRow}`);
+          
+          // 슬롯 번호 행에서 B열부터 U열까지 (20개 컬럼)
+          for (let colIndex = 1; colIndex <= 20 && colIndex < slotRow.length; colIndex++) {
+            const slotNumber = slotRow[colIndex];
+            const value = valueRow[colIndex];
+            
+            // 슬롯 번호가 유효하고 값도 유효한 경우
+            if (slotNumber !== undefined && slotNumber !== null && !isNaN(parseInt(slotNumber)) &&
+                value !== undefined && value !== null && !isNaN(parseInt(value))) {
+              
+              const slotIndex = parseInt(slotNumber);
+              const slotValue = parseInt(value);
+              
+              // 0~159 범위의 슬롯 번호인지 확인
+              if (slotIndex >= 0 && slotIndex <= 159) {
+                // Slot Format 테이블의 해당 셀 찾기
+                const cellId = `slot_format_${slotIndex}`;
+                const cellElement = document.getElementById(cellId);
+                
+                if (cellElement) {
+                  // 셀 값 업데이트
+                  cellElement.value = slotValue;
+                  appliedCount++;
+                  console.log(`✅ Updated ${cellId} = ${slotValue} (Slot ${slotIndex})`);
+                } else {
+                  console.log(`⚠️ Cell not found: ${cellId}`);
+                }
+              } else {
+                console.log(`⚠️ Invalid slot number: ${slotIndex} (should be 0-159)`);
+              }
+            } else {
+              console.log(`⚠️ Invalid data at group ${groupIndex}, col ${colIndex}: slot=${slotRow[colIndex]}, value=${valueRow[colIndex]}`);
+            }
+          }
+          validGroups++;
+        } else {
+          console.log(`⚠️ Invalid rows at group ${groupIndex}: slotRow=${slotRow}, valueRow=${valueRow}`);
+        }
+      }
+      
+      console.log(`📊 Summary: ${validGroups} valid groups, ${appliedCount} values applied`);
+      
+      if (appliedCount > 0) {
+        alert(`Slot Format 테이블에 ${appliedCount}개의 값이 성공적으로 적용되었습니다.\n\n적용된 그룹: ${validGroups}개`);
+      } else {
+        alert(`적용할 수 있는 데이터가 없습니다.\n\n파일 형식 확인사항:\n1. 첫 번째 행(B1)에 "Slot Format" 제목이 있어야 합니다\n2. 8개 그룹의 슬롯 번호와 값이 있어야 합니다\n3. 현재 파일의 데이터 구조: ${validGroups}개 유효 그룹, ${excelData.length}개 전체 행\n\n다운로드된 템플릿 파일을 사용하시는 것을 권장합니다.`);
+      }
+    }
+
     // 버튼 이벤트 리스너 추가
     document.addEventListener('DOMContentLoaded', function() {
       // 3Gpp Format Form 버튼 이벤트
@@ -11088,13 +12127,38 @@
         sync3gppFormBtn.addEventListener('click', download3gppFormatExcel);
       }
       
+      // 3Gpp Format Load 버튼 이벤트
+      const sync3gppLoadBtn = document.getElementById('sync_3gpp_load_btn');
+      if (sync3gppLoadBtn) {
+        sync3gppLoadBtn.addEventListener('click', load3GppFormatFromExcel);
+      }
+      
+      // 3Gpp Format 파일 입력 이벤트
+      const sync3gppFileInput = document.getElementById('sync_3gpp_file_input');
+      if (sync3gppFileInput) {
+        sync3gppFileInput.addEventListener('change', handle3GppFormatFileUpload);
+      }
+      
       // Slot Format Form 버튼 이벤트
       const syncSlotFormBtn = document.getElementById('sync_slot_form_btn');
       if (syncSlotFormBtn) {
         syncSlotFormBtn.addEventListener('click', downloadSlotFormatExcel);
       }
+      
+      // Slot Format Load 버튼 이벤트
+      const syncSlotLoadBtn = document.getElementById('sync_slot_load_btn');
+      if (syncSlotLoadBtn) {
+        syncSlotLoadBtn.addEventListener('click', loadSlotFormatFromExcel);
+      }
+      
+      // Slot Format 파일 입력 이벤트
+      const syncSlotFileInput = document.getElementById('sync_slot_file_input');
+      if (syncSlotFileInput) {
+        syncSlotFileInput.addEventListener('change', handleSlotFormatFileUpload);
+      }
     });
     </script>
 
 </body>
+</html>
 </html>
