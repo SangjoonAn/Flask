@@ -125,29 +125,51 @@ def handle_hex_packet(data):
                 src_info = "DU"
 
             elif rcv_main_sys == 0x40:  # SU 패킷
-                # 공통 파서로 파싱 (SU1~SU4 모두 동일 파이프라인)
-                update_status = parse_AllStatusPacket2(binary_data)
-
-                # 원본 SU 식별값(0x11~0x14) 기록
+                # 원본 SU 식별값(0x11~0x14) 확인
                 original_sub = binary_data[1]
-                update_status['original_Rcv_Sub_Sys'] = f"0x{original_sub:02X}"
-
-                # SU2(0x12), SU3(0x13), SU4(0x14)도 SU1처럼 동작시키기 위해 SU1(0x11)로 강제 매핑
-                if original_sub in (0x12, 0x13, 0x14):
-                    update_status['Rcv_Sub_Sys'] = 0x11
-                    update_status['su_id'] = 'su1'     # 프론트가 su1 UI만 가지고 있어도 동일 동작
-                    src_info = f"SU({update_status['original_Rcv_Sub_Sys']}→0x11)"
-                else:
-                    # 원래 SU1이면 그대로
+                update_status = None
+                
+                # SU별로 적절한 파서 사용
+                if original_sub == 0x11:  # SU1
+                    update_status = parse_AllStatusPacket2(binary_data)
                     update_status['su_id'] = 'su1'
-                    src_info = "SU(0x11)"
+                    src_info = "SU1(0x11)"
+                elif original_sub == 0x12:  # SU2
+                    update_status = parse_AllStatusPacket3(binary_data)
+                    update_status['su_id'] = 'su2'
+                    src_info = "SU2(0x12)"
+                elif original_sub == 0x13:  # SU3
+                    update_status = parse_AllStatusPacket4(binary_data)
+                    update_status['su_id'] = 'su3'
+                    src_info = "SU3(0x13)"
+                elif original_sub == 0x14:  # SU4
+                    update_status = parse_AllStatusPacket5(binary_data)
+                    update_status['su_id'] = 'su4'
+                    src_info = "SU4(0x14)"
+                else:
+                    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ⚠️ Unknown SU ID: 0x{original_sub:02X}")
+                    return {"status": "error", "message": f"Unknown SU ID: 0x{original_sub:02X}"}
+                
+                # 원본 SU 식별값 기록
+                update_status['original_Rcv_Sub_Sys'] = f"0x{original_sub:02X}"
 
             else:
                 print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ⚠️ Unknown Rcv_Main_Sys: 0x{rcv_main_sys:02X}")
                 return {"status": "error", "message": f"Unknown Rcv_Main_Sys: 0x{rcv_main_sys:02X}"}
 
-            # 공통 이벤트로 전송 (프론트는 동일 로직/화면을 탐)
-            socketio.emit("update_status", {"packet": update_status})
+            # SU별로 적절한 이벤트로 전송
+            if rcv_main_sys == 0x30:  # DU 패킷
+                socketio.emit("update_status", {"packet": update_status})
+            elif rcv_main_sys == 0x40:  # SU 패킷
+                su_id = update_status.get('su_id', 'su1')
+                if su_id == 'su1':
+                    socketio.emit("update_status", {"packet": update_status})
+                elif su_id == 'su2':
+                    socketio.emit("su2_status_update", {"packet": update_status})
+                elif su_id == 'su3':
+                    socketio.emit("su3_status_update", {"packet": update_status})
+                elif su_id == 'su4':
+                    socketio.emit("su4_status_update", {"packet": update_status})
 
             # 알람 상태 전송 (있을 때만)
             if 'AlarmStatus' in update_status:
@@ -186,6 +208,8 @@ def handle_request_update_status(data=None):
     except Exception as e:
         print(f"❌ Update Status Request Error: {e}")
         return {"status": "error", "message": str(e)}
+
+
 
 @socketio.on('request_tdd_status')
 def handle_request_tdd_status(data=None):
@@ -320,10 +344,33 @@ def leave_su2_set_mode(_payload=None):
 
 @socketio.on("apply_su2_values")
 def apply_su2_values(payload):
-    print(f"[SU2] apply values: {payload}")
-    # SU1과 동일: 시뮬레이터/클라이언트로 제어 패킷 브로드캐스트 + ACK
-    emit("su2_Ctrl_packet", payload, broadcast=True)
-    emit("su2_apply_ack", payload, broadcast=True)
+    try:
+        print(f"🔧 Applying SU2 values: {payload}")
+        
+        # payload 검증
+        if not payload:
+            raise ValueError("Payload is empty")
+        
+        # test.py로 전송 (SU1과 동일한 방식)
+        socketio.emit("su2_Ctrl_packet", payload, include_self=False)
+        
+        # 클라이언트에게 성공 응답
+        emit("su2_apply_ack", {"ok": True})
+        
+        print("✅ SU2 values successfully sent to test.py")
+        return {"status": "success", "message": "SU2 values packet received and sent to test.py"}
+        
+    except ValueError as ve:
+        error_msg = f"Validation error: {str(ve)}"
+        print(f"❌ {error_msg}")
+        emit("su2_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
+        
+    except Exception as e:
+        error_msg = f"Unexpected error: {str(e)}"
+        print(f"❌ {error_msg}")
+        emit("su2_apply_ack", {"ok": False, "error": error_msg})
+        return {"status": "error", "message": error_msg}
 
 
 # --- SU3 ---
@@ -436,11 +483,6 @@ def leave_sync_set_mode(payload=None):
 def apply_sync_values(payload):
     try:
         print(f"🔧 Applying Sync Module values: {payload}")
-        
-        # payload 구조 확인 로그 추가
-        print(f"🔍 Payload 구조: {list(payload.keys())}")
-        if 'Fields' in payload:
-            print(f"🔍 Fields 구조: {list(payload['Fields'].keys())}")
         
         # payload 검증
         if not payload:
