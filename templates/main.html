@@ -5776,7 +5776,7 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-2">
-                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 500px;">
                                 <h5 class="text-primary d-flex align-items-center mb-3">
                                     <i class="fas fa-folder me-2"></i> SU System
                                 </h5>
@@ -5862,193 +5862,77 @@
                             </div>
                         </div>
                         
-                        <div class="col-md-4">
-                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
-                                <h5 class="text-primary d-flex align-items-center mb-3">
-                                    <i class="fas fa-folder me-2"></i> Alarm
-                                </h5>
-                                <hr class="my-2" />
-
-                                <div class="row text-secondary small mb-4">
-                                    <div class="col-4">
-                                        <p id="su4_alarm_dc"><span class="status-circle"></span> DC</p>
-                                        <p id="su4_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
-                                        <p id="su4_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p id="su4_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
-                                        <p id="su4_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
-                                        <p id="su4_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
-                                    </div>
-                                    <div class="col-4">
-                                        <p id="su4_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
-                                        <p id="su4_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
-                                        <p id="su4_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
-                                        <p id="su4_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
-                                <h5 class="text-primary d-flex align-items-center mb-3">
-                                    <i class="fas fa-folder me-2"></i> ISO Measur
-                                </h5>
-                                <hr class="my-2" />
-
-                                <div class="row text-secondary small">
-                                    <div class="col-6 mb-2">
-                                        <span  class="small-text"><strong>ISO Status</strong></span>
-                                    </div>
-                                    <div class="col-6 mb-2 text-end">
-                                        <span id="su4_iso_status" class="small-text-2">N/A</span>
-                                    </div>
-
-                                    <div class="col-6 mb-2">
-                                        <span>#1</span>
-                                    </div>
-                                    <div class="col-6 mb-2 text-end">
-                                        <span>-55dB</span>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <!-- Modem Status -->
                         <div class="col-md-6">
-                            <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
-                                Modem Status
-                            </div>
-                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
-                                <h5 class="text-primary d-flex align-items-center mb-3">
-                                    <i class="fas fa-folder me-2"></i> Modem Status
-                                </h5>
-                                <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 200px;">
+                                        <h5 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> Alarm
+                                        </h5>
+                                        <hr class="my-2" />
 
-                                <div class="row text-secondary small mb-4">
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Mod Ver</strong></span>
-                                            <span id="su4_modver">N/A</span>
+                                        <div class="row text-secondary small mb-4">
+                                            <div class="col-4">
+                                                <p id="su4_alarm_dc"><span class="status-circle"></span> DC</p>
+                                                <p id="su4_alarm_temp" style="color: gray;"><span class="status-circle"></span> Temp</p>
+                                                <p id="su4_alarm_if_pll" style="color: gray;"><span class="status-circle"></span> IF PLL</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p id="su4_alarm_ac" style="color: gray;"><span class="status-circle"></span> AC</p>
+                                                <p id="su4_alarm_bat" style="color: gray;"><span class="status-circle"></span> BAT</p>
+                                                <p id="su4_alarm_sync_pll" style="color: gray;"><span class="status-circle"></span> Sync PLL</p>
+                                            </div>
+                                            <div class="col-4">
+                                                <p id="su4_alarm_fpga_link" style="color: gray;"><span class="status-circle"></span> FPGA Link</p>
+                                                <p id="su4_alarm_aa_link" style="color: gray;"><span class="status-circle"></span> Ant Link</p>
+                                                <p id="su4_alarm_tsync_link" style="color: gray;"><span class="status-circle"></span> TSync Link</p>
+                                                <p id="su4_alarm_decoding" style="color: gray;"><span class="status-circle"></span> Decoding</p>
+                                            </div>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>EMS Ver</strong></span>
-                                            <span id="su4_emsversion">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Status</strong></span>
-                                            <span id="su4_modstatus" class="text-success">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>IMSI</strong></span>
-                                            <span id="su4_modimsi">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>IMEI</strong></span>
-                                            <span id="su4_modimei">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Num</strong></span>
-                                            <span id="su4_modnum">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Mod IP</strong></span>
-                                            <span id="su4_modip">N/A</span>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>RSRP</strong></span>
-                                            <span id="su4_rsrp">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>RSRQ</strong></span>
-                                            <span id="su4_rsrq">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>RSSI</strong></span>
-                                            <span id="su4_rssi">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>PCI</strong></span>
-                                            <span id="su4_pci">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>SINR</strong></span>
-                                            <span id="su4_sinr">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Tx Pwr</strong></span>
-                                            <span id="su4_txpwr">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>LAN</strong></span>
-                                            <span id="su4_lan">N/A</span>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <hr class="my-3" style="border-top: 1px dotted black;" />
-                                <div class="row text-center mt-3">
-                                    <div class="col-6 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Modem Reset</button>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">EMS Reset</button>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Disable</button>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">LAN Enable</button>
+                                <div class="col-md-4">
+                                    <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 200px;">
+                                        <h5 class="text-primary d-flex align-items-center mb-3">
+                                            <i class="fas fa-folder me-2"></i> ISO Measur
+                                        </h5>
+                                        <hr class="my-2" />
+
+                                        <div class="row text-secondary small">
+                                            <div class="col-6 mb-2">
+                                                <span  class="small-text"><strong>ISO Status</strong></span>
+                                            </div>
+                                            <div class="col-6 mb-2 text-end">
+                                                <span id="su4_iso_status" class="small-text-2">N/A</span>
+                                            </div>
+
+                                            <div class="col-6 mb-2">
+                                                <span>#1</span>
+                                            </div>
+                                            <div class="col-6 mb-2 text-end">
+                                                <span>-55dB</span>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-
-                        <!-- Beam Status -->
-                        <div class="col-md-6">
+                            
+                            <!-- Beam Status -->
+                            <div class="row mt-2">
+                                <div class="col-md-12">
                             <div style="background-color: #547186; padding: 10px; border-radius: 5px; color: white; margin-bottom: 10px;">
                                 Beam Status
                             </div>
-                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 450px;">
+                            <div class="p-3 rounded shadow-sm" style="background-color: #f5f5f5; min-height: 150px;">
                                 <h5 class="text-primary d-flex align-items-center mb-3">
                                     <i class="fas fa-folder me-2"></i> Beam Status
                                 </h5>
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
 
                                 <div class="row text-secondary small mb-4">
-                                    <div class="col-md-6">
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Beam ID</strong></span>
-                                            <span id="su4_beam_id">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>RSRP</strong></span>
-                                            <span id="su4_beam_rsrp">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>SNR</strong></span>
-                                            <span id="su4_beam_snr">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>SSB</strong></span>
-                                            <span id="su4_beam_ssb">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>PCI</strong></span>
-                                            <span id="su4_beam_pci">N/A</span>
-                                        </div>
-                                    </div>
-
                                     <div class="col-md-6">
                                         <div class="d-flex justify-content-between mb-1">
                                             <span><strong>Ant. Array On/Off</strong></span>
@@ -6062,51 +5946,23 @@
                                             <span><strong>AGC Level</strong></span>
                                             <input type="text" id="su4_mvbx_rsagc_threshold" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>AGC Input</strong></span>
-                                            <span id="su4_agc_input_power">N/A</span>
+                                            <span><strong>gNB Type</strong></span>
+                                            <select id="su4_gNB_Vendor" data-editable="true" class="form-select form-select-sm" style="width: 70%;">
+                                                <option value="Manual">Manual</option>
+                                                <option value="Samsung">Samsung</option>
+                                                <option value="Nokia">Nokia</option>
+                                                <option value="Ericsson">Ericsson</option>
+                                            </select>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Decoded count</strong></span>
-                                            <span id="su4_decoded_ssb_count">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Decoded success</strong></span>
-                                            <span id="su4_decoded_ssb_no_error_count">N/A</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span><strong>Decoded rate</strong></span>
-                                            <span id="su4_decoded_rate">N/A</span>
+                                        <div class="d-flex justify-content-center mt-2">
+                                            <button class="btn btn-secondary" style="background-color: #6c757d; color: white; border-radius: 5px; width: 100%;">PLL RELOCK</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <hr class="my-3" style="border-top: 1px dotted black;" />
-                                <div class="row mb-3 align-items-center">
-                                    <div class="col-md-3">
-                                        <span><strong>gNB Type</strong></span>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <select id="su4_gNB_Vendor" data-editable="true" class="form-select form-select-sm">
-                                            <option value="Manual">Manual</option>
-                                            <option value="Samsung">Samsung</option>
-                                            <option value="Nokia">Nokia</option>
-                                            <option value="Ericsson">Ericsson</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <hr class="my-3" style="border-top: 1px dotted black;" />
-                                <div class="row text-center mt-3">
-                                    <div class="col-md-4 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">RSRP Req</button>
-                                    </div>
-                                    <div class="col-md-4 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">PLL Relock</button>
-                                    </div>
-                                    <div class="col-md-4 mb-2">
-                                        <button class="btn btn-secondary w-100" style="background-color: #6c757d; color: white; border-radius: 5px;">Beam Scan</button>
-                                    </div>
+                            </div>
                                 </div>
                             </div>
                         </div>
