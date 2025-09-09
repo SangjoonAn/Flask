@@ -1182,16 +1182,15 @@ def parse_AllStatusPacket2(packet):
     
     # 알람 비트 매핑 정의
     alarm_bit_map = [
-        {'bit': 1,  'id': 'alarm_dc'},
-        {'bit': 2,  'id': 'alarm_ac'},
-        {'bit': 3,  'id': 'alarm_temp'},
-        {'bit': 4,  'id': 'alarm_bat'},
-        {'bit': 49, 'id': 'alarm_fpga_link'},
-        {'bit': 53, 'id': 'alarm_if_pll'},
-        {'bit': 54, 'id': 'alarm_sync_pll'},
-        {'bit': 52, 'id': 'alarm_tsync_link'},  # 비트 51 → 52로 수정
-        {'bit': 66, 'id': 'alarm_decoding'},
-        {'bit': 70, 'id': 'alarm_aa_link'}
+        {'bit': 1,  'id': 'su1_alarm_dc'},
+        {'bit': 2,  'id': 'su1_alarm_ac'},
+        {'bit': 3,  'id': 'su1_alarm_temp'},
+        {'bit': 4,  'id': 'su1_alarm_bat'},
+        {'bit': 48, 'id': 'su1_alarm_du_link'},
+        {'bit': 53, 'id': 'su1_alarm_if_pll'},
+        {'bit': 52, 'id': 'su1_alarm_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 63, 'id': 'su1_alarm_ref_pll'},
+        {'bit': 70, 'id': 'su1_alarm_aa_link'}
     ]
     
     # 알람 비트 추출 함수
@@ -1729,18 +1728,17 @@ def parse_AllStatusPacket3(packet):
     
     # 알람 비트 매핑 정의
     alarm_bit_map = [
-        {'bit': 1,  'id': 'alarm_dc'},
-        {'bit': 2,  'id': 'alarm_ac'},
-        {'bit': 3,  'id': 'alarm_temp'},
-        {'bit': 4,  'id': 'alarm_bat'},
-        {'bit': 49, 'id': 'alarm_fpga_link'},
-        {'bit': 53, 'id': 'alarm_if_pll'},
-        {'bit': 54, 'id': 'alarm_sync_pll'},
-        {'bit': 52, 'id': 'alarm_tsync_link'},  # 비트 51 → 52로 수정
-        {'bit': 66, 'id': 'alarm_decoding'},
-        {'bit': 70, 'id': 'alarm_aa_link'}
+        {'bit': 1,  'id': 'su2_alarm_dc'},
+        {'bit': 2,  'id': 'su2_alarm_ac'},
+        {'bit': 3,  'id': 'su2_alarm_temp'},
+        {'bit': 4,  'id': 'su2_alarm_bat'},
+        {'bit': 48, 'id': 'su2_alarm_du_link'},
+        {'bit': 53, 'id': 'su2_alarm_if_pll'},
+        {'bit': 52, 'id': 'su2_alarm_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 63, 'id': 'su2_alarm_ref_pll'},
+        {'bit': 70, 'id': 'su2_alarm_aa_link'}
     ]
-    
+
     # 알람 비트 추출 함수
     def get_alarm_bit(alarm_bytes, bit_position):
         byte_index = (bit_position - 1) // 8
@@ -2276,16 +2274,15 @@ def parse_AllStatusPacket4(packet):
     
     # 알람 비트 매핑 정의
     alarm_bit_map = [
-        {'bit': 1,  'id': 'alarm_dc'},
-        {'bit': 2,  'id': 'alarm_ac'},
-        {'bit': 3,  'id': 'alarm_temp'},
-        {'bit': 4,  'id': 'alarm_bat'},
-        {'bit': 49, 'id': 'alarm_fpga_link'},
-        {'bit': 53, 'id': 'alarm_if_pll'},
-        {'bit': 54, 'id': 'alarm_sync_pll'},
-        {'bit': 52, 'id': 'alarm_tsync_link'},  # 비트 51 → 52로 수정
-        {'bit': 66, 'id': 'alarm_decoding'},
-        {'bit': 70, 'id': 'alarm_aa_link'}
+        {'bit': 1,  'id': 'su3_alarm_dc'},
+        {'bit': 2,  'id': 'su3_alarm_ac'},
+        {'bit': 3,  'id': 'su3_alarm_temp'},
+        {'bit': 4,  'id': 'su3_alarm_bat'},
+        {'bit': 48, 'id': 'su3_alarm_du_link'},
+        {'bit': 53, 'id': 'su3_alarm_if_pll'},
+        {'bit': 52, 'id': 'su3_alarm_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 63, 'id': 'su3_alarm_ref_pll'},
+        {'bit': 70, 'id': 'su3_alarm_aa_link'}
     ]
     
     # 알람 비트 추출 함수
@@ -2823,16 +2820,15 @@ def parse_AllStatusPacket5(packet):
     
     # 알람 비트 매핑 정의
     alarm_bit_map = [
-        {'bit': 1,  'id': 'alarm_dc'},
-        {'bit': 2,  'id': 'alarm_ac'},
-        {'bit': 3,  'id': 'alarm_temp'},
-        {'bit': 4,  'id': 'alarm_bat'},
-        {'bit': 49, 'id': 'alarm_fpga_link'},
-        {'bit': 53, 'id': 'alarm_if_pll'},
-        {'bit': 54, 'id': 'alarm_sync_pll'},
-        {'bit': 52, 'id': 'alarm_tsync_link'},  # 비트 51 → 52로 수정
-        {'bit': 66, 'id': 'alarm_decoding'},
-        {'bit': 70, 'id': 'alarm_aa_link'}
+        {'bit': 1,  'id': 'su4_alarm_dc'},
+        {'bit': 2,  'id': 'su4_alarm_ac'},
+        {'bit': 3,  'id': 'su4_alarm_temp'},
+        {'bit': 4,  'id': 'su4_alarm_bat'},
+        {'bit': 48, 'id': 'su4_alarm_du_link'},
+        {'bit': 53, 'id': 'su4_alarm_if_pll'},
+        {'bit': 52, 'id': 'su4_alarm_tsync_link'},  # 비트 51 → 52로 수정
+        {'bit': 63, 'id': 'su4_alarm_ref_pll'},
+        {'bit': 70, 'id': 'su4_alarm_aa_link'}
     ]
     
     # 알람 비트 추출 함수
