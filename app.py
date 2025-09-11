@@ -113,7 +113,16 @@ def handle_hex_packet(data):
 def handle_hex_packet(data):
     """ HEX 데이터 수신 및 변환 """
     try:
-        binary_data = binascii.unhexlify(data)  # HEX → Binary 변환
+        # 데이터 타입 확인 및 변환
+        if isinstance(data, bytes):
+            # 이미 바이너리 데이터인 경우
+            binary_data = data
+        elif isinstance(data, str):
+            # HEX 문자열인 경우
+            binary_data = binascii.unhexlify(data)
+        else:
+            raise ValueError(f"Unexpected data type: {type(data)}")
+        
         cmd = binary_data[6]
 
         if cmd == 0x55:
@@ -968,10 +977,10 @@ def parse_AllStatusPacket(packet):
     parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[788], packet[789]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[790], packet[791]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[792], packet[793]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[794], packet[795]]))[0])
     parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
@@ -1070,7 +1079,7 @@ def parse_AllStatusPacket(packet):
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
-    parsed_data['Reserved33'] = packet[1013]
+    parsed_data['SuEndMode'] = packet[1013]
     parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]
@@ -1514,10 +1523,10 @@ def parse_AllStatusPacket2(packet):
     parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[788], packet[789]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[790], packet[791]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[792], packet[793]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[794], packet[795]]))[0])
     parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
@@ -1616,7 +1625,7 @@ def parse_AllStatusPacket2(packet):
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
-    parsed_data['Reserved33'] = packet[1013]
+    parsed_data['SuEndMode'] = packet[1013]
     parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]
@@ -2060,10 +2069,10 @@ def parse_AllStatusPacket3(packet):
     parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[788], packet[789]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[790], packet[791]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[792], packet[793]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[794], packet[795]]))[0])
     parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
@@ -2162,7 +2171,7 @@ def parse_AllStatusPacket3(packet):
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
-    parsed_data['Reserved33'] = packet[1013]
+    parsed_data['SuEndMode'] = packet[1013]
     parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]
@@ -2606,10 +2615,10 @@ def parse_AllStatusPacket4(packet):
     parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[788], packet[789]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[790], packet[791]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[792], packet[793]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[794], packet[795]]))[0])
     parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
@@ -2708,7 +2717,7 @@ def parse_AllStatusPacket4(packet):
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
-    parsed_data['Reserved33'] = packet[1013]
+    parsed_data['SuEndMode'] = packet[1013]
     parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]
@@ -3152,10 +3161,10 @@ def parse_AllStatusPacket5(packet):
     parsed_data['LD2_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[782], packet[783]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[784], packet[785]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[786], packet[787]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Low'] = struct.unpack('<h', bytes([packet[788], packet[789]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[790], packet[791]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Low'] = struct.unpack('<h', bytes([packet[792], packet[793]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Low'] = struct.unpack('<h', bytes([packet[794], packet[795]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[788], packet[789]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[790], packet[791]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[792], packet[793]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Low'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[794], packet[795]]))[0])
     parsed_data['LD1_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[796], packet[797]]))[0])
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
@@ -3254,7 +3263,7 @@ def parse_AllStatusPacket5(packet):
     parsed_data['BeamAntSelect'] = packet[1010]
     parsed_data['DecodeRecoveryFuncOnOff'] = packet[1011]
     parsed_data['gNB_ScanOnOff'] = packet[1012]
-    parsed_data['Reserved33'] = packet[1013]
+    parsed_data['SuEndMode'] = packet[1013]
     parsed_data['ApiGsOutputPowerOffsetMimo'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[1014], packet[1015]]))[0])
     parsed_data['gNB_Vendor'] = packet[1016]
     parsed_data['Gs_Gain_Siso'] = packet[1017]

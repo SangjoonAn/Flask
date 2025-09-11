@@ -3893,6 +3893,23 @@
                                 <div class="col-3 mb-2 text-end">
                                     <span id="su1_curtemper">N/A</span>
                                 </div>
+                                <div class="col-3 mb-2">
+                                    <span><strong>SU Mode</strong></span>
+                                </div>
+                                <div class="col-3 mb-2 text-end">
+                                    <span id="su1_sumode">N/A</span>
+                                </div>
+                                <div class="col-3 mb-2">
+                                    <span><strong>SU ID</strong></span>
+                                </div>
+                                <div class="col-3 mb-2 text-end">
+                                    <select id="su1_suid" data-editable="true" style="width: 60%; height: 25px; padding: 0px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        <option value="1">SU #1</option>
+                                        <option value="2">SU #2</option>
+                                        <option value="3">SU #3</option>
+                                        <option value="4">SU #4</option>
+                                    </select>
+                                </div>
 
                                 <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                 <div class="col-3 mb-1">
@@ -3914,6 +3931,12 @@
                                 </div>
                                 <div class="col-3 mb-2 text-end">
                                     <span id="su1_InitStatus">N/A</span>
+                                </div>
+                                <div class="col-3 mb-2">
+                                    <span><strong>Cascade Mode</strong></span>
+                                </div>
+                                <div class="col-3 mb-2 text-end">
+                                    <button type="button" class="btn btn-success btn-sm" style="width: 60%; height: 25px; padding: 2px 6px;" id="su1_cascade_mode" data-editable="true">N/A</button>
                                 </div>
                             </div>
 
@@ -4034,7 +4057,7 @@
                                                 <i class="fas fa-plus-circle me-1"></i> DL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>DL Input</strong></span>
+                                                <span><strong>DL Output</strong></span>
                                                 <span id="su1_dl_input_siso">N/A</span>
                                             </div>
                                                                                 <div class="d-flex justify-content-between mb-1">
@@ -4055,7 +4078,7 @@
                                                 <i class="fas fa-plus-circle me-1"></i> UL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>UL Output(EIRP)</strong></span>
+                                                <span><strong>UL Input</strong></span>
                                                 <span id="su1_ul_output_siso">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
@@ -4063,8 +4086,12 @@
                                                 <input type="text" id="su1_ul_att_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
-                                                <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="su1_ul_iso_level_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                <span><strong>UL ALC Level</strong></span>
+                                                <input type="text" id="su1_ul_alc_level_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC On/Off</strong></span>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_ul_alc_onoff_siso" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                     </div>
@@ -4077,6 +4104,10 @@
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
                                             <input type="text" id="su1_mvbx_rx_gain_set_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-between mb-1">
+                                            <span><strong>DL ISO ATT</strong></span>
+                                            <span id="su1_dl_iso_att_siso">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4098,7 +4129,7 @@
                                                 <i class="fas fa-plus-circle me-1"></i> DL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>DL Input</strong></span>
+                                                <span><strong>DL Output</strong></span>
                                                 <span id="su1_dl_input_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
@@ -4119,7 +4150,7 @@
                                                 <i class="fas fa-plus-circle me-1"></i> UL
                                             </h6>
                                             <div class="d-flex justify-content-between mb-2">
-                                                <span><strong>UL Output(EIRP)</strong></span>
+                                                <span><strong>UL Input</strong></span>
                                                 <span id="su1_ul_output_mimo">N/A</span>
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
@@ -4127,8 +4158,12 @@
                                                 <input type="text" id="su1_ul_att_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                             </div>
                                             <div class="d-flex justify-content-between mb-1">
-                                                <span><strong>UL ISO Level</strong></span>
-                                                <input type="text" id="su1_ul_iso_level_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                <span><strong>UL ALC Level</strong></span>
+                                                <input type="text" id="su1_ul_alc_level_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC On/Off</strong></span>
+                                                <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su1_ul_alc_onoff_mimo" data-editable="true">N/A</button>
                                             </div>
                                         </div>
                                     </div>
@@ -4141,6 +4176,10 @@
                                         <div class="col-6 d-flex justify-content-between mb-1">
                                             <span><strong>UL Front End ATT</strong></span>
                                             <input type="text" id="su1_mvbx_rx_gain_set_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        </div>
+                                        <div class="col-6 d-flex justify-content-between mb-1">
+                                            <span><strong>DL ISO ATT</strong></span>
+                                            <span id="su1_dl_iso_att_mimo">N/A</span>
                                         </div>
                                         <div class="col-6 d-flex justify-content-between mb-2">
                                             <span><strong>UL ISO ATT</strong></span>
@@ -4157,23 +4196,57 @@
                                     </h6>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                     <div class="row mt-3">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong>DL LD</strong></span>
-                                            <span id="su1_ld1_det_dl0_siso">N/A</span>
+                                        <!-- DL Section -->
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL LD</strong></span>
+                                                    <span id="su1_ld1_det_dl0_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>DL LD Lower</strong></span>
+                                                    <input type="text" id="su1_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Next LD</strong></span>
+                                                    <span id="su1_ld3_det_dl0_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>DL Next LD Lower</strong></span>
+                                                    <input type="text" id="su1_ld3_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong>UL PD</strong></span>
-                                            <span id="su1_pd1_det_ul0_siso">N/A</span>
-                                        </div>
-                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                            <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                            <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="su1_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
-                                        </div>
-                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                            <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                            <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="su1_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        <!-- UL Section -->
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL PD</strong></span>
+                                                    <span id="su1_pd1_det_ul0_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>UL PD Lower</strong></span>
+                                                    <input type="text" id="su1_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Next PD</strong></span>
+                                                    <span id="su1_pd3_det_ul0_siso">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>UL Next PD Lower</strong></span>
+                                                    <input type="text" id="su1_pd3_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -4186,23 +4259,57 @@
                                     </h6>
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                     <div class="row mt-3">
-                                        <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong>DL LD</strong></span>
-                                            <span id="su1_ld2_det_dl1_mimo">N/A</span>
+                                        <!-- DL Section -->
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL LD</strong></span>
+                                                    <span id="su1_ld2_det_dl1_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>DL LD Lower</strong></span>
+                                                    <input type="text" id="su1_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>DL Next LD</strong></span>
+                                                    <span id="su1_ld4_det_dl1_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>DL Next LD Lower</strong></span>
+                                                    <input type="text" id="su1_ld4_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-6 d-flex justify-content-between mb-2">
-                                            <span><strong>UL PD</strong></span>
-                                            <span id="su1_pd2_det_ul1_mimo">N/A</span>
-                                        </div>
-                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                            <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                            <span><strong>DL LD Lower</strong></span>
-                                            <input type="text" id="su1_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
-                                        </div>
-                                        <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                            <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                            <span><strong>UL PD Lower</strong></span>
-                                            <input type="text" id="su1_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                        <!-- UL Section -->
+                                        <div class="col-6">
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL PD</strong></span>
+                                                    <span id="su1_pd2_det_ul1_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>UL PD Lower</strong></span>
+                                                    <input type="text" id="su1_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
+                                            <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                            <div class="mb-2">
+                                                <div class="d-flex justify-content-between mb-2">
+                                                    <span><strong>UL Next PD</strong></span>
+                                                    <span id="su1_pd4_det_ul1_mimo">N/A</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                    <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                    <span><strong>UL Next PD Lower</strong></span>
+                                                    <input type="text" id="su1_pd4_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -4566,6 +4673,23 @@
                                     <div class="col-3 mb-2 text-end"><span id="su2_curtime">N/A</span></div>
                                     <div class="col-3 mb-2"><span><strong>Cur Temper</strong></span></div>
                                 <div class="col-3 mb-2 text-end"><span id="su2_systememper">N/A</span></div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU Mode</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su2_sumode">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU ID</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <select id="su2_suid" data-editable="true" style="width: 60%; height: 25px; padding: 0px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            <option value="1">SU #1</option>
+                                            <option value="2">SU #2</option>
+                                            <option value="3">SU #3</option>
+                                            <option value="4">SU #4</option>
+                                        </select>
+                                    </div>
 
                                     <hr class="my-2" />
                                     <div class="col-3 mb-1"><span><strong>Temp Upper</strong></span></div>
@@ -4576,6 +4700,10 @@
                                     <hr class="my-2" />
                                     <div class="col-3 mb-2"><span><strong>Init Status</strong></span></div>
                                 <div class="col-3 mb-2 text-end"><span id="su2_fpga_init_status">N/A</span></div>
+                                <div class="col-3 mb-2"><span><strong>Cascade Mode</strong></span></div>
+                                <div class="col-3 mb-2 text-end">
+                                    <button type="button" class="btn btn-success btn-sm" style="width: 60%; height: 25px; padding: 2px 6px;" id="su2_cascade_mode" data-editable="true">N/A</button>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -4691,7 +4819,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su2_dl_input_siso">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -4712,17 +4840,21 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su2_ul_output_siso">N/A</span>
                                                 </div>
-                                                <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ATT</strong></span>
-                                                    <input type="text" id="su2_ul_att_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                                </div>
-                                                <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su2_ul_iso_level_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                                </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ATT</strong></span>
+                                                <input type="text" id="su2_ul_att_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC Level</strong></span>
+                                                <input type="text" id="su2_ul_alc_level_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC On/Off</strong></span>
+                                                <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su2_ul_alc_onoff_siso" data-editable="true">N/A</button>
+                                            </div>
                                             </div>
                                         </div>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -4734,6 +4866,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su2_mvbx_rx_gain_set_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su2_dl_iso_att_siso">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -4756,7 +4892,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su2_dl_input_mimo">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -4777,17 +4913,21 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su2_ul_output_mimo">N/A</span>
                                                 </div>
-                                                <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ATT</strong></span>
-                                                    <input type="text" id="su2_ul_att_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                                </div>
-                                                <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su2_ul_iso_level_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                                </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ATT</strong></span>
+                                                <input type="text" id="su2_ul_att_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC Level</strong></span>
+                                                <input type="text" id="su2_ul_alc_level_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <span><strong>UL ALC On/Off</strong></span>
+                                                <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su2_ul_alc_onoff_mimo" data-editable="true">N/A</button>
+                                            </div>
                                             </div>
                                         </div>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -4799,6 +4939,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su2_mvbx_rx_gain_set_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su2_dl_iso_att_mimo">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -4816,23 +4960,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su2_ld1_det_dl0_siso">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su2_ld1_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su2_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su2_ld3_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su2_ld3_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su2_pd1_det_ul0_siso">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su2_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su2_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su2_pd1_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su2_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su2_pd3_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su2_pd3_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -4846,23 +5024,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su2_ld2_det_dl1_mimo">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su2_ld2_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su2_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su2_ld4_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su2_ld4_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su2_pd2_det_ul1_mimo">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su2_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su2_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su2_pd2_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su2_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su2_pd4_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su2_pd4_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -4930,6 +5142,23 @@
                                     <div class="col-3 mb-2 text-end"><span id="su3_curtime">N/A</span></div>
                                     <div class="col-3 mb-2"><span><strong>Cur Temper</strong></span></div>
                                     <div class="col-3 mb-2 text-end"><span id="su3_curtemper">N/A</span></div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU Mode</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su3_sumode">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU ID</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <select id="su3_suid" data-editable="true" style="width: 60%; height: 25px; padding: 0px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            <option value="1">SU #1</option>
+                                            <option value="2">SU #2</option>
+                                            <option value="3">SU #3</option>
+                                            <option value="4">SU #4</option>
+                                        </select>
+                                    </div>
 
                                     <hr class="my-2" />
                                     <div class="col-3 mb-1"><span><strong>Temp Upper</strong></span></div>
@@ -4940,6 +5169,10 @@
                                     <hr class="my-2" />
                                     <div class="col-3 mb-2"><span><strong>Init Status</strong></span></div>
                                 <div class="col-3 mb-2 text-end"><span id="su3_fpga_init_status">N/A</span></div>
+                                <div class="col-3 mb-2"><span><strong>Cascade Mode</strong></span></div>
+                                <div class="col-3 mb-2 text-end">
+                                    <button type="button" class="btn btn-success btn-sm" style="width: 60%; height: 25px; padding: 2px 6px;" id="su3_cascade_mode" data-editable="true">N/A</button>
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -5055,7 +5288,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su3_dl_input_siso">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5076,7 +5309,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su3_ul_output_siso">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5084,8 +5317,12 @@
                                                     <input type="text" id="su3_ul_att_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su3_ul_iso_level_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                    <span><strong>UL ALC Level</strong></span>
+                                                    <input type="text" id="su3_ul_alc_level_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su3_ul_alc_onoff_siso" data-editable="true">N/A</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -5098,6 +5335,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su3_mvbx_rx_gain_set_siso" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su3_dl_iso_att_siso">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -5120,7 +5361,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su3_dl_input_mimo">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5141,7 +5382,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su3_ul_output_mimo">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5149,8 +5390,12 @@
                                                     <input type="text" id="su3_ul_att_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su3_ul_iso_level_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                    <span><strong>UL ALC Level</strong></span>
+                                                    <input type="text" id="su3_ul_alc_level_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width:30%; height:25px; padding:2px 6px;" id="su3_ul_alc_onoff_mimo" data-editable="true">N/A</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -5163,6 +5408,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su3_mvbx_rx_gain_set_mimo" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su3_dl_iso_att_mimo">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -5180,23 +5429,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su3_ld1_det_dl0_siso">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su3_ld1_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su3_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su3_ld3_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su3_ld3_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su3_pd1_det_ul0_siso">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su3_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su3_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su3_pd1_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su3_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su3_pd3_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su3_pd3_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -5210,23 +5493,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su3_ld2_det_dl1_mimo">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su3_ld2_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su3_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su3_ld4_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su3_ld4_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su3_pd2_det_ul1_mimo">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su3_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su3_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width:30%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su3_pd2_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su3_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su3_pd4_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su3_pd4_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -5313,6 +5630,23 @@
                                     </div>
                                     <div class="col-3 mb-2 text-end">
                                         <span id="su4_curtemper">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU Mode</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <span id="su4_sumode">N/A</span>
+                                    </div>
+                                    <div class="col-3 mb-2">
+                                        <span><strong>SU ID</strong></span>
+                                    </div>
+                                    <div class="col-3 mb-2 text-end">
+                                        <select id="su4_suid" data-editable="true" style="width: 60%; height: 25px; padding: 0px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            <option value="1">SU #1</option>
+                                            <option value="2">SU #2</option>
+                                            <option value="3">SU #3</option>
+                                            <option value="4">SU #4</option>
+                                        </select>
                                     </div>
 
                                     <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
@@ -5453,7 +5787,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su4_dl_input_siso">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5474,7 +5808,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su4_ul_output_siso">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5482,8 +5816,12 @@
                                                     <input type="text" id="su4_ul_att_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su4_ul_iso_level_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    <span><strong>UL ALC Level</strong></span>
+                                                    <input type="text" id="su4_ul_alc_level_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_ul_alc_onoff_siso" data-editable="true">N/A</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -5496,6 +5834,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su4_mvbx_rx_gain_set_siso" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su4_dl_iso_att_siso">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -5518,7 +5860,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> DL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>DL Input</strong></span>
+                                                    <span><strong>DL Output</strong></span>
                                                     <span id="su4_dl_input_mimo">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5539,7 +5881,7 @@
                                                     <i class="fas fa-plus-circle me-1"></i> UL
                                                 </h6>
                                                 <div class="d-flex justify-content-between mb-2">
-                                                    <span><strong>UL Output(EIRP)</strong></span>
+                                                    <span><strong>UL Input</strong></span>
                                                     <span id="su4_ul_output_mimo">N/A</span>
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
@@ -5547,8 +5889,12 @@
                                                     <input type="text" id="su4_ul_att_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
                                                 </div>
                                                 <div class="d-flex justify-content-between mb-1">
-                                                    <span><strong>UL ISO Level</strong></span>
-                                                    <input type="text" id="su4_ul_iso_level_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    <span><strong>UL ALC Level</strong></span>
+                                                    <input type="text" id="su4_ul_alc_level_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                </div>
+                                                <div class="d-flex justify-content-between mb-1">
+                                                    <span><strong>UL ALC On/Off</strong></span>
+                                                    <button type="button" class="btn btn-success btn-sm" style="width: 30%; height: 25px; padding: 2px 6px;" id="su4_ul_alc_onoff_mimo" data-editable="true">N/A</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -5561,6 +5907,10 @@
                                             <div class="col-6 d-flex justify-content-between mb-1">
                                                 <span><strong>UL Front End ATT</strong></span>
                                                 <input type="text" id="su4_mvbx_rx_gain_set_mimo" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            </div>
+                                            <div class="col-6 d-flex justify-content-between mb-1">
+                                                <span><strong>DL ISO ATT</strong></span>
+                                                <span id="su4_dl_iso_att_mimo">N/A</span>
                                             </div>
                                             <div class="col-6 d-flex justify-content-between mb-2">
                                                 <span><strong>UL ISO ATT</strong></span>
@@ -5578,23 +5928,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su4_ld1_det_dl0_siso">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su4_ld1_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su4_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su4_ld3_det_dl0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su4_ld3_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su4_pd1_det_ul0_siso">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su4_ld1_det_dl0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su4_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su4_pd1_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su4_pd1_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su4_pd3_det_ul0_siso">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su4_pd3_det_ul0_siso_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -5608,23 +5992,57 @@
                                         </h6>
                                         <hr class="my-2" style="border-top: 1px dotted black; width: 100%; margin: 0 auto;" />
                                         <div class="row mt-3">
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>DL LD</strong></span>
-                                                <span id="su4_ld2_det_dl1_mimo">N/A</span>
+                                            <!-- DL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL LD</strong></span>
+                                                        <span id="su4_ld2_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL LD Lower</strong></span>
+                                                        <input type="text" id="su4_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>DL Next LD</strong></span>
+                                                        <span id="su4_ld4_det_dl1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>DL Next LD Lower</strong></span>
+                                                        <input type="text" id="su4_ld4_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-6 d-flex justify-content-between mb-2">
-                                                <span><strong>UL PD</strong></span>
-                                                <span id="su4_pd2_det_ul1_mimo">N/A</span>
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-success me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>DL LD Lower</strong></span>
-                                                                                                    <input type="text" id="su4_ld2_det_dl1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
-                                            </div>
-                                            <div class="col-6 d-flex justify-content-between mb-1 align-items-center">
-                                                <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
-                                                <span><strong>UL PD Lower</strong></span>
-                                                                                                    <input type="text" id="su4_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                            <!-- UL Section -->
+                                            <div class="col-6">
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL PD</strong></span>
+                                                        <span id="su4_pd2_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL PD Lower</strong></span>
+                                                        <input type="text" id="su4_pd2_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3"></div> <!-- 한 줄 띄우기 -->
+                                                <div class="mb-2">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span><strong>UL Next PD</strong></span>
+                                                        <span id="su4_pd4_det_ul1_mimo">N/A</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between mb-1 align-items-center">
+                                                        <i class="fas fa-circle text-danger me-2" style="font-size: 0.7em;"></i>
+                                                        <span><strong>UL Next PD Lower</strong></span>
+                                                        <input type="text" id="su4_pd4_det_ul1_mimo_low" data-editable="true" value="N/A" readonly style="width: 30%; height: 25px; padding: 0px 4px; text-align: center; border: 1px solid #ced4da; border-radius: 0.25rem; font-size: 0.875rem; background-color: #fff;">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -7264,6 +7682,18 @@
                 const el = document.getElementById(id);
                 if (el && value !== undefined) el.innerText = value;
             };
+            const updateButtonText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    if (value === 1) {
+                        el.innerText = "ON";
+                        el.className = "btn btn-success btn-sm";
+                    } else {
+                        el.innerText = "OFF";
+                        el.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            };
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) el.value = value;
@@ -7294,12 +7724,48 @@
             // 시스템 시간 및 온도
             updateText("su2_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
             updateText("su2_systememper", `${data.packet.SysTemper} ℃`);
-            if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
+            
+            // SU MODE 업데이트
+            if (data.packet.SuModeStatus !== undefined) {
+                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
+                updateText("su2_sumode", suModeText);
+            }
+            
+            // SU ID 업데이트 (Set Mode가 아닐 때만)
+            if (data.packet.SuId !== undefined && !SET_MODE_SU2) {
+                updateValue("su2_suid", data.packet.SuId);
+            }
             updateValue("su2_inittemper", data.packet.SysTemperHighLvl);
             updateValue("su2_templower", data.packet.SysTemperLowLvl);
             
             // Init Status 업데이트
             updateStatusBadge2("su2_fpga_init_status", data.packet.FPGA_Init_Status);
+            
+            // Cascade Mode 업데이트 (Set Mode가 아닐 때만)
+            console.log("🔍 SU2 SuEndMode 체크:", data.packet.SuEndMode, "SET_MODE_SU2:", SET_MODE_SU2);
+            if (data.packet.SuEndMode !== undefined) {
+                if (SET_MODE_SU2) {
+                    console.log("🔒 SU2 Set Mode - Cascade Mode 업데이트 차단");
+                    return; // SU2 Set Mode에서 업데이트 차단
+                }
+                const su2CascadeModeEl = document.getElementById("su2_cascade_mode");
+                console.log("🔍 SU2 Cascade Mode 요소:", su2CascadeModeEl);
+                if (su2CascadeModeEl) {
+                    if (data.packet.SuEndMode === 1) {
+                        su2CascadeModeEl.textContent = "ON";
+                        su2CascadeModeEl.className = "btn btn-success btn-sm";
+                        console.log("✅ SU2 Cascade Mode를 ON으로 설정");
+                    } else {
+                        su2CascadeModeEl.textContent = "OFF";
+                        su2CascadeModeEl.className = "btn btn-secondary btn-sm";
+                        console.log("✅ SU2 Cascade Mode를 OFF로 설정");
+                    }
+                } else {
+                    console.log("❌ SU2 Cascade Mode 요소를 찾을 수 없음");
+                }
+            } else {
+                console.log("❌ SU2 SuEndMode가 undefined");
+            }
             
             // Modem 상태 (SU1과 동일한 패턴)
             updateText("su2_modstatus", statusText[data.packet.ModStatus] || "Unknown");
@@ -7388,10 +7854,24 @@
             updateText("su2_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
             if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
             updateValue("su2_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-            updateValue("su2_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
+            updateValue("su2_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
+            if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
+                if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
+                const su2UlAlcSisoEl = document.getElementById("su2_ul_alc_onoff_siso");
+                if (su2UlAlcSisoEl) {
+                    if (data.packet.ALC_UL0_SISO_Mode === 1) {
+                        su2UlAlcSisoEl.textContent = "ON";
+                        su2UlAlcSisoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su2UlAlcSisoEl.textContent = "OFF";
+                        su2UlAlcSisoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             
             updateValue("su2_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
             updateValue("su2_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
+            updateText("su2_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
             updateText("su2_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
             
             // SU2 AOM & mmWave MIMO RF 업데이트 (SU1과 동일한 패턴)
@@ -7416,25 +7896,47 @@
             updateText("su2_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
             if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
             updateValue("su2_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-            updateValue("su2_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            updateValue("su2_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
+                if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
+                const su2UlAlcMimoEl = document.getElementById("su2_ul_alc_onoff_mimo");
+                if (su2UlAlcMimoEl) {
+                    if (data.packet.ALC_UL1_MIMO_Mode === 1) {
+                        su2UlAlcMimoEl.textContent = "ON";
+                        su2UlAlcMimoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su2UlAlcMimoEl.textContent = "OFF";
+                        su2UlAlcMimoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             
             updateValue("su2_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
             updateValue("su2_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
+            updateText("su2_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
             updateText("su2_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
             
             // SU2 AOM & mmWave SISO OPTIC 업데이트 (SU1과 동일한 패턴)
             updateText("su2_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
             updateText("su2_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
+            updateText("su2_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
+            updateText("su2_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
             if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
             updateValue("su2_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
             updateValue("su2_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
+            updateValue("su2_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
+            updateValue("su2_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
             
             // SU2 AOM & mmWave MIMO OPTIC 업데이트 (SU1과 동일한 패턴)
             updateText("su2_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
             updateText("su2_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
+            updateText("su2_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
+            updateText("su2_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
             if (SET_MODE_SU2) return; // SU2 Set Mode에서 업데이트 차단
             updateValue("su2_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
             updateValue("su2_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
+            updateValue("su2_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
+            updateValue("su2_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
 
             // SU2 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
 
@@ -7446,20 +7948,43 @@
             console.log("📥 Received su3_status_update:", data.packet);
             console.log("🎯 SU3 패킷 감지! SU3 페이지 업데이트 시작");
             
-            // SU3 Set Mode일 때는 편집 가능한 필드 업데이트 차단
-            if (SET_MODE_SU3) {
-                console.log("🔒 SU3 Set Mode 활성화됨 - 편집 가능한 필드 업데이트 차단");
-                return;
-            }
+            // SU3 Set Mode일 때는 편집 가능한 필드 업데이트 차단 (개별 필드별로 처리)
 
             // SU3용 업데이트 함수 정의 (SU1, SU2와 동일)
             const updateText = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) el.innerText = value;
             };
+            const updateButtonText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    if (value === 1) {
+                        el.innerText = "ON";
+                        el.className = "btn btn-success btn-sm";
+                    } else {
+                        el.innerText = "OFF";
+                        el.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            };
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
-                if (el && value !== undefined) el.value = value;
+                if (el && value !== undefined) {
+                    // SU3 Set Mode에서 편집 가능한 필드만 업데이트 방지
+                    const isSu3 = id.startsWith('su3_');
+                    const isSync = id.startsWith('tsync_') || id.startsWith('TDD_') || id.startsWith('F_') || id.startsWith('ssb_') || id.startsWith('tdd_');
+                    const editLock = (isSu3 ? SET_MODE_SU3 : (isSync ? SYNC_SET_MODE : SET_MODE));
+                    
+                    if (editLock && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 ${isSu3 ? 'SU3' : (isSync ? 'Sync' : 'DU')} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                        return;
+                    }
+                    
+                    console.log(`📝 updateValue: ${id} = ${value} (DU_SET_MODE: ${SET_MODE}, SU3_SET_MODE: ${SET_MODE_SU3})`);
+                    el.value = value;
+                    // ID 값 출력 시 텍스트 크기 조정
+                    el.style.fontSize = '0.85rem';
+                }
             };
 
             // SU3용 텍스트 변수 정의 (SU1, SU2와 동일)
@@ -7485,11 +8010,49 @@
             updateText("su3_rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
             updateText("su3_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
             updateText("su3_curtemper", `${data.packet.SysTemper} ℃`);
+            
+            // SU MODE 업데이트
+            if (data.packet.SuModeStatus !== undefined) {
+                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
+                updateText("su3_sumode", suModeText);
+            }
+            
+            // SU ID 업데이트 (Set Mode가 아닐 때만)
+            if (data.packet.SuId !== undefined && !SET_MODE_SU3) {
+                updateValue("su3_suid", data.packet.SuId);
+            }
+            
             updateValue("su3_tempupper", data.packet.SysTemperHighLvl);
             updateValue("su3_templower", data.packet.SysTemperLowLvl);
             
             // Init Status 업데이트
             updateStatusBadge2("su3_fpga_init_status", data.packet.FPGA_Init_Status);
+            
+            // Cascade Mode 업데이트 (Set Mode가 아닐 때만)
+            console.log("🔍 SU3 SuEndMode 체크:", data.packet.SuEndMode, "SET_MODE_SU3:", SET_MODE_SU3);
+            if (data.packet.SuEndMode !== undefined) {
+                if (SET_MODE_SU3) {
+                    console.log("🔒 SU3 Set Mode - Cascade Mode 업데이트 차단");
+                    return; // SU3 Set Mode에서 업데이트 차단
+                }
+                const su3CascadeModeEl = document.getElementById("su3_cascade_mode");
+                console.log("🔍 SU3 Cascade Mode 요소:", su3CascadeModeEl);
+                if (su3CascadeModeEl) {
+                    if (data.packet.SuEndMode === 1) {
+                        su3CascadeModeEl.textContent = "ON";
+                        su3CascadeModeEl.className = "btn btn-success btn-sm";
+                        console.log("✅ SU3 Cascade Mode를 ON으로 설정");
+                    } else {
+                        su3CascadeModeEl.textContent = "OFF";
+                        su3CascadeModeEl.className = "btn btn-secondary btn-sm";
+                        console.log("✅ SU3 Cascade Mode를 OFF로 설정");
+                    }
+                } else {
+                    console.log("❌ SU3 Cascade Mode 요소를 찾을 수 없음");
+                }
+            } else {
+                console.log("❌ SU3 SuEndMode가 undefined");
+            }
             
             // Modem 상태 (SU1, SU2와 동일한 패턴)
             updateText("su3_modstatus", statusText[data.packet.ModStatus] || "Unknown");
@@ -7572,10 +8135,25 @@
             }
             
             updateText("su3_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
+            if (SET_MODE_SU3) return; // SU3 Set Mode에서 업데이트 차단
             updateValue("su3_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-            updateValue("su3_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
+            updateValue("su3_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
+            if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
+                if (SET_MODE_SU3) return; // SU3 Set Mode에서 업데이트 차단
+                const su3UlAlcSisoEl = document.getElementById("su3_ul_alc_onoff_siso");
+                if (su3UlAlcSisoEl) {
+                    if (data.packet.ALC_UL0_SISO_Mode === 1) {
+                        su3UlAlcSisoEl.textContent = "ON";
+                        su3UlAlcSisoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su3UlAlcSisoEl.textContent = "OFF";
+                        su3UlAlcSisoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             updateValue("su3_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
             updateValue("su3_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
+            updateText("su3_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
             updateText("su3_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
 
             // SU3 AOM & mmWave MIMO RF 업데이트 (SU1, SU2와 동일한 패턴)
@@ -7597,23 +8175,48 @@
             }
             
             updateText("su3_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
+            if (SET_MODE_SU3) return; // SU3 Set Mode에서 업데이트 차단
             updateValue("su3_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-            updateValue("su3_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            updateValue("su3_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
+                if (SET_MODE_SU3) return; // SU3 Set Mode에서 업데이트 차단
+                const su3UlAlcMimoEl = document.getElementById("su3_ul_alc_onoff_mimo");
+                if (su3UlAlcMimoEl) {
+                    if (data.packet.ALC_UL1_MIMO_Mode === 1) {
+                        su3UlAlcMimoEl.textContent = "ON";
+                        su3UlAlcMimoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su3UlAlcMimoEl.textContent = "OFF";
+                        su3UlAlcMimoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             updateValue("su3_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
             updateValue("su3_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
+            updateText("su3_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
             updateText("su3_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
 
             // SU3 AOM & mmWave SISO OPTIC 업데이트 (SU1, SU2와 동일한 패턴)
             updateText("su3_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
             updateText("su3_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
+            updateText("su3_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
+            updateText("su3_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
+            if (SET_MODE_SU3) return; // SU3 Set Mode에서 LOWER 값 업데이트 차단
             updateValue("su3_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
             updateValue("su3_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
+            updateValue("su3_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
+            updateValue("su3_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
             
             // SU3 AOM & mmWave MIMO OPTIC 업데이트 (SU1, SU2와 동일한 패턴)
             updateText("su3_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
             updateText("su3_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
+            updateText("su3_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
+            updateText("su3_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
+            if (SET_MODE_SU3) return; // SU3 Set Mode에서 LOWER 값 업데이트 차단
             updateValue("su3_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
             updateValue("su3_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
+            updateValue("su3_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
+            updateValue("su3_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
 
             // SU3 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
 
@@ -7684,6 +8287,18 @@
             // 시스템 시간 및 온도
             updateText("su4_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
             updateText("su4_curtemper", `${data.packet.SysTemper} ℃`);
+            
+            // SU MODE 업데이트
+            if (data.packet.SuModeStatus !== undefined) {
+                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
+                updateText("su4_sumode", suModeText);
+            }
+            
+            // SU ID 업데이트 (Set Mode가 아닐 때만)
+            if (data.packet.SuId !== undefined && !SET_MODE_SU4) {
+                updateValue("su4_suid", data.packet.SuId);
+            }
+            
             updateValue("su4_tempupper", data.packet.SysTemperHighLvl);
             updateValue("su4_templower", data.packet.SysTemperLowLvl);
             
@@ -7772,11 +8387,26 @@
             }
             
             updateText("su4_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
+            if (SET_MODE_SU4) return; // SU4 Set Mode에서 업데이트 차단
             updateValue("su4_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-            updateValue("su4_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
+            updateValue("su4_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
+            if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
+                if (SET_MODE_SU4) return; // SU4 Set Mode에서 업데이트 차단
+                const su4UlAlcSisoEl = document.getElementById("su4_ul_alc_onoff_siso");
+                if (su4UlAlcSisoEl) {
+                    if (data.packet.ALC_UL0_SISO_Mode === 1) {
+                        su4UlAlcSisoEl.textContent = "ON";
+                        su4UlAlcSisoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su4UlAlcSisoEl.textContent = "OFF";
+                        su4UlAlcSisoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             
             updateValue("su4_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
             updateValue("su4_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
+            updateText("su4_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
             updateText("su4_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
             
             // SU4 AOM & mmWave MIMO RF 업데이트 (SU1과 동일한 패턴)
@@ -7797,24 +8427,49 @@
             }
             
             updateText("su4_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
+            if (SET_MODE_SU4) return; // SU4 Set Mode에서 업데이트 차단
             updateValue("su4_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-            updateValue("su4_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            updateValue("su4_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+            if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
+                if (SET_MODE_SU4) return; // SU4 Set Mode에서 업데이트 차단
+                const su4UlAlcMimoEl = document.getElementById("su4_ul_alc_onoff_mimo");
+                if (su4UlAlcMimoEl) {
+                    if (data.packet.ALC_UL1_MIMO_Mode === 1) {
+                        su4UlAlcMimoEl.textContent = "ON";
+                        su4UlAlcMimoEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su4UlAlcMimoEl.textContent = "OFF";
+                        su4UlAlcMimoEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
             
             updateValue("su4_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
             updateValue("su4_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
+            updateText("su4_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
             updateText("su4_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
             
             // SU4 AOM & mmWave SISO OPTIC 업데이트 (SU1과 동일한 패턴)
             updateText("su4_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
             updateText("su4_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
+            updateText("su4_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
+            updateText("su4_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
+            if (SET_MODE_SU4) return; // SU4 Set Mode에서 LOWER 값 업데이트 차단
             updateValue("su4_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
             updateValue("su4_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
+            updateValue("su4_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
+            updateValue("su4_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
             
             // SU4 AOM & mmWave MIMO OPTIC 업데이트 (SU1과 동일한 패턴)
             updateText("su4_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
             updateText("su4_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
+            updateText("su4_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
+            updateText("su4_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
+            if (SET_MODE_SU4) return; // SU4 Set Mode에서 LOWER 값 업데이트 차단
             updateValue("su4_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
             updateValue("su4_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
+            updateValue("su4_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
+            updateValue("su4_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
 
 
             // SU4 gNB Type (Vendor) 업데이트 (SU1, SU2, SU3와 동일한 패턴)
@@ -8022,6 +8677,18 @@
                 const el = document.getElementById(id);
                 if (el && value !== undefined) el.innerText = value;
             };
+            const updateButtonText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    if (value === 1) {
+                        el.innerText = "ON";
+                        el.className = "btn btn-success btn-sm";
+                    } else {
+                        el.innerText = "OFF";
+                        el.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            };
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
                 if (el && value !== undefined) {
@@ -8120,8 +8787,45 @@
                 updateValue("su1_tempupper", data.packet.SysTemperHighLvl);
                 updateValue("su1_templower", data.packet.SysTemperLowLvl);
                 
+            // SU MODE 업데이트
+            if (data.packet.SuModeStatus !== undefined) {
+                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
+                updateText("su1_sumode", suModeText);
+            }
+            
+            // SU ID 업데이트 (Set Mode가 아닐 때만)
+            if (data.packet.SuId !== undefined && !SET_MODE_SU1) {
+                updateValue("su1_suid", data.packet.SuId);
+            }
+                
                 // Init Status 업데이트
                 updateStatusBadge2("su1_InitStatus", data.packet.FPGA_Init_Status);
+                
+                // Cascade Mode 업데이트 (Set Mode가 아닐 때만)
+                console.log("🔍 SU1 SuEndMode 체크:", data.packet.SuEndMode, "SET_MODE_SU1:", SET_MODE_SU1);
+                if (data.packet.SuEndMode !== undefined) {
+                    if (SET_MODE_SU1) {
+                        console.log("🔒 SU1 Set Mode - Cascade Mode 업데이트 차단");
+                        return; // SU1 Set Mode에서 업데이트 차단
+                    }
+                    const su1CascadeModeEl = document.getElementById("su1_cascade_mode");
+                    console.log("🔍 SU1 Cascade Mode 요소:", su1CascadeModeEl);
+                    if (su1CascadeModeEl) {
+                        if (data.packet.SuEndMode === 1) {
+                            su1CascadeModeEl.textContent = "ON";
+                            su1CascadeModeEl.className = "btn btn-success btn-sm";
+                            console.log("✅ SU1 Cascade Mode를 ON으로 설정");
+                        } else {
+                            su1CascadeModeEl.textContent = "OFF";
+                            su1CascadeModeEl.className = "btn btn-secondary btn-sm";
+                            console.log("✅ SU1 Cascade Mode를 OFF로 설정");
+                        }
+                    } else {
+                        console.log("❌ SU1 Cascade Mode 요소를 찾을 수 없음");
+                    }
+                } else {
+                    console.log("❌ SU1 SuEndMode가 undefined");
+                }
                 
                 // Modem 상태
                 updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
@@ -8201,10 +8905,24 @@
                 
                 updateText("su1_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
                 updateValue("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-                updateValue("su1_ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
+                updateValue("su1_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
+                if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
+                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
+                    const ulAlcSisoEl = document.getElementById("su1_ul_alc_onoff_siso");
+                    if (ulAlcSisoEl) {
+                        if (data.packet.ALC_UL0_SISO_Mode === 1) {
+                            ulAlcSisoEl.textContent = "ON";
+                            ulAlcSisoEl.className = "btn btn-success btn-sm";
+                        } else {
+                            ulAlcSisoEl.textContent = "OFF";
+                            ulAlcSisoEl.className = "btn btn-secondary btn-sm";
+                        }
+                    }
+                }
                 
                 updateValue("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
                 updateValue("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
+                updateText("su1_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
                 updateText("su1_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
                 
                 // SU1 AOM & mmWave MIMO RF 업데이트 (DU와 동일한 패턴)
@@ -8227,23 +8945,47 @@
                 
                 updateText("su1_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
                 updateValue("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-                updateValue("su1_ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+                updateValue("su1_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
+                if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
+                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
+                    const ulAlcMimoEl = document.getElementById("su1_ul_alc_onoff_mimo");
+                    if (ulAlcMimoEl) {
+                        if (data.packet.ALC_UL1_MIMO_Mode === 1) {
+                            ulAlcMimoEl.textContent = "ON";
+                            ulAlcMimoEl.className = "btn btn-success btn-sm";
+                        } else {
+                            ulAlcMimoEl.textContent = "OFF";
+                            ulAlcMimoEl.className = "btn btn-secondary btn-sm";
+                        }
+                    }
+                }
                 
                 updateValue("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
                 updateValue("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
+                updateText("su1_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
                 updateText("su1_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
                 
                 // SU1 AOM & mmWave SISO OPTIC 업데이트 (DU와 동일한 패턴)
                 updateText("su1_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
                 updateText("su1_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
+                updateText("su1_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
+                updateText("su1_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
                 updateValue("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
                 updateValue("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
+                updateValue("su1_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
+                updateValue("su1_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
                 
                 // SU1 AOM & mmWave MIMO OPTIC 업데이트 (DU와 동일한 패턴)
                 updateText("su1_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
                 updateText("su1_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
+                updateText("su1_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
+                updateText("su1_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
+                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
                 updateValue("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
                 updateValue("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
+                updateValue("su1_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
+                updateValue("su1_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
                 
                 // SU1 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
 
@@ -10466,6 +11208,8 @@
       // SU1 System
       su1_tempupper:       { key:'SU1_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
       su1_templower:       { key:'SU1_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+      su1_suid:            { key:'SU1_SuId',                  type:'u8',    min:1, max:4 },
+      su1_cascade_mode:    { key:'SU1_SuEndMode',             type:'u8',    min:0, max:1 },
       
       // SU1 Beam Status
       su1_gumstick_onoff:  { key:'SU1_GumStick_OnOff',        type:'u8',    min:0, max:1 },
@@ -10476,7 +11220,8 @@
       su1_dl_alc_onoff_siso: { key:'SU1_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su1_mvbx_tx_gain_set_siso: { key:'SU1_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
       su1_ul_att_siso:     { key:'SU1_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su1_ul_iso_level_siso: { key:'SU1_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su1_ul_alc_level_siso: { key:'SU1_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su1_ul_alc_onoff_siso: { key:'SU1_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su1_mvbx_rx_gain_set_siso: { key:'SU1_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
 
       // SU1 MIMO RF
@@ -10485,7 +11230,8 @@
       su1_dl_alc_onoff_mimo: { key:'SU1_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su1_mvbx_tx_gain_set_mimo: { key:'SU1_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
       su1_ul_att_mimo:     { key:'SU1_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su1_ul_iso_level_mimo: { key:'SU1_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su1_ul_alc_level_mimo: { key:'SU1_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su1_ul_alc_onoff_mimo: { key:'SU1_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su1_mvbx_rx_gain_set_mimo: { key:'SU1_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
 
       // SU1 OPTIC
@@ -10493,6 +11239,10 @@
       su1_pd1_det_ul0_siso_low: { key:'SU1_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
       su1_ld2_det_dl1_mimo_low: { key:'SU1_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
       su1_pd2_det_ul1_mimo_low: { key:'SU1_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld3_det_dl0_siso_low: { key:'SU1_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd3_det_ul0_siso_low: { key:'SU1_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld4_det_dl1_mimo_low: { key:'SU1_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd4_det_ul1_mimo_low: { key:'SU1_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU2 필드 매핑 ====
@@ -10500,6 +11250,8 @@
       // SU2 System
       su2_inittemper:       { key:'SU2_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
       su2_templower:        { key:'SU2_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+      su2_suid:             { key:'SU2_SuId',                  type:'u8',    min:1, max:4 },
+      su2_cascade_mode:     { key:'SU2_SuEndMode',             type:'u8',    min:0, max:1 },
       
       // SU2 Beam Status
       su2_gumstick_onoff:  { key:'SU2_GumStick_OnOff',        type:'u8',    min:0, max:1 },
@@ -10510,7 +11262,8 @@
       su2_dl_alc_onoff_siso: { key:'SU2_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su2_mvbx_tx_gain_set_siso: { key:'SU2_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
       su2_ul_att_siso:     { key:'SU2_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su2_ul_iso_level_siso: { key:'SU2_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su2_ul_alc_level_siso: { key:'SU2_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su2_ul_alc_onoff_siso: { key:'SU2_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su2_mvbx_rx_gain_set_siso: { key:'SU2_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
 
       // SU2 MIMO RF
@@ -10519,7 +11272,8 @@
       su2_dl_alc_onoff_mimo: { key:'SU2_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su2_mvbx_tx_gain_set_mimo: { key:'SU2_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
       su2_ul_att_mimo:     { key:'SU2_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su2_ul_iso_level_mimo: { key:'SU2_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su2_ul_alc_level_mimo: { key:'SU2_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su2_ul_alc_onoff_mimo: { key:'SU2_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su2_mvbx_rx_gain_set_mimo: { key:'SU2_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
 
       // SU2 OPTIC
@@ -10527,6 +11281,10 @@
       su2_pd1_det_ul0_siso_low: { key:'SU2_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
       su2_ld2_det_dl1_mimo_low: { key:'SU2_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
       su2_pd2_det_ul1_mimo_low: { key:'SU2_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld3_det_dl0_siso_low: { key:'SU2_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd3_det_ul0_siso_low: { key:'SU2_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld4_det_dl1_mimo_low: { key:'SU2_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd4_det_ul1_mimo_low: { key:'SU2_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU3 필드 매핑 ====
@@ -10534,6 +11292,8 @@
       // SU3 System
       su3_tempupper:       { key:'SU3_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
       su3_templower:        { key:'SU3_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+      su3_suid:             { key:'SU3_SuId',                  type:'u8',    min:1, max:4 },
+      su3_cascade_mode:     { key:'SU3_SuEndMode',             type:'u8',    min:0, max:1 },
       
       // SU3 Beam Status
       su3_gumstick_onoff:  { key:'SU3_GumStick_OnOff',        type:'u8',    min:0, max:1 },
@@ -10544,7 +11304,8 @@
       su3_dl_alc_onoff_siso: { key:'SU3_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su3_mvbx_tx_gain_set_siso: { key:'SU3_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
       su3_ul_att_siso:     { key:'SU3_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su3_ul_iso_level_siso: { key:'SU3_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su3_ul_alc_level_siso: { key:'SU3_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su3_ul_alc_onoff_siso: { key:'SU3_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su3_mvbx_rx_gain_set_siso: { key:'SU3_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
 
       // SU3 MIMO RF
@@ -10553,7 +11314,8 @@
       su3_dl_alc_onoff_mimo: { key:'SU3_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su3_mvbx_tx_gain_set_mimo: { key:'SU3_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
       su3_ul_att_mimo:     { key:'SU3_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su3_ul_iso_level_mimo: { key:'SU3_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su3_ul_alc_level_mimo: { key:'SU3_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su3_ul_alc_onoff_mimo: { key:'SU3_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su3_mvbx_rx_gain_set_mimo: { key:'SU3_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
 
       // SU3 OPTIC
@@ -10561,6 +11323,10 @@
       su3_pd1_det_ul0_siso_low: { key:'SU3_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
       su3_ld2_det_dl1_mimo_low: { key:'SU3_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
       su3_pd2_det_ul1_mimo_low: { key:'SU3_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld3_det_dl0_siso_low: { key:'SU3_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd3_det_ul0_siso_low: { key:'SU3_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld4_det_dl1_mimo_low: { key:'SU3_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd4_det_ul1_mimo_low: { key:'SU3_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU4 필드 매핑 ====
@@ -10568,6 +11334,7 @@
       // SU4 System
       su4_tempupper:       { key:'SU4_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
       su4_templower:        { key:'SU4_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
+      su4_suid:             { key:'SU4_SuId',                  type:'u8',    min:1, max:4 },
       
       // SU4 Beam Status
       su4_gumstick_onoff:  { key:'SU4_GumStick_OnOff',        type:'u8',    min:0, max:1 },
@@ -10578,7 +11345,8 @@
       su4_dl_alc_onoff_siso: { key:'SU4_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su4_mvbx_tx_gain_set_siso: { key:'SU4_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
       su4_ul_att_siso:     { key:'SU4_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su4_ul_iso_level_siso: { key:'SU4_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su4_ul_alc_level_siso: { key:'SU4_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
+      su4_ul_alc_onoff_siso: { key:'SU4_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
       su4_mvbx_rx_gain_set_siso: { key:'SU4_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
 
       // SU4 MIMO RF
@@ -10587,7 +11355,8 @@
       su4_dl_alc_onoff_mimo: { key:'SU4_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su4_mvbx_tx_gain_set_mimo: { key:'SU4_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
       su4_ul_att_mimo:     { key:'SU4_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su4_ul_iso_level_mimo: { key:'SU4_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su4_ul_alc_level_mimo: { key:'SU4_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
+      su4_ul_alc_onoff_mimo: { key:'SU4_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
       su4_mvbx_rx_gain_set_mimo: { key:'SU4_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
 
       // SU4 OPTIC
@@ -10595,6 +11364,10 @@
       su4_pd1_det_ul0_siso_low: { key:'SU4_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
       su4_ld2_det_dl1_mimo_low: { key:'SU4_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
       su4_pd2_det_ul1_mimo_low: { key:'SU4_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld3_det_dl0_siso_low: { key:'SU4_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd3_det_ul0_siso_low: { key:'SU4_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld4_det_dl1_mimo_low: { key:'SU4_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd4_det_ul1_mimo_low: { key:'SU4_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== Sync Module 필드 매핑 ====
@@ -10707,6 +11480,8 @@
       // Temp Upper/Lower
       SU1_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
       SU1_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SU1_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SU1_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
       SU1_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
@@ -10718,6 +11493,7 @@
       SU1_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
       SU1_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
       SU1_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU1_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
       SU1_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
@@ -10727,15 +11503,20 @@
       SU1_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
       SU1_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
       SU1_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU1_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
       SU1_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
       SU1_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
       SU1_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      SU1_LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
+      SU1_PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
       
       // MIMO OPTIC
       SU1_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
       SU1_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      SU1_LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
+      SU1_PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
     };
 
     //==== SU2 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
@@ -10743,6 +11524,8 @@
       // Temp Upper/Lower
       SU2_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
       SU2_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SU2_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SU2_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
       SU2_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
@@ -10754,6 +11537,7 @@
       SU2_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
       SU2_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
       SU2_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU2_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
       SU2_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
@@ -10763,6 +11547,7 @@
       SU2_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
       SU2_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
       SU2_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU2_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
       SU2_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
@@ -10779,6 +11564,8 @@
       // Temp Upper/Lower
       SU3_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
       SU3_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SU3_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SU3_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
       SU3_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
@@ -10790,6 +11577,7 @@
       SU3_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
       SU3_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
       SU3_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU3_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
       SU3_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
@@ -10799,6 +11587,7 @@
       SU3_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
       SU3_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
       SU3_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU3_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
       SU3_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
@@ -10815,6 +11604,8 @@
       // Temp Upper/Lower
       SU4_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
       SU4_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SU4_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SU4_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
       SU4_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
@@ -10826,6 +11617,7 @@
       SU4_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
       SU4_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
       SU4_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      SU4_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
       SU4_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
@@ -10835,6 +11627,7 @@
       SU4_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
       SU4_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
       SU4_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      SU4_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
       SU4_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
@@ -10908,10 +11701,12 @@
         // 섹션별 Set Mode 차단 (사용자가 편집 중인 값 덮어쓰기 방지)
         const isSu1 = id.startsWith('su1_');
         const isSu2 = id.startsWith('su2_');
-        const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : SET_MODE));
+        const isSu3 = id.startsWith('su3_');
+        const isSu4 = id.startsWith('su4_');
+        const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : (isSu3 ? SET_MODE_SU3 : (isSu4 ? SET_MODE_SU4 : SET_MODE))));
         
         if (editLock && el.hasAttribute('data-editable')) {
-            const section = isSu1 ? 'SU1' : (isSu2 ? 'SU2' : 'DU');
+            const section = isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : 'DU')));
             console.log(`🔒 ${section} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
             return;
         }
@@ -11928,19 +12723,22 @@
     
     //==== SU1 On/Off 버튼 토글 이벤트 연결 ====
     const su1OnOffButtons = [
-      'su1_gumstick_onoff', 'su1_dl_alc_onoff_siso', 'su1_dl_alc_onoff_mimo'
+      'su1_gumstick_onoff', 'su1_dl_alc_onoff_siso', 'su1_dl_alc_onoff_mimo', 'su1_ul_alc_onoff_siso', 'su1_ul_alc_onoff_mimo', 'su1_cascade_mode'
     ];
     
     su1OnOffButtons.forEach(buttonId => {
       const button = document.getElementById(buttonId);
       if (button) {
         button.addEventListener('click', () => toggleOnOffButtonSu1(buttonId));
+        console.log(`✅ SU1 On/Off 버튼 이벤트 연결: ${buttonId}`);
+      } else {
+        console.log(`⚠️ SU1 On/Off 버튼을 찾을 수 없음: ${buttonId}`);
       }
     });
 
     //==== SU2 On/Off 버튼 토글 이벤트 연결 ====
     const su2OnOffButtons = [
-      'su2_gumstick_onoff', 'su2_dl_alc_onoff_siso', 'su2_dl_alc_onoff_mimo'
+      'su2_gumstick_onoff', 'su2_dl_alc_onoff_siso', 'su2_dl_alc_onoff_mimo', 'su2_ul_alc_onoff_siso', 'su2_ul_alc_onoff_mimo', 'su2_cascade_mode'
     ];
     
     su2OnOffButtons.forEach(buttonId => {
@@ -11952,7 +12750,7 @@
 
     //==== SU3 On/Off 버튼 토글 이벤트 연결 ====
     const su3OnOffButtons = [
-      'su3_gumstick_onoff', 'su3_dl_alc_onoff_siso', 'su3_dl_alc_onoff_mimo'
+      'su3_gumstick_onoff', 'su3_dl_alc_onoff_siso', 'su3_dl_alc_onoff_mimo', 'su3_ul_alc_onoff_siso', 'su3_ul_alc_onoff_mimo', 'su3_cascade_mode'
     ];
     
     su3OnOffButtons.forEach(buttonId => {
@@ -11964,7 +12762,7 @@
 
     //==== SU4 On/Off 버튼 토글 이벤트 연결 ====
     const su4OnOffButtons = [
-      'su4_gumstick_onoff', 'su4_dl_alc_onoff_siso', 'su4_dl_alc_onoff_mimo'
+      'su4_gumstick_onoff', 'su4_dl_alc_onoff_siso', 'su4_dl_alc_onoff_mimo', 'su4_ul_alc_onoff_siso', 'su4_ul_alc_onoff_mimo'
     ];
     
     su4OnOffButtons.forEach(buttonId => {
