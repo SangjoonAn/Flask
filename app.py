@@ -985,10 +985,10 @@ def parse_AllStatusPacket(packet):
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[804], packet[805]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[806], packet[807]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[808], packet[809]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[810], packet[811]]))[0])
     # DU ATT (0.5dB 단위로 변환)
     parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
     parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
@@ -1531,10 +1531,10 @@ def parse_AllStatusPacket2(packet):
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[804], packet[805]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[806], packet[807]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[808], packet[809]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[810], packet[811]]))[0])
     # DU ATT (0.5dB 단위로 변환)
     parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
     parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
@@ -2077,10 +2077,10 @@ def parse_AllStatusPacket3(packet):
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[804], packet[805]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[806], packet[807]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[808], packet[809]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[810], packet[811]]))[0])
     # DU ATT (0.5dB 단위로 변환)
     parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
     parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
@@ -2623,10 +2623,10 @@ def parse_AllStatusPacket4(packet):
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[804], packet[805]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[806], packet[807]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[808], packet[809]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[810], packet[811]]))[0])
     # DU ATT (0.5dB 단위로 변환)
     parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
     parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
@@ -3169,10 +3169,10 @@ def parse_AllStatusPacket5(packet):
     parsed_data['LD2_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[798], packet[799]]))[0])
     parsed_data['PD1_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[800], packet[801]]))[0])
     parsed_data['PD2_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[802], packet[803]]))[0])
-    parsed_data['LD3_DET_DL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[804], packet[805]]))[0]
-    parsed_data['LD4_DET_DL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[806], packet[807]]))[0]
-    parsed_data['PD3_DET_UL0_SISO_Offset'] = struct.unpack('<h', bytes([packet[808], packet[809]]))[0]
-    parsed_data['PD4_DET_UL1_MIMO_Offset'] = struct.unpack('<h', bytes([packet[810], packet[811]]))[0]
+    parsed_data['LD3_DET_DL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[804], packet[805]]))[0])
+    parsed_data['LD4_DET_DL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[806], packet[807]]))[0])
+    parsed_data['PD3_DET_UL0_SISO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[808], packet[809]]))[0])
+    parsed_data['PD4_DET_UL1_MIMO_Offset'] = convert_to_01dbm(struct.unpack('<h', bytes([packet[810], packet[811]]))[0])
     # DU ATT (0.5dB 단위로 변환)
     parsed_data['DU_DlManualAtten_SISO'] = convert_att_4_to_2(packet[812])
     parsed_data['DU_DlSubAtten_SISO'] = convert_att_4_to_2(packet[813])
