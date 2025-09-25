@@ -2570,7 +2570,7 @@
                                                 <div class="form-group-item">
                                                     <label class="font-semibold">Polling Time</label>
                                                     <div class="input-with-unit">
-                                                        <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" onchange="handlePollingTimeChange(this.value)" />
+                                                        <input type="text" id="pollingtime" value="N/A" class="form-control form-control-sm" />
                                                         <span class="unit">[ms]</span>
                                                     </div>
                                                 </div>
@@ -8579,27 +8579,27 @@
             // SU2 Hidden Modal 업데이트
             updateValue("su2DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
             updateValue("su2DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
-            updateValue("su2Dl_Att_Test_Siso", data.packet.DL_Att_Test_Siso);
-            updateValue("su2Ant_Out_Offset_Siso", data.packet.Ant_Out_Offset_Siso);
-            updateValue("su2Ant_Output_SISO", data.packet.Ant_Output_SISO);
-            updateValue("su2Ant_Offset_UL_Siso", data.packet.Ant_Offset_UL_Siso);
+            updateValue("su2Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
+            updateValue("su2Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
+            updateValue("su2Ant_Output_SISO", data.packet.DsOutputPower_SISO);
+            updateValue("su2Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
             updateValue("su2UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
-            updateValue("su2UL_OutputOffset_SISO", data.packet.UL_OutputOffset_SISO);
-            updateValue("su2Ul_Att_Test_Siso", data.packet.UL_Att_Test_Siso);
-            updateValue("su2Ant_Gain_Siso", data.packet.Ant_Gain_Siso);
-            updateValue("su2Ant_Offset_DL_Siso", data.packet.Ant_Offset_DL_Siso);
+            updateValue("su2UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
+            updateValue("su2Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
+            updateValue("su2Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
+            updateValue("su2Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
             
             updateValue("su2DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
             updateValue("su2DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
-            updateValue("su2Dl_Att_Test_Mimo", data.packet.DL_Att_Test_Mimo);
-            updateValue("su2Ant_Out_Offset_Mimo", data.packet.Ant_Out_Offset_Mimo);
-            updateValue("su2Ant_Output_MIMO", data.packet.Ant_Output_MIMO);
-            updateValue("su2Ant_Offset_UL_Mimo", data.packet.Ant_Offset_UL_Mimo);
+            updateValue("su2Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
+            updateValue("su2Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
+            updateValue("su2Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
+            updateValue("su2Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
             updateValue("su2UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
-            updateValue("su2UL_OutputOffset_MIMO", data.packet.UL_OutputOffset_MIMO);
-            updateValue("su2UL_Att_Testl_Mimo", data.packet.UL_Att_Testl_Mimo);
-            updateValue("su2Ant_Gain_Mimo", data.packet.Ant_Gain_Mimo);
-            updateValue("su2Ant_Offset_DL_Mimo", data.packet.Ant_Offset_DL_Mimo);
+            updateValue("su2UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
+            updateValue("su2UL_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
+            updateValue("su2Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
+            updateValue("su2Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
             
             updateValue("su2LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
             updateValue("su2PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
@@ -8954,27 +8954,27 @@
             // SU3 Hidden Modal 업데이트
             updateValue("su3DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
             updateValue("su3DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
-            updateValue("su3Dl_Att_Test_Siso", data.packet.DL_Att_Test_Siso);
-            updateValue("su3Ant_Out_Offset_Siso", data.packet.Ant_Out_Offset_Siso);
-            updateValue("su3Ant_Output_SISO", data.packet.Ant_Output_SISO);
-            updateValue("su3Ant_Offset_UL_Siso", data.packet.Ant_Offset_UL_Siso);
+            updateValue("su3Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
+            updateValue("su3Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
+            updateValue("su3Ant_Output_SISO", data.packet.DsOutputPower_SISO);
+            updateValue("su3Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
             updateValue("su3UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
-            updateValue("su3UL_OutputOffset_SISO", data.packet.UL_OutputOffset_SISO);
-            updateValue("su3Ul_Att_Test_Siso", data.packet.UL_Att_Test_Siso);
-            updateValue("su3Ant_Gain_Siso", data.packet.Ant_Gain_Siso);
-            updateValue("su3Ant_Offset_DL_Siso", data.packet.Ant_Offset_DL_Siso);
+            updateValue("su3UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
+            updateValue("su3Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
+            updateValue("su3Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
+            updateValue("su3Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
             
             updateValue("su3DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
             updateValue("su3DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
-            updateValue("su3Dl_Att_Test_Mimo", data.packet.DL_Att_Test_Mimo);
-            updateValue("su3Ant_Out_Offset_Mimo", data.packet.Ant_Out_Offset_Mimo);
-            updateValue("su3Ant_Output_MIMO", data.packet.Ant_Output_MIMO);
-            updateValue("su3Ant_Offset_UL_Mimo", data.packet.Ant_Offset_UL_Mimo);
+            updateValue("su3Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
+            updateValue("su3Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
+            updateValue("su3Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
+            updateValue("su3Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
             updateValue("su3UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
-            updateValue("su3UL_OutputOffset_MIMO", data.packet.UL_OutputOffset_MIMO);
-            updateValue("su3UL_Att_Testl_Mimo", data.packet.UL_Att_Testl_Mimo);
-            updateValue("su3Ant_Gain_Mimo", data.packet.Ant_Gain_Mimo);
-            updateValue("su3Ant_Offset_DL_Mimo", data.packet.Ant_Offset_DL_Mimo);
+            updateValue("su3UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
+            updateValue("su3UL_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
+            updateValue("su3Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
+            updateValue("su3Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
             
             updateValue("su3LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
             updateValue("su3PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
@@ -9313,27 +9313,27 @@
             // SU4 Hidden Modal 업데이트
             updateValue("su4DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
             updateValue("su4DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
-            updateValue("su4Dl_Att_Test_Siso", data.packet.DL_Att_Test_Siso);
-            updateValue("su4Ant_Out_Offset_Siso", data.packet.Ant_Out_Offset_Siso);
-            updateValue("su4Ant_Output_SISO", data.packet.Ant_Output_SISO);
-            updateValue("su4Ant_Offset_UL_Siso", data.packet.Ant_Offset_UL_Siso);
+            updateValue("su4Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
+            updateValue("su4Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
+            updateValue("su4Ant_Output_SISO", data.packet.DsOutputPower_SISO);
+            updateValue("su4Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
             updateValue("su4UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
-            updateValue("su4UL_OutputOffset_SISO", data.packet.UL_OutputOffset_SISO);
-            updateValue("su4Ul_Att_Test_Siso", data.packet.UL_Att_Test_Siso);
-            updateValue("su4Ant_Gain_Siso", data.packet.Ant_Gain_Siso);
-            updateValue("su4Ant_Offset_DL_Siso", data.packet.Ant_Offset_DL_Siso);
+            updateValue("su4UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
+            updateValue("su4Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
+            updateValue("su4Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
+            updateValue("su4Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
             
             updateValue("su4DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
             updateValue("su4DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
-            updateValue("su4Dl_Att_Test_Mimo", data.packet.DL_Att_Test_Mimo);
-            updateValue("su4Ant_Out_Offset_Mimo", data.packet.Ant_Out_Offset_Mimo);
-            updateValue("su4Ant_Output_MIMO", data.packet.Ant_Output_MIMO);
-            updateValue("su4Ant_Offset_UL_Mimo", data.packet.Ant_Offset_UL_Mimo);
+            updateValue("su4Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
+            updateValue("su4Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
+            updateValue("su4Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
+            updateValue("su4Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
             updateValue("su4UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
-            updateValue("su4UL_OutputOffset_MIMO", data.packet.UL_OutputOffset_MIMO);
-            updateValue("su4UL_Att_Testl_Mimo", data.packet.UL_Att_Testl_Mimo);
-            updateValue("su4Ant_Gain_Mimo", data.packet.Ant_Gain_Mimo);
-            updateValue("su4Ant_Offset_DL_Mimo", data.packet.Ant_Offset_DL_Mimo);
+            updateValue("su4UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
+            updateValue("su4UL_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
+            updateValue("su4Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
+            updateValue("su4Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
             
             updateValue("su4LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
             updateValue("su4PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
@@ -9941,6 +9941,8 @@
                     }
                 }
                 
+                // SU1 Ant Select 업데이트
+                updateValue('su1AntSelect', data.packet.BeamAntSelect);
                 
                 console.log("✅ SU1 페이지 업데이트 완료");
             }
@@ -9973,6 +9975,9 @@
             else if (data.packet.Mu_Su_Buadrate === 2) baudrateText = "57600";
             else if (data.packet.Mu_Su_Buadrate === 3) baudrateText = "115200";
             updateValue("baudrate", baudrateText);
+            
+            // Polling Time 업데이트
+            updateValue("pollingtime", data.packet.PollingTime);
             
             // Ant Band: 0이면 Single, 1이면 Tri
             updateText("antband", data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
@@ -10035,6 +10040,17 @@
                 } else {
                     updateText('debug-toggle', 'Off');
                     debugToggle.className = 'btn-toggle off';
+                }
+            }
+            // Modem
+            const modemToggle = document.getElementById('modem-toggle');
+            if (modemToggle) {
+                if (data.packet.ModemOnOff === 1) {
+                    updateText('modem-toggle', 'On');
+                    modemToggle.className = 'btn-toggle on';
+                } else {
+                    updateText('modem-toggle', 'Off');
+                    modemToggle.className = 'btn-toggle off';
                 }
             }
             
@@ -10122,6 +10138,7 @@
             updateValue("PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
             updateValue("LD3_DET_DL0_SISO_Offset", data.packet.LD3_DET_DL0_SISO_Offset);
             updateValue("PD3_DET_UL0_SISO_Offset", data.packet.PD3_DET_UL0_SISO_Offset);
+            updateValue("RsrpOffset", data.packet.RsrpOffset);
             updateValue("LowRsrpLevel", data.packet.LowRsrpLevel);
             updateValue("LowRsrpStillTime", data.packet.LowRsrpStillTime);
 
@@ -10290,7 +10307,7 @@
             // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
             const temperCompEl = document.getElementById("temperComp");
             if (temperCompEl) {
-                if (data.packet.BeamAntSelect === 1) {
+                if (data.packet.TemperCompensationMode === 1) {
                     temperCompEl.textContent = "ON";
                     temperCompEl.className = "btn btn-sm btn-success";
                 } else {
@@ -10557,23 +10574,23 @@
             updateValue("su1DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
             updateValue("su1Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
             updateValue("su1Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
-            updateValue("su1Ant_Output_SISO", data.packet.GS_OutputPower_SISO);
+            updateValue("su1Ant_Output_SISO", data.packet.DsOutputPower_SISO);
             updateValue("su1Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
             updateValue("su1UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
             updateValue("su1UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
             updateValue("su1Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
-            updateValue("su1Ant_Gain_Siso", data.packet.GS_Gain_SISO);
+            updateValue("su1Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
             updateValue("su1Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
             updateValue("su1DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
             updateValue("su1DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
             updateValue("su1Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
             updateValue("su1Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
-            updateValue("su1Ant_Output_MIMO", data.packet.GS_OutputPower_MIMO);
+            updateValue("su1Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
             updateValue("su1Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
             updateValue("su1UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
             updateValue("su1UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
             updateValue("su1UL_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
-            updateValue("su1Ant_Gain_Mimo", data.packet.GS_Gain_MIMO);
+            updateValue("su1Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
             updateValue("su1Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
             updateValue("su1LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
             updateValue("su1PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
@@ -10627,7 +10644,7 @@
             // SU1 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
             const su1TemperCompEl = document.getElementById("su1TemperComp");
             if (su1TemperCompEl) {
-                if (data.packet.BeamAntSelect === 1) {
+                if (data.packet.TemperCompensationMode === 1) {
                     su1TemperCompEl.textContent = "ON";
                     su1TemperCompEl.className = "btn btn-sm btn-success";
                 } else {
@@ -10693,7 +10710,7 @@
             // SU2 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
             const su2TemperCompEl = document.getElementById("su2TemperComp");
             if (su2TemperCompEl) {
-                if (data.packet.BeamAntSelect === 1) {
+                if (data.packet.TemperCompensationMode === 1) {
                     su2TemperCompEl.textContent = "ON";
                     su2TemperCompEl.className = "btn btn-sm btn-success";
                 } else {
@@ -10759,7 +10776,7 @@
             // SU3 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
             const su3TemperCompEl = document.getElementById("su3TemperComp");
             if (su3TemperCompEl) {
-                if (data.packet.BeamAntSelect === 1) {
+                if (data.packet.TemperCompensationMode=== 1) {
                     su3TemperCompEl.textContent = "ON";
                     su3TemperCompEl.className = "btn btn-sm btn-success";
                 } else {
@@ -10825,7 +10842,7 @@
             // SU4 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
             const su4TemperCompEl = document.getElementById("su4TemperComp");
             if (su4TemperCompEl) {
-                if (data.packet.BeamAntSelect === 1) {
+                if (data.packet.TemperCompensationMode === 1) {
                     su4TemperCompEl.textContent = "ON";
                     su4TemperCompEl.className = "btn btn-sm btn-success";
                 } else {
@@ -15332,6 +15349,16 @@
                                                     <input type="text" class="form-control" id="su1CenterFrequency" value="N/A">
                                                     <span class="input-group-text">KHz</span>
                                                 </div>
+                                            </div>
+                                            <div class="beam-scan-field">
+                                                <label for="su1AntSelect">Ant Select</label>
+                                                <select class="form-select form-select-sm ms-auto" id="su1AntSelect" style="width: 100px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                    <option value="0">30:15</option>
+                                                    <option value="1">30:30</option>
+                                                    <option value="2">60:15</option>
+                                                    <option value="3">60:30</option>
+                                                    <option value="4">60:60</option>
+                                                </select>
                                             </div>
                                             <div class="beam-scan-field">
                                                 <label for="su1BeamFix">Beam Fix</label>
