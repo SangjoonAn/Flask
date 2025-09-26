@@ -8286,13 +8286,6 @@
         socket.on("su2_status_update", function (data) {
             console.log("📥 Received su2_status_update:", data.packet);
             console.log("🎯 SU2 패킷 감지! SU2 페이지 업데이트 시작");
-            
-            // 수신된 SU2 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from SU2 status:", error);
-            }
 
             // SU2용 업데이트 함수 정의 (SU1과 동일)
             const updateText = (id, value) => {
@@ -8727,13 +8720,6 @@
         socket.on("su3_status_update", function (data) {
             console.log("📥 Received su3_status_update:", data.packet);
             console.log("🎯 SU3 패킷 감지! SU3 페이지 업데이트 시작");
-            
-            // 수신된 SU3 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from SU3 status:", error);
-            }
             
             // SU3 Set Mode일 때는 편집 가능한 필드 업데이트 차단 (개별 필드별로 처리)
 
@@ -9177,13 +9163,6 @@
         socket.on("su4_status_update", function (data) {
             console.log("📥 Received su4_status_update:", data.packet);
             console.log("🎯 SU4 패킷 감지! SU4 페이지 업데이트 시작");
-            
-            // 수신된 SU4 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from SU4 status:", error);
-            }
 
             // SU4 Set Mode일 때는 상태 업데이트 차단
             if (SET_MODE_SU4) {
@@ -9606,6 +9585,232 @@
 
         });
 
+        // DU 상태 업데이트 핸들러
+        socket.on("du_status_update", function (data) {
+            console.log("📥 Received du_status_update:", data.packet);
+            console.log("🎯 DU 패킷 감지! DU 페이지 업데이트 시작");
+
+            const updateText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) el.innerText = value;
+            };
+            const updateValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    // DU Set Mode에서 편집 가능한 필드만 업데이트 방지
+                    if (SET_MODE && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 DU Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                        return;
+                    }
+                    el.value = value;
+                    el.style.fontSize = '0.85rem';
+                }
+            };
+
+            const statusText = {
+                0: "NONE",
+                1: "ACTIVE", 
+                2: "SUCCESS",
+                3: "FAIL"
+            };
+
+            const rtpTypeText = {
+                0: "DU_28G",
+                1: "DU_39G", 
+                2: "DU_26G"
+            };
+
+            // DU 기본 정보 업데이트
+            updateText("McuSwVer", data.packet.McuSwVer);
+            updateText("modipaddress", data.packet.ModIpAddress);
+            updateText("McuSwVer2", data.packet.McuSwVer);
+            updateText("FPGA_Ver", data.packet.FPGA_Ver);
+            updateText("rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
+
+            // 시스템 시간 및 온도
+            if (data.packet.System_Year && data.packet.System_hour) {
+                updateText("curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
+            }
+            if (data.packet.SysTemper !== undefined) {
+                updateText("curtemper", `${data.packet.SysTemper} ℃`);
+            }
+            if (data.packet.SysTemperHighLvl !== undefined) {
+                updateValue("tempupper", data.packet.SysTemperHighLvl);
+            }
+            if (data.packet.SysTemperLowLvl !== undefined) {
+                updateValue("templower", data.packet.SysTemperLowLvl);
+            }
+
+            // 네비게이션 점 색상 업데이트
+            updateNavDotColors();
+        });
+
+        // SU1 상태 업데이트 핸들러  
+        socket.on("su1_status_update", function (data) {
+            console.log("📥 Received su1_status_update:", data.packet);
+            console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
+
+            const updateText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) el.innerText = value;
+            };
+            const updateButtonText = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    if (value === 1) {
+                        el.innerText = "ON";
+                        el.className = "btn btn-success btn-sm";
+                    } else {
+                        el.innerText = "OFF";
+                        el.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            };
+            const updateValue = (id, value) => {
+                const el = document.getElementById(id);
+                if (el && value !== undefined) {
+                    // SU1 Set Mode에서 편집 가능한 필드만 업데이트 방지
+                    if (SET_MODE_SU1 && el.hasAttribute('data-editable')) {
+                        console.log(`🔒 SU1 Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+                        return;
+                    }
+                    el.value = value;
+                    el.style.fontSize = '0.85rem';
+                }
+            };
+
+            const statusText = {
+                0: "NONE",
+                1: "ACTIVE", 
+                2: "SUCCESS",
+                3: "FAIL"
+            };
+
+            const rtpTypeText = {
+                0: "DU_28G",
+                1: "DU_39G", 
+                2: "DU_26G"
+            };
+
+            // SU1 기본 정보 업데이트
+            updateText("su1_conserialnum_header", data.packet.ConSerialNum);
+            updateText("su1_emsversion2", data.packet.ModEmsFwVer);
+            updateText("su1_McuSwVer", data.packet.McuSwVer);
+            updateText("su1_rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
+            updateText("su1_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
+            updateText("su1_curtemper", `${data.packet.SysTemper} ℃`);
+
+            // SU1 세부 정보 업데이트
+            updateValue("su1_suid", data.packet.SuId);
+            updateValue("su1_inittemper", data.packet.SysTemperHighLvl);
+            updateValue("su1_templower", data.packet.SysTemperLowLvl);
+
+            updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
+            updateText("su1_modimsinum", data.packet.ModIMSINum);
+            updateText("su1_modimeinum", data.packet.ModIMEINum);
+            updateText("su1_modnum", data.packet.ModPhonNumber);
+            updateText("su1_modip", data.packet.ModIpAddress);
+
+            // SU1 토글 버튼들 업데이트
+            const su1AttTestToggle = document.getElementById('su1att-test-toggle');
+            if (su1AttTestToggle) {
+                su1AttTestToggle.textContent = data.packet.AttTestMode === 1 ? 'On' : 'Off';
+                su1AttTestToggle.className = data.packet.AttTestMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
+            }
+            const su1ApiInitToggle = document.getElementById('su1api-init-toggle');
+            if (su1ApiInitToggle) {
+                su1ApiInitToggle.textContent = data.packet.ApiInitMode === 1 ? 'On' : 'Off';
+                su1ApiInitToggle.className = data.packet.ApiInitMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
+            }
+            const su1ApiInitRetryToggle = document.getElementById('su1api-init-retry-toggle');
+            if (su1ApiInitRetryToggle) {
+                su1ApiInitRetryToggle.textContent = data.packet.ApiInitRetryMode === 1 ? 'On' : 'Off';
+                su1ApiInitRetryToggle.className = data.packet.ApiInitRetryMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
+            }
+            const su1DebugToggle = document.getElementById('su1debug-toggle');
+            if (su1DebugToggle) {
+                su1DebugToggle.textContent = data.packet.DebugMode === 1 ? 'On' : 'Off';
+                su1DebugToggle.className = data.packet.DebugMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
+            }
+
+            // Ant Band 업데이트
+            updateText('su1antband', data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
+
+            // SU1 Beam Info Modal 업데이트
+            updateText('su1Orientation', data.packet.Orientation);
+            updateText('su1Tilt', data.packet.Tilt);
+            updateText('su1AntArrayVer', data.packet.Gumstick_Ver);
+            updateText('su1StartTemper', data.packet.Gumstick_StartTemper + '℃');
+            updateText('su1CurTemper', data.packet.Gumstick_CurTemper + '℃');
+            updateText('su1CompensationDL', data.packet.DlTemperCompensation + 'dB');
+            updateText('su1CompensationUL', data.packet.UlTemperCompensation + 'dB');
+
+            // SU1 Beam Info 테이블 업데이트들 (모든 빔 스캔 관련 업데이트 추가)
+            updateText('su1MvbxMv2850TxGainSiso', data.packet.Mvbx_Mv2850TxGainSiso);
+            updateText('su1MvbxMv2850RxGainSiso', data.packet.Mvbx_Mv2850RxGainSiso);
+            updateText('su1MvbxMv2853TxGainSiso', data.packet.Mvbx_Mv2853TxGainSiso);
+            updateText('su1MvbxMv2853RxGainSiso', data.packet.Mvbx_Mv2853RxGainSiso);
+            updateText('su1MvbxMv2850TxGainMimo', data.packet.Mvbx_Mv2850TxGainMimo);
+            updateText('su1MvbxMv2850RxGainMimo', data.packet.Mvbx_Mv2850RxGainMimo);
+            updateText('su1MvbxMv2853TxGainMimo', data.packet.Mvbx_Mv2853TxGainMimo);
+            updateText('su1MvbxMv2853RxGainMimo', data.packet.Mvbx_Mv2853RxGainMimo);
+
+            // SU1 MODE 및 SU ID 업데이트
+            if (data.packet.SuModeStatus !== undefined) {
+                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
+                updateText("su1_sumode", suModeText);
+            }
+            
+            // SU ID 업데이트 (Set Mode가 아닐 때만)
+            if (data.packet.SuId !== undefined && !SET_MODE_SU1) {
+                updateValue("su1_suid", data.packet.SuId);
+            }
+
+            // Init Status 업데이트
+            updateStatusBadge2("su1_InitStatus", data.packet.FPGA_Init_Status);
+            
+            // SCSU1 Cascade Mode 업데이트
+            if (data.packet.SuEndMode !== undefined) {
+                if (SET_MODE_SU1) {
+                    console.log("🔒 SU1 Set Mode - Cascade Mode 업데이트 차단");
+                    return;
+                }
+                const su1CascadeModeEl = document.getElementById("su1_cascade_mode");
+                if (su1CascadeModeEl) {
+                    if (data.packet.SuEndMode === 1) {
+                        su1CascadeModeEl.textContent = "ON";
+                        su1CascadeModeEl.className = "btn btn-success btn-sm";
+                    } else {
+                        su1CascadeModeEl.textContent = "OFF";
+                        su1CascadeModeEl.className = "btn btn-secondary btn-sm";
+                    }
+                }
+            }
+
+            // 추가된 SU1 status updates
+            updateText("su1_rsrp", data.packet.ModRsrp + " [dBm]");
+            updateText("su1_rsrq", data.packet.ModRsrq + " [dBm]");
+            updateText("su1_rssi", data.packet.ModRssi + " [dBm]");
+            updateText("su1_pci", data.packet.ModPci);
+            updateText("su1_sinr", data.packet.ModSinr + " [dB]");
+            updateText("su1_txpwr", data.packet.ModTxPwr + " [dBm]");
+            updateText("su1_modver", data.packet.ModVersion);
+            updateText("su1_emsversion", data.packet.ModEmsFwVer);
+            updateText("su1_lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
+
+            // ISO 상태 업데이트  
+            const su1isoStatusText = {
+                0: "Ready",
+                1: "Measuring", 
+                2: "Fail",
+                3: "Success"
+            };
+            updateText("su1_iso_status", su1isoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
+
+            // 네비게이션 점 색상 업데이트
+            updateNavDotColors();
+        });
+
         // RX 박스 켜기
         socket.on("rx_on", function () {
             document.querySelectorAll('.rx-box').forEach(rxbox => {
@@ -9643,13 +9848,6 @@
         });
 
         socket.on("tdd_status", function (data) {
-            // 수신된 TDD 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from TDD status:", error);
-            }
-            
             // Set Mode 중이면 실시간 업데이트 중단 (스냅샷만 허용)
             // if (!LIVE_UPDATES && !SNAPSHOT_PENDING) {
             //     console.log('🔒 tdd_status blocked: Set Mode active and no snapshot pending');
@@ -9715,13 +9913,6 @@
             
             console.log("📥 Received update_status:", data.packet);
             console.log("📊 Packet type - rcvMainSys:", data.packet.rcvMainSys);
-            
-            // 수신된 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from status:", error);
-            }
             
             // SU1은 기존 방식 그대로 (HTML에서 직접 su1_ 접두어 사용)
             // updateValue는 개별 필드별로 호출되어야 함
@@ -9904,248 +10095,27 @@
                     updateValue("templower", data.packet.SysTemperLowLvl);
                 }
 
-            // SU1 페이지 업데이트 (Rcv_Main_Sys = 0x40)
-            if (data.packet.Rcv_Main_Sys === 0x40) {
-                console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
+            // SU1 관련 업데이트는 su1_status_update 핸들러에서 처리
 
-                updateText("su1_conserialnum_header", data.packet.ConSerialNum);
-                updateText("su1_emsversion2", data.packet.ModEmsFwVer);
-                
-                // 기본 정보
-                updateText("su1_McuSwVer", data.packet.McuSwVer);
-                updateText("su1_rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
-                
-                // 시스템 시간 및 온도
-                updateText("su1_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
-                updateText("su1_curtemper", `${data.packet.SysTemper} ℃`);
-                updateValue("su1_tempupper", data.packet.SysTemperHighLvl);
-                updateValue("su1_templower", data.packet.SysTemperLowLvl);
-                
-            // SU MODE 업데이트
-            if (data.packet.SuModeStatus !== undefined) {
-                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
-                updateText("su1_sumode", suModeText);
-            }
-            
-            // SU ID 업데이트 (Set Mode가 아닐 때만)
-            if (data.packet.SuId !== undefined && !SET_MODE_SU1) {
-                updateValue("su1_suid", data.packet.SuId);
-            }
-                
-                // Init Status 업데이트
-                updateStatusBadge2("su1_InitStatus", data.packet.FPGA_Init_Status);
-                
-                // Cascade Mode 업데이트 (Set Mode가 아닐 때만)
-                console.log("🔍 SU1 SuEndMode 체크:", data.packet.SuEndMode, "SET_MODE_SU1:", SET_MODE_SU1);
-                if (data.packet.SuEndMode !== undefined) {
-                    if (SET_MODE_SU1) {
-                        console.log("🔒 SU1 Set Mode - Cascade Mode 업데이트 차단");
-                        return; // SU1 Set Mode에서 업데이트 차단
-                    }
-                    const su1CascadeModeEl = document.getElementById("su1_cascade_mode");
-                    console.log("🔍 SU1 Cascade Mode 요소:", su1CascadeModeEl);
-                    if (su1CascadeModeEl) {
-                        if (data.packet.SuEndMode === 1) {
-                            su1CascadeModeEl.textContent = "ON";
-                            su1CascadeModeEl.className = "btn btn-success btn-sm";
-                            console.log("✅ SU1 Cascade Mode를 ON으로 설정");
-                        } else {
-                            su1CascadeModeEl.textContent = "OFF";
-                            su1CascadeModeEl.className = "btn btn-secondary btn-sm";
-                            console.log("✅ SU1 Cascade Mode를 OFF로 설정");
-                        }
-                    } else {
-                        console.log("❌ SU1 Cascade Mode 요소를 찾을 수 없음");
-                    }
-                } else {
-                    console.log("❌ SU1 SuEndMode가 undefined");
-                }
-                
-                // Modem 상태
-                updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
-                updateText("su1_modimsi", data.packet.ModIMSINum);
-                updateText("su1_modimei", data.packet.ModIMEINum);
-                updateText("su1_modnum", data.packet.ModPhonNumber);
-                updateText("su1_modip", data.packet.ModIpAddress);
-                updateText("su1_rsrp", data.packet.ModRsrp + " [dBm]");
-                updateText("su1_rsrq", data.packet.ModRsrq + " [dBm]");
-                updateText("su1_rssi", data.packet.ModRssi + " [dBm]");
-                updateText("su1_pci", data.packet.ModPci);
-                updateText("su1_sinr", data.packet.ModSinr + " [dB]");
-                updateText("su1_txpwr", data.packet.ModTxPwr + " [dBm]");
-                updateText("su1_modver", data.packet.ModVersion);
-                updateText("su1_emsversion", data.packet.ModEmsFwVer);
-                updateText("su1_lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
-                
-                // ISO 상태 (Ready/Measuring/Fail/Success 표시)
-                const su1isoStatusText = {
-                    0: "Ready",
-                    1: "Measuring", 
-                    2: "Fail",
-                    3: "Success"
-                };
-                updateText("su1_iso_status", su1isoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
 
-                // SU1 알람 상태 업데이트는 alarm_status_update 이벤트에서 처리
-            
-                
-                // SU1 Beam Status 업데이트 - 삭제된 요소들의 상태값 업데이트 제거됨
-                
-                // SU1 Ant. Array On/Off 업데이트 (DU와 동일한 패턴)
-                const antArrayEl = document.getElementById("su1_ant_array_onoff");
-                if (antArrayEl) {
-                    if (data.packet.Ant_Array_OnOff === 1) {
-                        antArrayEl.textContent = "ON";
-                        antArrayEl.className = "btn btn-success btn-sm";
-                    } else {
-                        antArrayEl.textContent = "OFF";
-                        antArrayEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-                
-                // SU1 AGC On/Off 업데이트 (DU와 동일한 패턴)
-                const agcEl = document.getElementById("su1_agc_onoff");
-                if (agcEl) {
-                    if (data.packet.AGC_OnOff === 1) {
-                        agcEl.textContent = "ON";
-                        agcEl.className = "btn btn-success btn-sm";
-                    } else {
-                        agcEl.textContent = "OFF";
-                        agcEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-                
-                // SU1 AGC Level 업데이트 - 상태값 업데이트 제거됨
-                
-                // SU1 AGC Input, Decoded SSB 정보 업데이트 - 삭제된 요소들의 상태값 업데이트 제거됨
-                
-                // SU1 AOM & mmWave SISO RF 업데이트 (DU와 동일한 패턴)
-                updateText("su1_dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
-                updateValue("su1_dl_att_siso", data.packet.DU_DlManualAtten_SISO);
-                updateValue("su1_dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level);
-                if (data.packet.ALC_DL0_SISO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const dlAlcSisoEl = document.getElementById("su1_dl_alc_onoff_siso");
-                    if (dlAlcSisoEl) {
-                        if (data.packet.ALC_DL0_SISO_Mode === 1) {
-                            dlAlcSisoEl.textContent = "ON";
-                            dlAlcSisoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            dlAlcSisoEl.textContent = "OFF";
-                            dlAlcSisoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateText("su1_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
-                updateValue("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-                updateValue("su1_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
-                if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const ulAlcSisoEl = document.getElementById("su1_ul_alc_onoff_siso");
-                    if (ulAlcSisoEl) {
-                        if (data.packet.ALC_UL0_SISO_Mode === 1) {
-                            ulAlcSisoEl.textContent = "ON";
-                            ulAlcSisoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            ulAlcSisoEl.textContent = "OFF";
-                            ulAlcSisoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateValue("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
-                updateValue("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
-                updateText("su1_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
-                updateText("su1_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
-                
-                // SU1 AOM & mmWave MIMO RF 업데이트 (DU와 동일한 패턴)
-                updateText("su1_dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
-                updateValue("su1_dl_att_mimo", data.packet.DU_DlManualAtten_MIMO);
-                updateValue("su1_dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level);
-                if (data.packet.ALC_DL1_MIMO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const dlAlcMimoEl = document.getElementById("su1_dl_alc_onoff_mimo");
-                    if (dlAlcMimoEl) {
-                        if (data.packet.ALC_DL1_MIMO_Mode === 1) {
-                            dlAlcMimoEl.textContent = "ON";
-                            dlAlcMimoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            dlAlcMimoEl.textContent = "OFF";
-                            dlAlcMimoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateText("su1_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
-                updateValue("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-                updateValue("su1_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
-                if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const ulAlcMimoEl = document.getElementById("su1_ul_alc_onoff_mimo");
-                    if (ulAlcMimoEl) {
-                        if (data.packet.ALC_UL1_MIMO_Mode === 1) {
-                            ulAlcMimoEl.textContent = "ON";
-                            ulAlcMimoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            ulAlcMimoEl.textContent = "OFF";
-                            ulAlcMimoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateValue("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
-                updateValue("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
-                updateText("su1_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
-                updateText("su1_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
-                
-                // SU1 AOM & mmWave SISO OPTIC 업데이트 (DU와 동일한 패턴)
-                updateText("su1_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
-                updateText("su1_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
-                updateText("su1_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
-                updateText("su1_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
-                updateValue("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
-                updateValue("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
-                updateValue("su1_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
-                updateValue("su1_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
-                
-                // SU1 AOM & mmWave MIMO OPTIC 업데이트 (DU와 동일한 패턴)
-                updateText("su1_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
-                updateText("su1_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
-                updateText("su1_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
-                updateText("su1_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
-                updateValue("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
-                updateValue("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
-                updateValue("su1_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
-                updateValue("su1_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
-                
-                // SU1 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
+            //Modem Status 화면
 
-                // SU1 Ant. Array On/Off (GumStick_OnOff) - DU와 동일 로직
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                const su1GumstickOnOffEl = document.getElementById("su1_gumstick_onoff");
-                if (su1GumstickOnOffEl) {
-                    if (data.packet.GumStick_OnOff === 1) {
-                        su1GumstickOnOffEl.textContent = "ON";
-                        su1GumstickOnOffEl.className = "btn btn-success btn-sm";
-                    } else {
-                        su1GumstickOnOffEl.textContent = "OFF";
-                        su1GumstickOnOffEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-
-                // SU1 AGC On/Off (Mvbx_RsAgcMode) - 상태값 업데이트 제거됨
-
-                // SU1 AGC Level (Mvbx_RsAgcThreshold) - 상태값 업데이트 제거됨
-
-                // SU1 AGC Input (AGC_Input_Power) - 삭제된 요소의 상태값 업데이트 제거됨
-
-                
-                console.log("✅ SU1 페이지 업데이트 완료");
-            }
-
+            updateText("modstatus", statusText[data.packet.ModStatus] || "Unknown");
+            updateText("modimsi", data.packet.ModIMSINum);
+            updateText("modimei", data.packet.ModIMEINum);
+            updateText("modnum", data.packet.ModPhonNumber);
+            updateText("rsrp", data.packet.ModRsrp + " [dBm]");
+            updateText("rsrq", data.packet.ModRsrq + " [dBm]");
+            updateText("rssi", data.packet.ModRssi + " [dBm]");
+            updateText("pci", data.packet.ModPci);
+            updateText("sinr", data.packet.ModSinr + " [dB]");
+            updateText("txpwr", data.packet.ModTxPwr + " [dBm]");
+            updateText("modver", data.packet.ModVersion);
+            updateText("emsversion", data.packet.ModEmsFwVer);
+            updateText("emsversion2", data.packet.ModEmsFwVer);
+            updateText("emsversion2_packet", data.packet.ModEmsFwVer);
+            updateText("modip", data.packet.ModIpAddress);
+            updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
             
             
             // Baudrate: 0=19200bps, 1=38400bps, 2=57600bps, 3=115200bps
@@ -10740,1304 +10710,6 @@
                 yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
                 blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
             });
-            
-
-            // SU1 Beam Book 동그라미 색상 업데이트 (SU1용)
-            // 항상 업데이트 시도 (조건 제거)
-            updateSu1BeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
-
-            // SU1 Hidden Modal 업데이트
-            updateValue("su1DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
-            updateValue("su1DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
-            updateValue("su1Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
-            updateValue("su1Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
-            updateValue("su1Ant_Output_SISO", data.packet.DsOutputPower_SISO);
-            updateValue("su1Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
-            updateValue("su1UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
-            updateValue("su1UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
-            updateValue("su1Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
-            updateValue("su1Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
-            updateValue("su1Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
-            updateValue("su1DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
-            updateValue("su1DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
-            updateValue("su1Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
-            updateValue("su1Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
-            updateValue("su1Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
-            updateValue("su1Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
-            updateValue("su1UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
-            updateValue("su1UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
-            updateValue("su1UL_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
-            updateValue("su1Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
-            updateValue("su1Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
-            updateValue("su1LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
-            updateValue("su1PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
-            updateValue("su1LD3_DET_DL0_SISO_Offset", data.packet.LD3_DET_DL0_SISO_Offset);
-            updateValue("su1PD3_DET_UL0_SISO_Offset", data.packet.PD3_DET_UL0_SISO_Offset);
-            updateValue("su1LowRsrpLevel", data.packet.LowRsrpLevel);
-            updateValue("su1LowRsrpStillTime", data.packet.LowRsrpStillTime);
-            updateValue("su1LD2_DET_DL1_MIMO_Offset", data.packet.LD2_DET_DL1_MIMO_Offset);
-            updateValue("su1PD2_DET_UL1_MIMO_Offset", data.packet.PD2_DET_UL1_MIMO_Offset);
-            updateValue("su1LD4_DET_DL1_MIMO_Offset", data.packet.LD4_DET_DL1_MIMO_Offset);
-            updateValue("su1PD4_DET_UL1_MIMO_Offset", data.packet.PD4_DET_UL1_MIMO_Offset);
-            updateValue("su1conserialnum", data.packet.ConSerialNum);
-            updateValue("su1baudrate", data.packet.Mu_Su_Buadrate === 0 ? "19200" : data.packet.Mu_Su_Buadrate === 1 ? "38400" : data.packet.Mu_Su_Buadrate === 2 ? "57600" : "115200");
-            
-            // SU1 Hidden Modal 토글 버튼 업데이트
-            const su1AomtempToggle = document.getElementById('su1aomtemp-toggle');
-            if (su1AomtempToggle) {
-                su1AomtempToggle.textContent = data.packet.AomTempCompensationMode === 1 ? 'On' : 'Off';
-                su1AomtempToggle.className = data.packet.AomTempCompensationMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
-            }
-            const su1AttTestToggle = document.getElementById('su1att-test-toggle');
-            if (su1AttTestToggle) {
-                su1AttTestToggle.textContent = data.packet.AttTestMode === 1 ? 'On' : 'Off';
-                su1AttTestToggle.className = data.packet.AttTestMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
-            }
-            const su1ApiInitToggle = document.getElementById('su1api-init-toggle');
-            if (su1ApiInitToggle) {
-                su1ApiInitToggle.textContent = data.packet.ApiInitMode === 1 ? 'On' : 'Off';
-                su1ApiInitToggle.className = data.packet.ApiInitMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
-            }
-            const su1ApiInitRetryToggle = document.getElementById('su1api-init-retry-toggle');
-            if (su1ApiInitRetryToggle) {
-                su1ApiInitRetryToggle.textContent = data.packet.ApiInitRetryMode === 1 ? 'On' : 'Off';
-                su1ApiInitRetryToggle.className = data.packet.ApiInitRetryMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
-            }
-            const su1DebugToggle = document.getElementById('su1debug-toggle');
-            if (su1DebugToggle) {
-                su1DebugToggle.textContent = data.packet.DebugMode === 1 ? 'On' : 'Off';
-                su1DebugToggle.className = data.packet.DebugMode === 1 ? 'btn-toggle on' : 'btn-toggle off';
-            }
-            // Ant Band: 0이면 Single, 1이면 Tri
-            updateText('su1antband', data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
-
-            // SU1 Beam Info Orientation/Tilt 업데이트
-            updateText('su1Orientation', data.packet.Orientation);
-            updateText('su1Tilt', data.packet.Tilt);
-
-
-            // SU1 Beam Info Modal 업데이트 (SU1 전용 ID 사용)
-            updateText('su1AntArrayVer', data.packet.Gumstick_Ver);
-            // SU1 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
-            const su1TemperCompEl = document.getElementById("su1TemperComp");
-            if (su1TemperCompEl) {
-                if (data.packet.TemperCompensationMode === 1) {
-                    su1TemperCompEl.textContent = "ON";
-                    su1TemperCompEl.className = "btn btn-sm btn-success";
-                } else {
-                    su1TemperCompEl.textContent = "OFF";
-                    su1TemperCompEl.className = "btn btn-sm btn-secondary";
-                }
-            }
-            updateText('su1StartTemper', data.packet.Gumstick_StartTemper + '℃');
-            updateText('su1CurTemper', data.packet.Gumstick_CurTemper + '℃');
-            updateText('su1CompensationDL', data.packet.DlTemperCompensation + 'dB');
-            updateText('su1CompensationUL', data.packet.UlTemperCompensation + 'dB');
-
-            // SU1 SISO/MIMO Tx/Rx Gain Setting 업데이트
-            updateText('su1MvbxMv2850TxGainSiso', data.packet.Mvbx_Mv2850TxGainSiso);
-            updateText('su1MvbxMv2850RxGainSiso', data.packet.Mvbx_Mv2850RxGainSiso);
-            updateText('su1MvbxMv2853TxGainSiso', data.packet.Mvbx_Mv2853TxGainSiso);
-            updateText('su1MvbxMv2853RxGainSiso', data.packet.Mvbx_Mv2853RxGainSiso);
-            updateText('su1MvbxMv2850TxGainMimo', data.packet.Mvbx_Mv2850TxGainMimo);
-            updateText('su1MvbxMv2850RxGainMimo', data.packet.Mvbx_Mv2850RxGainMimo);
-            updateText('su1MvbxMv2853TxGainMimo', data.packet.Mvbx_Mv2853TxGainMimo);
-            updateText('su1MvbxMv2853RxGainMimo', data.packet.Mvbx_Mv2853RxGainMimo);
-
-            // SU1 Beam Info 테이블 업데이트
-            updateText('su1MvbxBeamInfoBeamId1', data.packet.MVBX_BeamInfo_beamId1);
-            updateText('su1MvbxBeamInfoBeamId2', data.packet.MVBX_BeamInfo_beamId2);
-            updateText('su1MvbxBeamInfoBeamId3', data.packet.MVBX_BeamInfo_beamId3);
-            updateText('su1MvbxBeamInfoBeamId4', data.packet.MVBX_BeamInfo_beamId4);
-            updateText('su1MvbxBeamInfoPci1', data.packet.MVBX_BeamInfo_pci1);
-            updateText('su1MvbxBeamInfoPci2', data.packet.MVBX_BeamInfo_pci2);
-            updateText('su1MvbxBeamInfoPci3', data.packet.MVBX_BeamInfo_pci3);
-            updateText('su1MvbxBeamInfoPci4', data.packet.MVBX_BeamInfo_pci4);
-            updateText('su1MvbxBeamInfoSsbldx1', data.packet.MVBX_BeamInfo_ssbldx1);
-            updateText('su1MvbxBeamInfoSsbldx2', data.packet.MVBX_BeamInfo_ssbldx2);
-            updateText('su1MvbxBeamInfoSsbldx3', data.packet.MVBX_BeamInfo_ssbldx3);
-            updateText('su1MvbxBeamInfoSsbldx4', data.packet.MVBX_BeamInfo_ssbldx4);
-            updateText('su1MvbxBeamInfoEnergy1', data.packet.MVBX_BeamInfo_energy1);
-            updateText('su1MvbxBeamInfoEnergy2', data.packet.MVBX_BeamInfo_energy2);
-            updateText('su1MvbxBeamInfoEnergy3', data.packet.MVBX_BeamInfo_energy3);
-            updateText('su1MvbxBeamInfoEnergy4', data.packet.MVBX_BeamInfo_energy4);
-            updateText('su1MvbxBeamInfoPsstype1', data.packet.MVBX_BeamInfo_psstype1);
-            updateText('su1MvbxBeamInfoPsstype2', data.packet.MVBX_BeamInfo_psstype2);
-            updateText('su1MvbxBeamInfoPsstype3', data.packet.MVBX_BeamInfo_psstype3);
-            updateText('su1MvbxBeamInfoPsstype4', data.packet.MVBX_BeamInfo_psstype4);
-            updateText('su1MvbxBeamInfoSnr1', data.packet.MVBX_BeamInfo_snr1);
-            updateText('su1MvbxBeamInfoSnr2', data.packet.MVBX_BeamInfo_snr2);
-            updateText('su1MvbxBeamInfoSnr3', data.packet.MVBX_BeamInfo_snr3);
-            updateText('su1MvbxBeamInfoSnr4', data.packet.MVBX_BeamInfo_snr4);
-            updateText('su1MvbxBeamInfoRsrp1', data.packet.MVBX_BeamInfo_rsrp1);
-            updateText('su1MvbxBeamInfoRsrp2', data.packet.MVBX_BeamInfo_rsrp2);
-            updateText('su1MvbxBeamInfoRsrp3', data.packet.MVBX_BeamInfo_rsrp3);
-            updateText('su1MvbxBeamInfoRsrp4', data.packet.MVBX_BeamInfo_rsrp4);
-
-            // SU1 Beam Scan 카드 업데이트
-            updateText('su1PllRelockCount', data.packet.PllRelockCount);
-            updateValue('su1CenterFrequency', data.packet.ApiVenderFreq);
-            updateValue('su1BeamFix', data.packet.DuFixBeam === 0 ? 'AUTO' : 'FIX');
-            updateValue('su1ApiLogLevel', data.packet.ApiLogLevel);
-            updateValue('su1OrientationActual', data.packet.Actual_Orientation);
-            updateValue('su1TiltActual', data.packet.Actual_Tilt);
-            // SU1 Ant Select 업데이트
-            updateValue('su1AntSelect', data.packet.BeamAntSelect);
-
-
-            // 네비게이션 점 색상 업데이트
-            updateNavDotColors();
-
-            // 현재 활성화된 화면의 점은 알람 상태를 유지 (추가 표시 없음)
-            const activeScreenId = document.querySelector('.content-area > div.active')?.id;
-            // 활성화된 화면의 점에 대한 추가 표시 제거
-            
-            // SU Enable 상태 처리
-            if (data.packet.SuEnableBits) {
-                const enableBits = data.packet.SuEnableBits;
-                
-                // SU1 Enable 상태 (항상 Enable로 설정)
-                const su1EnableBadge = document.getElementById('su1-enable-badge');
-                if (su1EnableBadge) {
-                    su1EnableBadge.textContent = "#1 Enable";
-                    su1EnableBadge.className = "badge bg-success";
-                }
-                
-                // SU2 Enable 상태
-                const su2EnableBadge = document.getElementById('su2-enable-badge');
-                if (su2EnableBadge) {
-                    if (enableBits.SU2_ENABLE === 1) {
-                        su2EnableBadge.textContent = "#2 Enable";
-                        su2EnableBadge.className = "badge bg-success";
-                    } else {
-                        su2EnableBadge.textContent = "#2 Disable";
-                        su2EnableBadge.className = "badge bg-secondary";
-                    }
-                }
-                
-                // SU3 Enable 상태
-                const su3EnableBadge = document.getElementById('su3-enable-badge');
-                if (su3EnableBadge) {
-                    if (enableBits.SU3_ENABLE === 1) {
-                        su3EnableBadge.textContent = "#3 Enable";
-                        su3EnableBadge.className = "badge bg-success";
-                    } else {
-                        su3EnableBadge.textContent = "#3 Disable";
-                        su3EnableBadge.className = "badge bg-secondary";
-                    }
-                }
-                
-                // SU4 Enable 상태
-                const su4EnableBadge = document.getElementById('su4-enable-badge');
-                if (su4EnableBadge) {
-                    if (enableBits.SU4_ENABLE === 1) {
-                        su4EnableBadge.textContent = "#4 Enable";
-                        su4EnableBadge.className = "badge bg-success";
-                    } else {
-                        su4EnableBadge.textContent = "#4 Disable";
-                        su4EnableBadge.className = "badge bg-secondary";
-                    }
-                }
-                
-                // SU Link 컨테이너 표시/숨김 처리
-                const su1LinkContainer = document.getElementById('su1-link-container');
-                const su2LinkContainer = document.getElementById('su2-link-container');
-                const su3LinkContainer = document.getElementById('su3-link-container');
-                const su4LinkContainer = document.getElementById('su4-link-container');
-                
-                // SU1은 항상 표시 (Enable)
-                if (su1LinkContainer) {
-                    su1LinkContainer.style.display = 'block';
-                }
-                
-                // SU2 Enable 상태에 따라 표시/숨김
-                if (su2LinkContainer) {
-                    su2LinkContainer.style.display = enableBits.SU2_ENABLE === 1 ? 'block' : 'none';
-                }
-                
-                // SU3 Enable 상태에 따라 표시/숨김
-                if (su3LinkContainer) {
-                    su3LinkContainer.style.display = enableBits.SU3_ENABLE === 1 ? 'block' : 'none';
-                }
-                
-                // SU4 Enable 상태에 따라 표시/숨김
-                if (su4LinkContainer) {
-                    su4LinkContainer.style.display = enableBits.SU4_ENABLE === 1 ? 'block' : 'none';
-                }
-                
-                // SU Navigation 항목 표시/숨김 처리
-                const su1NavItem = document.getElementById('nav_su1');
-                const su2NavItem = document.getElementById('nav_su2');
-                const su3NavItem = document.getElementById('nav_su3');
-                const su4NavItem = document.getElementById('nav_su4');
-                
-                // SU1은 항상 표시 (Enable)
-                if (su1NavItem) {
-                    su1NavItem.style.display = 'block';
-                }
-                
-                // SU2 Enable 상태에 따라 표시/숨김
-                if (su2NavItem) {
-                    su2NavItem.style.display = enableBits.SU2_ENABLE === 1 ? 'block' : 'none';
-                }
-                
-                // SU3 Enable 상태에 따라 표시/숨김
-                if (su3NavItem) {
-                    su3NavItem.style.display = enableBits.SU3_ENABLE === 1 ? 'block' : 'none';
-                }
-                
-                // SU4 Enable 상태에 따라 표시/숨김
-                if (su4NavItem) {
-                    su4NavItem.style.display = enableBits.SU4_ENABLE === 1 ? 'block' : 'none';
-                }
-            }
-
-            
-        });
-        socket.on("su1_status_update", function (data) {
-            // 섹션별 차단은 updateValue에서 처리 (각 필드별로 독립적 차단)
-            
-            console.log("📥 Received su1_status_update:", data.packet);
-            console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
-            
-            // 수신된 SU1 상태값을 sendPacketData에 저장
-            try {
-                updateSendPacketDataFromStatus(data.packet);
-            } catch (error) {
-                console.error("❌ Failed to update sendPacketData from SU1 status:", error);
-            }
-            
-            // SU1은 기존 방식 그대로 (HTML에서 직접 su1_ 접두어 사용)
-            // updateValue는 개별 필드별로 호출되어야 함
-
-            // SuLinkFailBits 처리 (1비트씩)
-            if (data.packet.SuLinkFailBits) {
-                const bits = data.packet.SuLinkFailBits;
-                
-                // 전역 변수에 저장하여 updateNavDotColors에서 사용할 수 있도록 함
-                window.currentSuLinkFailBits = bits;
-                
-                // SU1 링크 알람 (1비트: 0=정상, 1=링크페일알람)
-                const su1Dot = document.querySelector('#su1-link-dot');
-                if (su1Dot) {
-                    su1Dot.className = 'status-dot';
-                    if (bits.SU1_LINK_FAIL === 0) {
-                        su1Dot.classList.add('status-normal'); // 초록색 (정상)
-                    } else if (bits.SU1_LINK_FAIL === 1) {
-                        su1Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
-                    } else {
-                        su1Dot.classList.add('status-normal'); // 기본값: 초록색
-                    }
-                }
-                
-                // SU2 링크 알람
-                const su2Dot = document.querySelector('#su2-link-dot');
-                if (su2Dot) {
-                    su2Dot.className = 'status-dot';
-                    if (bits.SU2_LINK_FAIL === 0) {
-                        su2Dot.classList.add('status-normal'); // 초록색 (정상)
-                    } else if (bits.SU2_LINK_FAIL === 1) {
-                        su2Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
-                    } else {
-                        su2Dot.classList.add('status-normal'); // 기본값: 초록색
-                    }
-                }
-                
-                // SU3 링크 알람
-                const su3Dot = document.querySelector('#su3-link-dot');
-                if (su3Dot) {
-                    su3Dot.className = 'status-dot';
-                    if (bits.SU3_LINK_FAIL === 0) {
-                        su3Dot.classList.add('status-normal'); // 초록색 (정상)
-                    } else if (bits.SU3_LINK_FAIL === 1) {
-                        su3Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
-                    } else {
-                        su3Dot.classList.add('status-normal'); // 기본값: 초록색
-                    }
-                }
-                
-                // SU4 링크 알람
-                const su4Dot = document.querySelector('#su4-link-dot');
-                if (su4Dot) {
-                    su4Dot.className = 'status-dot';
-                    if (bits.SU4_LINK_FAIL === 0) {
-                        su4Dot.classList.add('status-normal'); // 초록색 (정상)
-                    } else if (bits.SU4_LINK_FAIL === 1) {
-                        su4Dot.classList.add('status-linkfail'); // 주황색 (링크페일알람)
-                    } else {
-                        su4Dot.classList.add('status-normal'); // 기본값: 초록색
-                    }
-                }
-                
-                // 네비게이션 점 색상 업데이트
-                updateNavDotColors();
-                
-                // SU Link Fail 버튼 상태 업데이트
-                updateSuLinkFailButtons(bits);
-            }
-            
-            // Mask SU Link Fail 버튼 상태 업데이트
-            if (data.packet.MaskSuLinkFail) {
-                updateSuLinkFailButtons(data.packet.MaskSuLinkFail);
-            }
-            
-            // DL ALC 버튼 상태 업데이트
-            if (data.packet.DL_ALC_Bits) {
-                updateDLALCButtons(data.packet.DL_ALC_Bits);
-            }
-
-            // DET MASK 버튼 상태 업데이트
-            if (data.packet.DET_MASK_Bits) {
-                updateDETMASKButtons(data.packet.DET_MASK_Bits);
-            }
-
-            const updateText = (id, value) => {
-                const el = document.getElementById(id);
-                if (el && value !== undefined) el.innerText = value;
-            };
-            const updateButtonText = (id, value) => {
-                const el = document.getElementById(id);
-                if (el && value !== undefined) {
-                    if (value === 1) {
-                        el.innerText = "ON";
-                        el.className = "btn btn-success btn-sm";
-                    } else {
-                        el.innerText = "OFF";
-                        el.className = "btn btn-secondary btn-sm";
-                    }
-                }
-            };
-            const updateValue = (id, value) => {
-                const el = document.getElementById(id);
-                if (el && value !== undefined) {
-                            // 섹션별 Set Mode에서 편집 가능한 필드만 업데이트 방지
-        const isSu1 = id.startsWith('su1_');
-        const isSync = id.startsWith('tsync_') || id.startsWith('TDD_') || id.startsWith('F_') || id.startsWith('ssb_') || id.startsWith('tdd_');
-        const editLock = (isSu1 ? SET_MODE_SU1 : (isSync ? SYNC_SET_MODE : SET_MODE));
-        
-        if (editLock && el.hasAttribute('data-editable')) {
-            console.log(`🔒 ${isSu1 ? 'SU1' : (isSync ? 'Sync' : 'DU')} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
-            return;
-        }
-                    
-                    console.log(`📝 updateValue: ${id} = ${value} (DU_SET_MODE: ${SET_MODE}, SU1_SET_MODE: ${SET_MODE_SU1})`);
-                    el.value = value;
-                    // ID 값 출력 시 텍스트 크기 조정
-                    el.style.fontSize = '0.85rem';
-                }
-            };
-
-            const statusText = {
-                0: "NONE",
-                1: "ACTIVE",
-                2: "SUCCESS",
-                3: "FAIL"
-            };
-
-            /*
-
-            const decodeText = (arr) => {
-                try {
-                    return new TextDecoder().decode(new Uint8Array(arr)).replace(/\x00/g, "").trim() || "N/A";
-                } catch (e) {
-                    console.error("Decode Error:", e);
-                    return "N/A";
-                }
-            };
-
-            const parseVersion = (arr) => {
-                if (arr && arr.length === 2) {
-                    return `${arr[0]}.${arr[1].toString().padStart(2, "0")}`;
-                }
-                return "N/A";
-            };
-
-            */
-
-            // DU System 페이지 업데이트 (rcvMainSys = 0x30)
-            updateText("McuSwVer", data.packet.McuSwVer);
-            updateText("modipaddress", data.packet.ModIpAddress);
-
-            updateText("McuSwVer2", data.packet.McuSwVer);
-
-            updateText("FPGA_Ver", data.packet.FPGA_Ver);
-
-            const rtpTypeText = {
-            0: "DU_28G",
-            1: "DU_39G",
-            2: "DU_26G"
-            };
-
-            updateText("rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
-
-            // cur_time, cur_temper
-
-            if (data.packet.System_Year && data.packet.System_hour) {
-            updateText("curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
-            }
-
-            if (data.packet.SysTemper !== undefined) {
-            updateText("curtemper", `${data.packet.SysTemper} ℃`);
-            }
-            
-                            if (data.packet.SysTemperHighLvl !== undefined) {
-                    updateValue("tempupper", data.packet.SysTemperHighLvl);
-                }
-            
-                            if (data.packet.SysTemperLowLvl !== undefined) {
-                    updateValue("templower", data.packet.SysTemperLowLvl);
-                }
-
-            // SU1 페이지 업데이트 (Rcv_Main_Sys = 0x40)
-            if (data.packet.Rcv_Main_Sys === 0x40) {
-                console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
-
-                updateText("su1_conserialnum_header", data.packet.ConSerialNum);
-                updateText("su1_emsversion2", data.packet.ModEmsFwVer);
-                
-                // 기본 정보
-                updateText("su1_McuSwVer", data.packet.McuSwVer);
-                updateText("su1_rpttype", rtpTypeText[data.packet.RtpKind] || "Unknown");
-                
-                // 시스템 시간 및 온도
-                updateText("su1_curtime", `${data.packet.System_Year} ${data.packet.System_hour}`);
-                updateText("su1_curtemper", `${data.packet.SysTemper} ℃`);
-                updateValue("su1_tempupper", data.packet.SysTemperHighLvl);
-                updateValue("su1_templower", data.packet.SysTemperLowLvl);
-                
-            // SU MODE 업데이트
-            if (data.packet.SuModeStatus !== undefined) {
-                const suModeText = data.packet.SuModeStatus === 0 ? "Non Cascade" : "Cascade";
-                updateText("su1_sumode", suModeText);
-            }
-            
-            // SU ID 업데이트 (Set Mode가 아닐 때만)
-            if (data.packet.SuId !== undefined && !SET_MODE_SU1) {
-                updateValue("su1_suid", data.packet.SuId);
-            }
-                
-                // Init Status 업데이트
-                updateStatusBadge2("su1_InitStatus", data.packet.FPGA_Init_Status);
-                
-                // Cascade Mode 업데이트 (Set Mode가 아닐 때만)
-                console.log("🔍 SU1 SuEndMode 체크:", data.packet.SuEndMode, "SET_MODE_SU1:", SET_MODE_SU1);
-                if (data.packet.SuEndMode !== undefined) {
-                    if (SET_MODE_SU1) {
-                        console.log("🔒 SU1 Set Mode - Cascade Mode 업데이트 차단");
-                        return; // SU1 Set Mode에서 업데이트 차단
-                    }
-                    const su1CascadeModeEl = document.getElementById("su1_cascade_mode");
-                    console.log("🔍 SU1 Cascade Mode 요소:", su1CascadeModeEl);
-                    if (su1CascadeModeEl) {
-                        if (data.packet.SuEndMode === 1) {
-                            su1CascadeModeEl.textContent = "ON";
-                            su1CascadeModeEl.className = "btn btn-success btn-sm";
-                            console.log("✅ SU1 Cascade Mode를 ON으로 설정");
-                        } else {
-                            su1CascadeModeEl.textContent = "OFF";
-                            su1CascadeModeEl.className = "btn btn-secondary btn-sm";
-                            console.log("✅ SU1 Cascade Mode를 OFF로 설정");
-                        }
-                    } else {
-                        console.log("❌ SU1 Cascade Mode 요소를 찾을 수 없음");
-                    }
-                } else {
-                    console.log("❌ SU1 SuEndMode가 undefined");
-                }
-                
-                // Modem 상태
-                updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
-                updateText("su1_modimsi", data.packet.ModIMSINum);
-                updateText("su1_modimei", data.packet.ModIMEINum);
-                updateText("su1_modnum", data.packet.ModPhonNumber);
-                updateText("su1_modip", data.packet.ModIpAddress);
-                updateText("su1_rsrp", data.packet.ModRsrp + " [dBm]");
-                updateText("su1_rsrq", data.packet.ModRsrq + " [dBm]");
-                updateText("su1_rssi", data.packet.ModRssi + " [dBm]");
-                updateText("su1_pci", data.packet.ModPci);
-                updateText("su1_sinr", data.packet.ModSinr + " [dB]");
-                updateText("su1_txpwr", data.packet.ModTxPwr + " [dBm]");
-                updateText("su1_modver", data.packet.ModVersion);
-                updateText("su1_emsversion", data.packet.ModEmsFwVer);
-                updateText("su1_lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
-                
-                // ISO 상태 (Ready/Measuring/Fail/Success 표시)
-                const su1isoStatusText = {
-                    0: "Ready",
-                    1: "Measuring", 
-                    2: "Fail",
-                    3: "Success"
-                };
-                updateText("su1_iso_status", su1isoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
-
-                // SU1 알람 상태 업데이트는 alarm_status_update 이벤트에서 처리
-            
-                
-                // SU1 Beam Status 업데이트 - 삭제된 요소들의 상태값 업데이트 제거됨
-                
-                // SU1 Ant. Array On/Off 업데이트 (DU와 동일한 패턴)
-                const antArrayEl = document.getElementById("su1_ant_array_onoff");
-                if (antArrayEl) {
-                    if (data.packet.Ant_Array_OnOff === 1) {
-                        antArrayEl.textContent = "ON";
-                        antArrayEl.className = "btn btn-success btn-sm";
-                    } else {
-                        antArrayEl.textContent = "OFF";
-                        antArrayEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-                
-                // SU1 AGC On/Off 업데이트 (DU와 동일한 패턴)
-                const agcEl = document.getElementById("su1_agc_onoff");
-                if (agcEl) {
-                    if (data.packet.AGC_OnOff === 1) {
-                        agcEl.textContent = "ON";
-                        agcEl.className = "btn btn-success btn-sm";
-                    } else {
-                        agcEl.textContent = "OFF";
-                        agcEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-                
-                // SU1 AGC Level 업데이트 - 상태값 업데이트 제거됨
-                
-                // SU1 AGC Input, Decoded SSB 정보 업데이트 - 삭제된 요소들의 상태값 업데이트 제거됨
-                
-                // SU1 AOM & mmWave SISO RF 업데이트 (DU와 동일한 패턴)
-                updateText("su1_dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
-                updateValue("su1_dl_att_siso", data.packet.DU_DlManualAtten_SISO);
-                updateValue("su1_dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level);
-                if (data.packet.ALC_DL0_SISO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const dlAlcSisoEl = document.getElementById("su1_dl_alc_onoff_siso");
-                    if (dlAlcSisoEl) {
-                        if (data.packet.ALC_DL0_SISO_Mode === 1) {
-                            dlAlcSisoEl.textContent = "ON";
-                            dlAlcSisoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            dlAlcSisoEl.textContent = "OFF";
-                            dlAlcSisoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateText("su1_ul_output_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
-                updateValue("su1_ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-                updateValue("su1_ul_alc_level_siso", data.packet.ALC_UL0_SISO_Level);
-                if (data.packet.ALC_UL0_SISO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const ulAlcSisoEl = document.getElementById("su1_ul_alc_onoff_siso");
-                    if (ulAlcSisoEl) {
-                        if (data.packet.ALC_UL0_SISO_Mode === 1) {
-                            ulAlcSisoEl.textContent = "ON";
-                            ulAlcSisoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            ulAlcSisoEl.textContent = "OFF";
-                            ulAlcSisoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateValue("su1_mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
-                updateValue("su1_mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
-                updateText("su1_dl_iso_att_siso", data.packet.SU_DlIsoAtten_SISO + " [dB]");
-                updateText("su1_ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
-                
-                // SU1 AOM & mmWave MIMO RF 업데이트 (DU와 동일한 패턴)
-                updateText("su1_dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
-                updateValue("su1_dl_att_mimo", data.packet.DU_DlManualAtten_MIMO);
-                updateValue("su1_dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level);
-                if (data.packet.ALC_DL1_MIMO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const dlAlcMimoEl = document.getElementById("su1_dl_alc_onoff_mimo");
-                    if (dlAlcMimoEl) {
-                        if (data.packet.ALC_DL1_MIMO_Mode === 1) {
-                            dlAlcMimoEl.textContent = "ON";
-                            dlAlcMimoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            dlAlcMimoEl.textContent = "OFF";
-                            dlAlcMimoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateText("su1_ul_output_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
-                updateValue("su1_ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-                updateValue("su1_ul_alc_level_mimo", data.packet.ALC_UL1_MIMO_Level);
-                if (data.packet.ALC_UL1_MIMO_Mode !== undefined) {
-                    if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                    const ulAlcMimoEl = document.getElementById("su1_ul_alc_onoff_mimo");
-                    if (ulAlcMimoEl) {
-                        if (data.packet.ALC_UL1_MIMO_Mode === 1) {
-                            ulAlcMimoEl.textContent = "ON";
-                            ulAlcMimoEl.className = "btn btn-success btn-sm";
-                        } else {
-                            ulAlcMimoEl.textContent = "OFF";
-                            ulAlcMimoEl.className = "btn btn-secondary btn-sm";
-                        }
-                    }
-                }
-                
-                updateValue("su1_mvbx_tx_gain_set_mimo", data.packet.Mvbx_TxGainSetMiso);
-                updateValue("su1_mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
-                updateText("su1_dl_iso_att_mimo", data.packet.SU_DlIsoAtten_MIMO + " [dB]");
-                updateText("su1_ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
-                
-                // SU1 AOM & mmWave SISO OPTIC 업데이트 (DU와 동일한 패턴)
-                updateText("su1_ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
-                updateText("su1_pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
-                updateText("su1_ld3_det_dl0_siso", data.packet.LD3_DET_DL0_SISO + " [dBm]");
-                updateText("su1_pd3_det_ul0_siso", data.packet.PD3_DET_UL0_SISO + " [dBm]");
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
-                updateValue("su1_ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
-                updateValue("su1_pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
-                updateValue("su1_ld3_det_dl0_siso_low", data.packet.LD3_DET_DL0_SISO_Low);
-                updateValue("su1_pd3_det_ul0_siso_low", data.packet.PD3_DET_UL0_SISO_Low);
-                
-                // SU1 AOM & mmWave MIMO OPTIC 업데이트 (DU와 동일한 패턴)
-                updateText("su1_ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
-                updateText("su1_pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
-                updateText("su1_ld4_det_dl1_mimo", data.packet.LD4_DET_DL1_MIMO + " [dBm]");
-                updateText("su1_pd4_det_ul1_mimo", data.packet.PD4_DET_UL1_MIMO + " [dBm]");
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 LOWER 값 업데이트 차단
-                updateValue("su1_ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
-                updateValue("su1_pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
-                updateValue("su1_ld4_det_dl1_mimo_low", data.packet.LD4_DET_DL1_MIMO_Low);
-                updateValue("su1_pd4_det_ul1_mimo_low", data.packet.PD4_DET_UL1_MIMO_Low);
-                
-                // SU1 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
-
-                // SU1 Ant. Array On/Off (GumStick_OnOff) - DU와 동일 로직
-                if (SET_MODE_SU1) return; // SU1 Set Mode에서 업데이트 차단
-                const su1GumstickOnOffEl = document.getElementById("su1_gumstick_onoff");
-                if (su1GumstickOnOffEl) {
-                    if (data.packet.GumStick_OnOff === 1) {
-                        su1GumstickOnOffEl.textContent = "ON";
-                        su1GumstickOnOffEl.className = "btn btn-success btn-sm";
-                    } else {
-                        su1GumstickOnOffEl.textContent = "OFF";
-                        su1GumstickOnOffEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-
-                // SU1 AGC On/Off (Mvbx_RsAgcMode) - 상태값 업데이트 제거됨
-
-                // SU1 AGC Level (Mvbx_RsAgcThreshold) - 상태값 업데이트 제거됨
-
-                // SU1 AGC Input (AGC_Input_Power) - 삭제된 요소의 상태값 업데이트 제거됨
-            
-                
-                console.log("✅ SU1 페이지 업데이트 완료");
-            }
-
-
-            //Modem Status 화면
-
-            updateText("modstatus", statusText[data.packet.ModStatus] || "Unknown");
-            updateText("modimsi", data.packet.ModIMSINum);
-            updateText("modimei", data.packet.ModIMEINum);
-            updateText("modnum", data.packet.ModPhonNumber);
-            updateText("rsrp", data.packet.ModRsrp + " [dBm]");
-            updateText("rsrq", data.packet.ModRsrq + " [dBm]");
-            updateText("rssi", data.packet.ModRssi + " [dBm]");
-            updateText("pci", data.packet.ModPci);
-            updateText("sinr", data.packet.ModSinr + " [dB]");
-            updateText("txpwr", data.packet.ModTxPwr + " [dBm]");
-            updateText("modver", data.packet.ModVersion);
-            updateText("emsversion", data.packet.ModEmsFwVer);
-            updateText("emsversion2", data.packet.ModEmsFwVer);
-            updateText("emsversion2_packet", data.packet.ModEmsFwVer);
-            updateText("modip", data.packet.ModIpAddress);
-            updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
-            
-            
-            // Baudrate: 0=19200bps, 1=38400bps, 2=57600bps, 3=115200bps
-            let baudrateText = "N/A";
-            if (data.packet.Mu_Su_Buadrate === 0) baudrateText = "19200";
-            else if (data.packet.Mu_Su_Buadrate === 1) baudrateText = "38400";
-            else if (data.packet.Mu_Su_Buadrate === 2) baudrateText = "57600";
-            else if (data.packet.Mu_Su_Buadrate === 3) baudrateText = "115200";
-            updateValue("baudrate", baudrateText);
-            
-            // Polling Time 업데이트
-            updateValue("pollingtime", data.packet.PollingTime);
-            
-            // Ant Band: 0이면 Single, 1이면 Tri
-            updateText("antband", data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
-            
-            // 토글 버튼 업데이트 (1=ON, 0=OFF)
-            // AOM Temp
-            const aomTempToggle = document.getElementById('aomtemp-toggle');
-            if (aomTempToggle) {
-                if (data.packet.AomTemperConperMode === 1) {
-                    updateText('aomtemp-toggle', 'On');
-                    aomTempToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('aomtemp-toggle', 'Off');
-                    aomTempToggle.className = 'btn-toggle off';
-                }
-            }
-            
-            // Att Test
-            const attTestToggle = document.getElementById('att-test-toggle');
-            if (attTestToggle) {
-                if (data.packet.AttTestMode === 1) {
-                    updateText('att-test-toggle', 'On');
-                    attTestToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('att-test-toggle', 'Off');
-                    attTestToggle.className = 'btn-toggle off';
-                }
-            }
-            
-            // Api Init
-            const apiInitToggle = document.getElementById('api-init-toggle');
-            if (apiInitToggle) {
-                if (data.packet.ApiInitMode === 1) {
-                    updateText('api-init-toggle', 'On');
-                    apiInitToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('api-init-toggle', 'Off');
-                    apiInitToggle.className = 'btn-toggle off';
-                }
-            }
-            
-            // Api Init Retry
-            const apiInitRetryToggle = document.getElementById('api-init-retry-toggle');
-            if (apiInitRetryToggle) {
-                if (data.packet.ApiInitRetryMode === 1) {
-                    updateText('api-init-retry-toggle', 'On');
-                    apiInitRetryToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('api-init-retry-toggle', 'Off');
-                    apiInitRetryToggle.className = 'btn-toggle off';
-                }
-            }
-            
-            // Debug
-            const debugToggle = document.getElementById('debug-toggle');
-            if (debugToggle) {
-                if (data.packet.DebugMode === 1) {
-                    updateText('debug-toggle', 'On');
-                    debugToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('debug-toggle', 'Off');
-                    debugToggle.className = 'btn-toggle off';
-                }
-            }
-            // Modem
-            const modemToggle = document.getElementById('modem-toggle');
-            if (modemToggle) {
-                if (data.packet.ModemOnOff === 1) {
-                    updateText('modem-toggle', 'On');
-                    modemToggle.className = 'btn-toggle on';
-                } else {
-                    updateText('modem-toggle', 'Off');
-                    modemToggle.className = 'btn-toggle off';
-                }
-            }
-            
-
-            /*
-            const parseFloat32 = (bytes) => {
-                try {
-                    if (!Array.isArray(bytes) || bytes.length !== 4) return "N/A";
-                    const buffer = new ArrayBuffer(4);
-                    const view = new DataView(buffer);
-                    for (let i = 0; i < 4; i++) {
-                        view.setUint8(i, bytes[i]);
-                    }
-                    return view.getFloat32(0, true); // little-endian
-                } catch (e) {
-                    console.error("Float parse error:", e);
-                    return "N/A";
-                }
-            };
-            */
-        
-
-            updateText("mvbx_beamset", data.packet.Mvbx_BeamSet);
-            updateText("mvbx_pci", data.packet.MVBX_pci);
-            updateText("mvbx_ssb", data.packet.MVBX_ssb);
-            updateText("mvbx_rsrp", data.packet.MVBX_rsrp);
-            updateText("mvbx_snr", data.packet.MVBX_snr);
-
-            // SISO RF
-            updateText("dl_input_siso", data.packet.SISO_RF_DET_DL0_OUT + " [dBm]");
-                            updateValue("dl_att_siso", data.packet.DU_DlManualAtten_SISO);
-                updateValue("dl_alc_level_siso", data.packet.ALC_DL0_SISO_Level);
-            updateText("ul_input_siso", data.packet.SISO_RF_DET_UL0_OUT + " [dBm]");
-                            updateValue("ul_att_siso", data.packet.DU_UlManualAtten_SISO);
-                updateValue("ul_iso_level_siso", data.packet.ALC_UL0_SISO_Level);
-                            updateValue("mvbx_tx_gain_set_siso", data.packet.Mvbx_TxGainSetSiso);
-                console.log("🔍 DU mvbx_rx_gain_set_siso 업데이트:", data.packet.Mvbx_RxGainSetSiso);
-                updateValue("mvbx_rx_gain_set_siso", data.packet.Mvbx_RxGainSetSiso);
-            updateText("ul_iso_att_siso", data.packet.DU_UlIsoAtten_SISO + " [dB]");
-
-            // MIMO RF
-            updateText("dl_input_mimo", data.packet.MIMO_RF_DET_DL1_OUT + " [dBm]");
-                            updateValue("dl_att_mimo", data.packet.DU_DlManualAtten_MIMO);
-                updateValue("dl_alc_level_mimo", data.packet.ALC_DL1_MIMO_Level);
-            updateText("ul_input_mimo", data.packet.MIMO_RF_DET_UL1_OUT + " [dBm]");
-                            updateValue("ul_att_mimo", data.packet.DU_UlManualAtten_MIMO);
-                updateValue("ul_iso_level_mimo", data.packet.ALC_UL1_MIMO_Level);
-                            updateValue("mvbx_tx_gain_set_miso", data.packet.Mvbx_TxGainSetMiso);
-                updateValue("mvbx_rx_gain_set_mimo", data.packet.Mvbx_RxGainSetMiso);
-            updateText("ul_iso_att_mimo", data.packet.DU_UlIsoAtten_MIMO + " [dB]");
-
-            // RF Configuration Fields Update
-            console.log("RF Configuration Data:", data.packet);
-            
-            // SISO RF Fields
-            console.log("DU_DlSubAtten_SISO:", data.packet.DU_DlSubAtten_SISO);
-            updateValue("DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
-            updateValue("UlSubAtten_SISO", data.packet.DU_UlSubAtten_SISO);
-            updateValue("DL_InputOffset_SISO", data.packet.DL_OutputOffset_SISO);
-            updateValue("UL_OutputOffset_SISO", data.packet.UL_InputOffset_SISO);
-            updateValue("Dl_Att_Test_Siso", data.packet.Dl_Siso_Att_Test);
-            updateValue("Ul_Att_Test_Siso", data.packet.Ul_Siso_Att_Test);
-            updateValue("Ant_Gain_Siso", data.packet.Gs_Gain_Siso);
-            updateValue("Ant_Output_SISO", data.packet.DsOutputPower_SISO);
-            updateValue("Ant_Out_Offset_Siso", data.packet.ApiGsOutputPowerOffsetSiso);
-            updateValue("Ant_Offset_DL_Siso", data.packet.GS_AttenOffset_DL_Siso);
-            updateValue("Ant_Offset_UL_Siso", data.packet.GS_AttenOffset_UL_Siso);
-
-            // MIMO RF Fields
-            updateValue("DlSubAtten_MIMO", data.packet.DU_DlSubAtten_MIMO);
-            updateValue("UlSubAtten_MIMO", data.packet.DU_UlSubAtten_MIMO);
-            updateValue("DL_InputOffset_MIMO", data.packet.DL_OutputOffset_MIMO);
-            updateValue("UL_OutputOffset_MIMO", data.packet.UL_InputOffset_MIMO);
-            updateValue("Dl_Att_Test_Mimo", data.packet.Dl_Mimo_Att_Test);
-            updateValue("U_Att_Testl_Mimo", data.packet.Ul_Mimo_Att_Test);
-            updateValue("Ant_Gain_Mimo", data.packet.Gs_Gain_Mimo);
-            updateValue("Ant_Output_MIMO", data.packet.DsOutputPower_MIMO);
-            updateValue("Ant_Out_Offset_Mimo", data.packet.ApiGsOutputPowerOffsetMimo);
-            updateValue("Ant_Offset_DL_Mimo", data.packet.GS_AttenOffset_DL_Mimo);
-            updateValue("Ant_Offset_UL_Mimo", data.packet.GS_AttenOffset_UL_Mimo);
-
-            // Optic Configuration Fields Update
-            // SISO Optic Fields
-            updateValue("LD1_DET_DL0_SISO_Offset", data.packet.LD1_DET_DL0_SISO_Offset);
-            updateValue("PD1_DET_UL0_SISO_Offset", data.packet.PD1_DET_UL0_SISO_Offset);
-            updateValue("LD3_DET_DL0_SISO_Offset", data.packet.LD3_DET_DL0_SISO_Offset);
-            updateValue("PD3_DET_UL0_SISO_Offset", data.packet.PD3_DET_UL0_SISO_Offset);
-            updateValue("RsrpOffset", data.packet.RsrpOffset);
-            updateValue("LowRsrpLevel", data.packet.LowRsrpLevel);
-            updateValue("LowRsrpStillTime", data.packet.LowRsrpStillTime);
-
-            // MIMO Optic Fields
-            updateValue("LD2_DET_DL1_MIMO_Offset", data.packet.LD2_DET_DL1_MIMO_Offset);
-            updateValue("PD2_DET_UL1_MIMO_Offset", data.packet.PD2_DET_UL1_MIMO_Offset);
-            updateValue("LD4_DET_DL1_MIMO_Offset", data.packet.LD4_DET_DL1_MIMO_Offset);
-            updateValue("PD4_DET_UL1_MIMO_Offset", data.packet.PD4_DET_UL1_MIMO_Offset);
-
-            
-
-            //siso optic
-            updateText("ld1_det_dl0_siso", data.packet.LD1_DET_DL0_SISO + " [dBm]");
-            updateText("ld2_det_dl1_mimo", data.packet.LD2_DET_DL1_MIMO + " [dBm]");
-            updateText("pd1_det_ul0_siso", data.packet.PD1_DET_UL0_SISO + " [dBm]");
-            updateText("pd2_det_ul1_mimo", data.packet.PD2_DET_UL1_MIMO + " [dBm]");
-            
-            //mimo optic
-            updateValue("ld1_det_dl0_siso_low", data.packet.LD1_DET_DL0_SISO_Low);
-            updateValue("ld2_det_dl1_mimo_low", data.packet.LD2_DET_DL1_MIMO_Low);
-            updateValue("pd1_det_ul0_siso_low", data.packet.PD1_DET_UL0_SISO_Low);
-            updateValue("pd2_det_ul1_mimo_low", data.packet.PD2_DET_UL1_MIMO_Low);
-
-
-            if (data.packet.AlarmStatus) {
-                // 서버에서 계산된 알람 상태 사용
-                const alarmStatus = data.packet.AlarmStatus;
-                
-                // 각 알람 상태에 따라 UI 업데이트
-                Object.keys(alarmStatus).forEach(alarmId => {
-                    const isActive = alarmStatus[alarmId] === 1;
-                    updateAlarmDot(alarmId, isActive);
-                });
-                
-                // DU 알람 상태 계산 (클라이언트에서 계산)
-                const hasAnyAlarm = Object.values(alarmStatus).some(status => status === 1);
-                currentDuAlarmStatus = hasAnyAlarm ? 1 : 0;
-            }
-
-            updateStatusBadge1("FpgaStatus", data.packet.FPGA_Boot_Status);
-            updateStatusBadge2("InitStatus", data.packet.FPGA_Init_Status);
-            updateStatusBadge3("ScanStatus", data.packet.Beam_Scan_Status);
-
-
-
-
-            updateValue("Mvbx_RsAgcThreshold", data.packet.Mvbx_RsAgcThreshold);
-            updateValue("conserialnum", data.packet.ConSerialNum);
-            updateText("conserialnum_header", data.packet.ConSerialNum);
-            updateText("conserialnum_header_packet", data.packet.ConSerialNum);
-
-            // Decoded SSB 정보 업데이트
-            updateText("decoded_ssb_count", data.packet.decoded_ssb_count);
-            updateText("decoded_ssb_no_error_count", data.packet.decoded_ssb_no_error_count);
-            updateText("DecodedRate", data.packet.DecodedRate + " [%]");
-
-            const duIsoStatusText = {
-                0: "Ready",
-                1: "Measuring",
-                2: "Fail",
-                3: "Success"
-            };
-            
-
-
-            
-            updateText("du_iso_status", duIsoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
-        
-
-                // 1. Ant. Array On/Off (GumStick_OnOff)
-                if (SET_MODE) return; // Set Mode에서 업데이트 차단
-                const gumstickOnOffEl = document.getElementById("gumstick_onoff");
-                if (gumstickOnOffEl) {
-                    if (data.packet.GumStick_OnOff === 1) {
-                        gumstickOnOffEl.textContent = "ON";
-                        gumstickOnOffEl.className = "btn btn-success btn-sm";
-                    } else {
-                        gumstickOnOffEl.textContent = "OFF";
-                        gumstickOnOffEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-
-                            // 2. AGC On/Off (Mvbx_RsAgcMode)
-                if (SET_MODE) return; // Set Mode에서 업데이트 차단
-                const mvbxRsagcModeEl = document.getElementById("mvbx_rsagc_mode");
-                if (mvbxRsagcModeEl) {
-                    if (data.packet.Mvbx_RsAgcMode === 1) {
-                        mvbxRsagcModeEl.textContent = "ON";
-                        mvbxRsagcModeEl.className = "btn btn-success btn-sm";
-                    } else {
-                        mvbxRsagcModeEl.textContent = "OFF";
-                        mvbxRsagcModeEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-
-                            // 3. AGC Level (Mvbx_RsAgcThreshold)
-                let agcLevel = data.packet.Mvbx_RsAgcThreshold;
-                if (agcLevel === -999) {
-                    updateValue("mvbx_rsagc_threshold", "- - -");
-                } else {
-                    updateValue("mvbx_rsagc_threshold", agcLevel);
-                }
-
-            // 4. AGC Input (AGC_Input_Power)
-            updateText("agc_input_power", data.packet.AGC_Input_Power + " dBm");
-
-            // ALC DL0 SISO Mode (1=ON, 0=OFF)
-                if (SET_MODE) return; // Set Mode에서 업데이트 차단
-                const alcDl0SisoEl = document.getElementById("alc_dl0_siso_mode");
-                if (alcDl0SisoEl) {
-                    if (data.packet.ALC_DL0_SISO_Mode === 1) {
-                        alcDl0SisoEl.textContent = "ON";
-                        alcDl0SisoEl.className = "btn btn-success btn-sm";
-                    } else {
-                        alcDl0SisoEl.textContent = "OFF";
-                        alcDl0SisoEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-            
-            // ALC DL1 MIMO Mode (1=ON, 0=OFF)
-                if (SET_MODE) return; // Set Mode에서 업데이트 차단
-                const alcDl1MimoEl = document.getElementById("alc_dl1_mimo_mode");
-                if (alcDl1MimoEl) {
-                    if (data.packet.ALC_DL1_MIMO_Mode === 1) {
-                        alcDl1MimoEl.textContent = "ON";
-                        alcDl1MimoEl.className = "btn btn-success btn-sm";
-                    } else {
-                        alcDl1MimoEl.textContent = "OFF";
-                        alcDl1MimoEl.className = "btn btn-secondary btn-sm";
-                    }
-                }
-
-            // gNB Type: 0=Manual, 1=Samsung, 2=Nokia, 3=Ericsson
-            console.log('gNB_Vendor data:', data.packet.gNB_Vendor);
-            let gNBVendorText = "Manual"; // 기본값
-            if (data.packet.gNB_Vendor === 0) gNBVendorText = "Manual";
-            else if (data.packet.gNB_Vendor === 1) gNBVendorText = "Samsung";
-            else if (data.packet.gNB_Vendor === 2) gNBVendorText = "Nokia";
-            else if (data.packet.gNB_Vendor === 3) gNBVendorText = "Ericsson";
-            console.log('gNBVendorText:', gNBVendorText);
-            
-            // 메인 화면의 gNB_Vendor 업데이트
-            updateValue("gNB_Vendor", gNBVendorText);
-            
-            // 모달의 gNB_Vendor_1 업데이트
-            updateValue("gNB_Vendor_1", gNBVendorText);
-            
-            // AGC On/Off 업데이트 (1=ON, 0=OFF)
-            const agcModeEl2 = document.getElementById("Mvbx_RsAgcMode2");
-            if (agcModeEl2) {
-                if (data.packet.Mvbx_RsAgcMode === 1) {
-                    agcModeEl2.textContent = "ON";
-                    agcModeEl2.className = "btn btn-success btn-sm w-100";
-                } else {
-                    agcModeEl2.textContent = "OFF";
-                    agcModeEl2.className = "btn btn-secondary btn-sm w-100";
-                }
-            }
-            
-            // AGC Level 업데이트 (Range:-60~-100, Step:1)
-            updateValue("Mvbx_RsAgcThreshold2", data.packet.Mvbx_RsAgcThreshold);
-
-            
-
-            updateText('antArrayVer', data.packet.Gumstick_Ver);
-            // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
-            const temperCompEl = document.getElementById("temperComp");
-            if (temperCompEl) {
-                if (data.packet.TemperCompensationMode === 1) {
-                    temperCompEl.textContent = "ON";
-                    temperCompEl.className = "btn btn-sm btn-success";
-                } else {
-                    temperCompEl.textContent = "OFF";
-                    temperCompEl.className = "btn btn-sm btn-secondary";
-                }
-            }
-            updateText('startTemper', data.packet.Gumstick_StartTemper + '℃');
-            updateText('curTemper', data.packet.Gumstick_CurTemper + '℃');
-            updateText('compensationDL', data.packet.DlTemperCompensation + 'dB');
-            updateText('compensationUL', data.packet.UlTemperCompensation + 'dB');
-            updateText('mvbxMv2850TxGainSiso', data.packet.Mvbx_Mv2850TxGainSiso);
-            updateText('mvbxMv2850RxGainSiso', data.packet.Mvbx_Mv2850RxGainSiso);
-            updateText('mvbxMv2853TxGainSiso', data.packet.Mvbx_Mv2853TxGainSiso);
-            updateText('mvbxMv2853RxGainSiso', data.packet.Mvbx_Mv2853RxGainSiso);
-            updateText('mvbxMv2850TxGainMimo', data.packet.Mvbx_Mv2850TxGainMimo);
-            updateText('mvbxMv2850RxGainMimo', data.packet.Mvbx_Mv2850RxGainMimo);
-            updateText('mvbxMv2853TxGainMimo', data.packet.Mvbx_Mv2853TxGainMimo);
-            updateText('mvbxMv2853RxGainMimo', data.packet.Mvbx_Mv2853RxGainMimo);
-            updateText('mvbxBeamInfoBeamId1', data.packet.MVBX_BeamInfo_beamId1);
-            updateText('mvbxBeamInfoBeamId2', data.packet.MVBX_BeamInfo_beamId2);
-            updateText('mvbxBeamInfoBeamId3', data.packet.MVBX_BeamInfo_beamId3);
-            updateText('mvbxBeamInfoBeamId4', data.packet.MVBX_BeamInfo_beamId4);
-            updateText('mvbxBeamInfoPci1', data.packet.MVBX_BeamInfo_pci1);
-            updateText('mvbxBeamInfoPci2', data.packet.MVBX_BeamInfo_pci2);
-            updateText('mvbxBeamInfoPci3', data.packet.MVBX_BeamInfo_pci3);
-            updateText('mvbxBeamInfoPci4', data.packet.MVBX_BeamInfo_pci4);
-            updateText('mvbxBeamInfoSsbldx1', data.packet.MVBX_BeamInfo_ssbldx1);
-            updateText('mvbxBeamInfoSsbldx2', data.packet.MVBX_BeamInfo_ssbldx2);
-            updateText('mvbxBeamInfoSsbldx3', data.packet.MVBX_BeamInfo_ssbldx3);
-            updateText('mvbxBeamInfoSsbldx4', data.packet.MVBX_BeamInfo_ssbldx4);
-            updateText('mvbxBeamInfoEnergy1', data.packet.MVBX_BeamInfo_energy1);
-            updateText('mvbxBeamInfoEnergy2', data.packet.MVBX_BeamInfo_energy2);
-            updateText('mvbxBeamInfoEnergy3', data.packet.MVBX_BeamInfo_energy3);
-            updateText('mvbxBeamInfoEnergy4', data.packet.MVBX_BeamInfo_energy4);
-            updateText('mvbxBeamInfoPsstype1', data.packet.MVBX_BeamInfo_psstype1);
-            updateText('mvbxBeamInfoPsstype2', data.packet.MVBX_BeamInfo_psstype2);
-            updateText('mvbxBeamInfoPsstype3', data.packet.MVBX_BeamInfo_psstype3);
-            updateText('mvbxBeamInfoPsstype4', data.packet.MVBX_BeamInfo_psstype4);
-            updateText('mvbxBeamInfoSnr1', data.packet.MVBX_BeamInfo_snr1);
-            updateText('mvbxBeamInfoSnr2', data.packet.MVBX_BeamInfo_snr2);
-            updateText('mvbxBeamInfoSnr3', data.packet.MVBX_BeamInfo_snr3);
-            updateText('mvbxBeamInfoSnr4', data.packet.MVBX_BeamInfo_snr4);
-            updateText('mvbxBeamInfoRsrp1', data.packet.MVBX_BeamInfo_rsrp1);
-            updateText('mvbxBeamInfoRsrp2', data.packet.MVBX_BeamInfo_rsrp2);
-            updateText('mvbxBeamInfoRsrp3', data.packet.MVBX_BeamInfo_rsrp3);
-            updateText('mvbxBeamInfoRsrp4', data.packet.MVBX_BeamInfo_rsrp4);
-            updateText('pllRelockCount', data.packet.PllRelockCount);
-            updateValue('centerFrequency', data.packet.ApiVenderFreq);
-            updateValue('beamFix', data.packet.DuFixBeam === 0 ? 'AUTO' : 'FIX');
-            updateValue('apiLogLevel', data.packet.ApiLogLevel);
-            
-            // Beam Info Modal 추가 업데이트
-            // Beam Retry 스위치 업데이트 (1=ON, 0=OFF)
-            const beamRetryEl = document.getElementById("beamRetrySwitch");
-            if (beamRetryEl) {
-                if (data.packet.BeamScan_OnOff === 1) {
-                    beamRetryEl.textContent = "ON";
-                    beamRetryEl.className = "btn btn-sm ms-auto btn-success";
-                } else {
-                    beamRetryEl.textContent = "OFF";
-                    beamRetryEl.className = "btn btn-sm ms-auto btn-secondary";
-                }
-            }
-            
-            // Decode AGC 스위치 업데이트 (1=ON, 0=OFF)
-            const decodeAGCEl = document.getElementById("decodeAGCSwitch");
-            if (decodeAGCEl) {
-                if (data.packet.DecodeRecoveryFuncOnOff === 1) {
-                    decodeAGCEl.textContent = "ON";
-                    decodeAGCEl.className = "btn btn-sm ms-auto btn-success";
-                } else {
-                    decodeAGCEl.textContent = "OFF";
-                    decodeAGCEl.className = "btn btn-sm ms-auto btn-secondary";
-                }
-            }
-            updateText('retryCount', data.packet.TryBeamScanCont);
-            updateValue('apiAdcSel', data.packet.ApiAdcSel);
-            updateValue('syncPathGain', data.packet.ApiSyncPathGain);
-            updateValue('duTimeAdvance', data.packet.ApiDuTimeAdvance);
-            updateValue('suTimeAdvance', data.packet.ApiSuTimeAdvance);
-            updateValue('orientationActual', data.packet.Actual_Orientation);
-            updateValue('tiltActual', data.packet.Actual_Tilt);
-            updateText('orientation', data.packet.Orientation);
-            updateText('tilt', data.packet.Tilt);
-            updateText('Actual_Orientation', data.packet.Actual_Orientation);
-            updateText('Actual_Tilt', data.packet.Actual_Tilt);
-            updateValue('du-name', data.packet.ConSerialNum);
-
-            // Sync Module S/N과 EMS ver 업데이트
-            updateText('conserialnum_sync2', data.packet.ConSerialNum);
-            updateText('emsversion2_sync2', data.packet.ModEmsFwVer);
-
-        
-
-            // Packet 전송횟수와 응답횟수 업데이트
-            if (data.packet.PackSendCount && data.packet.PackErrorCount) {
-                // Cascade 1~4 업데이트 (각 cascade당 전송횟수 4바이트, 응답횟수 4바이트)
-                for (let i = 1; i <= 4; i++) {
-                    const sendCount = data.packet.PackSendCount[i-1] || 0;
-                    const errorCount = data.packet.PackErrorCount[i-1] || 0;
-                    updateText(`packet_cascade${i}`, `${sendCount} / ${errorCount}`);
-                }
-            }
-
-              // SU Enable 버튼 상태 업데이트
-              const su1EnableBtn = document.getElementById('su1-enable-btn');
-              const su2EnableBtn = document.getElementById('su2-enable-btn');
-              const su3EnableBtn = document.getElementById('su3-enable-btn');
-              const su4EnableBtn = document.getElementById('su4-enable-btn');
-  
-              // SU Info 필드들
-              const su1NameField = document.getElementById('su1-name');
-              const su1LatField = document.getElementById('su1-latitude');
-              const su1LonField = document.getElementById('su1-longitude');
-              
-              const su2NameField = document.getElementById('su2-name');
-              const su2LatField = document.getElementById('su2-latitude');
-              const su2LonField = document.getElementById('su2-longitude');
-              
-              const su3NameField = document.getElementById('su3-name');
-              const su3LatField = document.getElementById('su3-latitude');
-              const su3LonField = document.getElementById('su3-longitude');
-              
-              const su4NameField = document.getElementById('su4-name');
-              const su4LatField = document.getElementById('su4-latitude');
-              const su4LonField = document.getElementById('su4-longitude');
-  
-              if (su1EnableBtn) {
-                  su1EnableBtn.textContent = "#1 Enable";
-                  su1EnableBtn.className = "btn btn-success btn-sm";
-                  if (su1NameField) {
-                      su1NameField.disabled = false;
-                      su1NameField.style.backgroundColor = "white";
-                  }
-                  if (su1LatField) {
-                      su1LatField.disabled = false;
-                      su1LatField.style.backgroundColor = "white";
-                  }
-                  if (su1LonField) {
-                      su1LonField.disabled = false;
-                      su1LonField.style.backgroundColor = "white";
-                  }
-              }
-              if (su2EnableBtn) {
-                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU2_ENABLE === 1) {
-                      su2EnableBtn.textContent = "#2 Enable";
-                      su2EnableBtn.className = "btn btn-success btn-sm";
-                      if (su2NameField) {
-                          su2NameField.disabled = false;
-                          su2NameField.style.backgroundColor = "white";
-                      }
-                      if (su2LatField) {
-                          su2LatField.disabled = false;
-                          su2LatField.style.backgroundColor = "white";
-                      }
-                      if (su2LonField) {
-                          su2LonField.disabled = false;
-                          su2LonField.style.backgroundColor = "white";
-                      }
-                } else {
-                      su2EnableBtn.textContent = "#2 Disable";
-                      su2EnableBtn.className = "btn btn-secondary btn-sm";
-                      if (su2NameField) {
-                          su2NameField.disabled = true;
-                          su2NameField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su2LatField) {
-                          su2LatField.disabled = true;
-                          su2LatField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su2LonField) {
-                          su2LonField.disabled = true;
-                          su2LonField.style.backgroundColor = "#e9ecef";
-                      }
-                  }
-              }
-              if (su3EnableBtn) {
-                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU3_ENABLE === 1) {
-                      su3EnableBtn.textContent = "#3 Enable";
-                      su3EnableBtn.className = "btn btn-success btn-sm";
-                      if (su3NameField) {
-                          su3NameField.disabled = false;
-                          su3NameField.style.backgroundColor = "white";
-                      }
-                      if (su3LatField) {
-                          su3LatField.disabled = false;
-                          su3LatField.style.backgroundColor = "white";
-                      }
-                      if (su3LonField) {
-                          su3LonField.disabled = false;
-                          su3LonField.style.backgroundColor = "white";
-                      }
-                  } else {
-                      su3EnableBtn.textContent = "#3 Disable";
-                      su3EnableBtn.className = "btn btn-secondary btn-sm";
-                      if (su3NameField) {
-                          su3NameField.disabled = true;
-                          su3NameField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su3LatField) {
-                          su3LatField.disabled = true;
-                          su3LatField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su3LonField) {
-                          su3LonField.disabled = true;
-                          su3LonField.style.backgroundColor = "#e9ecef";
-                      }
-                  }
-              }
-              if (su4EnableBtn) {
-                  if (data.packet.SuEnableBits && data.packet.SuEnableBits.SU4_ENABLE === 1) {
-                      su4EnableBtn.textContent = "#4 Enable";
-                      su4EnableBtn.className = "btn btn-success btn-sm";
-                      if (su4NameField) {
-                          su4NameField.disabled = false;
-                          su4NameField.style.backgroundColor = "white";
-                      }
-                      if (su4LatField) {
-                          su4LatField.disabled = false;
-                          su4LatField.style.backgroundColor = "white";
-                      }
-                      if (su4LonField) {
-                          su4LonField.disabled = false;
-                          su4LonField.style.backgroundColor = "white";
-                      }
-                  } else {
-                      su4EnableBtn.textContent = "#4 Disable";
-                      su4EnableBtn.className = "btn btn-secondary btn-sm";
-                      if (su4NameField) {
-                          su4NameField.disabled = true;
-                          su4NameField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su4LatField) {
-                          su4LatField.disabled = true;
-                          su4LatField.style.backgroundColor = "#e9ecef";
-                      }
-                      if (su4LonField) {
-                          su4LonField.disabled = true;
-                          su4LonField.style.backgroundColor = "#e9ecef";
-                      }
-                  }
-              }
-            
             
 
             // SU1 Beam Book 동그라미 색상 업데이트 (SU1용)
@@ -15079,32 +13751,10 @@
     function applySet(){
       try{
         const fields = collectFields();
-        
-        // 수정된 필드들을 sendPacketData에 먼저 저장
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            sendPacketData[key] = value;
-            console.log(`📝 DU 저장: sendPacketData[${key}] = ${value}`);
-          }
-        }
-        
-        // 전체 패킷 복사 및 수정된 값들 적용
-        const packetToSend = {...sendPacketData};
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 DU ConMuFlag 적용:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_du_values', packetToSend);
-        console.log('🔧 Applying complete DU packet:', packetToSend);
-      }catch(e){ 
-        console.error('입력 오류:', e);
-        alert('입력 오류: ' + e.message); 
-      }
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_du_values', fields);
+        console.log('🔧 Applying DU values with ConMuFlag:', fields);
+      }catch(e){ alert('입력 오류: ' + e.message); }
     }
     
     //==== SU1 버튼 핸들러 ====
@@ -15131,40 +13781,10 @@
     function applySetSu1(){
       try{
         const fields = collectFieldsSu1();
-        
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x11; // SU1 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            sendPacketData[key] = value;
-            console.log(`📝 SU1 저장: sendPacketData[${key}] = ${value}`);
-          }
-        }
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU1 ConMuFlag 적용:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_su1_values', packetToSend);
-        console.log('🔧 Applying complete SU1 packet:', packetToSend);
-      }catch(e){ 
-        console.error('SU1 입력 오류:', e);
-        alert('SU1 입력 오류: ' + e.message); 
-      }
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su1_values', fields);
+        console.log('🔧 Applying SU1 values with ConMuFlag:', fields);
+      }catch(e){ alert('SU1 입력 오류: ' + e.message); }
     }
 
     //==== SU2 버튼 핸들러 ====
@@ -15193,40 +13813,10 @@
     function applySetSu2(){
       try{
         const fields = collectFieldsSu2();
-        
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x12; // SU2 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            sendPacketData[key] = value;
-            console.log(`📝 SU2 저장: sendPacketData[${key}] = ${value}`);
-          }
-        }
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU2 ConMuFlag 적용:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_su2_values', packetToSend);
-        console.log('🔧 Applying complete SU2 packet:', packetToSend);
-      }catch(e){ 
-        console.error('SU2 입력 오류:', e);
-        alert('SU2 입력 오류: ' + e.message); 
-      }
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su2_values', fields);
+        console.log('🔧 Applying SU2 values with ConMuFlag:', fields);
+      }catch(e){ alert('SU2 입력 오류: ' + e.message); }
     }
 
     //==== SU3 버튼 핸들러 ====
@@ -15253,40 +13843,10 @@
     function applySetSu3(){
       try{
         const fields = collectFieldsSu3();
-        
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x13; // SU3 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            sendPacketData[key] = value;
-            console.log(`📝 SU3 저장: sendPacketData[${key}] = ${value}`);
-          }
-        }
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU3 ConMuFlag 적용:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_su3_values', packetToSend);
-        console.log('🔧 Applying complete SU3 packet:', packetToSend);
-      }catch(e){ 
-        console.error('SU3 입력 오류:', e);
-        alert('SU3 입력 오류: ' + e.message); 
-      }
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su3_values', fields);
+        console.log('🔧 Applying SU3 values with ConMuFlag:', fields);
+      }catch(e){ alert('SU3 입력 오류: ' + e.message); }
     }
 
     //==== SU4 Set Mode 핸들러 ====
@@ -15313,40 +13873,10 @@
     function applySetSu4(){
       try{
         const fields = collectFieldsSu4();
-        
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x14; // SU4 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            sendPacketData[key] = value;
-            console.log(`📝 SU4 저장: sendPacketData[${key}] = ${value}`);
-          }
-        }
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU4 ConMuFlag 적용:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_su4_values', packetToSend);
-        console.log('🔧 Applying complete SU4 packet:', packetToSend);
-     }catch(e){ 
-        console.error('SU4 입력 오류:', e);
-        alert('SU4 입력 오류: ' + e.message); 
-      }
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_su4_values', fields);
+        console.log('🔧 Applying SU4 values with ConMuFlag:', fields);
+      }catch(e){ alert('SU4 입력 오류: ' + e.message); }
     }
 
     //==== 버튼 바인딩 ====
@@ -15418,42 +13948,6 @@
       }
     });
     
-    //==== 상태값을 sendPacketData에 저장하는 함수 ====
-    function updateSendPacketDataFromStatus(packetData) {
-        console.log('🔄 Storing latest status values to sendPacketData:', packetData);
-        
-        // 패킷 헤더 정보 업데이트 (전체 패킷 구조 유지)
-        if (packetData.Rcv_Main_Sys !== undefined) {
-            sendPacketData['Rcv_Main_Sys'] = packetData.Rcv_Main_Sys;
-        }
-        if (packetData.Rcv_Sub_Sys !== undefined) {
-            sendPacketData['Rcv_Sub_Sys'] = packetData.Rcv_Sub_Sys;
-        }
-        if (packetData.Rcv_Object !== undefined) {
-            sendPacketData['Rcv_Object'] = packetData.Rcv_Object;
-        }
-        if (packetData.Trans_Main_Sys !== undefined) {
-            sendPacketData['Trans_Main_Sys'] = packetData.Trans_Main_Sys;
-        }
-        if (packetData.Trans_Sub_Sys !== undefined) {
-            sendPacketData['Trans_Sub_Sys'] = packetData.Trans_Sub_Sys;
-        }
-        if (packetData.Trans_Object !== undefined) {
-            sendPacketData['Trans_Object'] = packetData.Trans_Object;
-        }
-        
-        // 전체 수신 데이터를 sendPacketData에 복사 (새로운 필드는 추가하고, 기존 필드는 업데이트)
-        const excludeKeys = ['rcvMainSys', 'packet'];// 시스템 관리용 키 제외
-        Object.keys(packetData).forEach(key => {
-            if (!excludeKeys.includes(key) && packetData[key] !== undefined) {
-                sendPacketData[key] = packetData[key];
-                console.log(`📝 Updated sendPacketData.${key} = ${packetData[key]}`);
-            }
-        });
-        
-        console.log('✅ sendPacketData updated with latest complete status values');
-    }
-
     //==== On/Off 버튼 토글 이벤트 연결 ====
     // Set Mode에서만 작동하는 On/Off 버튼들
     const onOffButtons = [
@@ -15546,29 +14040,10 @@
       try {
         // Sync Module 값 수집 및 적용
         const fields = collectSyncFields();
-        
-        // 전체 패킷 복사 및 수정된 값들 적용
-        const packetToSend = {...sendPacketData};
-        
-        // 수정된 필드들의 값을 전체 패킷에 업데이트
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag' && packetToSend.hasOwnProperty(key)) {
-            packetToSend[key] = value;
-            console.log(`🔧 Sync Field updated: ${key} = ${value}`);
-          }
-        }
-        
-        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
-        if (fields.ConMuFlag) {
-          packetToSend.ConMuFlag = fields.ConMuFlag;
-          console.log('🔧 Sync ConMuFlag applied:', fields.ConMuFlag);
-        }
-        
-        // 전체 패킷 전송
-        socket.emit('apply_sync_values', packetToSend);
-        console.log('🔧 Applying complete Sync Module packet:', packetToSend);
+        // ConMuFlag가 포함된 fields를 직접 전송
+        socket.emit('apply_sync_values', fields);
+        console.log('🔧 Applying Sync Module values with ConMuFlag:', fields);
       } catch(e) { 
-        console.error('Sync Module 입력 오류:', e);
         alert('Sync Module 입력 오류: ' + e.message); 
       }
     }
