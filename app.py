@@ -453,13 +453,29 @@ def apply_du_values(payload):
 def apply_su1_values(payload):
     try:
         print(f"🔧 Applying SU1 values: {payload}")
+        print(f"🔧 SU1 payload type: {type(payload)}")
+        print(f"🔧 SU1 payload keys: {list(payload.keys()) if isinstance(payload, dict) else 'Not a dict'}")
         
         # payload 검증
         if not payload:
             raise ValueError("Payload is empty")
         
+        # Fields가 있는지 확인
+        if 'Fields' in payload:
+            print(f"🔧 SU1 Fields found: {payload['Fields']}")
+        else:
+            print("⚠️ SU1 Fields not found in payload")
+        
+        # ConMuFlag가 있는지 확인
+        if 'ConMuFlag' in payload:
+            print(f"🔧 SU1 ConMuFlag found: {payload['ConMuFlag']}")
+        else:
+            print("⚠️ SU1 ConMuFlag not found in payload")
+        
         # test.py로 전송 (DU와 동일한 방식)
+        print("🔧 SU1 sending to test.py...")
         socketio.emit("su1_Ctrl_packet", payload, include_self=False)
+        print("🔧 SU1 sent to test.py")
         
         # 클라이언트에게 성공 응답
         emit("su1_apply_ack", {"ok": True})

@@ -4681,7 +4681,7 @@
 
                                     <hr class="my-2" />
                                     <div class="col-3 mb-1"><span><strong>Temp Upper</strong></span></div>
-                                <div class="col-3 mb-1 text-end"><input type="text" id="su2_inittemper" data-editable="true" value="N/A" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
+                                <div class="col-3 mb-1 text-end"><input type="text" id="su2_tempupper" data-editable="true" value="N/A" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
                                     <div class="col-3 mb-1"><span><strong>Temp Lower</strong></span></div>
                                     <div class="col-3 mb-1 text-end"><input type="text" id="su2_templower" data-editable="true" value="N/A" readonly style="width:60%; height:25px; padding:0 4px; text-align:center; border:1px solid #ced4da; border-radius:.25rem; font-size:.875rem; background-color:#fff;"></div>
 
@@ -8352,8 +8352,10 @@
             if (data.packet.SuId !== undefined && !SET_MODE_SU2) {
                 updateValue("su2_suid", data.packet.SuId);
             }
-            updateValue("su2_inittemper", data.packet.SysTemperHighLvl);
+            if (!SET_MODE_SU2) {
+            updateValue("su2_tempupper", data.packet.SysTemperHighLvl);
             updateValue("su2_templower", data.packet.SysTemperLowLvl);
+            }
             
             // Init Status 업데이트
             updateStatusBadge2("su2_fpga_init_status", data.packet.FPGA_Init_Status);
@@ -9850,7 +9852,7 @@
                 3: "FAIL"
             };
 
-            /*
+            
 
             const decodeText = (arr) => {
                 try {
@@ -9868,7 +9870,7 @@
                 return "N/A";
             };
 
-            */
+            
 
             // DU System 페이지 업데이트 (rcvMainSys = 0x30)
             updateText("McuSwVer", data.packet.McuSwVer);
@@ -9903,7 +9905,7 @@
                             if (data.packet.SysTemperLowLvl !== undefined) {
                     updateValue("templower", data.packet.SysTemperLowLvl);
                 }
-
+/*
             // SU1 페이지 업데이트 (Rcv_Main_Sys = 0x40)
             if (data.packet.Rcv_Main_Sys === 0x40) {
                 console.log("🎯 SU1 패킷 감지! SU1 페이지 업데이트 시작");
@@ -9960,6 +9962,8 @@
                 } else {
                     console.log("❌ SU1 SuEndMode가 undefined");
                 }
+
+                
                 
                 // Modem 상태
                 updateText("su1_modstatus", statusText[data.packet.ModStatus] || "Unknown");
@@ -10145,6 +10149,7 @@
                 
                 console.log("✅ SU1 페이지 업데이트 완료");
             }
+        */
 
             
             
@@ -10386,6 +10391,27 @@
 
             
             updateText("du_iso_status", duIsoStatusText[data.packet.DU_ISO_STATUS] ?? "N/A");
+
+
+
+                        //Modem Status 화면
+
+                        updateText("modstatus", statusText[data.packet.ModStatus] || "Unknown");
+            updateText("modimsi", data.packet.ModIMSINum);
+            updateText("modimei", data.packet.ModIMEINum);
+            updateText("modnum", data.packet.ModPhonNumber);
+            updateText("rsrp", data.packet.ModRsrp + " [dBm]");
+            updateText("rsrq", data.packet.ModRsrq + " [dBm]");
+            updateText("rssi", data.packet.ModRssi + " [dBm]");
+            updateText("pci", data.packet.ModPci);
+            updateText("sinr", data.packet.ModSinr + " [dB]");
+            updateText("txpwr", data.packet.ModTxPwr + " [dBm]");
+            updateText("modver", data.packet.ModVersion);
+            updateText("emsversion", data.packet.ModEmsFwVer);
+            updateText("emsversion2", data.packet.ModEmsFwVer);
+            updateText("emsversion2_packet", data.packet.ModEmsFwVer);
+            updateText("modip", data.packet.ModIpAddress);
+            updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
         
 
                             // 1. Ant. Array On/Off (GumStick_OnOff)
@@ -10740,6 +10766,8 @@
                 yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
                 blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
             });
+
+            /*
             
 
             // SU1 Beam Book 동그라미 색상 업데이트 (SU1용)
@@ -10886,6 +10914,7 @@
             updateValue('su1TiltActual', data.packet.Actual_Tilt);
             // SU1 Ant Select 업데이트
             updateValue('su1AntSelect', data.packet.BeamAntSelect);
+            */
 
 
             // 네비게이션 점 색상 업데이트
@@ -11433,7 +11462,7 @@
                 console.log("✅ SU1 페이지 업데이트 완료");
             }
 
-
+            /*
             //Modem Status 화면
 
             updateText("modstatus", statusText[data.packet.ModStatus] || "Unknown");
@@ -11452,7 +11481,7 @@
             updateText("emsversion2_packet", data.packet.ModEmsFwVer);
             updateText("modip", data.packet.ModIpAddress);
             updateText("lan", data.packet.ModLanUseMode === 1 ? "Enable" : "Disable");
-            
+            */
             
             // Baudrate: 0=19200bps, 1=38400bps, 2=57600bps, 3=115200bps
             let baudrateText = "N/A";
@@ -13774,168 +13803,168 @@
     //==== SU1 필드 매핑 ====
     const SU1_FIELD_MAP = {
       // SU1 System
-      su1_tempupper:       { key:'SU1_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
-      su1_templower:       { key:'SU1_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
-      su1_suid:            { key:'SU1_SuId',                  type:'u8',    min:1, max:4 },
-      su1_cascade_mode:    { key:'SU1_SuEndMode',             type:'u8',    min:0, max:1 },
+      su1_suid:            { key:'SuId',                     type:'u8',    min:1, max:4 },
+      su1_tempupper:       { key:'SysTemperHighLvl',         type:'i8',    min:-128, max:127 },
+      su1_templower:       { key:'SysTemperLowLvl',          type:'i8',    min:-128, max:127 },
+      su1_cascade_mode:    { key:'SuEndMode',                type:'u8',    min:0, max:1 },
       
       // SU1 Beam Status
-      su1_gumstick_onoff:  { key:'SU1_GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      su1_gumstick_onoff:  { key:'GumStick_OnOff',           type:'u8',    min:0, max:1 },
 
       // SU1 SISO RF
-      su1_dl_att_siso:     { key:'SU1_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su1_dl_alc_level_siso: { key:'SU1_ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su1_dl_alc_onoff_siso: { key:'SU1_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su1_mvbx_tx_gain_set_siso: { key:'SU1_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
-      su1_ul_att_siso:     { key:'SU1_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su1_ul_alc_level_siso: { key:'SU1_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su1_ul_alc_onoff_siso: { key:'SU1_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su1_mvbx_rx_gain_set_siso: { key:'SU1_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+      su1_dl_att_siso:     { key:'DlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su1_dl_alc_level_siso: { key:'ALC_DL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su1_dl_alc_onoff_siso: { key:'ALC_DL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su1_mvbx_tx_gain_set_siso: { key:'Mvbx_TxGainSetSiso', type:'u8',    min:0, max:255 },
+      su1_ul_att_siso:     { key:'UlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su1_ul_alc_level_siso: { key:'ALC_UL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su1_ul_alc_onoff_siso: { key:'ALC_UL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su1_mvbx_rx_gain_set_siso: { key:'Mvbx_RxGainSetSiso', type:'u8',    min:0, max:255 },
 
       // SU1 MIMO RF
-      su1_dl_att_mimo:     { key:'SU1_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su1_dl_alc_level_mimo: { key:'SU1_ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su1_dl_alc_onoff_mimo: { key:'SU1_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su1_mvbx_tx_gain_set_mimo: { key:'SU1_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
-      su1_ul_att_mimo:     { key:'SU1_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su1_ul_alc_level_mimo: { key:'SU1_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su1_ul_alc_onoff_mimo: { key:'SU1_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su1_mvbx_rx_gain_set_mimo: { key:'SU1_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
+      su1_dl_att_mimo:     { key:'DlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su1_dl_alc_level_mimo: { key:'ALC_DL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su1_dl_alc_onoff_mimo: { key:'ALC_DL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su1_mvbx_tx_gain_set_mimo: { key:'Mvbx_TxGainSetMimo', type:'u8',    min:0, max:255 },
+      su1_ul_att_mimo:     { key:'UlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su1_ul_alc_level_mimo: { key:'ALC_UL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su1_ul_alc_onoff_mimo: { key:'ALC_UL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su1_mvbx_rx_gain_set_mimo: { key:'Mvbx_RxGainSetMimo', type:'u8',    min:0, max:255 },
 
       // SU1 OPTIC
-      su1_ld1_det_dl0_siso_low: { key:'SU1_LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su1_pd1_det_ul0_siso_low: { key:'SU1_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su1_ld2_det_dl1_mimo_low: { key:'SU1_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su1_pd2_det_ul1_mimo_low: { key:'SU1_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su1_ld3_det_dl0_siso_low: { key:'SU1_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su1_pd3_det_ul0_siso_low: { key:'SU1_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su1_ld4_det_dl1_mimo_low: { key:'SU1_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su1_pd4_det_ul1_mimo_low: { key:'SU1_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld1_det_dl0_siso_low: { key:'LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld3_det_dl0_siso_low: { key:'LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd3_det_ul0_siso_low: { key:'PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_ld4_det_dl1_mimo_low: { key:'LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su1_pd4_det_ul1_mimo_low: { key:'PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU2 필드 매핑 ====
     const SU2_FIELD_MAP = {
       // SU2 System
-      su2_inittemper:       { key:'SU2_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
-      su2_templower:        { key:'SU2_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
-      su2_suid:             { key:'SU2_SuId',                  type:'u8',    min:1, max:4 },
-      su2_cascade_mode:     { key:'SU2_SuEndMode',             type:'u8',    min:0, max:1 },
+      su2_tempupper:       { key:'SysTemperHighLvl',         type:'i8',    min:-128, max:127 },
+      su2_templower:        { key:'SysTemperLowLvl',          type:'i8',    min:-128, max:127 },
+      su2_suid:             { key:'SuId',                     type:'u8',    min:1, max:4 },
+      su2_cascade_mode:     { key:'SuEndMode',                type:'u8',    min:0, max:1 },
       
       // SU2 Beam Status
-      su2_gumstick_onoff:  { key:'SU2_GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      su2_gumstick_onoff:  { key:'GumStick_OnOff',           type:'u8',    min:0, max:1 },
 
       // SU2 SISO RF
-      su2_dl_att_siso:     { key:'SU2_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su2_dl_alc_level_siso: { key:'SU2_ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su2_dl_alc_onoff_siso: { key:'SU2_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su2_mvbx_tx_gain_set_siso: { key:'SU2_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
-      su2_ul_att_siso:     { key:'SU2_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su2_ul_alc_level_siso: { key:'SU2_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su2_ul_alc_onoff_siso: { key:'SU2_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su2_mvbx_rx_gain_set_siso: { key:'SU2_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+      su2_dl_att_siso:     { key:'DlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su2_dl_alc_level_siso: { key:'ALC_DL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su2_dl_alc_onoff_siso: { key:'ALC_DL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su2_mvbx_tx_gain_set_siso: { key:'Mvbx_TxGainSetSiso', type:'u8',    min:0, max:255 },
+      su2_ul_att_siso:     { key:'UlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su2_ul_alc_level_siso: { key:'ALC_UL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su2_ul_alc_onoff_siso: { key:'ALC_UL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su2_mvbx_rx_gain_set_siso: { key:'Mvbx_RxGainSetSiso', type:'u8',    min:0, max:255 },
 
       // SU2 MIMO RF
-      su2_dl_att_mimo:     { key:'SU2_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su2_dl_alc_level_mimo: { key:'SU2_ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su2_dl_alc_onoff_mimo: { key:'SU2_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su2_mvbx_tx_gain_set_mimo: { key:'SU2_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
-      su2_ul_att_mimo:     { key:'SU2_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su2_ul_alc_level_mimo: { key:'SU2_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su2_ul_alc_onoff_mimo: { key:'SU2_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su2_mvbx_rx_gain_set_mimo: { key:'SU2_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
+      su2_dl_att_mimo:     { key:'DlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su2_dl_alc_level_mimo: { key:'ALC_DL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su2_dl_alc_onoff_mimo: { key:'ALC_DL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su2_mvbx_tx_gain_set_mimo: { key:'Mvbx_TxGainSetMimo', type:'u8',    min:0, max:255 },
+      su2_ul_att_mimo:     { key:'UlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su2_ul_alc_level_mimo: { key:'ALC_UL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su2_ul_alc_onoff_mimo: { key:'ALC_UL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su2_mvbx_rx_gain_set_mimo: { key:'Mvbx_RxGainSetMimo', type:'u8',    min:0, max:255 },
 
       // SU2 OPTIC
-      su2_ld1_det_dl0_siso_low: { key:'SU2_LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su2_pd1_det_ul0_siso_low: { key:'SU2_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su2_ld2_det_dl1_mimo_low: { key:'SU2_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su2_pd2_det_ul1_mimo_low: { key:'SU2_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su2_ld3_det_dl0_siso_low: { key:'SU2_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su2_pd3_det_ul0_siso_low: { key:'SU2_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su2_ld4_det_dl1_mimo_low: { key:'SU2_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su2_pd4_det_ul1_mimo_low: { key:'SU2_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld1_det_dl0_siso_low: { key:'LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld3_det_dl0_siso_low: { key:'LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd3_det_ul0_siso_low: { key:'PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su2_ld4_det_dl1_mimo_low: { key:'LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su2_pd4_det_ul1_mimo_low: { key:'PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU3 필드 매핑 ====
     const SU3_FIELD_MAP = {
       // SU3 System
-      su3_tempupper:       { key:'SU3_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
-      su3_templower:        { key:'SU3_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
-      su3_suid:             { key:'SU3_SuId',                  type:'u8',    min:1, max:4 },
-      su3_cascade_mode:     { key:'SU3_SuEndMode',             type:'u8',    min:0, max:1 },
+      su3_tempupper:       { key:'SysTemperHighLvl',         type:'i8',    min:-128, max:127 },
+      su3_templower:        { key:'SysTemperLowLvl',          type:'i8',    min:-128, max:127 },
+      su3_suid:             { key:'SuId',                     type:'u8',    min:1, max:4 },
+      su3_cascade_mode:     { key:'SuEndMode',                type:'u8',    min:0, max:1 },
       
       // SU3 Beam Status
-      su3_gumstick_onoff:  { key:'SU3_GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      su3_gumstick_onoff:  { key:'GumStick_OnOff',           type:'u8',    min:0, max:1 },
 
       // SU3 SISO RF
-      su3_dl_att_siso:     { key:'SU3_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su3_dl_alc_level_siso: { key:'SU3_ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su3_dl_alc_onoff_siso: { key:'SU3_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su3_mvbx_tx_gain_set_siso: { key:'SU3_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
-      su3_ul_att_siso:     { key:'SU3_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su3_ul_alc_level_siso: { key:'SU3_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su3_ul_alc_onoff_siso: { key:'SU3_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su3_mvbx_rx_gain_set_siso: { key:'SU3_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+      su3_dl_att_siso:     { key:'DlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su3_dl_alc_level_siso: { key:'ALC_DL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su3_dl_alc_onoff_siso: { key:'ALC_DL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su3_mvbx_tx_gain_set_siso: { key:'Mvbx_TxGainSetSiso', type:'u8',    min:0, max:255 },
+      su3_ul_att_siso:     { key:'UlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su3_ul_alc_level_siso: { key:'ALC_UL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su3_ul_alc_onoff_siso: { key:'ALC_UL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su3_mvbx_rx_gain_set_siso: { key:'Mvbx_RxGainSetSiso', type:'u8',    min:0, max:255 },
 
       // SU3 MIMO RF
-      su3_dl_att_mimo:     { key:'SU3_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su3_dl_alc_level_mimo: { key:'SU3_ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su3_dl_alc_onoff_mimo: { key:'SU3_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su3_mvbx_tx_gain_set_mimo: { key:'SU3_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
-      su3_ul_att_mimo:     { key:'SU3_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su3_ul_alc_level_mimo: { key:'SU3_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su3_ul_alc_onoff_mimo: { key:'SU3_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su3_mvbx_rx_gain_set_mimo: { key:'SU3_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
+      su3_dl_att_mimo:     { key:'DlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su3_dl_alc_level_mimo: { key:'ALC_DL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su3_dl_alc_onoff_mimo: { key:'ALC_DL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su3_mvbx_tx_gain_set_mimo: { key:'Mvbx_TxGainSetMimo', type:'u8',    min:0, max:255 },
+      su3_ul_att_mimo:     { key:'UlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su3_ul_alc_level_mimo: { key:'ALC_UL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su3_ul_alc_onoff_mimo: { key:'ALC_UL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su3_mvbx_rx_gain_set_mimo: { key:'Mvbx_RxGainSetMimo', type:'u8',    min:0, max:255 },
 
       // SU3 OPTIC
-      su3_ld1_det_dl0_siso_low: { key:'SU3_LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su3_pd1_det_ul0_siso_low: { key:'SU3_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su3_ld2_det_dl1_mimo_low: { key:'SU3_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su3_pd2_det_ul1_mimo_low: { key:'SU3_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su3_ld3_det_dl0_siso_low: { key:'SU3_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su3_pd3_det_ul0_siso_low: { key:'SU3_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su3_ld4_det_dl1_mimo_low: { key:'SU3_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su3_pd4_det_ul1_mimo_low: { key:'SU3_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld1_det_dl0_siso_low: { key:'LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld3_det_dl0_siso_low: { key:'LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd3_det_ul0_siso_low: { key:'PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su3_ld4_det_dl1_mimo_low: { key:'LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su3_pd4_det_ul1_mimo_low: { key:'PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== SU4 필드 매핑 ====
     const SU4_FIELD_MAP = {
       // SU4 System
-      su4_tempupper:       { key:'SU4_SysTemperHighLvl',      type:'i8',    min:-128, max:127 },
-      su4_templower:        { key:'SU4_SysTemperLowLvl',       type:'i8',    min:-128, max:127 },
-      su4_suid:             { key:'SU4_SuId',                  type:'u8',    min:1, max:4 },
+      su4_tempupper:       { key:'SysTemperHighLvl',         type:'i8',    min:-128, max:127 },
+      su4_templower:        { key:'SysTemperLowLvl',          type:'i8',    min:-128, max:127 },
+      su4_suid:             { key:'SuId',                     type:'u8',    min:1, max:4 },
       
       // SU4 Beam Status
-      su4_gumstick_onoff:  { key:'SU4_GumStick_OnOff',        type:'u8',    min:0, max:1 },
+      su4_gumstick_onoff:  { key:'GumStick_OnOff',           type:'u8',    min:0, max:1 },
 
       // SU4 SISO RF
-      su4_dl_att_siso:     { key:'SU4_DlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su4_dl_alc_level_siso: { key:'SU4_ALC_DL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su4_dl_alc_onoff_siso: { key:'SU4_ALC_DL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su4_mvbx_tx_gain_set_siso: { key:'SU4_Mvbx_TxGainSetSiso', type:'u8', min:0, max:255 },
-      su4_ul_att_siso:     { key:'SU4_UlManualAtten_SISO', type:'u8',    min:0, max:255 },
-      su4_ul_alc_level_siso: { key:'SU4_ALC_UL0_SISO_Level',  type:'u16le', min:0, max:65535 },
-      su4_ul_alc_onoff_siso: { key:'SU4_ALC_UL0_SISO_Mode',   type:'u8',    min:0, max:1 },
-      su4_mvbx_rx_gain_set_siso: { key:'SU4_Mvbx_RxGainSetSiso', type:'u8', min:0, max:255 },
+      su4_dl_att_siso:     { key:'DlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su4_dl_alc_level_siso: { key:'ALC_DL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su4_dl_alc_onoff_siso: { key:'ALC_DL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su4_mvbx_tx_gain_set_siso: { key:'Mvbx_TxGainSetSiso', type:'u8',    min:0, max:255 },
+      su4_ul_att_siso:     { key:'UlManualAtten_SISO',       type:'u8',    min:0, max:255 },
+      su4_ul_alc_level_siso: { key:'ALC_UL0_SISO_Level',     type:'u16le', min:0, max:65535 },
+      su4_ul_alc_onoff_siso: { key:'ALC_UL0_SISO_Mode',      type:'u8',    min:0, max:1 },
+      su4_mvbx_rx_gain_set_siso: { key:'Mvbx_RxGainSetSiso', type:'u8',    min:0, max:255 },
 
       // SU4 MIMO RF
-      su4_dl_att_mimo:     { key:'SU4_DlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su4_dl_alc_level_mimo: { key:'SU4_ALC_DL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su4_dl_alc_onoff_mimo: { key:'SU4_ALC_DL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su4_mvbx_tx_gain_set_mimo: { key:'SU4_Mvbx_TxGainSetMimo', type:'u8', min:0, max:255 },
-      su4_ul_att_mimo:     { key:'SU4_UlManualAtten_MIMO', type:'u8',    min:0, max:255 },
-      su4_ul_alc_level_mimo: { key:'SU4_ALC_UL1_MIMO_Level',  type:'u16le', min:0, max:65535 },
-      su4_ul_alc_onoff_mimo: { key:'SU4_ALC_UL1_MIMO_Mode',   type:'u8',    min:0, max:1 },
-      su4_mvbx_rx_gain_set_mimo: { key:'SU4_Mvbx_RxGainSetMimo', type:'u8', min:0, max:255 },
+      su4_dl_att_mimo:     { key:'DlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su4_dl_alc_level_mimo: { key:'ALC_DL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su4_dl_alc_onoff_mimo: { key:'ALC_DL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su4_mvbx_tx_gain_set_mimo: { key:'Mvbx_TxGainSetMimo', type:'u8',    min:0, max:255 },
+      su4_ul_att_mimo:     { key:'UlManualAtten_MIMO',       type:'u8',    min:0, max:255 },
+      su4_ul_alc_level_mimo: { key:'ALC_UL1_MIMO_Level',     type:'u16le', min:0, max:65535 },
+      su4_ul_alc_onoff_mimo: { key:'ALC_UL1_MIMO_Mode',      type:'u8',    min:0, max:1 },
+      su4_mvbx_rx_gain_set_mimo: { key:'Mvbx_RxGainSetMimo', type:'u8',    min:0, max:255 },
 
       // SU4 OPTIC
-      su4_ld1_det_dl0_siso_low: { key:'SU4_LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su4_pd1_det_ul0_siso_low: { key:'SU4_PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su4_ld2_det_dl1_mimo_low: { key:'SU4_LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su4_pd2_det_ul1_mimo_low: { key:'SU4_PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su4_ld3_det_dl0_siso_low: { key:'SU4_LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su4_pd3_det_ul0_siso_low: { key:'SU4_PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
-      su4_ld4_det_dl1_mimo_low: { key:'SU4_LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
-      su4_pd4_det_ul1_mimo_low: { key:'SU4_PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld1_det_dl0_siso_low: { key:'LD1_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd1_det_ul0_siso_low: { key:'PD1_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld2_det_dl1_mimo_low: { key:'LD2_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd2_det_ul1_mimo_low: { key:'PD2_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld3_det_dl0_siso_low: { key:'LD3_DET_DL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd3_det_ul0_siso_low: { key:'PD3_DET_UL0_SISO_Low', type:'u16le', min:0, max:65535 },
+      su4_ld4_det_dl1_mimo_low: { key:'LD4_DET_DL1_MIMO_Low', type:'u16le', min:0, max:65535 },
+      su4_pd4_det_ul1_mimo_low: { key:'PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
     //==== Sync Module 필드 매핑 ====
@@ -14046,165 +14075,177 @@
     //==== SU1 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
     const SU1_CONTROL_BITS = {
       // Temp Upper/Lower
-      SU1_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
-      SU1_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
-      SU1_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
-      SU1_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
-      SU1_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
       
       // SISO RF
-      SU1_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
-      SU1_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
-      SU1_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
-      SU1_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
-      SU1_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
-      SU1_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
-      SU1_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
-      SU1_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
-      SU1_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
-      SU1_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
-      SU1_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
-      SU1_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
-      SU1_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
-      SU1_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
-      SU1_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
-      SU1_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
+      Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
-      SU1_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
-      SU1_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
-      SU1_LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
-      SU1_PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
+      PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
       
       // MIMO OPTIC
-      SU1_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
-      SU1_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
-      SU1_LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
-      SU1_PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
+      PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
     };
 
     //==== SU2 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
     const SU2_CONTROL_BITS = {
       // Temp Upper/Lower
-      SU2_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
-      SU2_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
-      SU2_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
-      SU2_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
-      SU2_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
       
       // SISO RF
-      SU2_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
-      SU2_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
-      SU2_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
-      SU2_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
-      SU2_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
-      SU2_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
-      SU2_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
-      SU2_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
-      SU2_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
-      SU2_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
-      SU2_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
-      SU2_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
-      SU2_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
-      SU2_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
-      SU2_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
-      SU2_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
+      Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
-      SU2_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
-      SU2_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
+      PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
       
       // MIMO OPTIC
-      SU2_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
-      SU2_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
+      PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
     };
 
     //==== SU3 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
     const SU3_CONTROL_BITS = {
       // Temp Upper/Lower
-      SU3_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
-      SU3_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
-      SU3_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
-      SU3_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
-      SU3_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
       
       // SISO RF
-      SU3_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
-      SU3_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
-      SU3_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
-      SU3_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
-      SU3_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
-      SU3_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
-      SU3_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
-      SU3_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
-      SU3_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
-      SU3_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
-      SU3_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
-      SU3_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
-      SU3_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
-      SU3_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
-      SU3_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
-      SU3_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
+      Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
-      SU3_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
-      SU3_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
+      PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
       
       // MIMO OPTIC
-      SU3_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
-      SU3_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
+      PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
     };
 
     //==== SU4 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
     const SU4_CONTROL_BITS = {
       // Temp Upper/Lower
-      SU4_SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
-      SU4_SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
-      SU4_SuId: [3, 0],                    // packet[583]의 bit0 → index 3
-      SU4_SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
+      SysTemperHighLvl: [0, 3],        // packet[580]의 bit3 → index 0
+      SysTemperLowLvl: [0, 3],         // packet[580]의 bit3 → index 0
+      SuId: [3, 0],                    // packet[583]의 bit0 → index 3
+      SuEndMode: [14, 3],              // packet[594]의 bit3 → index 14
       
       // Beam Status
-      SU4_GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
+      GumStick_OnOff: [7, 1],          // packet[587]의 bit1 → index 7
       
       // SISO RF
-      SU4_DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
-      SU4_ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
-      SU4_ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
-      SU4_Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
-      SU4_UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
-      SU4_ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
-      SU4_ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
-      SU4_Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
+      DlManualAtten_SISO: [4, 0],      // packet[584]의 bit0 → index 4
+      ALC_DL0_SISO_Level: [7, 4],      // packet[587]의 bit4 → index 7
+      ALC_DL0_SISO_Mode: [3, 2],       // packet[583]의 bit2 → index 3
+      Mvbx_TxGainSetSiso: [16, 0],     // packet[596]의 bit0 → index 16
+      UlManualAtten_SISO: [4, 4],      // packet[584]의 bit4 → index 4
+      ALC_UL0_SISO_Level: [7, 6],      // packet[587]의 bit6 → index 7
+      ALC_UL0_SISO_Mode: [3, 4],       // packet[583]의 bit4 → index 3
+      Mvbx_RxGainSetSiso: [16, 1],     // packet[596]의 bit1 → index 16
       
       // MIMO RF
-      SU4_DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
-      SU4_ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
-      SU4_ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
-      SU4_Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
-      SU4_UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
-      SU4_ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
-      SU4_ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
-      SU4_Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
+      DlManualAtten_MIMO: [4, 2],      // packet[584]의 bit2 → index 4
+      ALC_DL1_MIMO_Level: [7, 5],      // packet[587]의 bit5 → index 7
+      ALC_DL1_MIMO_Mode: [3, 3],       // packet[583]의 bit3 → index 3
+      Mvbx_TxGainSetMimo: [16, 2],     // packet[596]의 bit2 → index 16
+      UlManualAtten_MIMO: [4, 7],      // packet[584]의 bit7 → index 4
+      ALC_UL1_MIMO_Level: [7, 7],      // packet[587]의 bit7 → index 7
+      ALC_UL1_MIMO_Mode: [3, 5],       // packet[583]의 bit5 → index 3
+      Mvbx_RxGainSetMimo: [16, 3],     // packet[596]의 bit3 → index 16
       
       // SISO OPTIC
-      SU4_LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
-      SU4_PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD1_DET_DL0_SISO_Low: [8, 0],   // packet[588]의 bit0 → index 8
+      PD1_DET_UL0_SISO_Low: [8, 2],   // packet[588]의 bit2 → index 8
+      LD3_DET_DL0_SISO_Low: [8, 4],   // packet[588]의 bit4 → index 8
+      PD3_DET_UL0_SISO_Low: [8, 6],   // packet[588]의 bit6 → index 8
       
       // MIMO OPTIC
-      SU4_LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
-      SU4_PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
+      PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
+      PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
     };
 
     //==== Sync Module 컨트롤 비트 (packet[12:16]을 index 0으로, [상대인덱스, bit]) ====
@@ -15132,30 +15173,21 @@
       try{
         const fields = collectFieldsSu1();
         
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x11; // SU1 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
+        // 수정된 필드들을 sendPacketData에 먼저 저장
         for (const [key, value] of Object.entries(fields)) {
           if (key !== 'ConMuFlag') {
             sendPacketData[key] = value;
-            console.log(`📝 SU1 저장: sendPacketData[${key}] = ${value}`);
           }
         }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        packetToSend.Rcv_Sub_Sys = 0x11; // SU1 번째 ID 설정
         
         // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
         if (fields.ConMuFlag) {
           packetToSend.ConMuFlag = fields.ConMuFlag;
           sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU1 ConMuFlag 적용:', fields.ConMuFlag);
         }
         
         // 전체 패킷 전송
@@ -15194,30 +15226,21 @@
       try{
         const fields = collectFieldsSu2();
         
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x12; // SU2 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
+        // 수정된 필드들을 sendPacketData에 먼저 저장
         for (const [key, value] of Object.entries(fields)) {
           if (key !== 'ConMuFlag') {
             sendPacketData[key] = value;
-            console.log(`📝 SU2 저장: sendPacketData[${key}] = ${value}`);
           }
         }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        packetToSend.Rcv_Sub_Sys = 0x12; // SU2 번째 ID 설정
         
         // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
         if (fields.ConMuFlag) {
           packetToSend.ConMuFlag = fields.ConMuFlag;
           sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU2 ConMuFlag 적용:', fields.ConMuFlag);
         }
         
         // 전체 패킷 전송
@@ -15254,30 +15277,21 @@
       try{
         const fields = collectFieldsSu3();
         
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x13; // SU3 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
+        // 수정된 필드들을 sendPacketData에 먼저 저장
         for (const [key, value] of Object.entries(fields)) {
           if (key !== 'ConMuFlag') {
             sendPacketData[key] = value;
-            console.log(`📝 SU3 저장: sendPacketData[${key}] = ${value}`);
           }
         }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        packetToSend.Rcv_Sub_Sys = 0x13; // SU3 번째 ID 설정
         
         // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
         if (fields.ConMuFlag) {
           packetToSend.ConMuFlag = fields.ConMuFlag;
           sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU3 ConMuFlag 적용:', fields.ConMuFlag);
         }
         
         // 전체 패킷 전송
@@ -15314,36 +15328,27 @@
       try{
         const fields = collectFieldsSu4();
         
-        // 전체 패킷 복사 (베이스 템플릿으로)
-        const packetToSend = {...sendPacketData};
-        packetToSend.Rcv_Sub_Sys = 0x14; // SU4 번째 ID 설정
-        
-        // 수정된 필드들을 packetToSend에 적용
-        for (const [key, value] of Object.entries(fields)) {
-          if (key !== 'ConMuFlag') {
-            packetToSend[key] = value;
-          }
-        }
-        
-        // sendPacketData에도 수정된 값들 저장 (영구 보존)
+        // 수정된 필드들을 sendPacketData에 먼저 저장
         for (const [key, value] of Object.entries(fields)) {
           if (key !== 'ConMuFlag') {
             sendPacketData[key] = value;
-            console.log(`📝 SU4 저장: sendPacketData[${key}] = ${value}`);
           }
         }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        packetToSend.Rcv_Sub_Sys = 0x14; // SU4 번째 ID 설정
         
         // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
         if (fields.ConMuFlag) {
           packetToSend.ConMuFlag = fields.ConMuFlag;
           sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
-          console.log('🔧 SU4 ConMuFlag 적용:', fields.ConMuFlag);
         }
         
         // 전체 패킷 전송
         socket.emit('apply_su4_values', packetToSend);
         console.log('🔧 Applying complete SU4 packet:', packetToSend);
-     }catch(e){ 
+      }catch(e){ 
         console.error('SU4 입력 오류:', e);
         alert('SU4 입력 오류: ' + e.message); 
       }
