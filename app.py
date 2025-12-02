@@ -460,12 +460,6 @@ def apply_su1_values(payload):
         if not payload:
             raise ValueError("Payload is empty")
         
-        # Fields가 있는지 확인
-        if 'Fields' in payload:
-            print(f"🔧 SU1 Fields found: {payload['Fields']}")
-        else:
-            print("⚠️ SU1 Fields not found in payload")
-        
         # ConMuFlag가 있는지 확인
         if 'ConMuFlag' in payload:
             print(f"🔧 SU1 ConMuFlag found: {payload['ConMuFlag']}")
