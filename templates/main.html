@@ -16264,7 +16264,7 @@
           const workbook = XLSX.read(data, { type: 'array' });
           console.log(`📊 Workbook sheets: ${workbook.SheetNames.join(', ')}`);
           
-          // 첫 번째 워크시트 가져오기
+          // 첫 번째 워크시트  가져오기
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           console.log(`📊 Worksheet: ${workbook.SheetNames[0]}`);
           
