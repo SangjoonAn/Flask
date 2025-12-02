@@ -8313,7 +8313,11 @@
             };
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
-                if (el && value !== undefined) el.value = value;
+                if (el && value !== undefined) {
+                    el.value = value;
+                    // ID 값 출력 시 텍스트 크기 조정
+                    el.style.fontSize = '0.85rem';
+                }
             };
 
             // SU2용 텍스트 변수 정의 (SU1과 동일)
@@ -16264,7 +16268,7 @@
           const workbook = XLSX.read(data, { type: 'array' });
           console.log(`📊 Workbook sheets: ${workbook.SheetNames.join(', ')}`);
           
-          // 첫 번째 워크시트 가져오기
+          // 첫 번째 워크시트  가져오기
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
           console.log(`📊 Worksheet: ${workbook.SheetNames[0]}`);
           
