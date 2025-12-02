@@ -8313,7 +8313,11 @@
             };
             const updateValue = (id, value) => {
                 const el = document.getElementById(id);
-                if (el && value !== undefined) el.value = value;
+                if (el && value !== undefined) {
+                    el.value = value;
+                    // ID 값 출력 시 텍스트 크기 조정
+                    el.style.fontSize = '0.85rem';
+                }
             };
 
             // SU2용 텍스트 변수 정의 (SU1과 동일)
