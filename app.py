@@ -324,6 +324,56 @@ def leave_set_mode(payload=None):
     print(f"🔧 Client leaving Set Mode")
     emit("du_status_mode_ack", {"ok": True})
 
+@socketio.on("enter_beam_info_set_mode")
+def enter_beam_info_set_mode(payload=None):
+    print(f"🔧 Client entering Beam Info Modal Set Mode")
+    emit("beam_info_set_mode_ack", {"ok": True})
+
+@socketio.on("leave_beam_info_set_mode")
+def leave_beam_info_set_mode(payload=None):
+    print(f"🔧 Client leaving Beam Info Modal Set Mode")
+    emit("beam_info_status_mode_ack", {"ok": True})
+
+@socketio.on("enter_beam_info_set_mode_su1")
+def enter_beam_info_set_mode_su1(payload=None):
+    print(f"🔧 Client entering SU1 Beam Info Modal Set Mode")
+    emit("beam_info_set_mode_su1_ack", {"ok": True})
+
+@socketio.on("leave_beam_info_set_mode_su1")
+def leave_beam_info_set_mode_su1(payload=None):
+    print(f"🔧 Client leaving SU1 Beam Info Modal Set Mode")
+    emit("beam_info_status_mode_su1_ack", {"ok": True})
+
+@socketio.on("enter_beam_info_set_mode_su2")
+def enter_beam_info_set_mode_su2(payload=None):
+    print(f"🔧 Client entering SU2 Beam Info Modal Set Mode")
+    emit("beam_info_set_mode_su2_ack", {"ok": True})
+
+@socketio.on("leave_beam_info_set_mode_su2")
+def leave_beam_info_set_mode_su2(payload=None):
+    print(f"🔧 Client leaving SU2 Beam Info Modal Set Mode")
+    emit("beam_info_status_mode_su2_ack", {"ok": True})
+
+@socketio.on("enter_beam_info_set_mode_su3")
+def enter_beam_info_set_mode_su3(payload=None):
+    print(f"🔧 Client entering SU3 Beam Info Modal Set Mode")
+    emit("beam_info_set_mode_su3_ack", {"ok": True})
+
+@socketio.on("leave_beam_info_set_mode_su3")
+def leave_beam_info_set_mode_su3(payload=None):
+    print(f"🔧 Client leaving SU3 Beam Info Modal Set Mode")
+    emit("beam_info_status_mode_su3_ack", {"ok": True})
+
+@socketio.on("enter_beam_info_set_mode_su4")
+def enter_beam_info_set_mode_su4(payload=None):
+    print(f"🔧 Client entering SU4 Beam Info Modal Set Mode")
+    emit("beam_info_set_mode_su4_ack", {"ok": True})
+
+@socketio.on("leave_beam_info_set_mode_su4")
+def leave_beam_info_set_mode_su4(payload=None):
+    print(f"🔧 Client leaving SU4 Beam Info Modal Set Mode")
+    emit("beam_info_status_mode_su4_ack", {"ok": True})
+
 @socketio.on("enter_su1_set_mode")
 def enter_su1_set_mode(payload=None):
     print(f"🔧 Client entering SU1 Set Mode")
@@ -356,13 +406,23 @@ def leave_su2_set_mode(_payload=None):
 def apply_su2_values(payload):
     try:
         print(f"🔧 Applying SU2 values: {payload}")
+        print(f"🔧 SU2 payload type: {type(payload)}")
+        print(f"🔧 SU2 payload keys: {list(payload.keys()) if isinstance(payload, dict) else 'Not a dict'}")
         
         # payload 검증
         if not payload:
             raise ValueError("Payload is empty")
         
+        # ConMuFlag가 있는지 확인
+        if 'ConMuFlag' in payload:
+            print(f"🔧 SU2 ConMuFlag found: {payload['ConMuFlag']}")
+        else:
+            print("⚠️ SU2 ConMuFlag not found in payload")
+        
         # test.py로 전송 (SU1과 동일한 방식)
+        print("🔧 SU2 sending to test.py...")
         socketio.emit("su2_Ctrl_packet", payload, include_self=False)
+        print("🔧 SU2 sent to test.py")
         
         # 클라이언트에게 성공 응답
         emit("su2_apply_ack", {"ok": True})

@@ -2439,7 +2439,7 @@
                                                 <!-- UL Bottom Section -->
                                                 <hr class="my-2" style="border-top: 1px dotted #6c757d; width: 100%; margin: 0 auto;" />
                                                 <div class="input-item">
-                                                    <label>Ant Out Output</label>
+                                                    <label>Ant Out Offset</label>
                                                     <div class="input-with-unit">
                                                         <input type="text" value="N/A" class="form-control form-control-sm" id="Ant_Out_Offset_Mimo" />
                                                         <span class="unit">[dBm]</span>
@@ -2646,7 +2646,7 @@
                                                 <small class="text-muted">Temper Comp</small>
                                             </div>
                                             <div class="col-auto">
-                                                <button class="btn btn-sm btn-on" id="temperComp">N/A</button>
+                                                <button type="button" class="btn btn-sm btn-on" id="temperComp" data-editable="true">N/A</button>
                                             </div>
                                             <div class="col-auto">
                                                 <small class="text-muted">Start Temper</small>
@@ -2822,11 +2822,11 @@
                                                     <div class="col-md-6">
                                                         <div class="beam-scan-field">
                                                             <label for="beamRetry">Beam Retry</label>
-                                                            <button class="btn btn-sm ms-auto btn-on" id="beamRetrySwitch">N/A</button>
+                                                            <button type="button" class="btn btn-sm ms-auto btn-on" id="beamRetrySwitch" data-editable="true">N/A</button>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="decodeAGC">Decode AGC</label>
-                                                            <button class="btn btn-sm ms-auto btn-on" id="decodeAGCSwitch">N/A</button>
+                                                            <button type="button" class="btn btn-sm ms-auto btn-on" id="decodeAGCSwitch" data-editable="true">N/A</button>
                                                         </div>
                                                         <div class="beam-scan-field">
                                                             <label for="retryCount">Retry Count [1:5min]</label>
@@ -2910,10 +2910,10 @@
                                     </div>
                                 </div>
                             </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
-                                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                                <button type="button" class="btn btn-secondary me-2" id="btnCancelBeamInfo" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
                                 <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
-                                <button class="btn btn-success d-none" id="btnApply">Apply</button>
                                 <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
+                                <button class="btn btn-success d-none" id="btnApply">Set</button>
                             </div>
 
                         </div>
@@ -6958,6 +6958,8 @@
             centerCircle.style.fill = "dimgray"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
+            centerCircle.style.cursor = "pointer";
+            centerCircle.setAttribute("data-beam-number", "0");
             svg.appendChild(centerCircle);
 
             const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -6998,6 +7000,8 @@
                     pathEl.setAttribute("fill", "dimgray");
                     pathEl.setAttribute("stroke", "#aaa");
                     pathEl.setAttribute("stroke-width", 1);
+                    pathEl.style.cursor = "pointer";
+                    pathEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(pathEl);
 
                     const textRadius = (innerRadius + outerRadius) / 2;
@@ -7125,7 +7129,60 @@
                 beamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawBeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
+                    
+                    // Beam Book SVG에 클릭 이벤트 리스너 추가
+                    const beamBookSvg = document.getElementById("beamBook");
+                    if (beamBookSvg) {
+                        // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+                        beamBookSvg.removeEventListener('click', handleBeamBookClick);
+                        beamBookSvg.addEventListener('click', handleBeamBookClick);
+                    }
+                    
+                    // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiMode에서 필드를 찾기 위해 필요)
+                    saveBeamInfoOriginalValues();
+                    
+                    // 모달이 열릴 때 UI 상태 초기화 (Set Mode가 활성화되어 있지 않은 상태로)
+                    if (!SET_MODE_BEAM_INFO) {
+                        applyBeamInfoUiMode();
+                    }
                 });
+                
+                // 모달이 닫힐 때 Set Mode 종료
+                beamInfoModal.addEventListener('hidden.bs.modal', function() {
+                    if (SET_MODE_BEAM_INFO) {
+                        SET_MODE_BEAM_INFO = false;
+                        applyBeamInfoUiMode();
+                        socket.emit('leave_beam_info_set_mode');
+                    }
+                    selectedBeamNumber = null; // 모달 닫을 때 선택 초기화
+                });
+            }
+            
+            // Beam Book 섹터 클릭 이벤트 핸들러
+            function handleBeamBookClick(event) {
+                if (!SET_MODE_BEAM_INFO) {
+                    return; // Set Mode가 아니면 클릭 무시
+                }
+                
+                const target = event.target;
+                const beamNumber = target.getAttribute("data-beam-number");
+                
+                if (beamNumber !== null) {
+                    const number = parseInt(beamNumber);
+                    selectedBeamNumber = number;
+                    
+                    // 모든 섹터를 dimgray로 초기화
+                    for (const beam of beamData) {
+                        beam.pathEl.setAttribute("fill", "dimgray");
+                        beam.pathEl.style.fill = "dimgray";
+                    }
+                    
+                    // 선택된 섹터만 #F2C029로 변경
+                    target.setAttribute("fill", "#F2C029");
+                    target.style.fill = "#F2C029";
+                    
+                    console.log(`🎯 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
+                }
             }
         });
 
@@ -7281,6 +7338,23 @@
                 su1BeamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawSu1BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
+                    
+                    // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu1에서 필드를 찾기 위해 필요)
+                    saveBeamInfoOriginalValuesSu1();
+                    
+                    // 모달이 열릴 때 UI 상태 초기화 (Set Mode가 활성화되어 있지 않은 상태로)
+                    if (!SET_MODE_BEAM_INFO_SU1) {
+                        applyBeamInfoUiModeSu1();
+                    }
+                });
+                
+                // 모달이 닫힐 때 Set Mode 종료
+                su1BeamInfoModal.addEventListener('hidden.bs.modal', function() {
+                    if (SET_MODE_BEAM_INFO_SU1) {
+                        SET_MODE_BEAM_INFO_SU1 = false;
+                        applyBeamInfoUiModeSu1();
+                        socket.emit('leave_beam_info_set_mode_su1');
+                    }
                 });
             }
         });
@@ -7437,6 +7511,23 @@
                 su2BeamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawSu2BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
+                    
+                    // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu2에서 필드를 찾기 위해 필요)
+                    saveBeamInfoOriginalValuesSu2();
+                    
+                    // 모달이 열릴 때 UI 상태 초기화 (Set Mode가 활성화되어 있지 않은 상태로)
+                    if (!SET_MODE_BEAM_INFO_SU2) {
+                        applyBeamInfoUiModeSu2();
+                    }
+                });
+                
+                // 모달이 닫힐 때 Set Mode 종료
+                su2BeamInfoModal.addEventListener('hidden.bs.modal', function() {
+                    if (SET_MODE_BEAM_INFO_SU2) {
+                        SET_MODE_BEAM_INFO_SU2 = false;
+                        applyBeamInfoUiModeSu2();
+                        socket.emit('leave_beam_info_set_mode_su2');
+                    }
                 });
             }
         });
@@ -7593,6 +7684,23 @@
                 su3BeamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawSu3BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
+                    
+                    // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu3에서 필드를 찾기 위해 필요)
+                    saveBeamInfoOriginalValuesSu3();
+                    
+                    // 모달이 열릴 때 UI 상태 초기화 (Set Mode가 활성화되어 있지 않은 상태로)
+                    if (!SET_MODE_BEAM_INFO_SU3) {
+                        applyBeamInfoUiModeSu3();
+                    }
+                });
+                
+                // 모달이 닫힐 때 Set Mode 종료
+                su3BeamInfoModal.addEventListener('hidden.bs.modal', function() {
+                    if (SET_MODE_BEAM_INFO_SU3) {
+                        SET_MODE_BEAM_INFO_SU3 = false;
+                        applyBeamInfoUiModeSu3();
+                        socket.emit('leave_beam_info_set_mode_su3');
+                    }
                 });
             }
         });
@@ -7749,6 +7857,23 @@
                 su4BeamInfoModal.addEventListener('shown.bs.modal', function() {
                     drawSu4BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
+                    
+                    // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu4에서 필드를 찾기 위해 필요)
+                    saveBeamInfoOriginalValuesSu4();
+                    
+                    // 모달이 열릴 때 UI 상태 초기화 (Set Mode가 활성화되어 있지 않은 상태로)
+                    if (!SET_MODE_BEAM_INFO_SU4) {
+                        applyBeamInfoUiModeSu4();
+                    }
+                });
+                
+                // 모달이 닫힐 때 Set Mode 종료
+                su4BeamInfoModal.addEventListener('hidden.bs.modal', function() {
+                    if (SET_MODE_BEAM_INFO_SU4) {
+                        SET_MODE_BEAM_INFO_SU4 = false;
+                        applyBeamInfoUiModeSu4();
+                        socket.emit('leave_beam_info_set_mode_su4');
+                    }
                 });
             }
         });
@@ -8658,9 +8783,10 @@
             // Ant Band: 0이면 Single, 1이면 Tri
             updateText('su2antband', data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
 
-            // 삭제된 SU2 Beam Info Modal 업데이트 추가
+            // SU2 Beam Info Modal 업데이트 (SU2 전용 ID 사용)
             updateText('su2AntArrayVer', data.packet.Gumstick_Ver);
             // SU2 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO_SU2) return; // SU2 Beam Info Set Mode에서 업데이트 차단
             const su2TemperCompEl = document.getElementById("su2TemperComp");
             if (su2TemperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -9108,9 +9234,10 @@
             // Ant Band: 0이면 Single, 1이면 Tri
             updateText('su3antband', data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
 
-            // 삭제된 SU3 Beam Info Modal 업데이트 추가
+            // SU3 Beam Info Modal 업데이트 (SU3 전용 ID 사용)
             updateText('su3AntArrayVer', data.packet.Gumstick_Ver);
             // SU3 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO_SU3) return; // SU3 Beam Info Set Mode에서 업데이트 차단
             const su3TemperCompEl = document.getElementById("su3TemperComp");
             if (su3TemperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -9542,9 +9669,10 @@
             // Ant Band: 0이면 Single, 1이면 Tri
             updateText('su4antband', data.packet.ApiOldNewVer === 0 ? "Single" : (data.packet.ApiOldNewVer === 1 ? "Tri" : "N/A"));
 
-            // 삭제된 SU4 Beam Info Modal 업데이트 추가
+            // SU4 Beam Info Modal 업데이트 (SU4 전용 ID 사용)
             updateText('su4AntArrayVer', data.packet.Gumstick_Ver);
             // SU4 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO_SU4) return; // SU4 Beam Info Set Mode에서 업데이트 차단
             const su4TemperCompEl = document.getElementById("su4TemperComp");
             if (su4TemperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -9834,11 +9962,27 @@
                 if (el && value !== undefined) {
                             // 섹션별 Set Mode에서 편집 가능한 필드만 업데이트 방지
         const isSu1 = id.startsWith('su1_');
+        const isSu2 = id.startsWith('su2_');
+        const isSu3 = id.startsWith('su3_');
+        const isSu4 = id.startsWith('su4_');
         const isSync = id.startsWith('tsync_') || id.startsWith('TDD_') || id.startsWith('F_') || id.startsWith('ssb_') || id.startsWith('tdd_');
-        const editLock = (isSu1 ? SET_MODE_SU1 : (isSync ? SYNC_SET_MODE : SET_MODE));
+        const isBeamInfo = ['temperComp', 'beamRetrySwitch', 'decodeAGCSwitch', 'centerFrequency', 'beamFix',
+                            'apiLogLevel', 'apiAdcSel', 'syncPathGain', 'duTimeAdvance', 
+                            'suTimeAdvance', 'orientationActual', 'tiltActual'].includes(id);
+
+        const isBeamInfoSu1 = ['su1TemperComp', 'su1CenterFrequency', 'su1AntSelect', 'su1BeamFix',
+                            'su1ApiLogLevel', 'su1OrientationActual', 'su1TiltActual'].includes(id);
+        const isBeamInfoSu2 = ['su2TemperComp', 'su2CenterFrequency', 'su2AntSelect', 'su2BeamFix',
+                            'su2ApiLogLevel', 'su2OrientationActual', 'su2TiltActual'].includes(id);
+        const isBeamInfoSu3 = ['su3TemperComp', 'su3CenterFrequency', 'su3AntSelect', 'su3BeamFix',
+                            'su3ApiLogLevel', 'su3OrientationActual', 'su3TiltActual'].includes(id);
+        const isBeamInfoSu4 = ['su4TemperComp', 'su4CenterFrequency', 'su4AntSelect', 'su4BeamFix',
+                            'su4ApiLogLevel', 'su4OrientationActual', 'su4TiltActual'].includes(id);
+        const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : (isSu3 ? SET_MODE_SU3 : (isSu4 ? SET_MODE_SU4 : (isSync ? SYNC_SET_MODE : (isBeamInfo ? SET_MODE_BEAM_INFO : (isBeamInfoSu1 ? SET_MODE_BEAM_INFO_SU1 : (isBeamInfoSu2 ? SET_MODE_BEAM_INFO_SU2 : (isBeamInfoSu3 ? SET_MODE_BEAM_INFO_SU3 : (isBeamInfoSu4 ? SET_MODE_BEAM_INFO_SU4 : SET_MODE))))))))));
         
         if (editLock && el.hasAttribute('data-editable')) {
-            console.log(`🔒 ${isSu1 ? 'SU1' : (isSync ? 'Sync' : 'DU')} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
+            const section = (isBeamInfo ? 'Beam Info' : (isBeamInfoSu1 ? 'SU1 Beam Info' : (isBeamInfoSu2 ? 'SU2 Beam Info' : (isBeamInfoSu3 ? 'SU3 Beam Info' : (isBeamInfoSu4 ? 'SU4 Beam Info' : (isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : (isSync ? 'Sync' : 'DU'))))))))));
+            console.log(`🔒 ${section} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
             return;
         }
                     
@@ -10515,6 +10659,8 @@
 
             updateText('antArrayVer', data.packet.Gumstick_Ver);
             // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const temperCompEl = document.getElementById("temperComp");
             if (temperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -10572,6 +10718,7 @@
             
             // Beam Info Modal 추가 업데이트
             // Beam Retry 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const beamRetryEl = document.getElementById("beamRetrySwitch");
             if (beamRetryEl) {
                 if (data.packet.BeamScan_OnOff === 1) {
@@ -10584,6 +10731,7 @@
             }
             
             // Decode AGC 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const decodeAGCEl = document.getElementById("decodeAGCSwitch");
             if (decodeAGCEl) {
                 if (data.packet.DecodeRecoveryFuncOnOff === 1) {
@@ -10765,11 +10913,13 @@
         
             
             // Beam Book 동그라미 색상 업데이트 (app.py에서 파싱한 데이터 사용)
-            // 항상 업데이트 시도 (조건 제거)
+            // Set Mode가 아닐 때만 업데이트
+            if (!SET_MODE_BEAM_INFO) {
                 updateBeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
+                    yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
+                });
+            }
 
             /*
             
@@ -10854,6 +11004,7 @@
             // SU1 Beam Info Modal 업데이트 (SU1 전용 ID 사용)
             updateText('su1AntArrayVer', data.packet.Gumstick_Ver);
             // SU1 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO_SU1) return; // SU1 Beam Info Set Mode에서 업데이트 차단
             const su1TemperCompEl = document.getElementById("su1TemperComp");
             if (su1TemperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -11824,6 +11975,8 @@
 
             updateText('antArrayVer', data.packet.Gumstick_Ver);
             // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            // Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const temperCompEl = document.getElementById("temperComp");
             if (temperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -11881,6 +12034,7 @@
             
             // Beam Info Modal 추가 업데이트
             // Beam Retry 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const beamRetryEl = document.getElementById("beamRetrySwitch");
             if (beamRetryEl) {
                 if (data.packet.BeamScan_OnOff === 1) {
@@ -11893,6 +12047,7 @@
             }
             
             // Decode AGC 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO) return; // Beam Info Set Mode에서 업데이트 차단
             const decodeAGCEl = document.getElementById("decodeAGCSwitch");
             if (decodeAGCEl) {
                 if (data.packet.DecodeRecoveryFuncOnOff === 1) {
@@ -12153,6 +12308,7 @@
             // SU1 Beam Info Modal 업데이트 (SU1 전용 ID 사용)
             updateText('su1AntArrayVer', data.packet.Gumstick_Ver);
             // SU1 Temper Comp 스위치 업데이트 (1=ON, 0=OFF)
+            if (SET_MODE_BEAM_INFO_SU1) return; // SU1 Beam Info Set Mode에서 업데이트 차단
             const su1TemperCompEl = document.getElementById("su1TemperComp");
             if (su1TemperCompEl) {
                 if (data.packet.TemperCompensationMode === 1) {
@@ -13764,6 +13920,12 @@
     <script>
     //==== 전역 상태 ====
     let SET_MODE = false;
+    let SET_MODE_BEAM_INFO = false;
+    let SET_MODE_BEAM_INFO_SU1 = false;
+    let SET_MODE_BEAM_INFO_SU2 = false;
+    let SET_MODE_BEAM_INFO_SU3 = false;
+    let SET_MODE_BEAM_INFO_SU4 = false;
+    let selectedBeamNumber = null; // 선택된 beam book 섹터 번호 저장
 
     //==== UI id ↔ 데이터 필드 매핑 ====
     const FIELD_MAP = {
@@ -13971,6 +14133,61 @@
       su4_pd4_det_ul1_mimo_low: { key:'PD4_DET_UL1_MIMO_Low', type:'u16le', min:0, max:65535 },
     };
 
+    //==== DU Hidden Modal 필드 매핑 ====
+    const DU_HIDDEN_FIELD_MAP = {
+      // SISO RF - DL
+      'DlSubAtten_SISO': { key:'DU_DlSubAtten_SISO', type:'u8', min:0, max:255 },
+      'DL_InputOffset_SISO': { key:'DL_OutputOffset_SISO', type:'u16le', min:0, max:65535 },
+      'Dl_Att_Test_Siso': { key:'Dl_Siso_Att_Test', type:'u16le', min:0, max:65535 },
+      'Ant_Gain_Siso': { key:'Gs_Gain_Siso', type:'u8', min:0, max:255 },
+      'Ant_Offset_DL_Siso': { key:'GS_AttenOffset_DL_Siso', type:'u8', min:0, max:255 },
+      
+      // SISO RF - UL
+      'UlSubAtten_SISO': { key:'DU_UlSubAtten_SISO', type:'u8', min:0, max:255 },
+      'UL_OutputOffset_SISO': { key:'UL_InputOffset_SISO', type:'u16le', min:0, max:65535 },
+      'Ul_Att_Test_Siso': { key:'Ul_Siso_Att_Test', type:'u16le', min:0, max:65535 },
+      'Ant_Output_SISO': { key:'ApiGsOutputPowerOffsetSiso', type:'u16le', min:0, max:65535 },
+      'Ant_Offset_UL_Siso': { key:'GS_AttenOffset_UL_Siso', type:'u8', min:0, max:255 },
+      
+      // MIMO RF - DL
+      'DlSubAtten_MIMO': { key:'DU_DlSubAtten_MIMO', type:'u8', min:0, max:255 },
+      'DL_InputOffset_MIMO': { key:'DL_OutputOffset_MIMO', type:'u16le', min:0, max:65535 },
+      'Dl_Att_Test_Mimo': { key:'Dl_Mimo_Att_Test', type:'u16le', min:0, max:65535 },
+      'Ant_Gain_Mimo': { key:'Gs_Gain_Mimo', type:'u8', min:0, max:255 },
+      'Ant_Offset_DL_Mimo': { key:'GS_AttenOffset_DL_Mimo', type:'u8', min:0, max:255 },
+      
+      // MIMO RF - UL
+      'UlSubAtten_MIMO': { key:'DU_UlSubAtten_MIMO', type:'u8', min:0, max:255 },
+      'UL_OutputOffset_MIMO': { key:'UL_InputOffset_MIMO', type:'u16le', min:0, max:65535 },
+      'U_Att_Testl_Mimo': { key:'Ul_Mimo_Att_Test', type:'u16le', min:0, max:65535 },
+      'Ant_Out_Offset_Mimo': { key:'ApiGsOutputPowerOffsetMimo', type:'u16le', min:0, max:65535 },
+      'Ant_Output_MIMO': { key:'DsOutputPower_MIMO', type:'u16le', min:0, max:65535 },
+      'Ant_Offset_UL_Mimo': { key:'GS_AttenOffset_UL_Mimo', type:'u8', min:0, max:255 },
+      
+      // SISO OPTIC
+      'LD1_DET_DL0_SISO_Offset': { key:'LD1_DET_DL0_SISO_Offset', type:'u16le', min:0, max:65535 },
+      'PD1_DET_UL0_SISO_Offset': { key:'PD1_DET_UL0_SISO_Offset', type:'u16le', min:0, max:65535 },
+      'RsrpOffset': { key:'RsrpOffset', type:'i8', min:-128, max:127 },
+      'LowRsrpLevel': { key:'LowRsrpLevel', type:'u16le', min:0, max:65535 },
+      'LowRsrpStillTime': { key:'LowRsrpStillTime', type:'u8', min:0, max:255 },
+      
+      // MIMO OPTIC
+      'LD2_DET_DL1_MIMO_Offset': { key:'LD2_DET_DL1_MIMO_Offset', type:'u16le', min:0, max:65535 },
+      'PD2_DET_UL1_MIMO_Offset': { key:'PD2_DET_UL1_MIMO_Offset', type:'u16le', min:0, max:65535 },
+      
+      // System Settings
+      'conserialnum': { key:'ConSerialNum', type:'string', min:0, max:16 },
+      'isodetect': { key:'IsoDetectMode', type:'u8', min:0, max:1 },
+      'pollingtime': { key:'PollingTime', type:'u16le', min:0, max:65535 },
+      'baudrate': { key:'Mu_Su_Buadrate', type:'u8', min:0, max:3 },
+      'aomtemp-toggle': { key:'AomTemperConperMode', type:'u8', min:0, max:1 },
+      'att-test-toggle': { key:'AttTestMode', type:'u8', min:0, max:1 },
+      'api-init-toggle': { key:'ApiInitMode', type:'u8', min:0, max:1 },
+      'api-init-retry-toggle': { key:'ApiInitRetryMode', type:'u8', min:0, max:1 },
+      'debug-toggle': { key:'DebugMode', type:'u8', min:0, max:1 },
+      'modem-toggle': { key:'ModemOnOff', type:'u8', min:0, max:1 },
+    };
+
     //==== Sync Module 필드 매핑 ====
     const SYNC_FIELD_MAP = {
       // TSYNC OUT SEL/MODE #1
@@ -14074,6 +14291,21 @@
       // MIMO OPTIC
       LD2_DET_DL1_MIMO_Low: [8, 1],   // packet[588]의 bit1 → index 8
       PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
+      
+      // Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
+      BeamScan_OnOff: [7, 2],                    // packet[7]의 bit2
+      Actual_Orientation: [12, 6],                // packet[12]의 bit6
+      Actual_Tilt: [12, 7],                       // packet[12]의 bit7
+      ApiLogLevel: [13, 1],                       // packet[13]의 bit1
+      ApiAdcSel: [13, 2],                         // packet[13]의 bit2
+      ApiSyncPathGain: [13, 3],                   // packet[13]의 bit3
+      ApiDuTimeAdvance: [13, 4],                  // packet[13]의 bit4
+      ApiSuTimeAdvance: [13, 4],                  // packet[13]의 bit4 (DU와 동일한 비트)
+      TemperCompensationMode: [13, 5],            // packet[13]의 bit5
+      ApiVenderFreq: [13, 6],                     // packet[13]의 bit6
+      DecodeRecoveryFuncOnOff: [14, 4],           // packet[14]의 bit4
+      DuFixBeam: [20, 0],                        // packet[20]의 bit0
+      Mvbx_BeamSet: [14, 6],                     // packet[594]의 bit6 (ConMuFlag[14]의 bit6)
     };
 
     //==== SU1 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
@@ -14118,6 +14350,15 @@
       PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
       LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
       PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
+      
+      // SU1 Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
+      TemperCompensationMode: [13, 5],            // packet[13]의 bit5 (su1TemperComp)
+      ApiVenderFreq: [13, 6],                     // packet[13]의 bit6 (su1CenterFrequency)
+      ApiAntSelect: [13, 7],                      // packet[13]의 bit7 (su1AntSelect) - 새로 추가된 항목
+      DuFixBeam: [20, 0],                        // packet[20]의 bit0 (su1BeamFix)
+      ApiLogLevel: [13, 1],                       // packet[13]의 bit1 (su1ApiLogLevel)
+      Actual_Orientation: [12, 6],                // packet[12]의 bit6 (su1OrientationActual)
+      Actual_Tilt: [12, 7],                       // packet[12]의 bit7 (su1TiltActual)
     };
 
     //==== SU2 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
@@ -14316,10 +14557,21 @@
         const isSu2 = id.startsWith('su2_');
         const isSu3 = id.startsWith('su3_');
         const isSu4 = id.startsWith('su4_');
-        const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : (isSu3 ? SET_MODE_SU3 : (isSu4 ? SET_MODE_SU4 : SET_MODE))));
+        const isBeamInfo = ['temperComp', 'beamRetrySwitch', 'decodeAGCSwitch', 'centerFrequency', 'beamFix',
+                            'apiLogLevel', 'apiAdcSel', 'syncPathGain', 'duTimeAdvance', 
+                            'suTimeAdvance', 'orientationActual', 'tiltActual'].includes(id);
+        const isBeamInfoSu1 = ['su1TemperComp', 'su1CenterFrequency', 'su1AntSelect', 'su1BeamFix',
+                               'su1ApiLogLevel', 'su1OrientationActual', 'su1TiltActual'].includes(id);
+        const isBeamInfoSu2 = ['su2TemperComp', 'su2CenterFrequency', 'su2AntSelect', 'su2BeamFix',
+                               'su2ApiLogLevel', 'su2OrientationActual', 'su2TiltActual'].includes(id);
+        const isBeamInfoSu3 = ['su3TemperComp', 'su3CenterFrequency', 'su3AntSelect', 'su3BeamFix',
+                               'su3ApiLogLevel', 'su3OrientationActual', 'su3TiltActual'].includes(id);
+        const isBeamInfoSu4 = ['su4TemperComp', 'su4CenterFrequency', 'su4AntSelect', 'su4BeamFix',
+                               'su4ApiLogLevel', 'su4OrientationActual', 'su4TiltActual'].includes(id);
+        const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : (isSu3 ? SET_MODE_SU3 : (isSu4 ? SET_MODE_SU4 : (isBeamInfo ? SET_MODE_BEAM_INFO : (isBeamInfoSu1 ? SET_MODE_BEAM_INFO_SU1 : (isBeamInfoSu2 ? SET_MODE_BEAM_INFO_SU2 : (isBeamInfoSu3 ? SET_MODE_BEAM_INFO_SU3 : (isBeamInfoSu4 ? SET_MODE_BEAM_INFO_SU4 : SET_MODE)))))))));
         
         if (editLock && el.hasAttribute('data-editable')) {
-            const section = isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : 'DU')));
+            const section = (isBeamInfo ? 'Beam Info' : (isBeamInfoSu1 ? 'SU1 Beam Info' : (isBeamInfoSu2 ? 'SU2 Beam Info' : (isBeamInfoSu3 ? 'SU3 Beam Info' : (isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : 'DU'))))))));
             console.log(`🔒 ${section} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
             return;
         }
@@ -14334,6 +14586,161 @@
         } else {
             el.value = value;
         }
+    }
+
+    //==== Beam Info Modal UI 모드 토글 ====
+    function applyBeamInfoUiMode(){
+      console.log(`🔧 applyBeamInfoUiMode: SET_MODE_BEAM_INFO=${SET_MODE_BEAM_INFO}`);
+      
+      // Set Mode 관련 버튼들 토글 (DU의 applyUiMode와 동일한 방식)
+      // beamInfoModal 내부의 버튼들만 선택
+      const btnSetModeModal = document.querySelector('#beamInfoModal #btnSetModeModal');
+      const btnApply = document.querySelector('#beamInfoModal #btnApply');
+      const btnStatusMode = document.querySelector('#beamInfoModal #btnStatusMode');
+      
+      // DU의 applyUiMode와 동일한 방식으로 토글
+      // Cancel 버튼은 항상 표시 (Set Mode와 무관)
+      if (btnSetModeModal) btnSetModeModal.classList.toggle('d-none', SET_MODE_BEAM_INFO);
+      if (btnApply) btnApply.classList.toggle('d-none', !SET_MODE_BEAM_INFO);
+      if (btnStatusMode) btnStatusMode.classList.toggle('d-none', !SET_MODE_BEAM_INFO);
+      
+      // Beam Info Modal 편집 가능한 필드들 토글 (DU의 applyUiMode와 동일한 방식)
+      const beamInfoEditableFields = document.querySelectorAll('#beamInfoModal [data-editable="true"]');
+      beamInfoEditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_BEAM_INFO;
+        else if (el.tagName === 'SELECT') el.disabled = !SET_MODE_BEAM_INFO;
+        else if (el.type === 'button') el.disabled = !SET_MODE_BEAM_INFO; // on/off 버튼도 disabled 처리
+        else if (el.type !== 'button' && el.tagName !== 'SELECT') el.toggleAttribute('readonly', !SET_MODE_BEAM_INFO);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_BEAM_INFO);
+        }
+      });
+      console.log(`🔧 Toggled ${beamInfoEditableFields.length} Beam Info editable fields`);
+    }
+
+    //==== SU1 Beam Info Modal UI 모드 토글 ====
+    function applyBeamInfoUiModeSu1(){
+      console.log(`🔧 applyBeamInfoUiModeSu1: SET_MODE_BEAM_INFO_SU1=${SET_MODE_BEAM_INFO_SU1}`);
+      
+      // Set Mode 관련 버튼들 토글 (DU의 applyUiMode와 동일한 방식)
+      // su1BeamInfoModal 내부의 버튼들만 선택
+      const btnSetModeModal = document.querySelector('#su1BeamInfoModal #su1BtnSetModeModal');
+      const btnApply = document.querySelector('#su1BeamInfoModal #su1BtnApply');
+      const btnStatusMode = document.querySelector('#su1BeamInfoModal #su1BtnStatusMode');
+      
+      // DU의 applyUiMode와 동일한 방식으로 토글
+      // Cancel 버튼은 항상 표시 (Set Mode와 무관)
+      if (btnSetModeModal) btnSetModeModal.classList.toggle('d-none', SET_MODE_BEAM_INFO_SU1);
+      if (btnApply) btnApply.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU1);
+      if (btnStatusMode) btnStatusMode.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU1);
+      
+      // SU1 Beam Info Modal 편집 가능한 필드들 토글 (DU의 applyUiMode와 동일한 방식)
+      const beamInfoEditableFields = document.querySelectorAll('#su1BeamInfoModal [data-editable="true"]');
+      beamInfoEditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_BEAM_INFO_SU1;
+        else if (el.tagName === 'SELECT') el.disabled = !SET_MODE_BEAM_INFO_SU1;
+        else if (el.type === 'button') el.disabled = !SET_MODE_BEAM_INFO_SU1; // on/off 버튼도 disabled 처리
+        else if (el.type !== 'button' && el.tagName !== 'SELECT') el.toggleAttribute('readonly', !SET_MODE_BEAM_INFO_SU1);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_BEAM_INFO_SU1);
+        }
+      });
+      console.log(`🔧 Toggled ${beamInfoEditableFields.length} SU1 Beam Info editable fields`);
+    }
+
+    //==== SU2 Beam Info Modal UI 모드 토글 ====
+    function applyBeamInfoUiModeSu2(){
+      console.log(`🔧 applyBeamInfoUiModeSu2: SET_MODE_BEAM_INFO_SU2=${SET_MODE_BEAM_INFO_SU2}`);
+      
+      // Set Mode 관련 버튼들 토글 (DU의 applyUiMode와 동일한 방식)
+      // su2BeamInfoModal 내부의 버튼들만 선택
+      const btnSetModeModal = document.querySelector('#su2BeamInfoModal #su2BtnSetModeModal');
+      const btnApply = document.querySelector('#su2BeamInfoModal #su2BtnApply');
+      const btnStatusMode = document.querySelector('#su2BeamInfoModal #su2BtnStatusMode');
+      
+      // DU의 applyUiMode와 동일한 방식으로 토글
+      // Cancel 버튼은 항상 표시 (Set Mode와 무관)
+      if (btnSetModeModal) btnSetModeModal.classList.toggle('d-none', SET_MODE_BEAM_INFO_SU2);
+      if (btnApply) btnApply.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU2);
+      if (btnStatusMode) btnStatusMode.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU2);
+      
+      // SU2 Beam Info Modal 편집 가능한 필드들 토글 (DU의 applyUiMode와 동일한 방식)
+      const beamInfoEditableFields = document.querySelectorAll('#su2BeamInfoModal [data-editable="true"]');
+      beamInfoEditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_BEAM_INFO_SU2;
+        else if (el.tagName === 'SELECT') el.disabled = !SET_MODE_BEAM_INFO_SU2;
+        else if (el.type === 'button') el.disabled = !SET_MODE_BEAM_INFO_SU2; // on/off 버튼도 disabled 처리
+        else if (el.type !== 'button' && el.tagName !== 'SELECT') el.toggleAttribute('readonly', !SET_MODE_BEAM_INFO_SU2);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_BEAM_INFO_SU2);
+        }
+      });
+      console.log(`🔧 Toggled ${beamInfoEditableFields.length} SU2 Beam Info editable fields`);
+    }
+
+    //==== SU3 Beam Info Modal UI 모드 토글 ====
+    function applyBeamInfoUiModeSu3(){
+      console.log(`🔧 applyBeamInfoUiModeSu3: SET_MODE_BEAM_INFO_SU3=${SET_MODE_BEAM_INFO_SU3}`);
+      
+      // Set Mode 관련 버튼들 토글 (DU의 applyUiMode와 동일한 방식)
+      // su3BeamInfoModal 내부의 버튼들만 선택
+      const btnSetModeModal = document.querySelector('#su3BeamInfoModal #su3BtnSetModeModal');
+      const btnApply = document.querySelector('#su3BeamInfoModal #su3BtnApply');
+      const btnStatusMode = document.querySelector('#su3BeamInfoModal #su3BtnStatusMode');
+      
+      // DU의 applyUiMode와 동일한 방식으로 토글
+      // Cancel 버튼은 항상 표시 (Set Mode와 무관)
+      if (btnSetModeModal) btnSetModeModal.classList.toggle('d-none', SET_MODE_BEAM_INFO_SU3);
+      if (btnApply) btnApply.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU3);
+      if (btnStatusMode) btnStatusMode.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU3);
+      
+      // SU3 Beam Info Modal 편집 가능한 필드들 토글 (DU의 applyUiMode와 동일한 방식)
+      const beamInfoEditableFields = document.querySelectorAll('#su3BeamInfoModal [data-editable="true"]');
+      beamInfoEditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_BEAM_INFO_SU3;
+        else if (el.tagName === 'SELECT') el.disabled = !SET_MODE_BEAM_INFO_SU3;
+        else if (el.type === 'button') el.disabled = !SET_MODE_BEAM_INFO_SU3; // on/off 버튼도 disabled 처리
+        else if (el.type !== 'button' && el.tagName !== 'SELECT') el.toggleAttribute('readonly', !SET_MODE_BEAM_INFO_SU3);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_BEAM_INFO_SU3);
+        }
+      });
+      console.log(`🔧 Toggled ${beamInfoEditableFields.length} SU3 Beam Info editable fields`);
+    }
+
+    //==== SU4 Beam Info Modal UI 모드 토글 ====
+    function applyBeamInfoUiModeSu4(){
+      console.log(`🔧 applyBeamInfoUiModeSu4: SET_MODE_BEAM_INFO_SU4=${SET_MODE_BEAM_INFO_SU4}`);
+      
+      // Set Mode 관련 버튼들 토글 (DU의 applyUiMode와 동일한 방식)
+      // su4BeamInfoModal 내부의 버튼들만 선택
+      const btnSetModeModal = document.querySelector('#su4BeamInfoModal #su4BtnSetModeModal');
+      const btnApply = document.querySelector('#su4BeamInfoModal #su4BtnApply');
+      const btnStatusMode = document.querySelector('#su4BeamInfoModal #su4BtnStatusMode');
+      
+      // DU의 applyUiMode와 동일한 방식으로 토글
+      // Cancel 버튼은 항상 표시 (Set Mode와 무관)
+      if (btnSetModeModal) btnSetModeModal.classList.toggle('d-none', SET_MODE_BEAM_INFO_SU4);
+      if (btnApply) btnApply.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU4);
+      if (btnStatusMode) btnStatusMode.classList.toggle('d-none', !SET_MODE_BEAM_INFO_SU4);
+      
+      // SU4 Beam Info Modal 편집 가능한 필드들 토글 (DU의 applyUiMode와 동일한 방식)
+      const beamInfoEditableFields = document.querySelectorAll('#su4BeamInfoModal [data-editable="true"]');
+      beamInfoEditableFields.forEach(el=>{
+        if (el.type==='checkbox') el.disabled = !SET_MODE_BEAM_INFO_SU4;
+        else if (el.tagName === 'SELECT') el.disabled = !SET_MODE_BEAM_INFO_SU4;
+        else if (el.type === 'button') el.disabled = !SET_MODE_BEAM_INFO_SU4; // on/off 버튼도 disabled 처리
+        else if (el.type !== 'button' && el.tagName !== 'SELECT') el.toggleAttribute('readonly', !SET_MODE_BEAM_INFO_SU4);
+        // on/off 버튼들은 editable-on 클래스 적용하지 않음
+        if (el.type !== 'button') {
+          el.classList.toggle('editable-on', SET_MODE_BEAM_INFO_SU4);
+        }
+      });
+      console.log(`🔧 Toggled ${beamInfoEditableFields.length} SU4 Beam Info editable fields`);
     }
 
     //==== UI 모드 토글 ====
@@ -14611,6 +15018,111 @@
       }
       
       console.log(`🔘 ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+    
+    //==== Beam Info Modal On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonBeamInfo(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      // 버튼의 현재 클래스에서 ms-auto 여부 확인
+      const hasMsAuto = button.className.includes('ms-auto');
+      const baseClass = hasMsAuto ? 'btn btn-sm ms-auto' : 'btn btn-sm';
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = `${baseClass} btn-secondary`;  // OFF: 회색
+      } else {
+        button.textContent = 'ON';
+        button.className = `${baseClass} btn-success`;     // ON: 초록색
+      }
+      
+      console.log(`🔘 Beam Info ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+    
+    //==== SU1 Beam Info Modal On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonBeamInfoSu1(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      // 버튼의 현재 클래스에서 ms-auto 여부 확인
+      const hasMsAuto = button.className.includes('ms-auto');
+      const baseClass = hasMsAuto ? 'btn btn-sm ms-auto' : 'btn btn-sm';
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = `${baseClass} btn-secondary`;  // OFF: 회색
+      } else {
+        button.textContent = 'ON';
+        button.className = `${baseClass} btn-success`;   // ON: 초록색
+      }
+      
+      console.log(`🔘 SU1 Beam Info ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+    
+    //==== SU2 Beam Info Modal On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonBeamInfoSu2(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      // 버튼의 현재 클래스에서 ms-auto 여부 확인
+      const hasMsAuto = button.className.includes('ms-auto');
+      const baseClass = hasMsAuto ? 'btn btn-sm ms-auto' : 'btn btn-sm';
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = `${baseClass} btn-secondary`;  // OFF: 회색
+      } else {
+        button.textContent = 'ON';
+        button.className = `${baseClass} btn-success`;   // ON: 초록색
+      }
+      
+      console.log(`🔘 SU2 Beam Info ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+    
+    //==== SU3 Beam Info Modal On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonBeamInfoSu3(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      // 버튼의 현재 클래스에서 ms-auto 여부 확인
+      const hasMsAuto = button.className.includes('ms-auto');
+      const baseClass = hasMsAuto ? 'btn btn-sm ms-auto' : 'btn btn-sm';
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = `${baseClass} btn-secondary`;  // OFF: 회색
+      } else {
+        button.textContent = 'ON';
+        button.className = `${baseClass} btn-success`;   // ON: 초록색
+      }
+      
+      console.log(`🔘 SU3 Beam Info ${buttonId} 토글: ${currentState} → ${button.textContent}`);
+    }
+    
+    //==== SU4 Beam Info Modal On/Off 버튼 토글 함수 ====
+    function toggleOnOffButtonBeamInfoSu4(buttonId) {
+      const button = document.getElementById(buttonId);
+      if (!button) return;
+      
+      // 버튼의 현재 클래스에서 ms-auto 여부 확인
+      const hasMsAuto = button.className.includes('ms-auto');
+      const baseClass = hasMsAuto ? 'btn btn-sm ms-auto' : 'btn btn-sm';
+      
+      const currentState = button.textContent;
+      if (currentState === 'ON') {
+        button.textContent = 'OFF';
+        button.className = `${baseClass} btn-secondary`;  // OFF: 회색
+      } else {
+        button.textContent = 'ON';
+        button.className = `${baseClass} btn-success`;   // ON: 초록색
+      }
+      
+      console.log(`🔘 SU4 Beam Info ${buttonId} 토글: ${currentState} → ${button.textContent}`);
     }
     
     //==== SU1 On/Off 버튼 토글 함수 ====
@@ -15048,6 +15560,417 @@
       return out;
     }
 
+    //==== Beam Info Modal 값 수집/검증 ====
+    function collectBeamInfoFields(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      console.log('🔍 Beam Info Modal collectBeamInfoFields 시작');
+      
+      // Beam Info Modal 필드 매핑 (임시 - 나중에 FIELD_MAP으로 변경 가능)
+      const beamInfoFieldMap = {
+        'temperComp': { key:'TemperCompensationMode', type:'u8', min:0, max:1 },
+        'beamRetrySwitch': { key:'BeamScan_OnOff', type:'u8', min:0, max:1 },
+        'decodeAGCSwitch': { key:'DecodeRecoveryFuncOnOff', type:'u8', min:0, max:1 },
+        'centerFrequency': { key:'ApiVenderFreq', type:'u32', min:0, max:4294967295 },
+        'beamFix': { key:'DuFixBeam', type:'u8', min:0, max:1 },
+        'apiLogLevel': { key:'ApiLogLevel', type:'u8', min:2, max:6 },
+        'apiAdcSel': { key:'ApiAdcSel', type:'u8', min:0, max:3 },
+        'syncPathGain': { key:'ApiSyncPathGain', type:'u8', min:0, max:15 },
+        'duTimeAdvance': { key:'ApiDuTimeAdvance', type:'u8', min:0, max:255 },
+        'suTimeAdvance': { key:'ApiSuTimeAdvance', type:'u8', min:0, max:255 },
+        'orientationActual': { key:'Actual_Orientation', type:'string', min:0, max:16 },
+        'tiltActual': { key:'Actual_Tilt', type:'string', min:0, max:16 },
+      };
+      
+      for (const [id, spec] of Object.entries(beamInfoFieldMap)){
+        const el = document.getElementById(id);
+        if (!el) {
+          console.log(`⚠️ Beam Info 요소를 찾을 수 없음: ${id}`);
+          continue;
+        }
+        
+        let v;
+        if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // beamFix: AUTO=0, FIX=1
+          v = el.value === 'FIX' ? 1 : 0;
+        } else if (spec.type === 'string') {
+          v = el.value; // 문자열은 그대로
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (spec.type !== 'string' && Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && spec.type !== 'string' && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && spec.type !== 'string' && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          let originalNum;
+          if (spec.type === 'string') {
+            originalNum = originalValue;
+          } else if (el.type === 'button') {
+            originalNum = originalValue === '1' ? 1 : 0;
+          } else {
+            originalNum = Number(originalValue);
+          }
+          
+          if (originalNum !== v) {
+            modifiedFields[spec.key] = true;
+            console.log(`🔧 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          }
+        }
+      }
+      
+      // Beam Book에서 선택된 섹터 번호가 있으면 Mvbx_BeamSet에 저장
+      if (selectedBeamNumber !== null) {
+        out['Mvbx_BeamSet'] = selectedBeamNumber;
+        modifiedFields['Mvbx_BeamSet'] = true;
+        console.log(`🎯 Beam Book 선택된 섹터: ${selectedBeamNumber} → Mvbx_BeamSet에 저장`);
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      // DU_CONTROL_BITS를 사용 (Beam Info Modal도 DU 패킷 사용)
+      out['ConMuFlag'] = buildDuConMuFlag(modifiedFields);
+      
+      console.log('🔍 Beam Info ConMuFlag:', out['ConMuFlag']);
+      
+      return out;
+    }
+
+    //==== SU1 Beam Info Modal 값 수집/검증 ====
+    function collectBeamInfoFieldsSu1(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      console.log('🔍 SU1 Beam Info Modal collectBeamInfoFieldsSu1 시작');
+      
+      // SU1 Beam Info Modal 필드 매핑 (7개 필드)
+      const beamInfoFieldMapSu1 = {
+        'su1TemperComp': { key:'TemperCompensationMode', type:'u8', min:0, max:1 },
+        'su1CenterFrequency': { key:'ApiVenderFreq', type:'u32', min:0, max:4294967295 },
+        'su1AntSelect': { key:'ApiAntSelect', type:'u8', min:0, max:4 },
+        'su1BeamFix': { key:'DuFixBeam', type:'u8', min:0, max:1 },
+        'su1ApiLogLevel': { key:'ApiLogLevel', type:'u8', min:2, max:6 },
+        'su1OrientationActual': { key:'Actual_Orientation', type:'string', min:0, max:16 },
+        'su1TiltActual': { key:'Actual_Tilt', type:'string', min:0, max:16 },
+      };
+      
+      for (const [id, spec] of Object.entries(beamInfoFieldMapSu1)){
+        const el = document.getElementById(id);
+        if (!el) {
+          console.log(`⚠️ SU1 Beam Info 요소를 찾을 수 없음: ${id}`);
+          continue;
+        }
+        
+        let v;
+        if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // beamFix: AUTO=0, FIX=1
+          // antSelect: 드롭다운 값 그대로 사용 (0~4)
+          if (id === 'su1BeamFix') {
+            v = el.value === 'FIX' ? 1 : 0;
+          } else {
+            v = Number(el.value);
+          }
+        } else if (spec.type === 'string') {
+          v = el.value; // 문자열은 그대로
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (spec.type !== 'string' && Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && spec.type !== 'string' && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && spec.type !== 'string' && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          let originalNum;
+          if (spec.type === 'string') {
+            originalNum = originalValue;
+          } else if (el.type === 'button') {
+            originalNum = originalValue === '1' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            if (id === 'su1BeamFix') {
+              originalNum = originalValue === 'FIX' ? 1 : 0;
+            } else {
+              originalNum = Number(originalValue);
+            }
+          } else {
+            originalNum = Number(originalValue);
+          }
+          
+          if (originalNum !== v) {
+            modifiedFields[spec.key] = true;
+            console.log(`🔧 SU1 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          }
+        }
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      // SU1_CONTROL_BITS를 사용
+      out['ConMuFlag'] = buildSu1ConMuFlag(modifiedFields);
+      
+      console.log('🔍 SU1 Beam Info ConMuFlag:', out['ConMuFlag']);
+      
+      return out;
+    }
+
+    //==== SU2 Beam Info Modal 값 수집/검증 ====
+    function collectBeamInfoFieldsSu2(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      console.log('🔍 SU2 Beam Info Modal collectBeamInfoFieldsSu2 시작');
+      
+      // SU2 Beam Info Modal 필드 매핑 (7개 필드)
+      const beamInfoFieldMapSu2 = {
+        'su2TemperComp': { key:'TemperCompensationMode', type:'u8', min:0, max:1 },
+        'su2CenterFrequency': { key:'ApiVenderFreq', type:'u32', min:0, max:4294967295 },
+        'su2AntSelect': { key:'ApiAntSelect', type:'u8', min:0, max:4 },
+        'su2BeamFix': { key:'DuFixBeam', type:'u8', min:0, max:1 },
+        'su2ApiLogLevel': { key:'ApiLogLevel', type:'u8', min:2, max:6 },
+        'su2OrientationActual': { key:'Actual_Orientation', type:'string', min:0, max:16 },
+        'su2TiltActual': { key:'Actual_Tilt', type:'string', min:0, max:16 },
+      };
+      
+      for (const [id, spec] of Object.entries(beamInfoFieldMapSu2)){
+        const el = document.getElementById(id);
+        if (!el) {
+          console.log(`⚠️ SU2 Beam Info 요소를 찾을 수 없음: ${id}`);
+          continue;
+        }
+        
+        let v;
+        if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // beamFix: AUTO=0, FIX=1
+          // antSelect: 드롭다운 값 그대로 사용 (0~4)
+          if (id === 'su2BeamFix') {
+            v = el.value === 'FIX' ? 1 : 0;
+          } else {
+            v = Number(el.value);
+          }
+        } else if (spec.type === 'string') {
+          v = el.value; // 문자열은 그대로
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (spec.type !== 'string' && Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && spec.type !== 'string' && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && spec.type !== 'string' && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          let originalNum;
+          if (spec.type === 'string') {
+            originalNum = originalValue;
+          } else if (el.type === 'button') {
+            originalNum = originalValue === '1' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            if (id === 'su2BeamFix') {
+              originalNum = originalValue === 'FIX' ? 1 : 0;
+            } else {
+              originalNum = Number(originalValue);
+            }
+          } else {
+            originalNum = Number(originalValue);
+          }
+          
+          if (originalNum !== v) {
+            modifiedFields[spec.key] = true;
+            console.log(`🔧 SU2 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          }
+        }
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      // SU2_CONTROL_BITS를 사용
+      out['ConMuFlag'] = buildSu2ConMuFlag(modifiedFields);
+      
+      console.log('🔍 SU2 Beam Info ConMuFlag:', out['ConMuFlag']);
+      
+      return out;
+    }
+
+    //==== SU3 Beam Info Modal 값 수집/검증 ====
+    function collectBeamInfoFieldsSu3(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      console.log('🔍 SU3 Beam Info Modal collectBeamInfoFieldsSu3 시작');
+      
+      // SU3 Beam Info Modal 필드 매핑 (7개 필드)
+      const beamInfoFieldMapSu3 = {
+        'su3TemperComp': { key:'TemperCompensationMode', type:'u8', min:0, max:1 },
+        'su3CenterFrequency': { key:'ApiVenderFreq', type:'u32', min:0, max:4294967295 },
+        'su3AntSelect': { key:'ApiAntSelect', type:'u8', min:0, max:4 },
+        'su3BeamFix': { key:'DuFixBeam', type:'u8', min:0, max:1 },
+        'su3ApiLogLevel': { key:'ApiLogLevel', type:'u8', min:2, max:6 },
+        'su3OrientationActual': { key:'Actual_Orientation', type:'string', min:0, max:16 },
+        'su3TiltActual': { key:'Actual_Tilt', type:'string', min:0, max:16 },
+      };
+      
+      for (const [id, spec] of Object.entries(beamInfoFieldMapSu3)){
+        const el = document.getElementById(id);
+        if (!el) {
+          console.log(`⚠️ SU3 Beam Info 요소를 찾을 수 없음: ${id}`);
+          continue;
+        }
+        
+        let v;
+        if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // beamFix: AUTO=0, FIX=1
+          // antSelect: 드롭다운 값 그대로 사용 (0~4)
+          if (id === 'su3BeamFix') {
+            v = el.value === 'FIX' ? 1 : 0;
+          } else {
+            v = Number(el.value);
+          }
+        } else if (spec.type === 'string') {
+          v = el.value; // 문자열은 그대로
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (spec.type !== 'string' && Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && spec.type !== 'string' && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && spec.type !== 'string' && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          let originalNum;
+          if (spec.type === 'string') {
+            originalNum = originalValue;
+          } else if (el.type === 'button') {
+            originalNum = originalValue === '1' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            if (id === 'su3BeamFix') {
+              originalNum = originalValue === 'FIX' ? 1 : 0;
+            } else {
+              originalNum = Number(originalValue);
+            }
+          } else {
+            originalNum = Number(originalValue);
+          }
+          
+          if (originalNum !== v) {
+            modifiedFields[spec.key] = true;
+            console.log(`🔧 SU3 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          }
+        }
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      // SU3_CONTROL_BITS를 사용
+      out['ConMuFlag'] = buildSu3ConMuFlag(modifiedFields);
+      
+      console.log('🔍 SU3 Beam Info ConMuFlag:', out['ConMuFlag']);
+      
+      return out;
+    }
+
+    //==== SU4 Beam Info Modal 값 수집/검증 ====
+    function collectBeamInfoFieldsSu4(){
+      const out = {};
+      const modifiedFields = {};  // 수정된 필드 추적
+      
+      console.log('🔍 SU4 Beam Info Modal collectBeamInfoFieldsSu4 시작');
+      
+      // SU4 Beam Info Modal 필드 매핑 (7개 필드)
+      const beamInfoFieldMapSu4 = {
+        'su4TemperComp': { key:'TemperCompensationMode', type:'u8', min:0, max:1 },
+        'su4CenterFrequency': { key:'ApiVenderFreq', type:'u32', min:0, max:4294967295 },
+        'su4AntSelect': { key:'ApiAntSelect', type:'u8', min:0, max:4 },
+        'su4BeamFix': { key:'DuFixBeam', type:'u8', min:0, max:1 },
+        'su4ApiLogLevel': { key:'ApiLogLevel', type:'u8', min:2, max:6 },
+        'su4OrientationActual': { key:'Actual_Orientation', type:'string', min:0, max:16 },
+        'su4TiltActual': { key:'Actual_Tilt', type:'string', min:0, max:16 },
+      };
+      
+      for (const [id, spec] of Object.entries(beamInfoFieldMapSu4)){
+        const el = document.getElementById(id);
+        if (!el) {
+          console.log(`⚠️ SU4 Beam Info 요소를 찾을 수 없음: ${id}`);
+          continue;
+        }
+        
+        let v;
+        if (el.type === 'button') {
+          v = el.textContent === 'ON' ? 1 : 0;
+        } else if (el.tagName === 'SELECT') {
+          // beamFix: AUTO=0, FIX=1
+          // antSelect: 드롭다운 값 그대로 사용 (0~4)
+          if (id === 'su4BeamFix') {
+            v = el.value === 'FIX' ? 1 : 0;
+          } else {
+            v = Number(el.value);
+          }
+        } else if (spec.type === 'string') {
+          v = el.value; // 문자열은 그대로
+        } else {
+          v = Number(el.value);
+        }
+        
+        if (spec.type !== 'string' && Number.isNaN(v)) throw new Error(`${id} 값이 숫자가 아닙니다`);
+        if (spec.min!==undefined && spec.type !== 'string' && v<spec.min) throw new Error(`${id} 최소 ${spec.min}`);
+        if (spec.max!==undefined && spec.type !== 'string' && v>spec.max) throw new Error(`${id} 최대 ${spec.max}`);
+        
+        out[spec.key] = v;
+        
+        // 실제로 수정된 경우에만 비트 설정
+        if (el.hasAttribute('data-original-value')) {
+          const originalValue = el.getAttribute('data-original-value');
+          let originalNum;
+          if (spec.type === 'string') {
+            originalNum = originalValue;
+          } else if (el.type === 'button') {
+            originalNum = originalValue === '1' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            if (id === 'su4BeamFix') {
+              originalNum = originalValue === 'FIX' ? 1 : 0;
+            } else {
+              originalNum = Number(originalValue);
+            }
+          } else {
+            originalNum = Number(originalValue);
+          }
+          
+          if (originalNum !== v) {
+            modifiedFields[spec.key] = true;
+            console.log(`🔧 SU4 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          }
+        }
+      }
+      
+      // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
+      // SU4_CONTROL_BITS를 사용
+      out['ConMuFlag'] = buildSu4ConMuFlag(modifiedFields);
+      
+      console.log('🔍 SU4 Beam Info ConMuFlag:', out['ConMuFlag']);
+      
+      return out;
+    }
+
     //==== SU4 값 수집/검증 ====
     function collectFieldsSu4(){
       const out = {};
@@ -15358,6 +16281,270 @@
       }
     }
 
+    //==== Beam Info Modal Set Mode 핸들러 ====
+    function enterSetModeBeamInfo(){
+      console.log('🔧 Entering Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO = true;
+      selectedBeamNumber = null; // Set Mode 진입 시 선택 초기화
+      console.log(`🔧 State: SET_MODE_BEAM_INFO=${SET_MODE_BEAM_INFO}`);
+      
+      // 모든 Beam Info Modal 필드의 원본 값 저장
+      saveBeamInfoOriginalValues();
+      
+      applyBeamInfoUiMode();
+      socket.emit('enter_beam_info_set_mode');
+      console.log('🔧 Beam Info Modal Set Mode activated');
+    }
+    function leaveSetModeBeamInfo(){
+      console.log('🔧 Leaving Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO = false;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO=${SET_MODE_BEAM_INFO}`);
+      applyBeamInfoUiMode();
+      socket.emit('leave_beam_info_set_mode');
+      console.log('🔧 Beam Info Modal Status Mode activated');
+    }
+    function applySetBeamInfo(){
+      try{
+        const fields = collectBeamInfoFields();
+        
+        // 수정된 필드들을 sendPacketData에 먼저 저장
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'ConMuFlag') {
+            sendPacketData[key] = value;
+            console.log(`📝 Beam Info 저장: sendPacketData[${key}] = ${value}`);
+          }
+        }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        
+        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
+        if (fields.ConMuFlag) {
+          packetToSend.ConMuFlag = fields.ConMuFlag;
+          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
+          console.log('🔧 Beam Info ConMuFlag 적용:', fields.ConMuFlag);
+        }
+        
+        // 전체 패킷 전송
+        socket.emit('apply_du_values', packetToSend);
+        console.log('🔧 Applying complete Beam Info packet:', packetToSend);
+        
+        // 전송 후 선택된 beam 번호 초기화
+        selectedBeamNumber = null;
+      }catch(e){ 
+        console.error('Beam Info 입력 오류:', e);
+        alert('Beam Info 입력 오류: ' + e.message); 
+      }
+    }
+
+    //==== SU1 Beam Info Modal Set Mode 핸들러 ====
+    function enterSetModeBeamInfoSu1(){
+      console.log('🔧 Entering SU1 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU1 = true;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU1=${SET_MODE_BEAM_INFO_SU1}`);
+      
+      // 모든 SU1 Beam Info Modal 필드의 원본 값 저장
+      saveBeamInfoOriginalValuesSu1();
+      
+      applyBeamInfoUiModeSu1();
+      socket.emit('enter_beam_info_set_mode_su1');
+      console.log('🔧 SU1 Beam Info Modal Set Mode activated');
+    }
+    function leaveSetModeBeamInfoSu1(){
+      console.log('🔧 Leaving SU1 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU1 = false;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU1=${SET_MODE_BEAM_INFO_SU1}`);
+      applyBeamInfoUiModeSu1();
+      socket.emit('leave_beam_info_set_mode_su1');
+      console.log('🔧 SU1 Beam Info Modal Status Mode activated');
+    }
+    function applySetBeamInfoSu1(){
+      try{
+        const fields = collectBeamInfoFieldsSu1();
+        
+        // 수정된 필드들을 sendPacketData에 먼저 저장
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'ConMuFlag') {
+            sendPacketData[key] = value;
+            console.log(`📝 SU1 Beam Info 저장: sendPacketData[${key}] = ${value}`);
+          }
+        }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        
+        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
+        if (fields.ConMuFlag) {
+          packetToSend.ConMuFlag = fields.ConMuFlag;
+          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
+          console.log('🔧 SU1 Beam Info ConMuFlag 적용:', fields.ConMuFlag);
+        }
+        
+        // 전체 패킷 전송
+        socket.emit('apply_su1_values', packetToSend);
+        console.log('🔧 Applying complete SU1 Beam Info packet:', packetToSend);
+      }catch(e){ 
+        console.error('SU1 Beam Info 입력 오류:', e);
+        alert('SU1 Beam Info 입력 오류: ' + e.message); 
+      }
+    }
+
+    //==== SU2 Beam Info Modal Set Mode 핸들러 ====
+    function enterSetModeBeamInfoSu2(){
+      console.log('🔧 Entering SU2 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU2 = true;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU2=${SET_MODE_BEAM_INFO_SU2}`);
+      
+      // 모든 SU2 Beam Info Modal 필드의 원본 값 저장
+      saveBeamInfoOriginalValuesSu2();
+      
+      applyBeamInfoUiModeSu2();
+      socket.emit('enter_beam_info_set_mode_su2');
+      console.log('🔧 SU2 Beam Info Modal Set Mode activated');
+    }
+    function leaveSetModeBeamInfoSu2(){
+      console.log('🔧 Leaving SU2 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU2 = false;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU2=${SET_MODE_BEAM_INFO_SU2}`);
+      applyBeamInfoUiModeSu2();
+      socket.emit('leave_beam_info_set_mode_su2');
+      console.log('🔧 SU2 Beam Info Modal Status Mode activated');
+    }
+    function applySetBeamInfoSu2(){
+      try{
+        const fields = collectBeamInfoFieldsSu2();
+        
+        // 수정된 필드들을 sendPacketData에 먼저 저장
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'ConMuFlag') {
+            sendPacketData[key] = value;
+            console.log(`📝 SU2 Beam Info 저장: sendPacketData[${key}] = ${value}`);
+          }
+        }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        
+        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
+        if (fields.ConMuFlag) {
+          packetToSend.ConMuFlag = fields.ConMuFlag;
+          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
+          console.log('🔧 SU2 Beam Info ConMuFlag 적용:', fields.ConMuFlag);
+        }
+        
+        // 전체 패킷 전송
+        socket.emit('apply_su2_values', packetToSend);
+        console.log('🔧 Applying complete SU2 Beam Info packet:', packetToSend);
+      }catch(e){ 
+        console.error('SU2 Beam Info 입력 오류:', e);
+        alert('SU2 Beam Info 입력 오류: ' + e.message); 
+      }
+    }
+
+    //==== SU3 Beam Info Modal Set Mode 핸들러 ====
+    function enterSetModeBeamInfoSu3(){
+      console.log('🔧 Entering SU3 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU3 = true;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU3=${SET_MODE_BEAM_INFO_SU3}`);
+      
+      // 모든 SU3 Beam Info Modal 필드의 원본 값 저장
+      saveBeamInfoOriginalValuesSu3();
+      
+      applyBeamInfoUiModeSu3();
+      socket.emit('enter_beam_info_set_mode_su3');
+      console.log('🔧 SU3 Beam Info Modal Set Mode activated');
+    }
+    function leaveSetModeBeamInfoSu3(){
+      console.log('🔧 Leaving SU3 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU3 = false;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU3=${SET_MODE_BEAM_INFO_SU3}`);
+      applyBeamInfoUiModeSu3();
+      socket.emit('leave_beam_info_set_mode_su3');
+      console.log('🔧 SU3 Beam Info Modal Status Mode activated');
+    }
+    function applySetBeamInfoSu3(){
+      try{
+        const fields = collectBeamInfoFieldsSu3();
+        
+        // 수정된 필드들을 sendPacketData에 먼저 저장
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'ConMuFlag') {
+            sendPacketData[key] = value;
+            console.log(`📝 SU3 Beam Info 저장: sendPacketData[${key}] = ${value}`);
+          }
+        }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        
+        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
+        if (fields.ConMuFlag) {
+          packetToSend.ConMuFlag = fields.ConMuFlag;
+          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
+          console.log('🔧 SU3 Beam Info ConMuFlag 적용:', fields.ConMuFlag);
+        }
+        
+        // 전체 패킷 전송
+        socket.emit('apply_su3_values', packetToSend);
+        console.log('🔧 Applying complete SU3 Beam Info packet:', packetToSend);
+      }catch(e){ 
+        console.error('SU3 Beam Info 입력 오류:', e);
+        alert('SU3 Beam Info 입력 오류: ' + e.message); 
+      }
+    }
+
+    //==== SU4 Beam Info Modal Set Mode 핸들러 ====
+    function enterSetModeBeamInfoSu4(){
+      console.log('🔧 Entering SU4 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU4 = true;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU4=${SET_MODE_BEAM_INFO_SU4}`);
+      
+      // 모든 SU4 Beam Info Modal 필드의 원본 값 저장
+      saveBeamInfoOriginalValuesSu4();
+      
+      applyBeamInfoUiModeSu4();
+      socket.emit('enter_beam_info_set_mode_su4');
+      console.log('🔧 SU4 Beam Info Modal Set Mode activated');
+    }
+    function leaveSetModeBeamInfoSu4(){
+      console.log('🔧 Leaving SU4 Beam Info Modal Set Mode...');
+      SET_MODE_BEAM_INFO_SU4 = false;
+      console.log(`🔧 State: SET_MODE_BEAM_INFO_SU4=${SET_MODE_BEAM_INFO_SU4}`);
+      applyBeamInfoUiModeSu4();
+      socket.emit('leave_beam_info_set_mode_su4');
+      console.log('🔧 SU4 Beam Info Modal Status Mode activated');
+    }
+    function applySetBeamInfoSu4(){
+      try{
+        const fields = collectBeamInfoFieldsSu4();
+        
+        // 수정된 필드들을 sendPacketData에 먼저 저장
+        for (const [key, value] of Object.entries(fields)) {
+          if (key !== 'ConMuFlag') {
+            sendPacketData[key] = value;
+            console.log(`📝 SU4 Beam Info 저장: sendPacketData[${key}] = ${value}`);
+          }
+        }
+        
+        // 전체 패킷 복사 및 수정된 값들 적용
+        const packetToSend = {...sendPacketData};
+        
+        // ConMuFlag 적용 (수정된 필드들에 대한 비트 설정)
+        if (fields.ConMuFlag) {
+          packetToSend.ConMuFlag = fields.ConMuFlag;
+          sendPacketData.ConMuFlag = fields.ConMuFlag; // sendPacketData에도 ConMuFlag 저장
+          console.log('🔧 SU4 Beam Info ConMuFlag 적용:', fields.ConMuFlag);
+        }
+        
+        // 전체 패킷 전송
+        socket.emit('apply_su4_values', packetToSend);
+        console.log('🔧 Applying complete SU4 Beam Info packet:', packetToSend);
+      }catch(e){ 
+        console.error('SU4 Beam Info 입력 오류:', e);
+        alert('SU4 Beam Info 입력 오류: ' + e.message); 
+      }
+    }
+
     //==== 버튼 바인딩 ====
     // 메인 화면의 Set Mode 버튼에만 이벤트 연결 (1127라인)
     document.querySelector('button[id="btnSetMode"]:not([style*="visibility"])')?.addEventListener('click', enterSetMode);
@@ -15383,6 +16570,137 @@
     document.getElementById('btnSetModeSu4')?.addEventListener('click', enterSetModeSu4);
     document.getElementById('btnStatusModeSu4')?.addEventListener('click', leaveSetModeSu4);
     document.getElementById('btnApplySu4')?.addEventListener('click', applySetSu4);
+    
+    //==== Beam Info Modal Set Mode 버튼 바인딩 ====
+    // btnSetModeModal은 여러 모달에서 사용되므로 beamInfoModal 내부의 것만 연결
+    const beamInfoSetModeBtn = document.querySelector('#beamInfoModal #btnSetModeModal');
+    if (beamInfoSetModeBtn) {
+      beamInfoSetModeBtn.addEventListener('click', enterSetModeBeamInfo);
+    }
+    
+    // Beam Info Modal 내부의 btnStatusMode와 btnApply 버튼
+    const beamInfoStatusModeBtn = document.querySelector('#beamInfoModal #btnStatusMode');
+    const beamInfoApplyBtn = document.querySelector('#beamInfoModal #btnApply');
+    if (beamInfoStatusModeBtn) {
+      beamInfoStatusModeBtn.addEventListener('click', leaveSetModeBeamInfo);
+    }
+    if (beamInfoApplyBtn) {
+      beamInfoApplyBtn.addEventListener('click', applySetBeamInfo);
+    }
+    
+    //==== Beam Info Modal On/Off 버튼 토글 이벤트 연결 ====
+    const beamInfoOnOffButtons = [
+      'temperComp', 'beamRetrySwitch', 'decodeAGCSwitch'
+    ];
+    
+    beamInfoOnOffButtons.forEach(buttonId => {
+      const button = document.getElementById(buttonId);
+      if (button) {
+        button.addEventListener('click', () => toggleOnOffButtonBeamInfo(buttonId));
+        console.log(`✅ Beam Info On/Off 버튼 이벤트 연결: ${buttonId}`);
+      } else {
+        console.log(`⚠️ Beam Info On/Off 버튼을 찾을 수 없음: ${buttonId}`);
+      }
+    });
+    
+    //==== SU1 Beam Info Modal Set Mode 버튼 바인딩 ====
+    // 이벤트 위임을 사용하여 모달 내부의 버튼 클릭 처리
+    document.addEventListener('click', function(e) {
+        // SU1 Beam Info Modal 내부의 버튼인지 확인
+        if (e.target.closest('#su1BeamInfoModal')) {
+            if (e.target.id === 'su1BtnSetModeModal') {
+                e.preventDefault();
+                enterSetModeBeamInfoSu1();
+                console.log('✅ SU1 Beam Info Set Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su1BtnStatusMode') {
+                e.preventDefault();
+                leaveSetModeBeamInfoSu1();
+                console.log('✅ SU1 Beam Info Status Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su1BtnApply') {
+                e.preventDefault();
+                applySetBeamInfoSu1();
+                console.log('✅ SU1 Beam Info Apply 버튼 클릭됨');
+            } else if (e.target.id === 'su1TemperComp') {
+                // SU1 Temper Comp 버튼 토글
+                toggleOnOffButtonBeamInfoSu1('su1TemperComp');
+            }
+        }
+    });
+    
+    //==== SU2 Beam Info Modal Set Mode 버튼 바인딩 ====
+    // 이벤트 위임을 사용하여 모달 내부의 버튼 클릭 처리
+    document.addEventListener('click', function(e) {
+        // SU2 Beam Info Modal 내부의 버튼인지 확인
+        if (e.target.closest('#su2BeamInfoModal')) {
+            if (e.target.id === 'su2BtnSetModeModal') {
+                e.preventDefault();
+                enterSetModeBeamInfoSu2();
+                console.log('✅ SU2 Beam Info Set Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su2BtnStatusMode') {
+                e.preventDefault();
+                leaveSetModeBeamInfoSu2();
+                console.log('✅ SU2 Beam Info Status Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su2BtnApply') {
+                e.preventDefault();
+                applySetBeamInfoSu2();
+                console.log('✅ SU2 Beam Info Apply 버튼 클릭됨');
+            } else if (e.target.id === 'su2TemperComp') {
+                // SU2 Temper Comp 버튼 토글
+                toggleOnOffButtonBeamInfoSu2('su2TemperComp');
+            }
+        }
+    });
+    
+    //==== SU3 Beam Info Modal Set Mode 버튼 바인딩 ====
+    // 이벤트 위임을 사용하여 모달 내부의 버튼 클릭 처리
+    document.addEventListener('click', function(e) {
+        // SU3 Beam Info Modal 내부의 버튼인지 확인
+        if (e.target.closest('#su3BeamInfoModal')) {
+            if (e.target.id === 'su3BtnSetModeModal') {
+                e.preventDefault();
+                enterSetModeBeamInfoSu3();
+                console.log('✅ SU3 Beam Info Set Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su3BtnStatusMode') {
+                e.preventDefault();
+                leaveSetModeBeamInfoSu3();
+                console.log('✅ SU3 Beam Info Status Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su3BtnApply') {
+                e.preventDefault();
+                applySetBeamInfoSu3();
+                console.log('✅ SU3 Beam Info Apply 버튼 클릭됨');
+            } else if (e.target.id === 'su3TemperComp') {
+                // SU3 Temper Comp 버튼 토글
+                toggleOnOffButtonBeamInfoSu3('su3TemperComp');
+            }
+        }
+    });
+    
+    //==== SU4 Beam Info Modal Set Mode 버튼 바인딩 ====
+    // 이벤트 위임을 사용하여 모달 내부의 버튼 클릭 처리
+    document.addEventListener('click', function(e) {
+        // SU4 Beam Info Modal 내부의 버튼인지 확인
+        if (e.target.closest('#su4BeamInfoModal')) {
+            if (e.target.id === 'su4BtnSetModeModal') {
+                e.preventDefault();
+                enterSetModeBeamInfoSu4();
+                console.log('✅ SU4 Beam Info Set Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su4BtnStatusMode') {
+                e.preventDefault();
+                leaveSetModeBeamInfoSu4();
+                console.log('✅ SU4 Beam Info Status Mode 버튼 클릭됨');
+            } else if (e.target.id === 'su4BtnApply') {
+                e.preventDefault();
+                applySetBeamInfoSu4();
+                console.log('✅ SU4 Beam Info Apply 버튼 클릭됨');
+            } else if (e.target.id === 'su4TemperComp') {
+                // SU4 Temper Comp 버튼 토글
+                toggleOnOffButtonBeamInfoSu4('su4TemperComp');
+            }
+        }
+    });
+    
+    
+
     
     //==== Sync Module Set Mode 버튼 바인딩 ====
     document.getElementById('sync_set_mode_btn')?.addEventListener('click', enterSyncSetMode);
@@ -15583,6 +16901,147 @@
     }
     
     //==== DU System 필드들의 원본 값 저장 ====
+    //==== Beam Info Modal 원본 값 저장 ====
+    function saveBeamInfoOriginalValues() {
+
+      
+      // Beam Info Modal의 편집 가능한 필드들
+      const beamInfoFields = [
+        'temperComp', 'beamRetrySwitch', 'decodeAGCSwitch', 'centerFrequency', 'beamFix',
+        'apiLogLevel', 'apiAdcSel', 'syncPathGain', 'duTimeAdvance', 
+        'suTimeAdvance', 'orientationActual', 'tiltActual'
+      ];
+      
+      beamInfoFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            originalValue = el.value;
+          } else {
+            originalValue = el.value;
+          }
+          el.setAttribute('data-original-value', originalValue);
+          el.setAttribute('data-editable', 'true');
+          console.log(`📝 Beam Info 원본 값 저장: ${id} = ${originalValue}`);
+        }
+      });
+    }
+
+    //==== SU1 Beam Info Modal 원본 값 저장 ====
+    function saveBeamInfoOriginalValuesSu1() {
+      console.log('🔧 Saving SU1 Beam Info Modal original values...');
+      
+      // SU1 Beam Info Modal의 편집 가능한 필드들 (7개)
+      const beamInfoFieldsSu1 = [
+        'su1TemperComp', 'su1CenterFrequency', 'su1AntSelect', 'su1BeamFix',
+        'su1ApiLogLevel', 'su1OrientationActual', 'su1TiltActual'
+      ];
+      
+      beamInfoFieldsSu1.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            originalValue = el.value;
+          } else {
+            originalValue = el.value;
+          }
+          el.setAttribute('data-original-value', originalValue);
+          el.setAttribute('data-editable', 'true');
+          console.log(`📝 SU1 Beam Info 원본 값 저장: ${id} = ${originalValue}`);
+        }
+      });
+    }
+
+    //==== SU2 Beam Info Modal 원본 값 저장 ====
+    function saveBeamInfoOriginalValuesSu2() {
+      console.log('🔧 Saving SU2 Beam Info Modal original values...');
+      
+      // SU2 Beam Info Modal의 편집 가능한 필드들 (7개)
+      const beamInfoFieldsSu2 = [
+        'su2TemperComp', 'su2CenterFrequency', 'su2AntSelect', 'su2BeamFix',
+        'su2ApiLogLevel', 'su2OrientationActual', 'su2TiltActual'
+      ];
+      
+      beamInfoFieldsSu2.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            originalValue = el.value;
+          } else {
+            originalValue = el.value;
+          }
+          el.setAttribute('data-original-value', originalValue);
+          el.setAttribute('data-editable', 'true');
+          console.log(`📝 SU2 Beam Info 원본 값 저장: ${id} = ${originalValue}`);
+        }
+      });
+    }
+
+    //==== SU3 Beam Info Modal 원본 값 저장 ====
+    function saveBeamInfoOriginalValuesSu3() {
+      console.log('🔧 Saving SU3 Beam Info Modal original values...');
+      
+      // SU3 Beam Info Modal의 편집 가능한 필드들 (7개)
+      const beamInfoFieldsSu3 = [
+        'su3TemperComp', 'su3CenterFrequency', 'su3AntSelect', 'su3BeamFix',
+        'su3ApiLogLevel', 'su3OrientationActual', 'su3TiltActual'
+      ];
+      
+      beamInfoFieldsSu3.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            originalValue = el.value;
+          } else {
+            originalValue = el.value;
+          }
+          el.setAttribute('data-original-value', originalValue);
+          el.setAttribute('data-editable', 'true');
+          console.log(`📝 SU3 Beam Info 원본 값 저장: ${id} = ${originalValue}`);
+        }
+      });
+    }
+
+    //==== SU4 Beam Info Modal 원본 값 저장 ====
+    function saveBeamInfoOriginalValuesSu4() {
+      console.log('🔧 Saving SU4 Beam Info Modal original values...');
+      
+      // SU4 Beam Info Modal의 편집 가능한 필드들 (7개)
+      const beamInfoFieldsSu4 = [
+        'su4TemperComp', 'su4CenterFrequency', 'su4AntSelect', 'su4BeamFix',
+        'su4ApiLogLevel', 'su4OrientationActual', 'su4TiltActual'
+      ];
+      
+      beamInfoFieldsSu4.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          let originalValue;
+          if (el.type === 'button') {
+            originalValue = el.textContent === 'ON' ? 1 : 0;
+          } else if (el.tagName === 'SELECT') {
+            originalValue = el.value;
+          } else {
+            originalValue = el.value;
+          }
+          el.setAttribute('data-original-value', originalValue);
+          el.setAttribute('data-editable', 'true');
+          console.log(`📝 SU4 Beam Info 원본 값 저장: ${id} = ${originalValue}`);
+        }
+      });
+    }
+
     function saveDuOriginalValues() {
       // FIELD_MAP을 기반으로 DU 필드들의 원본 값 저장
       for (const [id, spec] of Object.entries(FIELD_MAP)) {
@@ -16654,7 +18113,7 @@
                                     <small class="text-muted">Temper Comp</small>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-on" id="su1TemperComp">N/A</button>
+                                    <button type="button" class="btn btn-sm btn-on" id="su1TemperComp" data-editable="true">N/A</button>
                                 </div>
                                 <div class="col-auto">
                                     <small class="text-muted">Start Temper</small>
@@ -16900,10 +18359,10 @@
                         </div>
                     </div>
                 </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                    <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
-                    <button class="btn btn-success d-none" id="btnApply">Apply</button>
-                    <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
+                    <button type="button" class="btn btn-secondary me-2" id="btnCancelBeamInfoSu1" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                    <button class="btn btn-primary" id="su1BtnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
+                    <button class="btn btn-secondary d-none" id="su1BtnStatusMode">Status Mode</button>
+                    <button class="btn btn-success d-none" id="su1BtnApply">Set</button>
                 </div>
 
             </div>
@@ -16934,7 +18393,7 @@
                                     <small class="text-muted">Temper Comp</small>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-on" id="su2TemperComp">N/A</button>
+                                    <button type="button" class="btn btn-sm btn-on" id="su2TemperComp" data-editable="true">N/A</button>
                                 </div>
                                 <div class="col-auto">
                                     <small class="text-muted">Start Temper</small>
@@ -17180,10 +18639,10 @@
                         </div>
                     </div>
                 </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                    <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
-                    <button class="btn btn-success d-none" id="btnApply">Apply</button>
-                    <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
+                    <button type="button" class="btn btn-secondary me-2" id="btnCancelBeamInfoSu2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                    <button class="btn btn-primary" id="su2BtnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
+                    <button class="btn btn-secondary d-none" id="su2BtnStatusMode">Status Mode</button>
+                    <button class="btn btn-success d-none" id="su2BtnApply">Set</button>
                 </div>
 
             </div>
@@ -17214,7 +18673,7 @@
                                     <small class="text-muted">Temper Comp</small>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-on" id="su3TemperComp">N/A</button>
+                                    <button type="button" class="btn btn-sm btn-on" id="su3TemperComp" data-editable="true">N/A</button>
                                 </div>
                                 <div class="col-auto">
                                     <small class="text-muted">Start Temper</small>
@@ -17395,13 +18854,13 @@
                                             <div class="beam-scan-field">
                                                 <label for="su3CenterFrequency">Center Frequency</label>
                                                 <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                    <input type="text" class="form-control" id="su3CenterFrequency" value="N/A">
+                                                    <input type="text" class="form-control" id="su3CenterFrequency" value="N/A" data-editable="true">
                                                     <span class="input-group-text">KHz</span>
                                                 </div>
                                             </div>
                                             <div class="beam-scan-field">
                                                 <label for="su3AntSelect">Ant Select</label>
-                                                <select class="form-select form-select-sm ms-auto" id="su3AntSelect" style="width: 100px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                <select class="form-select form-select-sm ms-auto" id="su3AntSelect" style="width: 100px; font-size: 0.6rem; padding: 0.1rem 0.2rem;" data-editable="true">
                                                     <option value="0">30:15</option>
                                                     <option value="1">30:30</option>
                                                     <option value="2">60:15</option>
@@ -17411,7 +18870,7 @@
                                             </div>
                                             <div class="beam-scan-field">
                                                 <label for="su3BeamFix">Beam Fix</label>
-                                                <select class="form-select form-select-sm ms-auto" id="su3BeamFix" style="width: 80px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                <select class="form-select form-select-sm ms-auto" id="su3BeamFix" style="width: 80px; font-size: 0.6rem; padding: 0.1rem 0.2rem;" data-editable="true">
                                                     <option value="AUTO">AUTO</option>
                                                     <option value="FIX">FIX</option>
                                                 </select>
@@ -17420,7 +18879,7 @@
                                         <div class="col-md-6">
                                             <div class="beam-scan-field">
                                                 <label for="su3ApiLogLevel">API Log Level [2~6]</label>
-                                                <input type="text" class="form-control form-control-sm ms-auto w-25" id="su3ApiLogLevel" value="N/A">
+                                                <input type="text" class="form-control form-control-sm ms-auto w-25" id="su3ApiLogLevel" value="N/A" data-editable="true">
                                             </div>
                                             <div class="beam-scan-field">
                                                 <table class="table table-sm table-borderless mb-0" style="border: none;">
@@ -17437,7 +18896,7 @@
                                                                 <small class="text-muted">Orientation</small>
                                                             </td>
                                                             <td class="text-center" style="border: none; padding: 8px;">
-                                                                <input type="text" class="form-control form-control-sm" id="su3OrientationActual" value="N/A" style="width: 60px; margin-left: 20px;">
+                                                                <input type="text" class="form-control form-control-sm" id="su3OrientationActual" value="N/A" style="width: 60px; margin-left: 20px;" data-editable="true">
                                                             </td>
                                                             <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                         </tr>
@@ -17446,7 +18905,7 @@
                                                                 <small class="text-muted">Tilt</small>
                                                             </td>
                                                             <td class="text-center" style="border: none; padding: 8px;">
-                                                                <input type="text" class="form-control form-control-sm" id="su3TiltActual" value="N/A" style="width: 60px; margin-left: 20px;">
+                                                                <input type="text" class="form-control form-control-sm" id="su3TiltActual" value="N/A" style="width: 60px; margin-left: 20px;" data-editable="true">
                                                             </td>
                                                             <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                         </tr>
@@ -17460,10 +18919,10 @@
                         </div>
                     </div>
                 </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                    <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
-                    <button class="btn btn-success d-none" id="btnApply">Apply</button>
-                    <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
+                    <button type="button" class="btn btn-secondary me-2" id="btnCancelBeamInfoSu3" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                    <button class="btn btn-primary" id="su3BtnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
+                    <button class="btn btn-secondary d-none" id="su3BtnStatusMode">Status Mode</button>
+                    <button class="btn btn-success d-none" id="su3BtnApply">Set</button>
                 </div>
 
             </div>
@@ -17494,7 +18953,7 @@
                                     <small class="text-muted">Temper Comp</small>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-on" id="su4TemperComp">N/A</button>
+                                    <button class="btn btn-sm btn-on" id="su4TemperComp" data-editable="true">N/A</button>
                                 </div>
                                 <div class="col-auto">
                                     <small class="text-muted">Start Temper</small>
@@ -17675,13 +19134,13 @@
                                             <div class="beam-scan-field">
                                                 <label for="su4CenterFrequency">Center Frequency</label>
                                                 <div class="input-group input-group-sm ms-auto" style="width: 120px;">
-                                                    <input type="text" class="form-control" id="su4CenterFrequency" value="N/A">
+                                                    <input type="text" class="form-control" id="su4CenterFrequency" value="N/A" data-editable="true">
                                                     <span class="input-group-text">KHz</span>
                                                 </div>
                                             </div>
                                             <div class="beam-scan-field">
                                                 <label for="su4AntSelect">Ant Select</label>
-                                                <select class="form-select form-select-sm ms-auto" id="su4AntSelect" style="width: 100px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                <select class="form-select form-select-sm ms-auto" id="su4AntSelect" style="width: 100px; font-size: 0.6rem; padding: 0.1rem 0.2rem;" data-editable="true">
                                                     <option value="0">30:15</option>
                                                     <option value="1">30:30</option>
                                                     <option value="2">60:15</option>
@@ -17691,7 +19150,7 @@
                                             </div>
                                             <div class="beam-scan-field">
                                                 <label for="su4BeamFix">Beam Fix</label>
-                                                <select class="form-select form-select-sm ms-auto" id="su4BeamFix" style="width: 80px; font-size: 0.6rem; padding: 0.1rem 0.2rem;">
+                                                <select class="form-select form-select-sm ms-auto" id="su4BeamFix" style="width: 80px; font-size: 0.6rem; padding: 0.1rem 0.2rem;" data-editable="true">
                                                     <option value="AUTO">AUTO</option>
                                                     <option value="FIX">FIX</option>
                                                 </select>
@@ -17700,7 +19159,7 @@
                                         <div class="col-md-6">
                                             <div class="beam-scan-field">
                                                 <label for="su4ApiLogLevel">API Log Level [2~6]</label>
-                                                <input type="text" class="form-control form-control-sm ms-auto w-25" id="su4ApiLogLevel" value="N/A">
+                                                <input type="text" class="form-control form-control-sm ms-auto w-25" id="su4ApiLogLevel" value="N/A" data-editable="true">
                                             </div>
                                             <div class="beam-scan-field">
                                                 <table class="table table-sm table-borderless mb-0" style="border: none;">
@@ -17717,7 +19176,7 @@
                                                                 <small class="text-muted">Orientation</small>
                                                             </td>
                                                             <td class="text-center" style="border: none; padding: 8px;">
-                                                                <input type="text" class="form-control form-control-sm" id="su4OrientationActual" value="N/A" style="width: 60px; margin-left: 20px;">
+                                                                <input type="text" class="form-control form-control-sm" id="su4OrientationActual" value="N/A" style="width: 60px; margin-left: 20px;" data-editable="true">
                                                             </td>
                                                             <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                         </tr>
@@ -17726,7 +19185,7 @@
                                                                 <small class="text-muted">Tilt</small>
                                                             </td>
                                                             <td class="text-center" style="border: none; padding: 8px;">
-                                                                <input type="text" class="form-control form-control-sm" id="su4TiltActual" value="N/A" style="width: 60px; margin-left: 20px;">
+                                                                <input type="text" class="form-control form-control-sm" id="su4TiltActual" value="N/A" style="width: 60px; margin-left: 20px;" data-editable="true">
                                                             </td>
                                                             <td class="text-center text-muted" style="border: none; padding: 8px;">[0]</td>
                                                         </tr>
@@ -17740,10 +19199,10 @@
                         </div>
                     </div>
                 </div>                             <div class="modal-footer justify-content-center" style="background-color:#d1d1d1; border-top: none; padding: 10px 20px; display: flex; gap: 10px;">
-                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
-                    <button class="btn btn-primary" id="btnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
-                    <button class="btn btn-success d-none" id="btnApply">Apply</button>
-                    <button class="btn btn-secondary d-none" id="btnStatusMode">Status Mode</button>
+                    <button type="button" class="btn btn-secondary me-2" id="btnCancelBeamInfoSu4" data-bs-dismiss="modal" style="visibility: visible; opacity: 1;">Cancel</button>
+                    <button class="btn btn-primary" id="su4BtnSetModeModal" style="visibility: visible; opacity: 1;">Set Mode</button>
+                    <button class="btn btn-secondary d-none" id="su4BtnStatusMode">Status Mode</button>
+                    <button class="btn btn-success d-none" id="su4BtnApply">Set</button>
                 </div>
 
             </div>
