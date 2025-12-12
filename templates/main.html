@@ -6971,6 +6971,8 @@
             centerText.setAttribute("fill", "white");
             centerText.setAttribute("font-weight", "bold");
             centerText.textContent = "0";
+            centerText.style.cursor = "pointer";
+            centerText.setAttribute("data-beam-number", "0");
             svg.appendChild(centerText);
 
             beamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
@@ -7015,6 +7017,8 @@
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
                     textEl.textContent = beamNumber;
+                    textEl.style.cursor = "pointer";
+                    textEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(textEl);
                     
                     beamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
@@ -7171,15 +7175,19 @@
                     const number = parseInt(beamNumber);
                     selectedBeamNumber = number;
                     
+                    // beamData에서 해당 섹터의 pathEl 찾기
+                    const beam = beamData.find(b => b.number === number);
+                    if (!beam) return;
+                    
                     // 모든 섹터를 dimgray로 초기화
-                    for (const beam of beamData) {
-                        beam.pathEl.setAttribute("fill", "dimgray");
-                        beam.pathEl.style.fill = "dimgray";
+                    for (const b of beamData) {
+                        b.pathEl.setAttribute("fill", "dimgray");
+                        b.pathEl.style.fill = "dimgray";
                     }
                     
-                    // 선택된 섹터만 #F2C029로 변경
-                    target.setAttribute("fill", "#F2C029");
-                    target.style.fill = "#F2C029";
+                    // 선택된 섹터의 pathEl만 #F2C029로 변경 (textEl이 아닌 pathEl에 색상 적용)
+                    beam.pathEl.setAttribute("fill", "#F2C029");
+                    beam.pathEl.style.fill = "#F2C029";
                     
                     console.log(`🎯 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
                 }
@@ -7210,6 +7218,8 @@
             centerCircle.style.fill = "dimgray"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
+            centerCircle.style.cursor = "pointer";
+            centerCircle.setAttribute("data-beam-number", "0");
             svg.appendChild(centerCircle);
 
             const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -7221,6 +7231,8 @@
             centerText.setAttribute("fill", "white");
             centerText.setAttribute("font-weight", "bold");
             centerText.textContent = "0";
+            centerText.style.cursor = "pointer";
+            centerText.setAttribute("data-beam-number", "0");
             svg.appendChild(centerText);
 
             su1BeamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
@@ -7250,6 +7262,8 @@
                     pathEl.setAttribute("fill", "dimgray");
                     pathEl.setAttribute("stroke", "#aaa");
                     pathEl.setAttribute("stroke-width", 1);
+                    pathEl.style.cursor = "pointer";
+                    pathEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(pathEl);
 
                     const textRadius = (innerRadius + outerRadius) / 2;
@@ -7263,6 +7277,8 @@
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
                     textEl.textContent = beamNumber;
+                    textEl.style.cursor = "pointer";
+                    textEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(textEl);
                     
                     su1BeamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
@@ -7339,6 +7355,14 @@
                     drawSu1BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
                     
+                    // SU1 Beam Book SVG에 클릭 이벤트 리스너 추가
+                    const su1BeamBookSvg = document.getElementById("su1BeamBook");
+                    if (su1BeamBookSvg) {
+                        // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+                        su1BeamBookSvg.removeEventListener('click', handleSu1BeamBookClick);
+                        su1BeamBookSvg.addEventListener('click', handleSu1BeamBookClick);
+                    }
+                    
                     // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu1에서 필드를 찾기 위해 필요)
                     saveBeamInfoOriginalValuesSu1();
                     
@@ -7355,7 +7379,39 @@
                         applyBeamInfoUiModeSu1();
                         socket.emit('leave_beam_info_set_mode_su1');
                     }
+                    selectedBeamNumberSu1 = null; // 모달 닫을 때 선택 초기화
                 });
+            }
+            
+            // SU1 Beam Book 섹터 클릭 이벤트 핸들러
+            function handleSu1BeamBookClick(event) {
+                if (!SET_MODE_BEAM_INFO_SU1) {
+                    return; // Set Mode가 아니면 클릭 무시
+                }
+                
+                const target = event.target;
+                const beamNumber = target.getAttribute("data-beam-number");
+                
+                if (beamNumber !== null) {
+                    const number = parseInt(beamNumber);
+                    selectedBeamNumberSu1 = number;
+                    
+                    // beamData에서 해당 섹터의 pathEl 찾기
+                    const beam = su1BeamData.find(b => b.number === number);
+                    if (!beam) return;
+                    
+                    // 모든 섹터를 dimgray로 초기화
+                    for (const b of su1BeamData) {
+                        b.pathEl.setAttribute("fill", "dimgray");
+                        b.pathEl.style.fill = "dimgray";
+                    }
+                    
+                    // 선택된 섹터의 pathEl만 #F2C029로 변경 (textEl이 아닌 pathEl에 색상 적용)
+                    beam.pathEl.setAttribute("fill", "#F2C029");
+                    beam.pathEl.style.fill = "#F2C029";
+                    
+                    console.log(`🎯 SU1 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
+                }
             }
         });
 
@@ -7383,6 +7439,8 @@
             centerCircle.style.fill = "dimgray"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
+            centerCircle.style.cursor = "pointer";
+            centerCircle.setAttribute("data-beam-number", "0");
             svg.appendChild(centerCircle);
 
             const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -7394,6 +7452,8 @@
             centerText.setAttribute("fill", "white");
             centerText.setAttribute("font-weight", "bold");
             centerText.textContent = "0";
+            centerText.style.cursor = "pointer";
+            centerText.setAttribute("data-beam-number", "0");
             svg.appendChild(centerText);
 
             su2BeamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
@@ -7423,6 +7483,8 @@
                     pathEl.setAttribute("fill", "dimgray");
                     pathEl.setAttribute("stroke", "#aaa");
                     pathEl.setAttribute("stroke-width", 1);
+                    pathEl.style.cursor = "pointer";
+                    pathEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(pathEl);
 
                     const textRadius = (innerRadius + outerRadius) / 2;
@@ -7436,6 +7498,8 @@
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
                     textEl.textContent = beamNumber;
+                    textEl.style.cursor = "pointer";
+                    textEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(textEl);
                     
                     su2BeamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
@@ -7512,6 +7576,14 @@
                     drawSu2BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
                     
+                    // SU2 Beam Book SVG에 클릭 이벤트 리스너 추가
+                    const su2BeamBookSvg = document.getElementById("su2BeamBook");
+                    if (su2BeamBookSvg) {
+                        // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+                        su2BeamBookSvg.removeEventListener('click', handleSu2BeamBookClick);
+                        su2BeamBookSvg.addEventListener('click', handleSu2BeamBookClick);
+                    }
+                    
                     // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu2에서 필드를 찾기 위해 필요)
                     saveBeamInfoOriginalValuesSu2();
                     
@@ -7528,7 +7600,39 @@
                         applyBeamInfoUiModeSu2();
                         socket.emit('leave_beam_info_set_mode_su2');
                     }
+                    selectedBeamNumberSu2 = null; // 모달 닫을 때 선택 초기화
                 });
+            }
+            
+            // SU2 Beam Book 섹터 클릭 이벤트 핸들러
+            function handleSu2BeamBookClick(event) {
+                if (!SET_MODE_BEAM_INFO_SU2) {
+                    return; // Set Mode가 아니면 클릭 무시
+                }
+                
+                const target = event.target;
+                const beamNumber = target.getAttribute("data-beam-number");
+                
+                if (beamNumber !== null) {
+                    const number = parseInt(beamNumber);
+                    selectedBeamNumberSu2 = number;
+                    
+                    // beamData에서 해당 섹터의 pathEl 찾기
+                    const beam = su2BeamData.find(b => b.number === number);
+                    if (!beam) return;
+                    
+                    // 모든 섹터를 dimgray로 초기화
+                    for (const b of su2BeamData) {
+                        b.pathEl.setAttribute("fill", "dimgray");
+                        b.pathEl.style.fill = "dimgray";
+                    }
+                    
+                    // 선택된 섹터의 pathEl만 #F2C029로 변경 (textEl이 아닌 pathEl에 색상 적용)
+                    beam.pathEl.setAttribute("fill", "#F2C029");
+                    beam.pathEl.style.fill = "#F2C029";
+                    
+                    console.log(`🎯 SU2 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
+                }
             }
         });
 
@@ -7556,6 +7660,8 @@
             centerCircle.style.fill = "dimgray"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
+            centerCircle.style.cursor = "pointer";
+            centerCircle.setAttribute("data-beam-number", "0");
             svg.appendChild(centerCircle);
 
             const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -7567,6 +7673,8 @@
             centerText.setAttribute("fill", "white");
             centerText.setAttribute("font-weight", "bold");
             centerText.textContent = "0";
+            centerText.style.cursor = "pointer";
+            centerText.setAttribute("data-beam-number", "0");
             svg.appendChild(centerText);
 
             su3BeamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
@@ -7596,6 +7704,8 @@
                     pathEl.setAttribute("fill", "dimgray");
                     pathEl.setAttribute("stroke", "#aaa");
                     pathEl.setAttribute("stroke-width", 1);
+                    pathEl.style.cursor = "pointer";
+                    pathEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(pathEl);
 
                     const textRadius = (innerRadius + outerRadius) / 2;
@@ -7609,6 +7719,8 @@
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
                     textEl.textContent = beamNumber;
+                    textEl.style.cursor = "pointer";
+                    textEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(textEl);
                     
                     su3BeamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
@@ -7685,6 +7797,14 @@
                     drawSu3BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
                     
+                    // SU3 Beam Book SVG에 클릭 이벤트 리스너 추가
+                    const su3BeamBookSvg = document.getElementById("su3BeamBook");
+                    if (su3BeamBookSvg) {
+                        // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+                        su3BeamBookSvg.removeEventListener('click', handleSu3BeamBookClick);
+                        su3BeamBookSvg.addEventListener('click', handleSu3BeamBookClick);
+                    }
+                    
                     // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu3에서 필드를 찾기 위해 필요)
                     saveBeamInfoOriginalValuesSu3();
                     
@@ -7701,7 +7821,39 @@
                         applyBeamInfoUiModeSu3();
                         socket.emit('leave_beam_info_set_mode_su3');
                     }
+                    selectedBeamNumberSu3 = null; // 모달 닫을 때 선택 초기화
                 });
+            }
+            
+            // SU3 Beam Book 섹터 클릭 이벤트 핸들러
+            function handleSu3BeamBookClick(event) {
+                if (!SET_MODE_BEAM_INFO_SU3) {
+                    return; // Set Mode가 아니면 클릭 무시
+                }
+                
+                const target = event.target;
+                const beamNumber = target.getAttribute("data-beam-number");
+                
+                if (beamNumber !== null) {
+                    const number = parseInt(beamNumber);
+                    selectedBeamNumberSu3 = number;
+                    
+                    // beamData에서 해당 섹터의 pathEl 찾기
+                    const beam = su3BeamData.find(b => b.number === number);
+                    if (!beam) return;
+                    
+                    // 모든 섹터를 dimgray로 초기화
+                    for (const b of su3BeamData) {
+                        b.pathEl.setAttribute("fill", "dimgray");
+                        b.pathEl.style.fill = "dimgray";
+                    }
+                    
+                    // 선택된 섹터의 pathEl만 #F2C029로 변경 (textEl이 아닌 pathEl에 색상 적용)
+                    beam.pathEl.setAttribute("fill", "#F2C029");
+                    beam.pathEl.style.fill = "#F2C029";
+                    
+                    console.log(`🎯 SU3 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
+                }
             }
         });
 
@@ -7729,6 +7881,8 @@
             centerCircle.style.fill = "dimgray"; // CSS 스타일로도 설정
             centerCircle.setAttribute("stroke", "#aaa");
             centerCircle.setAttribute("stroke-width", 1);
+            centerCircle.style.cursor = "pointer";
+            centerCircle.setAttribute("data-beam-number", "0");
             svg.appendChild(centerCircle);
 
             const centerText = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -7740,6 +7894,8 @@
             centerText.setAttribute("fill", "white");
             centerText.setAttribute("font-weight", "bold");
             centerText.textContent = "0";
+            centerText.style.cursor = "pointer";
+            centerText.setAttribute("data-beam-number", "0");
             svg.appendChild(centerText);
 
             su4BeamData.push({ number: 0, pathEl: centerCircle, textEl: centerText });
@@ -7769,6 +7925,8 @@
                     pathEl.setAttribute("fill", "dimgray");
                     pathEl.setAttribute("stroke", "#aaa");
                     pathEl.setAttribute("stroke-width", 1);
+                    pathEl.style.cursor = "pointer";
+                    pathEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(pathEl);
 
                     const textRadius = (innerRadius + outerRadius) / 2;
@@ -7782,6 +7940,8 @@
                     textEl.setAttribute("font-size", "10");
                     textEl.setAttribute("fill", "white");
                     textEl.textContent = beamNumber;
+                    textEl.style.cursor = "pointer";
+                    textEl.setAttribute("data-beam-number", beamNumber);
                     svg.appendChild(textEl);
                     
                     su4BeamData.push({ number: beamNumber, pathEl: pathEl, textEl: textEl });
@@ -7858,6 +8018,14 @@
                     drawSu4BeamBook();
                     // 초기 색상은 모두 dimgray로 설정됨 (하드코딩된 색상 업데이트 제거)
                     
+                    // SU4 Beam Book SVG에 클릭 이벤트 리스너 추가
+                    const su4BeamBookSvg = document.getElementById("su4BeamBook");
+                    if (su4BeamBookSvg) {
+                        // 기존 이벤트 리스너 제거 후 새로 추가 (중복 방지)
+                        su4BeamBookSvg.removeEventListener('click', handleSu4BeamBookClick);
+                        su4BeamBookSvg.addEventListener('click', handleSu4BeamBookClick);
+                    }
+                    
                     // 모달이 열릴 때 data-editable 속성 설정 (applyBeamInfoUiModeSu4에서 필드를 찾기 위해 필요)
                     saveBeamInfoOriginalValuesSu4();
                     
@@ -7874,7 +8042,39 @@
                         applyBeamInfoUiModeSu4();
                         socket.emit('leave_beam_info_set_mode_su4');
                     }
+                    selectedBeamNumberSu4 = null; // 모달 닫을 때 선택 초기화
                 });
+            }
+            
+            // SU4 Beam Book 섹터 클릭 이벤트 핸들러
+            function handleSu4BeamBookClick(event) {
+                if (!SET_MODE_BEAM_INFO_SU4) {
+                    return; // Set Mode가 아니면 클릭 무시
+                }
+                
+                const target = event.target;
+                const beamNumber = target.getAttribute("data-beam-number");
+                
+                if (beamNumber !== null) {
+                    const number = parseInt(beamNumber);
+                    selectedBeamNumberSu4 = number;
+                    
+                    // beamData에서 해당 섹터의 pathEl 찾기
+                    const beam = su4BeamData.find(b => b.number === number);
+                    if (!beam) return;
+                    
+                    // 모든 섹터를 dimgray로 초기화
+                    for (const b of su4BeamData) {
+                        b.pathEl.setAttribute("fill", "dimgray");
+                        b.pathEl.style.fill = "dimgray";
+                    }
+                    
+                    // 선택된 섹터의 pathEl만 #F2C029로 변경 (textEl이 아닌 pathEl에 색상 적용)
+                    beam.pathEl.setAttribute("fill", "#F2C029");
+                    beam.pathEl.style.fill = "#F2C029";
+                    
+                    console.log(`🎯 SU4 Beam Book 섹터 선택: ${number} (색상: #F2C029)`);
+                }
             }
         });
 
@@ -8689,14 +8889,14 @@
             // SU2 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
 
             // SU2 Beam Book 동그라미 색상 업데이트
-            console.log("🎯 SU2 Beam Book 업데이트 시도:", data.packet.MVBX_BeamInfo_beamId1, data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4);
-            // 항상 업데이트 시도 (조건 제거)
-            updateSu2BeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
-            
-            console.log("✅ SU2 Beam Book 색상 업데이트 완료");
+            // Set Mode가 아닐 때만 업데이트
+            if (!SET_MODE_BEAM_INFO_SU2) {
+                updateSu2BeamColors({
+                    yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
+                });
+                console.log("✅ SU2 Beam Book 색상 업데이트 완료");
+            }
 
             // SU2 Beam Info Orientation/Tilt 업데이트
             updateText('su2Orientation', data.packet.Orientation);
@@ -9140,14 +9340,14 @@
             // SU3 gNB Type (Vendor) 업데이트 - 상태값 업데이트 제거됨
 
             // SU3 Beam Book 동그라미 색상 업데이트
-            console.log("🎯 SU3 Beam Book 업데이트 시도:", data.packet.MVBX_BeamInfo_beamId1, data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4);
-            // 항상 업데이트 시도 (조건 제거)
-            updateSu3BeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
-            
-            console.log("✅ SU3 Beam Book 색상 업데이트 완료");
+            // Set Mode가 아닐 때만 업데이트
+            if (!SET_MODE_BEAM_INFO_SU3) {
+                updateSu3BeamColors({
+                    yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
+                });
+                console.log("✅ SU3 Beam Book 색상 업데이트 완료");
+            }
 
             // SU3 Beam Info Orientation/Tilt 업데이트
             updateText('su3Orientation', data.packet.Orientation);
@@ -9575,14 +9775,14 @@
             // SU4 AGC Input (AGC_Input_Power) - 삭제된 요소의 상태값 업데이트 제거됨
 
             // SU4 Beam Book 동그라미 색상 업데이트
-            console.log("🎯 SU4 Beam Book 업데이트 시도:", data.packet.MVBX_BeamInfo_beamId1, data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4);
-            // 항상 업데이트 시도 (조건 제거)
-            updateSu4BeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
-            
-            console.log("✅ SU4 Beam Book 색상 업데이트 완료");
+            // Set Mode가 아닐 때만 업데이트
+            if (!SET_MODE_BEAM_INFO_SU4) {
+                updateSu4BeamColors({
+                    yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
+                });
+                console.log("✅ SU4 Beam Book 색상 업데이트 완료");
+            }
 
             // SU4 Beam Info Orientation/Tilt 업데이트
             updateText('su4Orientation', data.packet.Orientation);
@@ -12229,11 +12429,13 @@
             
 
             // SU1 Beam Book 동그라미 색상 업데이트 (SU1용)
-            // 항상 업데이트 시도 (조건 제거)
-            updateSu1BeamColors({
-                yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
-                blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
-            });
+            // Set Mode가 아닐 때만 업데이트
+            if (!SET_MODE_BEAM_INFO_SU1) {
+                updateSu1BeamColors({
+                    yellow: [data.packet.MVBX_BeamInfo_beamId1].filter(id => id >= 0),
+                    blue: [data.packet.MVBX_BeamInfo_beamId2, data.packet.MVBX_BeamInfo_beamId3, data.packet.MVBX_BeamInfo_beamId4].filter(id => id >= 0)
+                });
+            }
 
             // SU1 Hidden Modal 업데이트
             updateValue("su1DlSubAtten_SISO", data.packet.DU_DlSubAtten_SISO);
@@ -13925,7 +14127,11 @@
     let SET_MODE_BEAM_INFO_SU2 = false;
     let SET_MODE_BEAM_INFO_SU3 = false;
     let SET_MODE_BEAM_INFO_SU4 = false;
-    let selectedBeamNumber = null; // 선택된 beam book 섹터 번호 저장
+    let selectedBeamNumber = null; // 선택된 beam book 섹터 번호 저장 (DU용)
+    let selectedBeamNumberSu1 = null; // 선택된 SU1 beam book 섹터 번호 저장
+    let selectedBeamNumberSu2 = null; // 선택된 SU2 beam book 섹터 번호 저장
+    let selectedBeamNumberSu3 = null; // 선택된 SU3 beam book 섹터 번호 저장
+    let selectedBeamNumberSu4 = null; // 선택된 SU4 beam book 섹터 번호 저장
 
     //==== UI id ↔ 데이터 필드 매핑 ====
     const FIELD_MAP = {
@@ -14354,8 +14560,9 @@
       // SU1 Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
       TemperCompensationMode: [13, 5],            // packet[13]의 bit5 (su1TemperComp)
       ApiVenderFreq: [13, 6],                     // packet[13]의 bit6 (su1CenterFrequency)
-      ApiAntSelect: [13, 7],                      // packet[13]의 bit7 (su1AntSelect) - 새로 추가된 항목
+      ApiAntSelect: [14, 7],                      // packet[13]의 bit7 (su1AntSelect) - 새로 추가된 항목
       DuFixBeam: [20, 0],                        // packet[20]의 bit0 (su1BeamFix)
+      Mvbx_BeamSet: [14, 6],                     // packet[594]의 bit6 (ConMuFlag[14]의 bit6)
       ApiLogLevel: [13, 1],                       // packet[13]의 bit1 (su1ApiLogLevel)
       Actual_Orientation: [12, 6],                // packet[12]의 bit6 (su1OrientationActual)
       Actual_Tilt: [12, 7],                       // packet[12]의 bit7 (su1TiltActual)
@@ -14403,6 +14610,16 @@
       PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
       LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
       PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
+      
+      // SU2 Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
+      TemperCompensationMode: [13, 5],            // packet[13]의 bit5 (su2TemperComp)
+      ApiVenderFreq: [13, 6],                     // packet[13]의 bit6 (su2CenterFrequency)
+      ApiAntSelect: [14, 7],                      // packet[14]의 bit7 (su2AntSelect)
+      DuFixBeam: [20, 0],                        // packet[20]의 bit0 (su2BeamFix)
+      Mvbx_BeamSet: [14, 6],                     // packet[594]의 bit6 (ConMuFlag[14]의 bit6)
+      ApiLogLevel: [13, 1],                       // packet[13]의 bit1 (su2ApiLogLevel)
+      Actual_Orientation: [12, 6],                // packet[12]의 bit6 (su2OrientationActual)
+      Actual_Tilt: [12, 7],                       // packet[12]의 bit7 (su2TiltActual)
     };
 
     //==== SU3 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
@@ -14447,6 +14664,16 @@
       PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
       LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
       PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
+      
+      // SU3 Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
+      TemperCompensationMode: [13, 5],            // packet[13]의 bit5 (su3TemperComp)
+      ApiVenderFreq: [13, 6],                     // packet[13]의 bit6 (su3CenterFrequency)
+      ApiAntSelect: [14, 7],                      // packet[14]의 bit7 (su3AntSelect)
+      DuFixBeam: [20, 0],                        // packet[20]의 bit0 (su3BeamFix)
+      Mvbx_BeamSet: [14, 6],                     // packet[594]의 bit6 (ConMuFlag[14]의 bit6)
+      ApiLogLevel: [13, 1],                       // packet[13]의 bit1 (su3ApiLogLevel)
+      Actual_Orientation: [12, 6],                // packet[12]의 bit6 (su3OrientationActual)
+      Actual_Tilt: [12, 7],                       // packet[12]의 bit7 (su3TiltActual)
     };
 
     //==== SU4 System 컨트롤 비트 (24바이트, packet[580:604]을 index 0으로, [상대인덱스, bit]) ====
@@ -14491,6 +14718,16 @@
       PD2_DET_UL1_MIMO_Low: [8, 3],   // packet[588]의 bit3 → index 8
       LD4_DET_DL1_MIMO_Low: [8, 5],   // packet[588]의 bit5 → index 8
       PD4_DET_UL1_MIMO_Low: [8, 7],   // packet[588]의 bit7 → index 8
+      
+      // SU4 Beam Info Modal Fields (ConMuFlag: packet[7:20], 13 bytes)
+      TemperCompensationMode: [13, 5],            // packet[13]의 bit5 (su4TemperComp)
+      ApiVenderFreq: [13, 6],                     // packet[13]의 bit6 (su4CenterFrequency)
+      ApiAntSelect: [14, 7],                      // packet[14]의 bit7 (su4AntSelect)
+      DuFixBeam: [20, 0],                        // packet[20]의 bit0 (su4BeamFix)
+      Mvbx_BeamSet: [14, 6],                     // packet[594]의 bit6 (ConMuFlag[14]의 bit6)
+      ApiLogLevel: [13, 1],                       // packet[13]의 bit1 (su4ApiLogLevel)
+      Actual_Orientation: [12, 6],                // packet[12]의 bit6 (su4OrientationActual)
+      Actual_Tilt: [12, 7],                       // packet[12]의 bit7 (su4TiltActual)
     };
 
     //==== Sync Module 컨트롤 비트 (packet[12:16]을 index 0으로, [상대인덱스, bit]) ====
@@ -14571,7 +14808,7 @@
         const editLock = (isSu1 ? SET_MODE_SU1 : (isSu2 ? SET_MODE_SU2 : (isSu3 ? SET_MODE_SU3 : (isSu4 ? SET_MODE_SU4 : (isBeamInfo ? SET_MODE_BEAM_INFO : (isBeamInfoSu1 ? SET_MODE_BEAM_INFO_SU1 : (isBeamInfoSu2 ? SET_MODE_BEAM_INFO_SU2 : (isBeamInfoSu3 ? SET_MODE_BEAM_INFO_SU3 : (isBeamInfoSu4 ? SET_MODE_BEAM_INFO_SU4 : SET_MODE)))))))));
         
         if (editLock && el.hasAttribute('data-editable')) {
-            const section = (isBeamInfo ? 'Beam Info' : (isBeamInfoSu1 ? 'SU1 Beam Info' : (isBeamInfoSu2 ? 'SU2 Beam Info' : (isBeamInfoSu3 ? 'SU3 Beam Info' : (isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : 'DU'))))))));
+            const section = (isBeamInfo ? 'Beam Info' : (isBeamInfoSu1 ? 'SU1 Beam Info' : (isBeamInfoSu2 ? 'SU2 Beam Info' : (isBeamInfoSu3 ? 'SU3 Beam Info' : (isBeamInfoSu4 ? 'SU4 Beam Info' : (isSu1 ? 'SU1' : (isSu2 ? 'SU2' : (isSu3 ? 'SU3' : (isSu4 ? 'SU4' : 'DU')))))))));
             console.log(`🔒 ${section} Set Mode: ${id} 값 업데이트 차단 (현재 값: ${el.value}, 새 값: ${value})`);
             return;
         }
@@ -15716,6 +15953,13 @@
         }
       }
       
+      // Beam Book에서 선택된 섹터 번호가 있으면 Mvbx_BeamSet에 저장
+      if (selectedBeamNumberSu1 !== null) {
+        out['Mvbx_BeamSet'] = selectedBeamNumberSu1;
+        modifiedFields['Mvbx_BeamSet'] = true;
+        console.log(`🎯 SU1 Beam Book 선택된 섹터: ${selectedBeamNumberSu1} → Mvbx_BeamSet에 저장`);
+      }
+      
       // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
       // SU1_CONTROL_BITS를 사용
       out['ConMuFlag'] = buildSu1ConMuFlag(modifiedFields);
@@ -15796,6 +16040,13 @@
             console.log(`🔧 SU2 Beam Info 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
           }
         }
+      }
+      
+      // Beam Book에서 선택된 섹터 번호가 있으면 Mvbx_BeamSet에 저장
+      if (selectedBeamNumberSu2 !== null) {
+        out['Mvbx_BeamSet'] = selectedBeamNumberSu2;
+        modifiedFields['Mvbx_BeamSet'] = true;
+        console.log(`🎯 SU2 Beam Book 선택된 섹터: ${selectedBeamNumberSu2} → Mvbx_BeamSet에 저장`);
       }
       
       // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
@@ -15880,6 +16131,13 @@
         }
       }
       
+      // Beam Book에서 선택된 섹터 번호가 있으면 Mvbx_BeamSet에 저장
+      if (selectedBeamNumberSu3 !== null) {
+        out['Mvbx_BeamSet'] = selectedBeamNumberSu3;
+        modifiedFields['Mvbx_BeamSet'] = true;
+        console.log(`🎯 SU3 Beam Book 선택된 섹터: ${selectedBeamNumberSu3} → Mvbx_BeamSet에 저장`);
+      }
+      
       // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
       // SU3_CONTROL_BITS를 사용
       out['ConMuFlag'] = buildSu3ConMuFlag(modifiedFields);
@@ -15962,6 +16220,13 @@
         }
       }
       
+      // Beam Book에서 선택된 섹터 번호가 있으면 Mvbx_BeamSet에 저장
+      if (selectedBeamNumberSu4 !== null) {
+        out['Mvbx_BeamSet'] = selectedBeamNumberSu4;
+        modifiedFields['Mvbx_BeamSet'] = true;
+        console.log(`🎯 SU4 Beam Book 선택된 섹터: ${selectedBeamNumberSu4} → Mvbx_BeamSet에 저장`);
+      }
+      
       // ConMuFlag 추가 (수정된 필드에 해당하는 비트만 1로 설정)
       // SU4_CONTROL_BITS를 사용
       out['ConMuFlag'] = buildSu4ConMuFlag(modifiedFields);
@@ -16007,11 +16272,19 @@
         if (el.hasAttribute('data-original-value')) {
           const originalValue = el.getAttribute('data-original-value');
           // 원본값이 이미 숫자인 경우 그대로 사용, 문자열인 경우 숫자로 변환
-          const originalNum = typeof originalValue === 'number' ? originalValue : Number(originalValue);
-          if (originalNum !== v) {
-            modifiedFields[spec.key] = v;
-            console.log(`🔧 SU4 수정된 필드: ${spec.key} (${originalNum} → ${v})`);
+          const originalValueNum = typeof originalValue === 'number' ? 
+            originalValue : Number(originalValue);
+          
+          console.log(`🔍 SU4 필드 비교: ${id} (${spec.key}) - 원본: ${originalValue} (${originalValueNum}), 현재: ${v}`);
+          
+          // NaN 체크 및 안전한 비교
+          if (!Number.isNaN(originalValueNum) && !Number.isNaN(v) && 
+              v !== originalValueNum) {
+            modifiedFields[spec.key] = true;
+            console.log(`✅ SU4 필드 수정 감지: ${spec.key} - ${originalValueNum} → ${v}`);
           }
+        } else {
+          console.log(`⚠️ SU4 필드 data-original-value 없음: ${id} (${spec.key})`);
         }
       }
       
@@ -16341,6 +16614,7 @@
     function enterSetModeBeamInfoSu1(){
       console.log('🔧 Entering SU1 Beam Info Modal Set Mode...');
       SET_MODE_BEAM_INFO_SU1 = true;
+      selectedBeamNumberSu1 = null; // Set Mode 진입 시 선택 초기화
       console.log(`🔧 State: SET_MODE_BEAM_INFO_SU1=${SET_MODE_BEAM_INFO_SU1}`);
       
       // 모든 SU1 Beam Info Modal 필드의 원본 값 저장
@@ -16383,6 +16657,9 @@
         // 전체 패킷 전송
         socket.emit('apply_su1_values', packetToSend);
         console.log('🔧 Applying complete SU1 Beam Info packet:', packetToSend);
+        
+        // 전송 후 선택된 beam 번호 초기화
+        selectedBeamNumberSu1 = null;
       }catch(e){ 
         console.error('SU1 Beam Info 입력 오류:', e);
         alert('SU1 Beam Info 입력 오류: ' + e.message); 
@@ -16393,6 +16670,7 @@
     function enterSetModeBeamInfoSu2(){
       console.log('🔧 Entering SU2 Beam Info Modal Set Mode...');
       SET_MODE_BEAM_INFO_SU2 = true;
+      selectedBeamNumberSu2 = null; // Set Mode 진입 시 선택 초기화
       console.log(`🔧 State: SET_MODE_BEAM_INFO_SU2=${SET_MODE_BEAM_INFO_SU2}`);
       
       // 모든 SU2 Beam Info Modal 필드의 원본 값 저장
@@ -16435,6 +16713,9 @@
         // 전체 패킷 전송
         socket.emit('apply_su2_values', packetToSend);
         console.log('🔧 Applying complete SU2 Beam Info packet:', packetToSend);
+        
+        // 전송 후 선택된 beam 번호 초기화
+        selectedBeamNumberSu2 = null;
       }catch(e){ 
         console.error('SU2 Beam Info 입력 오류:', e);
         alert('SU2 Beam Info 입력 오류: ' + e.message); 
@@ -16445,6 +16726,7 @@
     function enterSetModeBeamInfoSu3(){
       console.log('🔧 Entering SU3 Beam Info Modal Set Mode...');
       SET_MODE_BEAM_INFO_SU3 = true;
+      selectedBeamNumberSu3 = null; // Set Mode 진입 시 선택 초기화
       console.log(`🔧 State: SET_MODE_BEAM_INFO_SU3=${SET_MODE_BEAM_INFO_SU3}`);
       
       // 모든 SU3 Beam Info Modal 필드의 원본 값 저장
@@ -16487,6 +16769,9 @@
         // 전체 패킷 전송
         socket.emit('apply_su3_values', packetToSend);
         console.log('🔧 Applying complete SU3 Beam Info packet:', packetToSend);
+        
+        // 전송 후 선택된 beam 번호 초기화
+        selectedBeamNumberSu3 = null;
       }catch(e){ 
         console.error('SU3 Beam Info 입력 오류:', e);
         alert('SU3 Beam Info 입력 오류: ' + e.message); 
@@ -16497,6 +16782,7 @@
     function enterSetModeBeamInfoSu4(){
       console.log('🔧 Entering SU4 Beam Info Modal Set Mode...');
       SET_MODE_BEAM_INFO_SU4 = true;
+      selectedBeamNumberSu4 = null; // Set Mode 진입 시 선택 초기화
       console.log(`🔧 State: SET_MODE_BEAM_INFO_SU4=${SET_MODE_BEAM_INFO_SU4}`);
       
       // 모든 SU4 Beam Info Modal 필드의 원본 값 저장
@@ -16539,6 +16825,9 @@
         // 전체 패킷 전송
         socket.emit('apply_su4_values', packetToSend);
         console.log('🔧 Applying complete SU4 Beam Info packet:', packetToSend);
+        
+        // 전송 후 선택된 beam 번호 초기화
+        selectedBeamNumberSu4 = null;
       }catch(e){ 
         console.error('SU4 Beam Info 입력 오류:', e);
         alert('SU4 Beam Info 입력 오류: ' + e.message); 
@@ -18953,7 +19242,7 @@
                                     <small class="text-muted">Temper Comp</small>
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-sm btn-on" id="su4TemperComp" data-editable="true">N/A</button>
+                                    <button type="button" class="btn btn-sm btn-on" id="su4TemperComp" data-editable="true">N/A</button>
                                 </div>
                                 <div class="col-auto">
                                     <small class="text-muted">Start Temper</small>
